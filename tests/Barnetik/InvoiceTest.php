@@ -38,5 +38,6 @@ class InvoiceTest extends TestCase
 
         $this->assertIsArray($invoice->lines());
         $this->assertCount(1, $invoice->lines());
+        $this->assertEquals('This is the first line', $invoice->lines()[0]->description());
     }
 }
