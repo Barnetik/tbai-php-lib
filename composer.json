@@ -1,0 +1,14 @@
+{
+    "name": "barnetik/tbai",
+    "description": "Generate and sign TicketBAI compatible invoices",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Barnetik\\": "src/Barnetik"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    }
+}
