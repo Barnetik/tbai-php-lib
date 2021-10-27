@@ -1,4 +1,5 @@
 <?php
+
 namespace Barnetik\Tbai;
 
 class InvoiceLine
@@ -20,23 +21,23 @@ class InvoiceLine
         $this->taxType = $taxType;
     }
 
-	public function description()
-	{
-		return $this->description;
-	}
+    public function description()
+    {
+        return $this->description;
+    }
 
-	public function beforeTaxPrice()
-	{
-		return $this->beforeTaxPrice;
-	}
+    public function beforeTaxPrice()
+    {
+        return $this->beforeTaxPrice;
+    }
 
-	public function afterTaxPrice()
-	{
-		return $this->afterTaxPrice;
-	}
+    public function afterTaxPrice()
+    {
+        return $this->afterTaxPrice;
+    }
 
-	public function taxType()
-	{
-		return $this->taxType;
-	}
+    public function taxType()
+    {
+        return $this->taxType;
+    }
 }

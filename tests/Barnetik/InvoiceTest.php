@@ -1,10 +1,10 @@
 <?php
+
 namespace Barnetik;
 
 use Barnetik\Tbai\Invoice;
 use Barnetik\Tbai\InvoiceLine;
 use PHPUnit\Framework\TestCase;
-
 
 class InvoiceTest extends TestCase
 {

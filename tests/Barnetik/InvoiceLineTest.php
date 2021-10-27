@@ -1,9 +1,9 @@
 <?php
+
 namespace Barnetik;
 
 use Barnetik\Tbai\InvoiceLine;
 use PHPUnit\Framework\TestCase;
-
 
 class InvoiceLineTest extends TestCase
 {
@@ -20,6 +20,5 @@ class InvoiceLineTest extends TestCase
         $this->assertEquals($priceBefore, $invoice->beforeTaxPrice());
         $this->assertEquals($priceAfter, $invoice->afterTaxPrice());
         $this->assertEquals($taxType, $invoice->taxType());
-
     }
 }

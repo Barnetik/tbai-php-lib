@@ -1,4 +1,5 @@
 <?php
+
 namespace Barnetik\Tbai;
 
 class Invoice
@@ -32,33 +33,33 @@ class Invoice
         return $this;
     }
 
-	public function invoiceNumber()
-	{
-		return $this->invoiceNumber;
-	}
+    public function invoiceNumber()
+    {
+        return $this->invoiceNumber;
+    }
 
-	public function description()
-	{
-		return $this->description;
-	}
+    public function description()
+    {
+        return $this->description;
+    }
 
-	public function beforeTaxTotal()
-	{
-		return $this->beforeTaxTotal;
-	}
+    public function beforeTaxTotal()
+    {
+        return $this->beforeTaxTotal;
+    }
 
-	public function afterTaxTotal()
-	{
-		return $this->afterTaxTotal;
-	}
+    public function afterTaxTotal()
+    {
+        return $this->afterTaxTotal;
+    }
 
-	public function taxType()
-	{
-		return $this->taxType;
-	}
+    public function taxType()
+    {
+        return $this->taxType;
+    }
 
-	public function lines()
-	{
-		return $this->lines;
-	}
+    public function lines()
+    {
+        return $this->lines;
+    }
 }
