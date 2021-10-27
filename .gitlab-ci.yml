@@ -11,14 +11,21 @@ build:
     paths: 
       - vendor/
 
-test-php8:
+test-quality-standards:
   stage: test
-  image: php:8
+  image: php:latest
   script:
-    - vendor/bin/phpunit
+    - vendor/bin/phpstan
+    - vendor/bin/phpcs
 
 test-php7:
   stage: test
   image: php:7
+  script:
+    - vendor/bin/phpunit
+
+test-php8:
+  stage: test
+  image: php:8
   script:
     - vendor/bin/phpunit
