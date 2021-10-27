@@ -10,6 +10,14 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
-        "spatie/phpunit-watcher": "^1.23"
-    }
+        "spatie/phpunit-watcher": "^1.23",
+        "phpstan/phpstan": "^0.12.99",
+        "squizlabs/php_codesniffer": "*",
+        "suin/phpcs-psr4-sniff": "^3.0"
+    },
+    "scripts": {
+      "phpstan": "phpstan analyse -c phpstan.neon",
+      "phpcs": "phpcs",
+      "phpcbf": "phpcbf"
+  }
 }
