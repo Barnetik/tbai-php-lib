@@ -25,7 +25,7 @@ class Receptor
     {
     }
 
-    public function createNationalReceptor($taxId, $name, $postalCode = null)
+    public static function createNationalReceptor($taxId, $name, $postalCode = null)
     {
         $receptor = new self;
         $receptor->taxIdType = self::TAX_ID_TYPE_IFZ;
@@ -37,7 +37,7 @@ class Receptor
         return $receptor;
     }
 
-    public function createForeignReceptor($taxIdType, $taxId, $name, $countryCode = 'ES', $postalCode = null)
+    public static function createForeignReceptor($taxIdType, $taxId, $name, $countryCode = 'ES', $postalCode = null)
     {
         $receptor = new self;
         $receptor->taxIdType = $taxIdType;
