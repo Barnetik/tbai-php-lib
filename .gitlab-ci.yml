@@ -1,0 +1,23 @@
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  image: composer
+  script:
+    - composer install
+  artifacts:
+    path: vendor/
+
+test-php8:
+  stage: test
+  image: php:8
+  script:
+    - vendor/bin/phpunit
+
+test-php7:
+  stage: test
+  image: php:7
+  script:
+    - vendor/bin/phpunit
