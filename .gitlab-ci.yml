@@ -8,7 +8,8 @@ build:
   script:
     - composer install
   artifacts:
-    path: vendor/
+    paths: 
+      - vendor/
 
 test-php8:
   stage: test
