@@ -1,6 +1,6 @@
 <?php
 
-namespace Barnetik;
+namespace Barnetik\Tbai;
 
 use Barnetik\Tbai\Invoice;
 use Barnetik\Tbai\InvoiceLine;

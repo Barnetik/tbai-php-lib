@@ -1,6 +1,6 @@
 <?php
 
-namespace Barnetik;
+namespace Barnetik\Tbai;
 
 use Barnetik\Tbai\InvoiceLine;
 use PHPUnit\Framework\TestCase;
