@@ -5,16 +5,26 @@ namespace Barnetik\Tbai;
 class InvoiceSubject
 {
     protected $emisor;
-    protected $receptor;
+    protected $receptors = [];
 
+    public function __construct($emisor, Receptor $receptor)
+    {
+        $this->emisor;
+        $this->addReceptor($receptor);
+    }
+
+    public function addReceptor(Receptor $receptor)
+    {
+        array_push($this->receptors, $receptor);
+    }
 
     public function emisor()
     {
         return $this->emisor;
     }
 
-    public function receptor()
+    public function receptors()
     {
-        return $this->receptor;
+        return $this->receptors;
     }
 }
