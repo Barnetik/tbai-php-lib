@@ -13,7 +13,8 @@
         "spatie/phpunit-watcher": "^1.23",
         "phpstan/phpstan": "^0.12.99",
         "squizlabs/php_codesniffer": "*",
-        "suin/phpcs-psr4-sniff": "^3.0"
+        "suin/phpcs-psr4-sniff": "^3.0",
+        "phpro/grumphp": "^1.5"
     },
     "scripts": {
       "phpstan": "phpstan analyse -c phpstan.neon",

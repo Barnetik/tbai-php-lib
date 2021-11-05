@@ -1,4 +1,5 @@
 <?php
+
 namespace Barnetik\Tbai;
 
 use Barnetik\Tbai\Subject\Emitter;
@@ -34,4 +35,3 @@ class InvoiceSubjectTest extends TestCase
         $this->assertCount(3, $invoiceSubject->recipients());
     }
 }
-
