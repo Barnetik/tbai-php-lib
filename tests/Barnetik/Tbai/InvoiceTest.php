@@ -9,14 +9,14 @@ use PHPUnit\Framework\TestCase;
 class InvoiceTest extends TestCase
 {
 
-    public function testInvoiceCanBeCreated()
+    public function testInvoiceCanBeCreated(): void
     {
         $invoiceNumber = 'TEST-INVOICE-000001';
         $description = 'This is a test invoice';
         $totalBefore = 55.78;
         $totalAfter = 89.00;
         $taxType = Invoice::TAX_TYPE_10;
-        $invoice = new Invoice($invoiceNumber, $description, $totalBefore, $totalAfter, $taxType);
+        $invoice = new Invoice($invoiceNumber, $description, (string) $totalBefore, (string) $totalAfter, $taxType);
 
         $this->assertEquals($invoiceNumber, $invoice->invoiceNumber());
         $this->assertEquals($description, $invoice->description());
@@ -25,15 +25,15 @@ class InvoiceTest extends TestCase
         $this->assertEquals($taxType, $invoice->taxType());
     }
 
-    public function testInvoiceCanHaveLines()
+    public function testInvoiceCanHaveLines(): void
     {
         $invoiceNumber = 'TEST-INVOICE-000001';
         $description = 'This is a test invoice';
         $totalBefore = 55.78;
         $totalAfter = 89.00;
         $taxType = Invoice::TAX_TYPE_10;
-        $invoice = new Invoice($invoiceNumber, $description, $totalBefore, $totalAfter, $taxType);
-        $firstLine = new InvoiceLine('This is the first line', 55.78, 89.00, InvoiceLine::TAX_TYPE_10);
+        $invoice = new Invoice($invoiceNumber, $description, (string) $totalBefore, (string) $totalAfter, $taxType);
+        $firstLine = new InvoiceLine('This is the first line', (string) $totalBefore, (string) $totalAfter, InvoiceLine::TAX_TYPE_10);
         $invoice->addLine($firstLine);
 
         $this->assertIsArray($invoice->lines());

@@ -8,13 +8,13 @@ use PHPUnit\Framework\TestCase;
 class InvoiceLineTest extends TestCase
 {
 
-    public function testInvoiceLineCanBeCreated()
+    public function testInvoiceLineCanBeCreated(): void
     {
         $description = 'This is a test line';
         $priceBefore = 55.78;
         $priceAfter = 89.00;
         $taxType = InvoiceLine::TAX_TYPE_10;
-        $invoice = new InvoiceLine($description, $priceBefore, $priceAfter, $taxType);
+        $invoice = new InvoiceLine($description, (string) $priceBefore, (string) $priceAfter, $taxType);
 
         $this->assertEquals($description, $invoice->description());
         $this->assertEquals($priceBefore, $invoice->beforeTaxPrice());

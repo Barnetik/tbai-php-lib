@@ -2,45 +2,57 @@
 
 namespace Barnetik\Tbai;
 
+use Barnetik\Tbai\Subject\Emitter;
+use Barnetik\Tbai\Subject\Recipient;
+
 class InvoiceSubject
 {
-    const EMITED_BY_EMISOR = 'N';
-    const EMITED_BY_THIRD_PARTY = 'T';
-    const EMITED_BY_RECEPTOR = 'D';
+    const EMITTED_BY_EMITTER = 'N';
+    const EMITTED_BY_THIRD_PARTY = 'T';
+    const EMITTED_BY_RECIPIENT = 'D';
 
-    protected $emisor;
-    protected $receptors = [];
-    protected $emitedBy;
+    protected Emitter $emitter;
+    protected array $recipients = [];
+    protected string $emittedBy;
 
-    public function __construct(Emisor $emisor, Receptor $receptor, $emitedBy)
+    public function __construct(Emitter $emitter, Recipient $recipient, string $emittedBy)
     {
-        $this->emisor = $emisor;
-        $this->addReceptor($receptor);
-        $this->emitedBy = $emitedBy;
+        $this->emitter = $emitter;
+        $this->addRecipient($recipient);
+        $this->emittedBy = $emittedBy;
     }
 
-    public function addReceptor(Receptor $receptor)
+    public function addRecipient(Recipient $recipient): self
     {
-        array_push($this->receptors, $receptor);
+        array_push($this->recipients, $recipient);
+        return $this;
     }
 
-    public function emisor()
+    public function emitter(): Emitter
     {
-        return $this->emisor;
+        return $this->emitter;
     }
 
-    public function receptors()
+    public function recipients(): array
     {
-        return $this->receptors;
+        return $this->recipients;
     }
 
-    public function multipleReceptors()
+    public function multipleRecipients(): string
     {
-        return sizeof($this->receptors) > 1;
+        if ($this->hasMultipleRecipients()) {
+            return 'S';
+        }
+        return 'N';
     }
 
-    public function emitedBy()
+    public function hasMultipleRecipients(): bool
     {
-        return $this->emitedBy;
+        return sizeof($this->recipients) > 1;
+    }
+
+    public function emittedBy(): string
+    {
+        return $this->emittedBy;
     }
 }

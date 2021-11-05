@@ -8,12 +8,12 @@ class InvoiceLine
     const TAX_TYPE_10 = 10;
     const TAX_TYPE_21 = 21;
 
-    protected $description;
-    protected $beforeTaxPrice;
-    protected $afterTaxPrice;
-    protected $taxType;
+    protected string $description;
+    protected string $beforeTaxPrice;
+    protected string $afterTaxPrice;
+    protected int $taxType;
 
-    public function __construct($description, $beforeTaxPrice, $afterTaxPrice, $taxType)
+    public function __construct(string $description, string $beforeTaxPrice, string $afterTaxPrice, int $taxType)
     {
         $this->description = $description;
         $this->beforeTaxPrice = $beforeTaxPrice;
@@ -21,22 +21,22 @@ class InvoiceLine
         $this->taxType = $taxType;
     }
 
-    public function description()
+    public function description(): string
     {
         return $this->description;
     }
 
-    public function beforeTaxPrice()
+    public function beforeTaxPrice(): string
     {
         return $this->beforeTaxPrice;
     }
 
-    public function afterTaxPrice()
+    public function afterTaxPrice(): string
     {
         return $this->afterTaxPrice;
     }
 
-    public function taxType()
+    public function taxType(): int
     {
         return $this->taxType;
     }
