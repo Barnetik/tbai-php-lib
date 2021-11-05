@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class InvoiceSubjectTest extends TestCase
 {
-    public function testSingleRecipientSubject(): void
+    public function test_single_recipient_subject(): void
     {
         $emitter = new Emitter('11111111H', 'Emitter Bussiness');
         $recipient = Recipient::createNationalRecipient('00000000T', 'Recipient Bussiness');
@@ -19,7 +19,7 @@ class InvoiceSubjectTest extends TestCase
         $this->assertCount(1, $invoiceSubject->recipients());
     }
 
-    public function testMultipleRecipientsSubject(): void
+    public function test_multiple_recipient_subjects(): void
     {
         $emitter = new Emitter('11111111H', 'Emitter Bussiness');
         $recipient1 = Recipient::createNationalRecipient('00000000T', 'Recipient Bussiness 1');

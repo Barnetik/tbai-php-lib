@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 class InvoiceLineTest extends TestCase
 {
 
-    public function testInvoiceLineCanBeCreated(): void
+    public function test_invoice_line_can_be_created(): void
     {
         $description = 'This is a test line';
         $priceBefore = 55.78;

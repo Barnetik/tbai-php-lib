@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class RecipientTest extends TestCase
 {
-    public function testNationalReceptorTypeIsIfz(): void
+    public function test_national_recipient_id_type_is_ifz(): void
     {
         $receptor = Recipient::createNationalRecipient('11111111H', 'Test business', (string) 48270);
 
@@ -18,7 +18,7 @@ class RecipientTest extends TestCase
         $this->assertEquals('11111111H', $receptor->taxId());
     }
 
-    public function testForeignReceptorIsCreated(): void
+    public function test_foreign_recipient_can_be_created(): void
     {
         $receptor = Recipient::createGenericRecipient('abcdefghijkl', 'Test foreign business', (string) 48260, Recipient::TAX_ID_TYPE_PASSPORT, 'UK');
 

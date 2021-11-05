@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 class InvoiceTest extends TestCase
 {
 
-    public function testInvoiceCanBeCreated(): void
+    public function test_invoice_can_be_created(): void
     {
         $invoiceNumber = 'TEST-INVOICE-000001';
         $description = 'This is a test invoice';
@@ -25,7 +25,7 @@ class InvoiceTest extends TestCase
         $this->assertEquals($taxType, $invoice->taxType());
     }
 
-    public function testInvoiceCanHaveLines(): void
+    public function test_invoice_can_have_lines(): void
     {
         $invoiceNumber = 'TEST-INVOICE-000001';
         $description = 'This is a test invoice';
