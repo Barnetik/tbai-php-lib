@@ -1,10 +1,10 @@
 <?php
 
-namespace Barnetik\Tbai;
+namespace Barnetik\Tbai\Invoice;
 
 use Barnetik\Tbai\Exception\InvalidDateException;
 use Barnetik\Tbai\Exception\InvalidTimeException;
-use Barnetik\Tbai\InvoiceHeader;
+use Barnetik\Tbai\Invoice\InvoiceHeader;
 use PHPUnit\Framework\TestCase;
 
 class InvoiceHeaderTest extends TestCase
