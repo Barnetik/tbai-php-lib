@@ -14,7 +14,7 @@ class AmmountCheckerTest extends TestCase
         $checker = new AmmountChecker();
 
         try {
-            $ammount = 12.04;
+            $ammount = "12.04";
             $checker($ammount, 2);
             $this->fail();
         } catch (InvalidAmmountException $e) {
@@ -38,7 +38,7 @@ class AmmountCheckerTest extends TestCase
         }
     }
 
-    public function test_checker_returns_true_if_ammount_is_valid()
+    public function test_checker_returns_true_if_ammount_is_valid(): void
     {
         $checker = new AmmountChecker();
 

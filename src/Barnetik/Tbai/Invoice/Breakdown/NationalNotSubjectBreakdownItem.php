@@ -42,7 +42,7 @@ class NationalNotSubjectBreakdownItem
         return $this;
     }
 
-    public function ammount()
+    public function ammount(): string
     {
         return $this->ammount;
     }

@@ -9,7 +9,7 @@ class InvoiceBreakdown
 {
     private array $nationalNotSubjectBreakdownItems = [];
 
-    public function addNationalNotSubjectBreakdownItem(NationalNotSubjectBreakdownItem $notSubjectBreakdowItem)
+    public function addNationalNotSubjectBreakdownItem(NationalNotSubjectBreakdownItem $notSubjectBreakdowItem): self
     {
         if (sizeof($this->nationalNotSubjectBreakdownItems) < 2) {
             $this->nationalNotSubjectBreakdownItems[] = $notSubjectBreakdowItem;
