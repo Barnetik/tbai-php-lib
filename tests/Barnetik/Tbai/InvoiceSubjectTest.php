@@ -12,7 +12,7 @@ class InvoiceSubjectTest extends TestCase
     {
         $emitter = new Emitter('11111111H', 'Emitter Bussiness');
         $recipient = Recipient::createNationalRecipient('00000000T', 'Recipient Bussiness');
-        $invoiceSubject = new InvoiceSubject($emitter, $recipient, InvoiceSubject::EMITTED_BY_EMITTER);
+        $invoiceSubject = new Subject($emitter, $recipient, Subject::EMITTED_BY_EMITTER);
 
         $this->assertFalse($invoiceSubject->hasMultipleRecipients());
         $this->assertEquals('N', $invoiceSubject->multipleRecipients());
@@ -26,7 +26,7 @@ class InvoiceSubjectTest extends TestCase
         $recipient2 = Recipient::createNationalRecipient('00000001R', 'Recipient Bussiness 2');
         $recipient3 = Recipient::createNationalRecipient('00000002W', 'Recipient Bussiness 3');
 
-        $invoiceSubject = new InvoiceSubject($emitter, $recipient1, InvoiceSubject::EMITTED_BY_EMITTER);
+        $invoiceSubject = new Subject($emitter, $recipient1, Subject::EMITTED_BY_EMITTER);
         $invoiceSubject->addRecipient($recipient2);
         $invoiceSubject->addRecipient($recipient3);
 

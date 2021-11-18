@@ -2,64 +2,20 @@
 
 namespace Barnetik\Tbai;
 
+use Barnetik\Tbai\Invoice\Breakdown;
+use Barnetik\Tbai\Invoice\Data;
+use Barnetik\Tbai\Invoice\Header;
+
 class Invoice
 {
-    const TAX_TYPE_4 = 4;
-    const TAX_TYPE_10 = 10;
-    const TAX_TYPE_21 = 21;
+    private Header $header;
+    private Data $data;
+    private Breakdown $breakdown;
 
-    protected string $invoiceNumber;
-    protected string $description;
-
-    protected string $beforeTaxTotal;
-    protected string $afterTaxTotal;
-    protected int $taxType;
-
-    protected array $lines = [];
-
-    public function __construct(string $invoiceNumber, string $description, string $beforeTaxTotal, string $afterTaxTotal, int $taxType)
+    public function __construct(Header $header, Data $data, Breakdown $breakdown)
     {
-        $this->invoiceNumber = $invoiceNumber;
-        $this->description = $description;
-
-        $this->beforeTaxTotal = $beforeTaxTotal;
-        $this->afterTaxTotal = $afterTaxTotal;
-        $this->taxType = $taxType;
-    }
-
-    public function addLine(InvoiceLine $line): self
-    {
-        array_push($this->lines, $line);
-        return $this;
-    }
-
-    public function invoiceNumber(): string
-    {
-        return $this->invoiceNumber;
-    }
-
-    public function description(): string
-    {
-        return $this->description;
-    }
-
-    public function beforeTaxTotal(): string
-    {
-        return $this->beforeTaxTotal;
-    }
-
-    public function afterTaxTotal(): string
-    {
-        return $this->afterTaxTotal;
-    }
-
-    public function taxType(): int
-    {
-        return $this->taxType;
-    }
-
-    public function lines(): array
-    {
-        return $this->lines;
+        $this->header = $header;
+        $this->data = $data;
+        $this->breakdown = $breakdown;
     }
 }

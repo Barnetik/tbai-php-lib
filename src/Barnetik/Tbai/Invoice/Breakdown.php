@@ -7,7 +7,7 @@ use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectExemptBreakdownItem;
 use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectNotExemptBreakdownItem;
 use OutOfBoundsException;
 
-class InvoiceBreakdown
+class Breakdown
 {
     private array $nationalNotSubjectBreakdownItems = [];
     private array $nationalSubjectExemptBreakdownItems = [];
@@ -20,7 +20,7 @@ class InvoiceBreakdown
             return $this;
         }
 
-        throw new OutOfBoundsException('Too many not subject breadown items');
+        throw new OutOfBoundsException('Too many not subject breakdown items');
     }
 
     public function addNationalSubjectExemptBreakdownItem(NationalSubjectExemptBreakdownItem $subjectExemptBreakdowItem): self
@@ -30,7 +30,7 @@ class InvoiceBreakdown
             return $this;
         }
 
-        throw new OutOfBoundsException('Too many subject and exempt breadown items');
+        throw new OutOfBoundsException('Too many subject and exempt breakdown items');
     }
 
     public function addNationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem $subjectNotExemptBreakdowItem): self
@@ -40,6 +40,6 @@ class InvoiceBreakdown
             return $this;
         }
 
-        throw new OutOfBoundsException('Too many subject and not exempt breadown items');
+        throw new OutOfBoundsException('Too many subject and not exempt breakdown items');
     }
 }

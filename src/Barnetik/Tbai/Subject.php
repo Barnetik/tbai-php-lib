@@ -5,7 +5,7 @@ namespace Barnetik\Tbai;
 use Barnetik\Tbai\Subject\Emitter;
 use Barnetik\Tbai\Subject\Recipient;
 
-class InvoiceSubject
+class Subject
 {
     const EMITTED_BY_EMITTER = 'N';
     const EMITTED_BY_THIRD_PARTY = 'T';
@@ -54,5 +54,10 @@ class InvoiceSubject
     public function emittedBy(): string
     {
         return $this->emittedBy;
+    }
+
+    public function __toString(): string
+    {
+        return 'Esto es el subject txabal';
     }
 }

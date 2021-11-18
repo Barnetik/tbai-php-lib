@@ -6,19 +6,33 @@ use Barnetik\Tbai\Exception\InvalidDateException;
 use Barnetik\Tbai\Exception\InvalidTimeException;
 use DateTime;
 
-class InvoiceHeader
+class Header
 {
-    private string $series;
+    private ?string $series;
     private string $invoiceNumber;
     private string $expeditionDate;
     private string $expeditionTime;
+    private bool $isSimplified;
 
-    public function __construct(string $series, string $invoiceNumber, string $expeditionDate, string $expeditionTime)
+    private function __construct(string $invoiceNumber, string $expeditionDate, string $expeditionTime, ?string $series = null)
     {
         $this->series = $series;
         $this->invoiceNumber = $invoiceNumber;
         $this->setExpeditionDate($expeditionDate);
         $this->setExpeditionTime($expeditionTime);
+    }
+
+    public static function create(string $invoiceNumber, string $expeditionDate, string $expeditionTime, ?string $series = null): self
+    {
+        $header = new self($invoiceNumber, $expeditionDate, $expeditionTime, $series);
+        $header->isSimplified = false;
+        return $header;
+    }
+    public static function createSimplified(string $invoiceNumber, string $expeditionDate, string $expeditionTime, ?string $series = null): self
+    {
+        $header = new self($invoiceNumber, $expeditionDate, $expeditionTime, $series);
+        $header->isSimplified = true;
+        return $header;
     }
 
     private function setExpeditionDate(string $expeditionDate): self

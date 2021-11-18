@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 
 class AmmountCheckerTest extends TestCase
 {
-
     public function test_checker_throws_exception_if_ammount_is_not_valid(): void
     {
         $checker = new AmmountChecker();

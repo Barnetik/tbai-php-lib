@@ -17,7 +17,7 @@ class InvoiceBreakdownsTest extends TestCase
     {
         $this->expectException(OutOfBoundsException::class);
 
-        $invoiceBreakdown = new InvoiceBreakdown();
+        $invoiceBreakdown = new Breakdown();
         $notSubjectItem = new NationalNotSubjectBreakdownItem('12,25', NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_RL);
         $invoiceBreakdown->addNationalNotSubjectBreakdownItem($notSubjectItem);
         $invoiceBreakdown->addNationalNotSubjectBreakdownItem($notSubjectItem);

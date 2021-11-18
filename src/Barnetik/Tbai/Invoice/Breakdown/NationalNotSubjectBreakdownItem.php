@@ -4,6 +4,7 @@ namespace Barnetik\Tbai\Invoice\Breakdown;
 
 use Barnetik\Tbai\AmmountChecker;
 use Barnetik\Tbai\Exception\InvalidAmmountException;
+use InvalidArgumentException;
 
 class NationalNotSubjectBreakdownItem
 {
@@ -42,7 +43,7 @@ class NationalNotSubjectBreakdownItem
     private function setNotSubjectReason(string $reason): self
     {
         if (!in_array($reason, $this->validNotSubjectReasons())) {
-            throw new InvalidAmmountException();
+            throw new InvalidArgumentException('Subject reason is not valid');
         }
         $this->notSubjectReason = $reason;
 
