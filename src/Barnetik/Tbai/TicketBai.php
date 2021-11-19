@@ -41,11 +41,16 @@ class TicketBai implements Stringable, TbaiXml
         return $tbai;
     }
 
-    public function __toString(): string
+    public function toDom(): DomDocument
     {
         $xml = new DOMDocument('1.0', 'utf-8');
         $domNode = $this->xml($xml);
         $xml->append($domNode);
-        return $xml->saveXml();
+        return $xml;
+    }
+
+    public function __toString(): string
+    {
+        return $this->toDom()->saveXml();
     }
 }

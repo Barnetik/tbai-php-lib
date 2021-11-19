@@ -2,7 +2,7 @@
 
 namespace Barnetik\Tbai\TypeChecker;
 
-use Barnetik\Tbai\Exception\InvalidAmmountException;
+use Barnetik\Tbai\Exception\InvalidVatIdException;
 
 class VatId
 {
@@ -12,7 +12,7 @@ class VatId
             return true;
         }
 
-        throw new InvalidAmmountException();
+        throw new InvalidVatIdException();
     }
 
     public function __invoke(string $vatId): bool

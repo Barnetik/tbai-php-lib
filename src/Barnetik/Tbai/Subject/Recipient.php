@@ -2,7 +2,13 @@
 
 namespace Barnetik\Tbai\Subject;
 
-class Recipient
+use Barnetik\Tbai\Interface\TbaiXml;
+use Barnetik\Tbai\TypeChecker\VatId;
+use DOMDocument;
+use DOMNode;
+use InvalidArgumentException;
+
+class Recipient implements TbaiXml
 {
     const VAT_ID_TYPE_IFZ = '02';
     const VAT_ID_TYPE_NIF = '02';
@@ -20,33 +26,59 @@ class Recipient
     protected string $name;
     protected string $countryCode;
     protected ?string $postalCode;
+    protected ?string $address = null;
+
+    protected VatId $vatIdChecker;
 
     private function __construct()
     {
+        $this->vatIdChecker = new VatId;
     }
 
     public static function createNationalRecipient(string $vatId, string $name, ?string $postalCode = null): self
     {
         $recipient = new self();
-        $recipient->vatIdType = self::VAT_ID_TYPE_IFZ;
+        $recipient->setVatId(self::VAT_ID_TYPE_IFZ, $vatId);
         $recipient->countryCode = 'ES';
-
-        $recipient->vatId = $vatId;
         $recipient->name = $name;
         $recipient->postalCode = $postalCode;
         return $recipient;
     }
 
-    public static function createGenericRecipient(string $vatId, string $name, ?string $postalCode = null, string $vatIdType, string $countryCode = 'ES'): self
+    public static function createGenericRecipient(string $vatId, string $name, ?string $postalCode = null, string $vatIdType = self::VAT_ID_TYPE_NIF, string $countryCode = 'ES'): self
     {
         $recipient = new self();
-        $recipient->vatIdType = $vatIdType;
-        $recipient->countryCode = $countryCode;
+        $recipient->setVatId($vatIdType, $vatId);
 
-        $recipient->vatId = $vatId;
+        $recipient->countryCode = $countryCode;
         $recipient->name = $name;
         $recipient->postalCode = $postalCode;
         return $recipient;
+    }
+
+    protected function setVatId(string $vatIdType, string $vatId)
+    {
+        if (!in_array($vatIdType, $this->validIdTypes())) {
+            throw new InvalidArgumentException('Wrong VatId Type');
+        }
+
+        if ($vatIdType === self::VAT_ID_TYPE_NIF) {
+            $this->vatIdChecker->check($vatId);
+        }
+        $this->vatIdType = $vatIdType;
+        $this->vatId = $vatId;
+    }
+
+    protected function validIdTypes()
+    {
+        return [
+            self:: VAT_ID_TYPE_IFZ,
+            self:: VAT_ID_TYPE_NIF,
+            self:: VAT_ID_TYPE_PASSPORT,
+            self:: VAT_ID_TYPE_NATIONAL_ID,
+            self:: VAT_ID_TYPE_RESIDENCE_CERTIFICATE,
+            self:: VAT_ID_TYPE_OTHER
+        ];
     }
 
     public function vatIdType(): string
@@ -72,5 +104,51 @@ class Recipient
     public function countryCode(): string
     {
         return $this->countryCode;
+    }
+
+    protected function hasNifAsVatId(): bool
+    {
+        return $this->vatIdType() === self::VAT_ID_TYPE_NIF;
+    }
+
+    public function xml(DOMDocument $domDocument): DOMNode
+    {
+        $recipient = $domDocument->createElement('IDDestinatario');
+        if ($this->hasNifAsVatId()) {
+            $recipient->appendChild(
+                $domDocument->createElement('NIF', $this->vatId())
+            );
+        } else {
+            $otherId = $domDocument->createElement('IDOtro');
+            $otherId->append(
+                $domDocument->createElement('CodigoPais', $this->countryCode()),
+                $domDocument->createElement('IDType', $this->vatIdType()),
+                $domDocument->createElement('ID', $this->vatId())
+            );
+
+            $recipient->appendChild(
+                $otherId
+            );
+        }
+			// <element name="CodigoPais" type="T:CountryType2" minOccurs="0"/>
+			// <element name="IDType" type="T:IDTypeType"/>
+			// <element name="ID" type="T:TextMax20Type"/>
+
+        $recipient->appendChild(
+            $domDocument->createElement('ApellidosNombreRazonSocial', $this->name)
+        );
+
+        if ($this->postalCode()) {
+            $recipient->appendChild(
+                $domDocument->createElement('CodigoPostal', $this->postalCode())
+            );
+        }
+
+        if ($this->address) {
+            $recipient->appendChild(
+                $domDocument->createElement('Direccion', $this->address)
+            );
+        }
+        return $recipient;
     }
 }

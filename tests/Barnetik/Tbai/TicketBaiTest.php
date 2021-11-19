@@ -16,7 +16,8 @@ class TicketBaiTest extends TestCase
 {
     public function test_TicketBai_can_be_created(): void
     {
-        $subject = $this->getSubject();
+        // $subject = $this->getSubject();
+        $subject = $this->getMultipleRecipientSubject();
         $fingerprint = $this->getFingerprint();
 
         $header = Header::create('0000001', date('d-m-Y'), date('H:i:s'), 'TEST-SERIE-');
@@ -31,13 +32,10 @@ class TicketBaiTest extends TestCase
             $fingerprint
         );
 
-        echo $ticketbai;
-        // $xml = new DOMDocument();
-        // // $xml->loadXml(file_get_contents(__DIR__ . '/__files/sample-no-signature.xml'));
-        // $xml->loadXml((string)$ticketbai);
-        // $xml->schemaValidate(__DIR__ . '/__files/ticketBaiV1-2-no-signature.xsd.xml');
+        $dom = $ticketbai->toDom();
+        $dom->formatOutput = true;
+        echo $dom->saveXml();
 
-        // echo $ticketbai;
 
         $this->assertTrue(true);
     }
@@ -47,6 +45,13 @@ class TicketBaiTest extends TestCase
         $emitter = new Emitter('11111111H', 'Emitter Name');
         $recipient = Recipient::createNationalRecipient('00000000T', 'Client Name');
         return new Subject($emitter, $recipient, Subject::EMITTED_BY_EMITTER);
+    }
+
+    private function getMultipleRecipientSubject(): Subject
+    {
+        $subject = $this->getSubject();
+        $subject->addRecipient(Recipient::createGenericRecipient('X0000000I', 'Client Name 2', '48270', Recipient::VAT_ID_TYPE_RESIDENCE_CERTIFICATE, 'IE'));
+        return $subject;
     }
 
     private function getFingerprint(): Fingerprint

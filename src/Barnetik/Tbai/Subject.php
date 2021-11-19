@@ -18,7 +18,7 @@ class Subject implements TbaiXml
     protected array $recipients = [];
     protected string $emittedBy;
 
-    public function __construct(Emitter $emitter, Recipient $recipient, string $emittedBy)
+    public function __construct(Emitter $emitter, Recipient $recipient, string $emittedBy = self::EMITTED_BY_EMITTER)
     {
         $this->emitter = $emitter;
         $this->addRecipient($recipient);
@@ -62,9 +62,20 @@ class Subject implements TbaiXml
     public function xml(DOMDocument $document): DOMNode
     {
         $subject = $document->createElement('Sujetos');
-        $subject->appendChild(
-            $this->emitter->xml($document)
+        $subject->append(
+            $this->emitter->xml($document),
+            $document->createElement('VariosDestinatarios', $this->multipleRecipients()),
+            $document->createElement('EmitidaPorTercerosODestinatario', $this->emittedBy()),
         );
+
+        $recipients = $document->createElement('Destinatarios');
+        foreach ($this->recipients as $recipient) {
+            $recipients->appendChild(
+                $recipient->xml($document)
+            );
+        }
+        $subject->appendChild($recipients);
+
         return $subject;
     }
 }
