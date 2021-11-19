@@ -2,6 +2,7 @@
 
 namespace Barnetik\Tbai;
 
+use Barnetik\Tbai\Fingerprint\PreviousInvoice;
 use Barnetik\Tbai\Fingerprint\Vendor;
 use Barnetik\Tbai\Invoice\Breakdown;
 use Barnetik\Tbai\Invoice\Breakdown\NationalNotSubjectBreakdownItem;
@@ -20,7 +21,7 @@ class TicketBaiTest extends TestCase
         $subject = $this->getMultipleRecipientSubject();
         $fingerprint = $this->getFingerprint();
 
-        $header = Header::create('0000001', date('d-m-Y'), date('H:i:s'), 'TEST-SERIE-');
+        $header = Header::create('0000002', date('d-m-Y'), date('H:i:s'), 'TEST-SERIE-');
         $data = new Data('test-description', '12,34', [Data::VAT_REGIME_01]);
         $breakdown = new Breakdown();
         $breakdown->addNationalNotSubjectBreakdownItem(new NationalNotSubjectBreakdownItem('12,34', NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_LOCATION_RULES));
@@ -60,6 +61,7 @@ class TicketBaiTest extends TestCase
     private function getFingerprint(): Fingerprint
     {
         $vendor = new Vendor('testLicenseKey', 'barnetik');
-        return new Fingerprint($vendor);
+        $previousInvoice = new PreviousInvoice('0000002', '02-12-2020', 'abcdefgkauskjsa', 'TEST-SERIE-');
+        return new Fingerprint($vendor, $previousInvoice);
     }
 }

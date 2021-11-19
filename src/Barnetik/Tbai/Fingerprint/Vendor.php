@@ -36,8 +36,3 @@ class Vendor implements TbaiXml
         return $vendor;
     }
 }
-
-// <element name="LicenciaTBAI" type="T:TextMax20Type"/>
-// <element name="EntidadDesarrolladora" type="T:EntidadDesarrolladoraType"/>
-// <element name="Nombre" type="T:TextMax120Type"/>
-// <element name="Version" type="T:TextMax20Type"/>

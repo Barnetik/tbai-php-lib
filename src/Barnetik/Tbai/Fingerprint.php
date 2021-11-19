@@ -23,13 +23,10 @@ class Fingerprint implements TbaiXml
     {
         $fingerprint = $domDocument->createElement('HuellaTBAI');
 
-        // if ($this->previousInvoice) {
-        //     $fingerprint->appendChild($this->previousInvoice->xml($domDocument));
-        // }
+        if ($this->previousInvoice) {
+            $fingerprint->appendChild($this->previousInvoice->xml($domDocument));
+        }
         $fingerprint->appendChild($this->vendor->xml($domDocument));
         return $fingerprint;
     }
 }
-// <element name="EncadenamientoFacturaAnterior" type="T:EncadenamientoFacturaAnteriorType" minOccurs="0"/>
-// <element name="Software" type="T:SoftwareFacturacionType"/>
-// <element name="NumSerieDispositivo" type="T:TextMax30Type" minOccurs="0"/>
