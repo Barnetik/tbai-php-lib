@@ -1,7 +1,9 @@
 <?php
+
 namespace Barnetik\Tbai\Invoice;
 
 use Barnetik\Tbai\Invoice\Breakdown\NationalNotSubjectBreakdownItem;
+use Barnetik\Tbai\ValueObject\Ammount;
 use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 
@@ -9,7 +11,7 @@ class InvoiceBreakdownsTest extends TestCase
 {
     public function test_NotSubjectBreakdownItem_can_be_created(): void
     {
-        $notSubjectItem = new NationalNotSubjectBreakdownItem('12.25', NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_RL);
+        $notSubjectItem = new NationalNotSubjectBreakdownItem(new Ammount('12.25'), NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_RL);
         $this->assertEquals('12.25', $notSubjectItem->ammount());
     }
 
@@ -18,7 +20,7 @@ class InvoiceBreakdownsTest extends TestCase
         $this->expectException(OutOfBoundsException::class);
 
         $invoiceBreakdown = new Breakdown();
-        $notSubjectItem = new NationalNotSubjectBreakdownItem('12.25', NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_RL);
+        $notSubjectItem = new NationalNotSubjectBreakdownItem(new Ammount('12.25'), NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_RL);
         $invoiceBreakdown->addNationalNotSubjectBreakdownItem($notSubjectItem);
         $invoiceBreakdown->addNationalNotSubjectBreakdownItem($notSubjectItem);
         $invoiceBreakdown->addNationalNotSubjectBreakdownItem($notSubjectItem);
