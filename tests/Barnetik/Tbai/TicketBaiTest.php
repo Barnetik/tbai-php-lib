@@ -60,7 +60,7 @@ class TicketBaiTest extends TestCase
 
     private function getFingerprint(): Fingerprint
     {
-        $vendor = new Vendor('testLicenseKey', 'barnetik');
+        $vendor = new Vendor('testLicenseKey', 'F95780987');
         $previousInvoice = new PreviousInvoice('0000002', '02-12-2020', 'abcdefgkauskjsa', 'TEST-SERIE-');
         return new Fingerprint($vendor, $previousInvoice);
     }

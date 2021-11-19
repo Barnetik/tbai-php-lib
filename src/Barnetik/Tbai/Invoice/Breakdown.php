@@ -48,7 +48,20 @@ class Breakdown implements TbaiXml
 
     public function xml(DOMDocument $domDocument): DOMNode
     {
-        $breakdown = $domDocument->createElement('Desglose');
+        $breakdown = $domDocument->createElement('TipoDesglose');
+        $invoiceBreakdown = $domDocument->createElement('DesgloseFactura');
+
+        if (sizeof($this->nationalNotSubjectBreakdownItems)) {
+            $noSubject = $domDocument->createElement('NoSujeta');
+            ;
+            foreach ($this->nationalNotSubjectBreakdownItems as $nationalNotSubjectItem) {
+                $noSubject->appendChild($nationalNotSubjectItem->xml($domDocument));
+            }
+            $invoiceBreakdown->appendChild($noSubject);
+        }
+
+
+        $breakdown->appendChild($invoiceBreakdown);
         return $breakdown;
     }
 }

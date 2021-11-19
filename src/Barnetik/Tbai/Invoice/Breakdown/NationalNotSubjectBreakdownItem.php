@@ -4,9 +4,12 @@ namespace Barnetik\Tbai\Invoice\Breakdown;
 
 use Barnetik\Tbai\TypeChecker\Ammount;
 use Barnetik\Tbai\Exception\InvalidAmmountException;
+use Barnetik\Tbai\Interface\TbaiXml;
+use DOMDocument;
+use DOMNode;
 use InvalidArgumentException;
 
-class NationalNotSubjectBreakdownItem
+class NationalNotSubjectBreakdownItem implements TbaiXml
 {
     const NOT_SUBJECT_REASON_RL = 'RL';
     const NOT_SUBJECT_REASON_LOCATION_RULES = 'RL';
@@ -53,5 +56,15 @@ class NationalNotSubjectBreakdownItem
     public function ammount(): string
     {
         return $this->ammount;
+    }
+
+    public function xml(DOMDocument $domDocument): DOMNode
+    {
+        $notSubjectDetail = $domDocument->createElement('DetalleNoSujeta');
+        $notSubjectDetail->append(
+            $domDocument->createElement('Causa', $this->notSubjectReason),
+            $domDocument->createElement('Importe', $this->ammount),
+        );
+        return $notSubjectDetail;
     }
 }
