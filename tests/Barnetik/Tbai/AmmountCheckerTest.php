@@ -2,7 +2,7 @@
 
 namespace Barnetik\Tbai;
 
-use Barnetik\Tbai\AmmountChecker;
+use Barnetik\Tbai\TypeChecker\Ammount;
 use Barnetik\Tbai\Exception\InvalidAmmountException;
 use PHPUnit\Framework\TestCase;
 
@@ -10,7 +10,7 @@ class AmmountCheckerTest extends TestCase
 {
     public function test_checker_throws_exception_if_ammount_is_not_valid(): void
     {
-        $checker = new AmmountChecker();
+        $checker = new Ammount();
 
         try {
             $ammount = "12.04";
@@ -39,7 +39,7 @@ class AmmountCheckerTest extends TestCase
 
     public function test_checker_returns_true_if_ammount_is_valid(): void
     {
-        $checker = new AmmountChecker();
+        $checker = new Ammount();
 
         $ammount = "123456,02";
         $this->assertTrue($checker($ammount));

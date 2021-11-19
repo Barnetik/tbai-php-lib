@@ -4,19 +4,19 @@ namespace Barnetik\Tbai\Subject;
 
 class Recipient
 {
-    const TAX_ID_TYPE_IFZ = '02';
-    const TAX_ID_TYPE_NIF = '02';
-    const TAX_ID_TYPE_PASSPORT = '03';
+    const VAT_ID_TYPE_IFZ = '02';
+    const VAT_ID_TYPE_NIF = '02';
+    const VAT_ID_TYPE_PASSPORT = '03';
     /**
      * Egoitza dagoen herrialdeak edo lurraldeak emandako nortasun agiri ofiziala
      * Documento oficial de identificación expedido por el país o territorio de residencia
      */
-    const TAX_ID_TYPE_NATIONAL_ID = '04';
-    const TAX_ID_TYPE_RESIDENCE_CERTIFICATE = '05';
-    const TAX_ID_TYPE_OTHER = '06';
+    const VAT_ID_TYPE_NATIONAL_ID = '04';
+    const VAT_ID_TYPE_RESIDENCE_CERTIFICATE = '05';
+    const VAT_ID_TYPE_OTHER = '06';
 
-    protected string $taxIdType;
-    protected string $taxId;
+    protected string $vatIdType;
+    protected string $vatId;
     protected string $name;
     protected string $countryCode;
     protected ?string $postalCode;
@@ -25,38 +25,38 @@ class Recipient
     {
     }
 
-    public static function createNationalRecipient(string $taxId, string $name, ?string $postalCode = null): self
+    public static function createNationalRecipient(string $vatId, string $name, ?string $postalCode = null): self
     {
         $recipient = new self();
-        $recipient->taxIdType = self::TAX_ID_TYPE_IFZ;
+        $recipient->vatIdType = self::VAT_ID_TYPE_IFZ;
         $recipient->countryCode = 'ES';
 
-        $recipient->taxId = $taxId;
+        $recipient->vatId = $vatId;
         $recipient->name = $name;
         $recipient->postalCode = $postalCode;
         return $recipient;
     }
 
-    public static function createGenericRecipient(string $taxId, string $name, ?string $postalCode = null, string $taxIdType, string $countryCode = 'ES'): self
+    public static function createGenericRecipient(string $vatId, string $name, ?string $postalCode = null, string $vatIdType, string $countryCode = 'ES'): self
     {
         $recipient = new self();
-        $recipient->taxIdType = $taxIdType;
+        $recipient->vatIdType = $vatIdType;
         $recipient->countryCode = $countryCode;
 
-        $recipient->taxId = $taxId;
+        $recipient->vatId = $vatId;
         $recipient->name = $name;
         $recipient->postalCode = $postalCode;
         return $recipient;
     }
 
-    public function taxIdType(): string
+    public function vatIdType(): string
     {
-        return $this->taxIdType;
+        return $this->vatIdType;
     }
 
-    public function taxId(): string
+    public function vatId(): string
     {
-        return $this->taxId;
+        return $this->vatId;
     }
 
     public function name(): string

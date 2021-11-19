@@ -2,7 +2,7 @@
 
 namespace Barnetik\Tbai\Invoice;
 
-use Barnetik\Tbai\AmmountChecker;
+use Barnetik\Tbai\TypeChecker\Ammount;
 use Barnetik\Tbai\Exception\InvalidVatRegimeException;
 use InvalidArgumentException;
 use OutOfBoundsException;
@@ -33,11 +33,11 @@ class Data
     private ?string $taxBaseCost;
     private array $vatRegime = [];
     private array $details = [];
-    private AmmountChecker $ammountChecker;
+    private Ammount $ammountChecker;
 
     public function __construct(string $description, string $total, array $vatRegimes, ?string $supportedRetention = null, ?string $taxBaseCost = null)
     {
-        $this->ammountChecker = new AmmountChecker();
+        $this->ammountChecker = new Ammount();
 
         $this->description = $description;
         $this->setTotal($total);

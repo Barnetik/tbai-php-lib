@@ -2,7 +2,7 @@
 
 namespace Barnetik\Tbai\Invoice\Breakdown;
 
-use Barnetik\Tbai\AmmountChecker;
+use Barnetik\Tbai\TypeChecker\Ammount;
 use Barnetik\Tbai\Exception\InvalidNotExemptTypeException;
 use OutOfBoundsException;
 
@@ -14,11 +14,11 @@ class NationalSubjectNotExemptBreakdownItem
     private string $notExemptType;
     private string $taxBase;
     private array $vatDetails = [];
-    private AmmountChecker $ammountChecker;
+    private Ammount $ammountChecker;
 
     public function __construct(string $taxBase, string $type)
     {
-        $this->ammountChecker = new AmmountChecker();
+        $this->ammountChecker = new Ammount();
         $this->setTaxBase($taxBase);
         $this->setNotExemptType($type);
     }

@@ -2,10 +2,13 @@
 
 namespace Barnetik\Tbai;
 
+use Barnetik\Tbai\Interface\TbaiXml;
 use Barnetik\Tbai\Subject\Emitter;
 use Barnetik\Tbai\Subject\Recipient;
+use DOMDocument;
+use DOMNode;
 
-class Subject
+class Subject implements TbaiXml
 {
     const EMITTED_BY_EMITTER = 'N';
     const EMITTED_BY_THIRD_PARTY = 'T';
@@ -56,8 +59,12 @@ class Subject
         return $this->emittedBy;
     }
 
-    public function __toString(): string
+    public function xml(DOMDocument $document): DOMNode
     {
-        return 'Esto es el subject txabal';
+        $subject = $document->createElement('Sujetos');
+        $subject->appendChild(
+            $this->emitter->xml($document)
+        );
+        return $subject;
     }
 }

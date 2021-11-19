@@ -5,11 +5,11 @@ namespace Barnetik\Tbai;
 use Barnetik\Tbai\Fingerprint\Vendor;
 use Barnetik\Tbai\Invoice\Breakdown;
 use Barnetik\Tbai\Invoice\Breakdown\NationalNotSubjectBreakdownItem;
-use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectExemptBreakdownItem;
 use Barnetik\Tbai\Invoice\Data;
 use Barnetik\Tbai\Invoice\Header;
 use Barnetik\Tbai\Subject\Emitter;
 use Barnetik\Tbai\Subject\Recipient;
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 
 class TicketBaiTest extends TestCase
@@ -32,6 +32,12 @@ class TicketBaiTest extends TestCase
         );
 
         echo $ticketbai;
+        // $xml = new DOMDocument();
+        // // $xml->loadXml(file_get_contents(__DIR__ . '/__files/sample-no-signature.xml'));
+        // $xml->loadXml((string)$ticketbai);
+        // $xml->schemaValidate(__DIR__ . '/__files/ticketBaiV1-2-no-signature.xsd.xml');
+
+        // echo $ticketbai;
 
         $this->assertTrue(true);
     }

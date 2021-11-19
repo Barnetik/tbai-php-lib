@@ -1,10 +1,10 @@
 <?php
 
-namespace Barnetik\Tbai;
+namespace Barnetik\Tbai\TypeChecker;
 
 use Barnetik\Tbai\Exception\InvalidAmmountException;
 
-class AmmountChecker
+class Ammount
 {
     public function check(string $ammount, int $intPartMaxLength = 12): bool
     {

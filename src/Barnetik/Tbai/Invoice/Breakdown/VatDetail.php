@@ -2,7 +2,7 @@
 
 namespace Barnetik\Tbai\Invoice\Breakdown;
 
-use Barnetik\Tbai\AmmountChecker;
+use Barnetik\Tbai\TypeChecker\Ammount;
 
 class VatDetail
 {
@@ -13,11 +13,11 @@ class VatDetail
     private ?string $equivalenceQuota;
     private ?bool $isEquivalenceOperation;
 
-    private AmmountChecker $ammountChecker;
+    private Ammount $ammountChecker;
 
     public function __construct(string $taxBase, ?string $taxRate = null, ?string $taxQuota = null, ?string $equivalenceRate = null, ?string $equivalenceQuota = null, ?bool $isEquivalenceOperation = null)
     {
-        $this->ammountChecker = new AmmountChecker();
+        $this->ammountChecker = new Ammount();
         $this->setTaxBase($taxBase);
 
         if ($taxRate) {

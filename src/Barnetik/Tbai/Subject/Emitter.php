@@ -2,24 +2,50 @@
 
 namespace Barnetik\Tbai\Subject;
 
-class Emitter
-{
-    protected string $taxId;
-    protected string $name;
+use Barnetik\Tbai\Interface\TbaiXml;
+use Barnetik\Tbai\TypeChecker\VatId;
+use DOMDocument;
+use DOMNode;
 
-    public function __construct(string $taxId, string $name)
+class Emitter implements TbaiXml
+{
+    protected string $vatId;
+    protected string $name;
+    protected VatId $vatIdChecker;
+
+
+    public function __construct(string $vatId, string $name)
     {
-        $this->taxId = $taxId;
+        $this->vatIdChecker = new VatId();
+        $this->setVatId($vatId);
         $this->name = $name;
     }
 
-    public function taxId(): string
+    public function setVatId(string $vatId): self
     {
-        return $this->taxId;
+        $this->vatIdChecker->check($vatId);
+        $this->vatId = $vatId;
+
+        return $this;
+    }
+
+    public function vatId(): string
+    {
+        return $this->vatId;
     }
 
     public function name(): string
     {
         return $this->name;
+    }
+
+    public function xml(DOMDocument $domDocument): DOMNode
+    {
+        $emitter = $domDocument->createElement('Emisor');
+        $emitter->append(
+            $domDocument->createElement('NIF', $this->vatId),
+            $domDocument->createElement('ApellidosNombreRazonSocial', $this->name),
+        );
+        return $emitter;
     }
 }

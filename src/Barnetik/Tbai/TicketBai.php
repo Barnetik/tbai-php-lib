@@ -2,35 +2,50 @@
 
 namespace Barnetik\Tbai;
 
-class TicketBai
+use Barnetik\Tbai\Interface\TbaiXml;
+use DOMDocument;
+use DOMNode;
+use SimpleXMLElement;
+use Stringable;
+
+class TicketBai implements Stringable, TbaiXml
 {
+    private Header $header;
     private Subject $subject;
     private Invoice $invoice;
     private Fingerprint $fingerprint;
 
     public function __construct(Subject $subject, Invoice $invoice, Fingerprint $fingerprint)
     {
+        $this->header = new Header();
         $this->subject = $subject;
         $this->invoice = $invoice;
         $this->fingerprint = $fingerprint;
     }
 
-    public function toXml(): string
+    public function xml(DOMDocument $document): DOMNode
     {
-        return $this->__toString();
+        // $invoice = (string)$this->invoice;
+        // $fingerprint = (string)$this->fingerprint;
+        // $xml->addChild($this->invoice->xml());
+        // $xml->addChild($this->fingerprint->xml());
+
+
+        $tbai = $document->createElementNS('urn:ticketbai:emision', 'T:TicketBai');
+        $tbai->append(
+            $this->header->xml($document),
+            $this->subject->xml($document),
+        );
+
+        $document->appendChild($tbai);
+        return $tbai;
     }
 
     public function __toString(): string
     {
-        $subject = (string)$this->subject;
-        $invoice = (string)$this->invoice;
-        $fingerprint = (string)$this->fingerprint;
-        return <<<EOF
-        <xml>
-            <cosas>$subject<cosas>
-            <cosas>$invoice<cosas>
-            <cosas>$fingerprint<cosas>
-        </xml>
-EOF;
+        $xml = new DOMDocument('1.0', 'utf-8');
+        $domNode = $this->xml($xml);
+        $xml->append($domNode);
+        return $xml->saveXml();
     }
 }

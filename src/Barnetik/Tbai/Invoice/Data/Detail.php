@@ -2,7 +2,7 @@
 
 namespace Barnetik\Tbai\Invoice\Data;
 
-use Barnetik\Tbai\AmmountChecker;
+use Barnetik\Tbai\TypeChecker\Ammount;
 
 class Detail
 {
@@ -12,7 +12,7 @@ class Detail
     private string $discount;
     private string $totalAmmount;
 
-    private AmmountChecker $ammountChecker;
+    private Ammount $ammountChecker;
 
     public function __construct(string $description, string $unitPrice, string $quantity, string $totalAmmount, string $discount = null)
     {
@@ -23,7 +23,7 @@ class Detail
         $this->setDiscount($discount);
     }
 
-    protected function setUnitPrice(string $unitPrice)
+    protected function setUnitPrice(string $unitPrice): self
     {
         $this->ammountChecker->check($unitPrice);
 
@@ -31,7 +31,7 @@ class Detail
         return $this;
     }
 
-    protected function setQuantity(string $quantity)
+    protected function setQuantity(string $quantity): self
     {
         $this->ammountChecker->check($quantity);
 
@@ -39,7 +39,7 @@ class Detail
         return $this;
     }
 
-    protected function setTotalAmmount(string $totalAmmount)
+    protected function setTotalAmmount(string $totalAmmount): self
     {
         $this->ammountChecker->check($totalAmmount);
 
@@ -47,7 +47,7 @@ class Detail
         return $this;
     }
 
-    protected function setDiscount(string $discount)
+    protected function setDiscount(string $discount): self
     {
         $this->ammountChecker->check($discount);
 

@@ -2,7 +2,7 @@
 
 namespace Barnetik\Tbai\Invoice\Breakdown;
 
-use Barnetik\Tbai\AmmountChecker;
+use Barnetik\Tbai\TypeChecker\Ammount;
 use Barnetik\Tbai\Exception\InvalidAmmountException;
 use InvalidArgumentException;
 
@@ -16,11 +16,11 @@ class NationalNotSubjectBreakdownItem
     private string $notSubjectReason;
     private string $ammount;
 
-    private AmmountChecker $ammountChecker;
+    private Ammount $ammountChecker;
 
     public function __construct(string $ammount, string $reason)
     {
-        $this->ammountChecker = new AmmountChecker();
+        $this->ammountChecker = new Ammount();
         $this->setAmmount($ammount);
         $this->setNotSubjectReason($reason);
     }
