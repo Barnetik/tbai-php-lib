@@ -28,7 +28,6 @@ class TicketBai implements Stringable, TbaiXml
         // $invoice = (string)$this->invoice;
         // $xml->addChild($this->invoice->xml());
 
-
         $tbai = $document->createElementNS('urn:ticketbai:emision', 'T:TicketBai');
         $tbai->append(
             $this->header->xml($document),

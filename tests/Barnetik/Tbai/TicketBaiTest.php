@@ -34,9 +34,11 @@ class TicketBaiTest extends TestCase
 
         $dom = $ticketbai->toDom();
         $dom->formatOutput = true;
-        echo $dom->saveXml();
 
+        echo $dom->saveXml();
         $dom->schemaValidate(__DIR__ . '/__files/ticketBaiV1-2-no-signature.xsd');
+
+
 
         $this->assertTrue(true);
     }

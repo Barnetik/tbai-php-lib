@@ -22,6 +22,11 @@ class Fingerprint implements TbaiXml
     public function xml(DOMDocument $domDocument): DOMNode
     {
         $fingerprint = $domDocument->createElement('HuellaTBAI');
+
+        // if ($this->previousInvoice) {
+        //     $fingerprint->appendChild($this->previousInvoice->xml($domDocument));
+        // }
+        $fingerprint->appendChild($this->vendor->xml($domDocument));
         return $fingerprint;
     }
 }

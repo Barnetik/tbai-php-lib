@@ -78,7 +78,6 @@ class Subject implements TbaiXml
             $document->createElement('EmitidaPorTercerosODestinatario', $this->emittedBy()),
         );
 
-
         return $subject;
     }
 }
