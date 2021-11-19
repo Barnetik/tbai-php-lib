@@ -32,7 +32,7 @@ class Recipient implements TbaiXml
 
     private function __construct()
     {
-        $this->vatIdChecker = new VatId;
+        $this->vatIdChecker = new VatId();
     }
 
     public static function createNationalRecipient(string $vatId, string $name, ?string $postalCode = null): self
@@ -56,7 +56,7 @@ class Recipient implements TbaiXml
         return $recipient;
     }
 
-    protected function setVatId(string $vatIdType, string $vatId)
+    protected function setVatId(string $vatIdType, string $vatId): self
     {
         if (!in_array($vatIdType, $this->validIdTypes())) {
             throw new InvalidArgumentException('Wrong VatId Type');
@@ -67,9 +67,11 @@ class Recipient implements TbaiXml
         }
         $this->vatIdType = $vatIdType;
         $this->vatId = $vatId;
+
+        return $this;
     }
 
-    protected function validIdTypes()
+    protected function validIdTypes(): array
     {
         return [
             self:: VAT_ID_TYPE_IFZ,
@@ -130,9 +132,6 @@ class Recipient implements TbaiXml
                 $otherId
             );
         }
-			// <element name="CodigoPais" type="T:CountryType2" minOccurs="0"/>
-			// <element name="IDType" type="T:IDTypeType"/>
-			// <element name="ID" type="T:TextMax20Type"/>
 
         $recipient->appendChild(
             $domDocument->createElement('ApellidosNombreRazonSocial', $this->name)
