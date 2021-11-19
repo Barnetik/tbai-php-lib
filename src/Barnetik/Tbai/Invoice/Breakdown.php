@@ -51,9 +51,33 @@ class Breakdown implements TbaiXml
         $breakdown = $domDocument->createElement('TipoDesglose');
         $invoiceBreakdown = $domDocument->createElement('DesgloseFactura');
 
+        if (sizeof($this->nationalSubjectExemptBreakdownItems) || sizeof($this->nationalSubjectNotExemptBreakdownItems)) {
+            $subject = $domDocument->createElement('Sujeta');
+
+            if (sizeof($this->nationalSubjectExemptBreakdownItems)) {
+                $exempt = $domDocument->createElement('Exenta');
+                $subject->appendChild($exempt);
+
+                foreach ($this->nationalSubjectExemptBreakdownItems as $nationalSubjectExempt) {
+                    $exempt->appendChild($nationalSubjectExempt->xml($domDocument));
+                }
+            }
+
+            if (sizeof($this->nationalSubjectNotExemptBreakdownItems)) {
+                $notExempt = $domDocument->createElement('NoExenta');
+                $subject->appendChild($notExempt);
+
+                foreach ($this->nationalSubjectNotExemptBreakdownItems as $nationalSubjectNotExempt) {
+                    $notExempt->appendChild($nationalSubjectNotExempt->xml($domDocument));
+                }
+            }
+
+            $invoiceBreakdown->appendChild($subject);
+        }
+
         if (sizeof($this->nationalNotSubjectBreakdownItems)) {
             $noSubject = $domDocument->createElement('NoSujeta');
-            ;
+
             foreach ($this->nationalNotSubjectBreakdownItems as $nationalNotSubjectItem) {
                 $noSubject->appendChild($nationalNotSubjectItem->xml($domDocument));
             }
@@ -65,3 +89,30 @@ class Breakdown implements TbaiXml
         return $breakdown;
     }
 }
+
+// <complexType name="NoExentaType">
+//     <sequence>
+//         <element name="DetalleNoExenta" type="T:DetalleNoExentaType" minOccurs="1" maxOccurs="2"/>
+//     </sequence>
+// </complexType>
+// <complexType name="DetalleNoExentaType">
+//     <sequence>
+//         <element name="TipoNoExenta" type="T:TipoOperacionSujetaNoExentaType"/>
+//         <element name="DesgloseIVA" type="T:DesgloseIVAType"/>
+//     </sequence>
+// </complexType>
+// <complexType name="DesgloseIVAType">
+//     <sequence>
+//         <element name="DetalleIVA" type="T:DetalleIVAType" maxOccurs="6"/>
+//     </sequence>
+// </complexType>
+// <complexType name="DetalleIVAType">
+//     <sequence>
+//         <element name="BaseImponible" type="T:ImporteSgn12.2Type"/>
+//         <element name="TipoImpositivo" type="T:Tipo3.2Type" minOccurs="0"/>
+//         <element name="CuotaImpuesto" type="T:ImporteSgn12.2Type" minOccurs="0"/>
+//         <element name="TipoRecargoEquivalencia" type="T:Tipo3.2Type" minOccurs="0"/>
+//         <element name="CuotaRecargoEquivalencia" type="T:ImporteSgn12.2Type" minOccurs="0"/>
+//         <element name="OperacionEnRecargoDeEquivalenciaORegimenSimplificado" type="T:SiNoType" minOccurs="0"/>
+//     </sequence>
+// </complexType>
