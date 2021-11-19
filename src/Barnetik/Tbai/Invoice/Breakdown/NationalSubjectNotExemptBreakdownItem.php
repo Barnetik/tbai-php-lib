@@ -4,22 +4,22 @@ namespace Barnetik\Tbai\Invoice\Breakdown;
 
 use Barnetik\Tbai\TypeChecker\Ammount;
 use Barnetik\Tbai\Exception\InvalidNotExemptTypeException;
+use Barnetik\Tbai\Interfaces\TbaiXml;
+use DOMDocument;
+use DOMNode;
 use OutOfBoundsException;
 
-class NationalSubjectNotExemptBreakdownItem
+class NationalSubjectNotExemptBreakdownItem implements TbaiXml
 {
     const NOT_EXEMPT_TYPE_S1 = 'S1';
     const NOT_EXEMPT_TYPE_S2 = 'S2';
 
     private string $notExemptType;
-    private string $taxBase;
     private array $vatDetails = [];
     private Ammount $ammountChecker;
 
-    public function __construct(string $taxBase, string $type)
+    public function __construct(string $type)
     {
-        $this->ammountChecker = new Ammount();
-        $this->setTaxBase($taxBase);
         $this->setNotExemptType($type);
     }
 
@@ -29,13 +29,6 @@ class NationalSubjectNotExemptBreakdownItem
             self::NOT_EXEMPT_TYPE_S1,
             self::NOT_EXEMPT_TYPE_S2,
         ];
-    }
-
-    private function setTaxBase(string $taxBase): self
-    {
-        $this->ammountChecker->check($taxBase);
-        $this->taxBase = $taxBase;
-        return $this;
     }
 
     private function setNotExemptType(string $type): self
@@ -56,5 +49,19 @@ class NationalSubjectNotExemptBreakdownItem
         }
 
         throw new OutOfBoundsException('Too many vat detail items');
+    }
+
+    public function xml(DOMDocument $domDocument): DOMNode
+    {
+        $notExentType = $domDocument->createElement('DetalleNoExenta');
+
+        foreach ($this->vatDetails as $vatDetail) {
+            $notExentType->appendChild($domDocument->createElement('TipoNoExenta', $this->notExemptType));
+            $vatBreakdown = $domDocument->createElement('DesgloseIVA');
+            $vatBreakdown->appendChild($vatDetail->xml($domDocument));
+            $notExentType->appendChild($vatBreakdown);
+        }
+
+        return $notExentType;
     }
 }

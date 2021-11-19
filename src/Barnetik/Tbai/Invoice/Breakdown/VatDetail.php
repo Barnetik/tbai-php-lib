@@ -2,16 +2,19 @@
 
 namespace Barnetik\Tbai\Invoice\Breakdown;
 
+use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\TypeChecker\Ammount;
+use DOMDocument;
+use DOMNode;
 
-class VatDetail
+class VatDetail implements TbaiXml
 {
     private string $taxBase;
-    private ?string $taxRate;
-    private ?string $taxQuota;
-    private ?string $equivalenceRate;
-    private ?string $equivalenceQuota;
-    private ?bool $isEquivalenceOperation;
+    private ?string $taxRate = null;
+    private ?string $taxQuota = null;
+    private ?string $equivalenceRate = null;
+    private ?string $equivalenceQuota = null;
+    private ?bool $isEquivalenceOperation = null;
 
     private Ammount $ammountChecker;
 
@@ -69,5 +72,30 @@ class VatDetail
         $this->ammountChecker->check($equivalenceQuota, 12);
         $this->equivalenceQuota = $equivalenceQuota;
         return $this;
+    }
+
+    public function xml(DOMDocument $domDocument): DOMNode
+    {
+        $vatDetail = $domDocument->createElement('DetalleIVA');
+        $vatDetail->appendChild($domDocument->createElement('BaseImponible', $this->taxBase));
+
+        if ($this->taxRate) {
+            $vatDetail->appendChild($domDocument->createElement('TipoImpositivo', $this->taxRate));
+        }
+
+        if ($this->taxQuota) {
+            $vatDetail->appendChild($domDocument->createElement('CuotaImpuesto', $this->taxQuota));
+        }
+
+        if ($this->equivalenceRate) {
+            $vatDetail->appendChild($domDocument->createElement('TipoRecargoEquivalencia', $this->equivalenceRate));
+        }
+
+        if ($this->equivalenceQuota) {
+            $vatDetail->appendChild($domDocument->createElement('CuotaRecargoEquivalencia', $this->equivalenceQuota));
+        }
+
+        $vatDetail->appendChild($domDocument->createElement('OperacionEnRecargoDeEquivalenciaORegimenSimplificado', $this->isEquivalenceOperation ? 'S' : 'N'));
+        return $vatDetail;
     }
 }
