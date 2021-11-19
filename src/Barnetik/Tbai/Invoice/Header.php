@@ -4,9 +4,14 @@ namespace Barnetik\Tbai\Invoice;
 
 use Barnetik\Tbai\Exception\InvalidDateException;
 use Barnetik\Tbai\Exception\InvalidTimeException;
+use Barnetik\Tbai\Interface\TbaiXml;
+use Barnetik\Tbai\TypeChecker\Date;
+use Barnetik\Tbai\TypeChecker\Time;
 use DateTime;
+use DOMDocument;
+use DOMNode;
 
-class Header
+class Header implements TbaiXml
 {
     private ?string $series;
     private string $invoiceNumber;
@@ -14,8 +19,14 @@ class Header
     private string $expeditionTime;
     private bool $isSimplified;
 
+    private Time $timeChecker;
+    private Date $dateChecker;
+
     private function __construct(string $invoiceNumber, string $expeditionDate, string $expeditionTime, ?string $series = null)
     {
+        $this->timeChecker = new Time();
+        $this->dateChecker = new Date();
+
         $this->series = $series;
         $this->invoiceNumber = $invoiceNumber;
         $this->setExpeditionDate($expeditionDate);
@@ -37,9 +48,7 @@ class Header
 
     private function setExpeditionDate(string $expeditionDate): self
     {
-        if (false === DateTime::createFromFormat("d-m-Y", $expeditionDate)) {
-            throw new InvalidDateException('Wrong expedition date provided');
-        }
+        $this->dateChecker->check($expeditionDate);
 
         $this->expeditionDate = $expeditionDate;
         return $this;
@@ -47,9 +56,7 @@ class Header
 
     private function setExpeditionTime(string $expeditionTime): self
     {
-        if (!preg_match('/\d{2}:\d{2}:\d{2}/', $expeditionTime)) {
-            throw new InvalidTimeException('Wrong expedition time provided');
-        }
+        $this->timeChecker->check($expeditionTime);
 
         $this->expeditionTime = $expeditionTime;
         return $this;
@@ -74,4 +81,30 @@ class Header
     {
         return $this->expeditionTime;
     }
+
+    public function xml(DOMDocument $domDocument): DOMNode
+    {
+        $header = $domDocument->createElement('CabeceraFactura');
+        if ($this->series()) {
+            $header->appendChild($domDocument->createElement('SerieFactura', $this->series()));
+        }
+
+        $header->append(
+            $domDocument->createElement('NumFactura', $this->series()),
+            $domDocument->createElement('FechaExpedicionFactura', $this->expeditionDate()),
+            $domDocument->createElement('HoraExpedicionFactura', $this->expeditionTime()),
+            $domDocument->createElement('FacturaSimplificada', $this->isSimplified ? 'S' : 'N')
+        );
+
+
+        return $header;
+    }
 }
+
+    // <complexType name="CabeceraFacturaType">
+    //  <sequence>
+    //      <element name="FacturaEmitidaSustitucionSimplificada" type="T:SiNoType" minOccurs="0"/>
+    //      <element name="FacturaRectificativa" type="T:FacturaRectificativaType" minOccurs="0"/>
+    //      <element name="FacturasRectificadasSustituidas" type="T:FacturasRectificadasSustituidasType" minOccurs="0"/>
+    //  </sequence>
+    // </complexType>
