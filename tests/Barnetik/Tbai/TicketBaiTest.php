@@ -61,14 +61,14 @@ class TicketBaiTest extends TestCase
     private function getSubject(): Subject
     {
         $emitter = new Emitter(new VatId('11111111H'), 'Emitter Name');
-        $recipient = Recipient::createNationalRecipient('00000000T', 'Client Name');
+        $recipient = Recipient::createNationalRecipient(new VatId('00000000T'), 'Client Name');
         return new Subject($emitter, $recipient, Subject::EMITTED_BY_EMITTER);
     }
 
     private function getMultipleRecipientSubject(): Subject
     {
         $subject = $this->getSubject();
-        $subject->addRecipient(Recipient::createGenericRecipient('X0000000I', 'Client Name 2', '48270', Recipient::VAT_ID_TYPE_RESIDENCE_CERTIFICATE, 'IE'));
+        $subject->addRecipient(Recipient::createGenericRecipient(new VatId('X0000000I', VatId::VAT_ID_TYPE_RESIDENCE_CERTIFICATE), 'Client Name 2', '48270', 'IE'));
         return $subject;
     }
 

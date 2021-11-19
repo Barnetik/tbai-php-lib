@@ -3,52 +3,38 @@
 namespace Barnetik\Tbai\Subject;
 
 use Barnetik\Tbai\Interfaces\TbaiXml;
-use Barnetik\Tbai\TypeChecker\VatId;
+use Barnetik\Tbai\ValueObject\VatId;
 use DOMDocument;
 use DOMNode;
 use InvalidArgumentException;
 
 class Recipient implements TbaiXml
 {
-    const VAT_ID_TYPE_IFZ = '02';
-    const VAT_ID_TYPE_NIF = '02';
-    const VAT_ID_TYPE_PASSPORT = '03';
-    /**
-     * Egoitza dagoen herrialdeak edo lurraldeak emandako nortasun agiri ofiziala
-     * Documento oficial de identificación expedido por el país o territorio de residencia
-     */
-    const VAT_ID_TYPE_NATIONAL_ID = '04';
-    const VAT_ID_TYPE_RESIDENCE_CERTIFICATE = '05';
-    const VAT_ID_TYPE_OTHER = '06';
-
-    protected string $vatIdType;
-    protected string $vatId;
+    protected VatId $vatId;
     protected string $name;
     protected string $countryCode;
     protected ?string $postalCode;
     protected ?string $address = null;
 
-    protected VatId $vatIdChecker;
-
     private function __construct()
     {
-        $this->vatIdChecker = new VatId();
     }
 
-    public static function createNationalRecipient(string $vatId, string $name, ?string $postalCode = null): self
+    public static function createNationalRecipient(VatId $vatId, string $name, ?string $postalCode = null): self
     {
         $recipient = new self();
-        $recipient->setVatId(self::VAT_ID_TYPE_IFZ, $vatId);
+        $recipient->vatId = $vatId;
+        // $recipient->setVatId(self::VAT_ID_TYPE_IFZ, $vatId);
         $recipient->countryCode = 'ES';
         $recipient->name = $name;
         $recipient->postalCode = $postalCode;
         return $recipient;
     }
 
-    public static function createGenericRecipient(string $vatId, string $name, ?string $postalCode = null, string $vatIdType = self::VAT_ID_TYPE_NIF, string $countryCode = 'ES'): self
+    public static function createGenericRecipient(VatId $vatId, string $name, ?string $postalCode = null, string $countryCode = 'ES'): self
     {
         $recipient = new self();
-        $recipient->setVatId($vatIdType, $vatId);
+        $recipient->vatId = $vatId;
 
         $recipient->countryCode = $countryCode;
         $recipient->name = $name;
@@ -56,39 +42,12 @@ class Recipient implements TbaiXml
         return $recipient;
     }
 
-    protected function setVatId(string $vatIdType, string $vatId): self
-    {
-        if (!in_array($vatIdType, $this->validIdTypes())) {
-            throw new InvalidArgumentException('Wrong VatId Type');
-        }
-
-        if ($vatIdType === self::VAT_ID_TYPE_NIF) {
-            $this->vatIdChecker->check($vatId);
-        }
-        $this->vatIdType = $vatIdType;
-        $this->vatId = $vatId;
-
-        return $this;
-    }
-
-    protected function validIdTypes(): array
-    {
-        return [
-            self::VAT_ID_TYPE_IFZ,
-            self::VAT_ID_TYPE_NIF,
-            self::VAT_ID_TYPE_PASSPORT,
-            self::VAT_ID_TYPE_NATIONAL_ID,
-            self::VAT_ID_TYPE_RESIDENCE_CERTIFICATE,
-            self::VAT_ID_TYPE_OTHER
-        ];
-    }
-
     public function vatIdType(): string
     {
-        return $this->vatIdType;
+        return $this->vatId->type();
     }
 
-    public function vatId(): string
+    public function vatId(): VatId
     {
         return $this->vatId;
     }
@@ -110,7 +69,7 @@ class Recipient implements TbaiXml
 
     protected function hasNifAsVatId(): bool
     {
-        return $this->vatIdType() === self::VAT_ID_TYPE_NIF;
+        return $this->vatIdType() === VatId::VAT_ID_TYPE_NIF;
     }
 
     public function xml(DOMDocument $domDocument): DOMNode

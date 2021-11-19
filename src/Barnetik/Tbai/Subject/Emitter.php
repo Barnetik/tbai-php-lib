@@ -12,7 +12,6 @@ class Emitter implements TbaiXml
     protected string $vatId;
     protected string $name;
 
-
     public function __construct(VatId $vatId, string $name)
     {
         $this->vatId = $vatId;
