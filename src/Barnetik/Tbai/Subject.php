@@ -62,11 +62,6 @@ class Subject implements TbaiXml
     public function xml(DOMDocument $document): DOMNode
     {
         $subject = $document->createElement('Sujetos');
-        $subject->append(
-            $this->emitter->xml($document),
-            $document->createElement('VariosDestinatarios', $this->multipleRecipients()),
-            $document->createElement('EmitidaPorTercerosODestinatario', $this->emittedBy()),
-        );
 
         $recipients = $document->createElement('Destinatarios');
         foreach ($this->recipients as $recipient) {
@@ -75,6 +70,14 @@ class Subject implements TbaiXml
             );
         }
         $subject->appendChild($recipients);
+
+        $subject->append(
+            $this->emitter->xml($document),
+            $recipients,
+            $document->createElement('VariosDestinatarios', $this->multipleRecipients()),
+            $document->createElement('EmitidaPorTercerosODestinatario', $this->emittedBy()),
+        );
+
 
         return $subject;
     }

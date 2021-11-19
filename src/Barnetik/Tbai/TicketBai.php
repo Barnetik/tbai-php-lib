@@ -26,15 +26,14 @@ class TicketBai implements Stringable, TbaiXml
     public function xml(DOMDocument $document): DOMNode
     {
         // $invoice = (string)$this->invoice;
-        // $fingerprint = (string)$this->fingerprint;
         // $xml->addChild($this->invoice->xml());
-        // $xml->addChild($this->fingerprint->xml());
 
 
         $tbai = $document->createElementNS('urn:ticketbai:emision', 'T:TicketBai');
         $tbai->append(
             $this->header->xml($document),
             $this->subject->xml($document),
+            $this->fingerprint->xml($document),
         );
 
         $document->appendChild($tbai);

@@ -10,7 +10,7 @@ use SimpleXMLElement;
 
 class Header implements TbaiXml
 {
-    const TBAI_VERSION = '1.0';
+    const TBAI_VERSION = '1.2';
 
     public function xml(DOMDocument $document): DOMNode
     {
