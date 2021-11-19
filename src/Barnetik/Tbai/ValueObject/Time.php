@@ -1,12 +1,20 @@
 <?php
 
-namespace Barnetik\Tbai\TypeChecker;
+namespace Barnetik\Tbai\ValueObject;
 
 use Barnetik\Tbai\Exception\InvalidTimeException;
-use DateTimeImmutable;
+use Stringable;
 
-class Time
+class Time implements Stringable
 {
+    private string $value;
+
+    public function __construct(string $time)
+    {
+        $this->check($time);
+        $this->value = $time;
+    }
+
     public function check(string $time): bool
     {
         if (!preg_match('/^\d{2}:\d{2}:\d{2}$/', $time, $matches)) {
@@ -16,8 +24,8 @@ class Time
         return true;
     }
 
-    public function __invoke(string $time): bool
+    public function __toString(): string
     {
-        return $this->check($time);
+        return $this->value;
     }
 }

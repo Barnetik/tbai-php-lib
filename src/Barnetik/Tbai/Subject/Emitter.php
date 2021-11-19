@@ -3,7 +3,7 @@
 namespace Barnetik\Tbai\Subject;
 
 use Barnetik\Tbai\Interfaces\TbaiXml;
-use Barnetik\Tbai\TypeChecker\VatId;
+use Barnetik\Tbai\ValueObject\VatId;
 use DOMDocument;
 use DOMNode;
 
@@ -11,22 +11,12 @@ class Emitter implements TbaiXml
 {
     protected string $vatId;
     protected string $name;
-    protected VatId $vatIdChecker;
 
 
-    public function __construct(string $vatId, string $name)
+    public function __construct(VatId $vatId, string $name)
     {
-        $this->vatIdChecker = new VatId();
-        $this->setVatId($vatId);
-        $this->name = $name;
-    }
-
-    public function setVatId(string $vatId): self
-    {
-        $this->vatIdChecker->check($vatId);
         $this->vatId = $vatId;
-
-        return $this;
+        $this->name = $name;
     }
 
     public function vatId(): string

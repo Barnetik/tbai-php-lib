@@ -11,6 +11,10 @@ use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectNotExemptBreakdownItem;
 use Barnetik\Tbai\Invoice\Breakdown\VatDetail;
 use Barnetik\Tbai\Invoice\Data;
 use Barnetik\Tbai\Invoice\Header;
+use Barnetik\Tbai\ValueObject\Ammount;
+use Barnetik\Tbai\ValueObject\Date;
+use Barnetik\Tbai\ValueObject\Time;
+use Barnetik\Tbai\ValueObject\VatId;
 use Barnetik\Tbai\Subject\Emitter;
 use Barnetik\Tbai\Subject\Recipient;
 use DOMDocument;
@@ -24,14 +28,14 @@ class TicketBaiTest extends TestCase
         $subject = $this->getMultipleRecipientSubject();
         $fingerprint = $this->getFingerprint();
 
-        $header = Header::create('0000002', date('d-m-Y'), date('H:i:s'), 'TEST-SERIE-');
-        $data = new Data('test-description', '12.34', [Data::VAT_REGIME_01]);
+        $header = Header::create('0000002', new Date(date('d-m-Y')), new Time(date('H:i:s')), 'TEST-SERIE-');
+        $data = new Data('test-description', new Ammount('12.34'), [Data::VAT_REGIME_01]);
         $breakdown = new Breakdown();
-        $breakdown->addNationalNotSubjectBreakdownItem(new NationalNotSubjectBreakdownItem('12.34', NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_LOCATION_RULES));
-        $breakdown->addNationalSubjectExemptBreakdownItem(new NationalSubjectExemptBreakdownItem('56.78', NationalSubjectExemptBreakdownItem::EXEMPT_REASON_ART_23));
+        $breakdown->addNationalNotSubjectBreakdownItem(new NationalNotSubjectBreakdownItem(new Ammount('12.34'), NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_LOCATION_RULES));
+        $breakdown->addNationalSubjectExemptBreakdownItem(new NationalSubjectExemptBreakdownItem(new Ammount('56.78'), NationalSubjectExemptBreakdownItem::EXEMPT_REASON_ART_23));
 
         $notExemptBreakdown = new NationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1);
-        $notExemptBreakdown->addVatDetail(new VatDetail('98.76', '4.12', '3.01'));
+        $notExemptBreakdown->addVatDetail(new VatDetail(new Ammount('98.76'), new Ammount('4.12'), new Ammount('3.01')));
         $breakdown->addNationalSubjectNotExemptBreakdownItem($notExemptBreakdown);
 
         // (new NationalNotSubjectBreakdownItem('12.34', NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_LOCATION_RULES));
@@ -56,7 +60,7 @@ class TicketBaiTest extends TestCase
 
     private function getSubject(): Subject
     {
-        $emitter = new Emitter('11111111H', 'Emitter Name');
+        $emitter = new Emitter(new VatId('11111111H'), 'Emitter Name');
         $recipient = Recipient::createNationalRecipient('00000000T', 'Client Name');
         return new Subject($emitter, $recipient, Subject::EMITTED_BY_EMITTER);
     }
@@ -71,7 +75,7 @@ class TicketBaiTest extends TestCase
     private function getFingerprint(): Fingerprint
     {
         $vendor = new Vendor('testLicenseKey', 'F95780987');
-        $previousInvoice = new PreviousInvoice('0000002', '02-12-2020', 'abcdefgkauskjsa', 'TEST-SERIE-');
+        $previousInvoice = new PreviousInvoice('0000002', new Date('02-12-2020'), 'abcdefgkauskjsa', 'TEST-SERIE-');
         return new Fingerprint($vendor, $previousInvoice);
     }
 }

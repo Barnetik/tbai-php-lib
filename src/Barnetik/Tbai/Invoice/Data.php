@@ -2,9 +2,9 @@
 
 namespace Barnetik\Tbai\Invoice;
 
-use Barnetik\Tbai\TypeChecker\Ammount;
 use Barnetik\Tbai\Exception\InvalidVatRegimeException;
 use Barnetik\Tbai\Interfaces\TbaiXml;
+use Barnetik\Tbai\ValueObject\Ammount;
 use DOMDocument;
 use DOMNode;
 use InvalidArgumentException;
@@ -31,52 +31,25 @@ class Data implements TbaiXml
     const VAT_REGIME_52 = '52';
 
     private string $description;
-    private string $total;
-    private ?string $supportedRetention = null;
-    private ?string $taxBaseCost = null;
+    private Ammount $total;
+    private ?Ammount $supportedRetention = null;
+    private ?Ammount $taxBaseCost = null;
     private array $vatRegime = [];
     private array $details = [];
-    private Ammount $ammountChecker;
 
-    public function __construct(string $description, string $total, array $vatRegimes, ?string $supportedRetention = null, ?string $taxBaseCost = null)
+    public function __construct(string $description, Ammount $total, array $vatRegimes, ?Ammount $supportedRetention = null, ?Ammount $taxBaseCost = null)
     {
-        $this->ammountChecker = new Ammount();
-
         $this->description = $description;
-        $this->setTotal($total);
+        $this->total = $total;
         $this->setVatRegimes($vatRegimes);
 
         if ($supportedRetention) {
-            $this->setSupportedRetention($supportedRetention);
+            $this->supportedRetention = $supportedRetention;
         }
 
         if ($taxBaseCost) {
-            $this->setTaxBaseCost($taxBaseCost);
+            $this->taxBaseCost = $taxBaseCost;
         }
-    }
-
-    private function setTotal(string $total): self
-    {
-        $this->ammountChecker->check($total, 12);
-
-        $this->total = $total;
-        return $this;
-    }
-
-    private function setSupportedRetention(string $supportedRetention): self
-    {
-        $this->ammountChecker->check($supportedRetention, 12);
-
-        $this->supportedRetention = $supportedRetention;
-        return $this;
-    }
-
-    private function setTaxBaseCost(string $taxBaseCost): self
-    {
-        $this->ammountChecker->check($taxBaseCost, 12);
-
-        $this->taxBaseCost = $taxBaseCost;
-        return $this;
     }
 
     private function setVatRegimes(array $vatRegimes): self

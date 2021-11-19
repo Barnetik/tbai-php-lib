@@ -74,12 +74,12 @@ class Recipient implements TbaiXml
     protected function validIdTypes(): array
     {
         return [
-            self:: VAT_ID_TYPE_IFZ,
-            self:: VAT_ID_TYPE_NIF,
-            self:: VAT_ID_TYPE_PASSPORT,
-            self:: VAT_ID_TYPE_NATIONAL_ID,
-            self:: VAT_ID_TYPE_RESIDENCE_CERTIFICATE,
-            self:: VAT_ID_TYPE_OTHER
+            self::VAT_ID_TYPE_IFZ,
+            self::VAT_ID_TYPE_NIF,
+            self::VAT_ID_TYPE_PASSPORT,
+            self::VAT_ID_TYPE_NATIONAL_ID,
+            self::VAT_ID_TYPE_RESIDENCE_CERTIFICATE,
+            self::VAT_ID_TYPE_OTHER
         ];
     }
 

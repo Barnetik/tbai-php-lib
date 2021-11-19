@@ -2,7 +2,6 @@
 
 namespace Barnetik\Tbai\Invoice\Breakdown;
 
-use Barnetik\Tbai\TypeChecker\Ammount;
 use Barnetik\Tbai\Exception\InvalidNotExemptTypeException;
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use DOMDocument;
@@ -16,7 +15,6 @@ class NationalSubjectNotExemptBreakdownItem implements TbaiXml
 
     private string $notExemptType;
     private array $vatDetails = [];
-    private Ammount $ammountChecker;
 
     public function __construct(string $type)
     {

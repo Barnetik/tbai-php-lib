@@ -2,8 +2,7 @@
 
 namespace Barnetik\Tbai\Invoice\Breakdown;
 
-use Barnetik\Tbai\TypeChecker\Ammount;
-use Barnetik\Tbai\Exception\InvalidAmmountException;
+use Barnetik\Tbai\ValueObject\Ammount;
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use DOMDocument;
 use DOMNode;
@@ -19,20 +18,10 @@ class NationalNotSubjectBreakdownItem implements TbaiXml
     private string $notSubjectReason;
     private string $ammount;
 
-    private Ammount $ammountChecker;
-
-    public function __construct(string $ammount, string $reason)
+    public function __construct(Ammount $ammount, string $reason)
     {
-        $this->ammountChecker = new Ammount();
-        $this->setAmmount($ammount);
-        $this->setNotSubjectReason($reason);
-    }
-
-    private function setAmmount(string $ammount): self
-    {
-        $this->ammountChecker->check($ammount);
         $this->ammount = $ammount;
-        return $this;
+        $this->setNotSubjectReason($reason);
     }
 
     private function validNotSubjectReasons(): array

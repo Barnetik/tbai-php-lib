@@ -2,7 +2,7 @@
 
 namespace Barnetik\Tbai\Invoice\Breakdown;
 
-use Barnetik\Tbai\TypeChecker\Ammount;
+use Barnetik\Tbai\ValueObject\Ammount;
 use Barnetik\Tbai\Exception\InvalidExemptionReasonException;
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use DOMDocument;
@@ -25,13 +25,11 @@ class NationalSubjectExemptBreakdownItem implements TbaiXml
     const EXEMPT_REASON_OTHER = 'E6';
 
     private string $exemptionReason;
-    private string $taxBase;
-    private Ammount $ammountChecker;
+    private Ammount $taxBase;
 
-    public function __construct(string $taxBase, string $reason)
+    public function __construct(Ammount $taxBase, string $reason)
     {
-        $this->ammountChecker = new Ammount();
-        $this->setTaxBase($taxBase);
+        $this->taxBase = $taxBase;
         $this->setExemptionReason($reason);
     }
 
@@ -45,13 +43,6 @@ class NationalSubjectExemptBreakdownItem implements TbaiXml
             self::EXEMPT_REASON_E5,
             self::EXEMPT_REASON_E6
         ];
-    }
-
-    private function setTaxBase(string $taxBase): self
-    {
-        $this->ammountChecker->check($taxBase);
-        $this->taxBase = $taxBase;
-        return $this;
     }
 
     private function setExemptionReason(string $reason): self

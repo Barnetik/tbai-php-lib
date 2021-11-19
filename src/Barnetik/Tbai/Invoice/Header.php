@@ -5,9 +5,8 @@ namespace Barnetik\Tbai\Invoice;
 use Barnetik\Tbai\Exception\InvalidDateException;
 use Barnetik\Tbai\Exception\InvalidTimeException;
 use Barnetik\Tbai\Interfaces\TbaiXml;
-use Barnetik\Tbai\TypeChecker\Date;
-use Barnetik\Tbai\TypeChecker\Time;
-use DateTime;
+use Barnetik\Tbai\ValueObject\Date;
+use Barnetik\Tbai\ValueObject\Time;
 use DOMDocument;
 use DOMNode;
 
@@ -15,51 +14,29 @@ class Header implements TbaiXml
 {
     private ?string $series;
     private string $invoiceNumber;
-    private string $expeditionDate;
-    private string $expeditionTime;
+    private Date $expeditionDate;
+    private Time $expeditionTime;
     private bool $isSimplified;
 
-    private Time $timeChecker;
-    private Date $dateChecker;
-
-    private function __construct(string $invoiceNumber, string $expeditionDate, string $expeditionTime, ?string $series = null)
+    private function __construct(string $invoiceNumber, Date $expeditionDate, Time $expeditionTime, ?string $series = null)
     {
-        $this->timeChecker = new Time();
-        $this->dateChecker = new Date();
-
         $this->series = $series;
         $this->invoiceNumber = $invoiceNumber;
-        $this->setExpeditionDate($expeditionDate);
-        $this->setExpeditionTime($expeditionTime);
+        $this->expeditionDate = $expeditionDate;
+        $this->expeditionTime = $expeditionTime;
     }
 
-    public static function create(string $invoiceNumber, string $expeditionDate, string $expeditionTime, ?string $series = null): self
+    public static function create(string $invoiceNumber, Date $expeditionDate, Time $expeditionTime, ?string $series = null): self
     {
         $header = new self($invoiceNumber, $expeditionDate, $expeditionTime, $series);
         $header->isSimplified = false;
         return $header;
     }
-    public static function createSimplified(string $invoiceNumber, string $expeditionDate, string $expeditionTime, ?string $series = null): self
+    public static function createSimplified(string $invoiceNumber, Date $expeditionDate, Time $expeditionTime, ?string $series = null): self
     {
         $header = new self($invoiceNumber, $expeditionDate, $expeditionTime, $series);
         $header->isSimplified = true;
         return $header;
-    }
-
-    private function setExpeditionDate(string $expeditionDate): self
-    {
-        $this->dateChecker->check($expeditionDate);
-
-        $this->expeditionDate = $expeditionDate;
-        return $this;
-    }
-
-    private function setExpeditionTime(string $expeditionTime): self
-    {
-        $this->timeChecker->check($expeditionTime);
-
-        $this->expeditionTime = $expeditionTime;
-        return $this;
     }
 
     public function series(): string
@@ -72,12 +49,12 @@ class Header implements TbaiXml
         return $this->invoiceNumber;
     }
 
-    public function expeditionDate(): string
+    public function expeditionDate(): Date
     {
         return $this->expeditionDate;
     }
 
-    public function expeditionTime(): string
+    public function expeditionTime(): Time
     {
         return $this->expeditionTime;
     }

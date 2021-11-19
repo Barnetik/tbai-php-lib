@@ -1,12 +1,21 @@
 <?php
 
-namespace Barnetik\Tbai\TypeChecker;
+namespace Barnetik\Tbai\ValueObject;
 
 use Barnetik\Tbai\Exception\InvalidDateException;
 use DateTimeImmutable;
+use Stringable;
 
-class Date
+class Date implements Stringable
 {
+    private string $value;
+
+    public function __construct(string $date)
+    {
+        $this->check($date);
+        $this->value = $date;
+    }
+
     public function check(string $date): bool
     {
         if (false === DateTimeImmutable::createFromFormat("d-m-Y", $date)) {
@@ -16,8 +25,8 @@ class Date
         return true;
     }
 
-    public function __invoke(string $date): bool
+    public function __toString(): string
     {
-        return $this->check($date);
+        return $this->value;
     }
 }
