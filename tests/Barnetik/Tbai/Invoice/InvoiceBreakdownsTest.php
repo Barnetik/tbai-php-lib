@@ -9,8 +9,8 @@ class InvoiceBreakdownsTest extends TestCase
 {
     public function test_NotSubjectBreakdownItem_can_be_created(): void
     {
-        $notSubjectItem = new NationalNotSubjectBreakdownItem('12,25', NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_RL);
-        $this->assertEquals('12,25', $notSubjectItem->ammount());
+        $notSubjectItem = new NationalNotSubjectBreakdownItem('12.25', NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_RL);
+        $this->assertEquals('12.25', $notSubjectItem->ammount());
     }
 
     public function test_NotSubjectBreakdownItems_are_limited(): void
@@ -18,7 +18,7 @@ class InvoiceBreakdownsTest extends TestCase
         $this->expectException(OutOfBoundsException::class);
 
         $invoiceBreakdown = new Breakdown();
-        $notSubjectItem = new NationalNotSubjectBreakdownItem('12,25', NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_RL);
+        $notSubjectItem = new NationalNotSubjectBreakdownItem('12.25', NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_RL);
         $invoiceBreakdown->addNationalNotSubjectBreakdownItem($notSubjectItem);
         $invoiceBreakdown->addNationalNotSubjectBreakdownItem($notSubjectItem);
         $invoiceBreakdown->addNationalNotSubjectBreakdownItem($notSubjectItem);

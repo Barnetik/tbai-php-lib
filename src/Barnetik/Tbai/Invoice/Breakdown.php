@@ -2,12 +2,15 @@
 
 namespace Barnetik\Tbai\Invoice;
 
+use Barnetik\Tbai\Interface\TbaiXml;
 use Barnetik\Tbai\Invoice\Breakdown\NationalNotSubjectBreakdownItem;
 use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectExemptBreakdownItem;
 use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectNotExemptBreakdownItem;
+use DOMDocument;
+use DOMNode;
 use OutOfBoundsException;
 
-class Breakdown
+class Breakdown implements TbaiXml
 {
     private array $nationalNotSubjectBreakdownItems = [];
     private array $nationalSubjectExemptBreakdownItems = [];
@@ -41,5 +44,11 @@ class Breakdown
         }
 
         throw new OutOfBoundsException('Too many subject and not exempt breakdown items');
+    }
+
+    public function xml(DOMDocument $domDocument): DOMNode
+    {
+        $breakdown = $domDocument->createElement('Desglose');
+        return $breakdown;
     }
 }

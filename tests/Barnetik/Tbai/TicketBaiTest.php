@@ -22,9 +22,9 @@ class TicketBaiTest extends TestCase
         $fingerprint = $this->getFingerprint();
 
         $header = Header::create('0000002', date('d-m-Y'), date('H:i:s'), 'TEST-SERIE-');
-        $data = new Data('test-description', '12,34', [Data::VAT_REGIME_01]);
+        $data = new Data('test-description', '12.34', [Data::VAT_REGIME_01]);
         $breakdown = new Breakdown();
-        $breakdown->addNationalNotSubjectBreakdownItem(new NationalNotSubjectBreakdownItem('12,34', NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_LOCATION_RULES));
+        $breakdown->addNationalNotSubjectBreakdownItem(new NationalNotSubjectBreakdownItem('12.34', NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_LOCATION_RULES));
         $invoice = new Invoice($header, $data, $breakdown);
 
         $ticketbai = new TicketBai(

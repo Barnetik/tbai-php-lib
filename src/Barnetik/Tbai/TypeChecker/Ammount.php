@@ -8,7 +8,7 @@ class Ammount
 {
     public function check(string $ammount, int $intPartMaxLength = 12): bool
     {
-        if (preg_match('/^\d{1,' . $intPartMaxLength . '},\d{2}$/', $ammount, $matches)) {
+        if (preg_match('/^\d{1,' . $intPartMaxLength . '}\.\d{2}$/', $ammount, $matches)) {
             return true;
         }
 

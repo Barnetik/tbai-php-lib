@@ -28,8 +28,8 @@ class Invoice implements TbaiXml
 
         $invoice->append(
             $this->header->xml($domDocument),
-            // $this->data->xml($domDocument),
-            // $this->breakdown->xml($domDocument)
+            $this->data->xml($domDocument),
+            $this->breakdown->xml($domDocument)
         );
 
         return $invoice;
