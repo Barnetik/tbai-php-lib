@@ -2,7 +2,7 @@
 
 namespace Barnetik\Tbai\Fingerprint;
 
-use Barnetik\Tbai\Interface\TbaiXml;
+use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\TypeChecker\Date;
 use DOMDocument;
 use DOMNode;

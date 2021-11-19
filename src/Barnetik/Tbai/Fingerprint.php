@@ -4,7 +4,7 @@ namespace Barnetik\Tbai;
 
 use Barnetik\Tbai\Fingerprint\PreviousInvoice;
 use Barnetik\Tbai\Fingerprint\Vendor;
-use Barnetik\Tbai\Interface\TbaiXml;
+use Barnetik\Tbai\Interfaces\TbaiXml;
 use DOMDocument;
 use DOMNode;
 

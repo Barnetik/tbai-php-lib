@@ -2,7 +2,7 @@
 
 namespace Barnetik\Tbai;
 
-use Barnetik\Tbai\Interface\TbaiXml;
+use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\Invoice\Breakdown;
 use Barnetik\Tbai\Invoice\Data;
 use Barnetik\Tbai\Invoice\Header;

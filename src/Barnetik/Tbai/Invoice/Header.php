@@ -4,7 +4,7 @@ namespace Barnetik\Tbai\Invoice;
 
 use Barnetik\Tbai\Exception\InvalidDateException;
 use Barnetik\Tbai\Exception\InvalidTimeException;
-use Barnetik\Tbai\Interface\TbaiXml;
+use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\TypeChecker\Date;
 use Barnetik\Tbai\TypeChecker\Time;
 use DateTime;

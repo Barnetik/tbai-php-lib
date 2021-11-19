@@ -2,7 +2,7 @@
 
 namespace Barnetik\Tbai\Subject;
 
-use Barnetik\Tbai\Interface\TbaiXml;
+use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\TypeChecker\VatId;
 use DOMDocument;
 use DOMNode;

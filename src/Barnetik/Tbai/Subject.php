@@ -2,7 +2,7 @@
 
 namespace Barnetik\Tbai;
 
-use Barnetik\Tbai\Interface\TbaiXml;
+use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\Subject\Emitter;
 use Barnetik\Tbai\Subject\Recipient;
 use DOMDocument;

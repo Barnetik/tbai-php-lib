@@ -1,6 +1,6 @@
 <?php
 
-namespace Barnetik\Tbai\Interface;
+namespace Barnetik\Tbai\Interfaces;
 
 use DOMDocument;
 use DOMNode;

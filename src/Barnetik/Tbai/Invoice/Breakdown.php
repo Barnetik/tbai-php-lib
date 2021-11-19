@@ -2,7 +2,7 @@
 
 namespace Barnetik\Tbai\Invoice;
 
-use Barnetik\Tbai\Interface\TbaiXml;
+use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\Invoice\Breakdown\NationalNotSubjectBreakdownItem;
 use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectExemptBreakdownItem;
 use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectNotExemptBreakdownItem;

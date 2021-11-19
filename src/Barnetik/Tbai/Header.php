@@ -2,7 +2,7 @@
 
 namespace Barnetik\Tbai;
 
-use Barnetik\Tbai\Interface\TbaiXml;
+use Barnetik\Tbai\Interfaces\TbaiXml;
 use DOMDocument;
 use DOMElement;
 use DOMNode;

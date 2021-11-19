@@ -4,7 +4,7 @@ namespace Barnetik\Tbai\Invoice\Breakdown;
 
 use Barnetik\Tbai\TypeChecker\Ammount;
 use Barnetik\Tbai\Exception\InvalidAmmountException;
-use Barnetik\Tbai\Interface\TbaiXml;
+use Barnetik\Tbai\Interfaces\TbaiXml;
 use DOMDocument;
 use DOMNode;
 use InvalidArgumentException;
