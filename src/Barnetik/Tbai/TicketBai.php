@@ -47,7 +47,7 @@ class TicketBai implements Stringable, TbaiXml
         return $xml;
     }
 
-    public function sign($pfxFilePath, $password)
+    public function sign(string $pfxFilePath, string $password): string
     {
         $xmlString = $this->__toString();
         $xmlSigner = new XmlSigner();
