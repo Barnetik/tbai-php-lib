@@ -20,5 +20,8 @@
       "phpstan": "phpstan analyse -c phpstan.neon",
       "phpcs": "phpcs",
       "phpcbf": "phpcbf"
-  }
+  },
+    "require": {
+        "selective/xmldsig": "^2.2"
+    }
 }

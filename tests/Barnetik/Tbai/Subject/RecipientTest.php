@@ -10,7 +10,7 @@ class RecipientTest extends TestCase
 {
     public function test_national_recipient_id_type_is_ifz(): void
     {
-        $receptor = Recipient::createNationalRecipient(new VatId('11111111H'), 'Test business', (string) 48270);
+        $receptor = Recipient::createNationalRecipient(new VatId('11111111H'), 'Test business', 48270);
 
         $this->assertEquals(VatId::VAT_ID_TYPE_IFZ, $receptor->vatIdType());
         $this->assertEquals('Test business', $receptor->name());
@@ -21,7 +21,7 @@ class RecipientTest extends TestCase
 
     public function test_foreign_recipient_can_be_created(): void
     {
-        $receptor = Recipient::createGenericRecipient(new VatId('abcdefghijkl', VatId::VAT_ID_TYPE_PASSPORT), 'Test foreign business', (string) 48260, 'UK');
+        $receptor = Recipient::createGenericRecipient(new VatId('abcdefghijkl', VatId::VAT_ID_TYPE_PASSPORT), 'Test foreign business', 48260, 'UK');
 
         $this->assertEquals(VatId::VAT_ID_TYPE_PASSPORT, $receptor->vatIdType());
         $this->assertEquals('Test foreign business', $receptor->name());

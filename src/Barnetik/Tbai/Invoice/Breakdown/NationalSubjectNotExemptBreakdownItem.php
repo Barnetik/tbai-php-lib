@@ -16,9 +16,10 @@ class NationalSubjectNotExemptBreakdownItem implements TbaiXml
     private string $notExemptType;
     private array $vatDetails = [];
 
-    public function __construct(string $type)
+    public function __construct(string $type, array $vatDetails)
     {
         $this->setNotExemptType($type);
+        $this->vatDetails = $vatDetails;
     }
 
     private function validNotExemptTypes(): array

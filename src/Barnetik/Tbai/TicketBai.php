@@ -5,6 +5,8 @@ namespace Barnetik\Tbai;
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use DOMDocument;
 use DOMNode;
+use Selective\XmlDSig\DigestAlgorithmType;
+use Selective\XmlDSig\XmlSigner;
 use SimpleXMLElement;
 use Stringable;
 
@@ -43,6 +45,15 @@ class TicketBai implements Stringable, TbaiXml
         $domNode = $this->xml($xml);
         $xml->append($domNode);
         return $xml;
+    }
+
+    public function sign($pfxFilePath, $password)
+    {
+        $xmlString = $this->__toString();
+        $xmlSigner = new XmlSigner();
+        $xmlSigner->loadPfxFile($pfxFilePath, $password);
+
+        return $xmlSigner->signXml($xmlString, DigestAlgorithmType::SHA512);
     }
 
     public function __toString(): string

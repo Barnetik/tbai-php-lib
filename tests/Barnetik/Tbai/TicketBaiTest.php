@@ -19,6 +19,8 @@ use Barnetik\Tbai\Subject\Emitter;
 use Barnetik\Tbai\Subject\Recipient;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use Selective\XmlDSig\DigestAlgorithmType;
+use Selective\XmlDSig\XmlSigner;
 
 class TicketBaiTest extends TestCase
 {
@@ -34,8 +36,8 @@ class TicketBaiTest extends TestCase
         $breakdown->addNationalNotSubjectBreakdownItem(new NationalNotSubjectBreakdownItem(new Ammount('12.34'), NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_LOCATION_RULES));
         $breakdown->addNationalSubjectExemptBreakdownItem(new NationalSubjectExemptBreakdownItem(new Ammount('56.78'), NationalSubjectExemptBreakdownItem::EXEMPT_REASON_ART_23));
 
-        $notExemptBreakdown = new NationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1);
-        $notExemptBreakdown->addVatDetail(new VatDetail(new Ammount('98.76'), new Ammount('4.12'), new Ammount('3.01')));
+        $vatDetail = new VatDetail(new Ammount('98.76'), new Ammount('4.12'), new Ammount('3.01'));
+        $notExemptBreakdown = new NationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1, [$vatDetail]);
         $breakdown->addNationalSubjectNotExemptBreakdownItem($notExemptBreakdown);
 
         // (new NationalNotSubjectBreakdownItem('12.34', NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_LOCATION_RULES));
@@ -47,13 +49,13 @@ class TicketBaiTest extends TestCase
             $fingerprint
         );
 
+        echo $ticketbai->sign($_ENV['TBAI_P12_PATH'], $_ENV['TBAI_PRIVATE_KEY']);
+
         $dom = $ticketbai->toDom();
-        $dom->formatOutput = true;
+        // $dom->formatOutput = true;
 
-        echo $dom->saveXml();
+        // echo $dom->saveXml();
         $dom->schemaValidate(__DIR__ . '/__files/ticketBaiV1-2-no-signature.xsd');
-
-
 
         $this->assertTrue(true);
     }
