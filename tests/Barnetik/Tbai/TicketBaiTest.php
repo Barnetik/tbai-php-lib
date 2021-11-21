@@ -51,6 +51,10 @@ class TicketBaiTest extends TestCase
 
         echo $ticketbai->sign($_ENV['TBAI_P12_PATH'], $_ENV['TBAI_PRIVATE_KEY']);
 
+        $qr = new Qr($ticketbai);
+        var_dump($qr->ticketbaiIdentifier());
+        var_dump($qr->qrUrl());
+
         $dom = $ticketbai->toDom();
         // $dom->formatOutput = true;
 

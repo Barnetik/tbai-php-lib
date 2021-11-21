@@ -144,6 +144,11 @@ class Data implements TbaiXml
         $data->appendChild($vatRegimeKeys);
         return $data;
     }
+
+    public function total(): Ammount
+    {
+        return $this->total;
+    }
 }
 
 // <element name="FechaOperacion" type="T:FechaType" minOccurs="0"/>

@@ -22,6 +22,8 @@
       "phpcbf": "phpcbf"
   },
     "require": {
-        "selective/xmldsig": "^2.2"
+        "endroid/qr-code": "^4.4",
+        "selective/xmldsig": "^2.2",
+        "pburggraf/crc": "^0.8.1"
     }
 }

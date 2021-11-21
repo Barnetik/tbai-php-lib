@@ -5,6 +5,7 @@ namespace Barnetik\Tbai;
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\Subject\Emitter;
 use Barnetik\Tbai\Subject\Recipient;
+use Barnetik\Tbai\ValueObject\VatId;
 use DOMDocument;
 use DOMNode;
 
@@ -39,6 +40,11 @@ class Subject implements TbaiXml
     public function recipients(): array
     {
         return $this->recipients;
+    }
+
+    public function emitterVatId(): VatId
+    {
+        return $this->emitter->vatId();
     }
 
     public function multipleRecipients(): string

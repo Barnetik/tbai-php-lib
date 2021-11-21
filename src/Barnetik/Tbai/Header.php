@@ -4,9 +4,7 @@ namespace Barnetik\Tbai;
 
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use DOMDocument;
-use DOMElement;
 use DOMNode;
-use SimpleXMLElement;
 
 class Header implements TbaiXml
 {

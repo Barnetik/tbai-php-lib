@@ -9,7 +9,7 @@ use DOMNode;
 
 class Emitter implements TbaiXml
 {
-    protected string $vatId;
+    protected VatId $vatId;
     protected string $name;
 
     public function __construct(VatId $vatId, string $name)
@@ -18,7 +18,7 @@ class Emitter implements TbaiXml
         $this->name = $name;
     }
 
-    public function vatId(): string
+    public function vatId(): VatId
     {
         return $this->vatId;
     }

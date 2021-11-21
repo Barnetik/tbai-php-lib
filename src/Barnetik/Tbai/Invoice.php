@@ -6,6 +6,8 @@ use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\Invoice\Breakdown;
 use Barnetik\Tbai\Invoice\Data;
 use Barnetik\Tbai\Invoice\Header;
+use Barnetik\Tbai\ValueObject\Ammount;
+use Barnetik\Tbai\ValueObject\Date;
 use DOMDocument;
 use DOMNode;
 
@@ -34,9 +36,24 @@ class Invoice implements TbaiXml
 
         return $invoice;
     }
-}
 
-        //  <element name="CabeceraFactura" type="T:CabeceraFacturaType"/>
-        //  <element name="DatosFactura" type="T:DatosFacturaType"/>
-        //  <element name="TipoDesglose" type="T:TipoDesgloseType"/>
-        // </sequence>
+    public function expeditionDate(): Date
+    {
+        return $this->header->expeditionDate();
+    }
+
+    public function series(): string
+    {
+        return $this->header->series();
+    }
+
+    public function invoiceNumber(): string
+    {
+        return $this->header->invoiceNumber();
+    }
+
+    public function totalAmmount(): Ammount
+    {
+        return $this->data->total();
+    }
+}

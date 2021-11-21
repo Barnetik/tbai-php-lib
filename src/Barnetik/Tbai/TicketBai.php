@@ -3,6 +3,9 @@
 namespace Barnetik\Tbai;
 
 use Barnetik\Tbai\Interfaces\TbaiXml;
+use Barnetik\Tbai\ValueObject\Ammount;
+use Barnetik\Tbai\ValueObject\Date;
+use Barnetik\Tbai\ValueObject\VatId;
 use DOMDocument;
 use DOMNode;
 use Selective\XmlDSig\DigestAlgorithmType;
@@ -16,6 +19,8 @@ class TicketBai implements Stringable, TbaiXml
     private Subject $subject;
     private Invoice $invoice;
     private Fingerprint $fingerprint;
+
+    private ?string $signedXml = null;
 
     public function __construct(Subject $subject, Invoice $invoice, Fingerprint $fingerprint)
     {
@@ -39,6 +44,31 @@ class TicketBai implements Stringable, TbaiXml
         return $tbai;
     }
 
+    public function emitterVatId(): VatId
+    {
+        return $this->subject->emitterVatId();
+    }
+
+    public function expeditionDate(): Date
+    {
+        return $this->invoice->expeditionDate();
+    }
+
+    public function series(): string
+    {
+        return $this->invoice->series();
+    }
+
+    public function invoiceNumber(): string
+    {
+        return $this->invoice->invoiceNumber();
+    }
+
+    public function totalAmmount(): Ammount
+    {
+        return $this->invoice->totalAmmount();
+    }
+
     public function toDom(): DomDocument
     {
         $xml = new DOMDocument('1.0', 'utf-8');
@@ -49,11 +79,20 @@ class TicketBai implements Stringable, TbaiXml
 
     public function sign(string $pfxFilePath, string $password): string
     {
-        $xmlString = $this->__toString();
-        $xmlSigner = new XmlSigner();
-        $xmlSigner->loadPfxFile($pfxFilePath, $password);
+        if (!$this->signedXml) {
+            $xmlString = $this->__toString();
+            $xmlSigner = new XmlSigner();
+            $xmlSigner->loadPfxFile($pfxFilePath, $password);
+            $this->signedXml = $xmlSigner->signXml($xmlString, DigestAlgorithmType::SHA512);
+        }
 
-        return $xmlSigner->signXml($xmlString, DigestAlgorithmType::SHA512);
+        return $this->signedXml;
+    }
+
+    public function shortSignatureValue(): string
+    {
+        $simpleXml = new SimpleXMLElement($this->signedXml);
+        return substr($simpleXml->Signature->SignatureValue, 0, 13);
     }
 
     public function __toString(): string

@@ -8,25 +8,31 @@ use Stringable;
 
 class Date implements Stringable
 {
-    private string $value;
+    private DateTimeImmutable $value;
 
     public function __construct(string $date)
     {
         $this->check($date);
-        $this->value = $date;
+        $this->value = DateTimeImmutable::createFromFormat("d-m-Y", $date);
     }
 
     public function check(string $date): bool
     {
-        if (false === DateTimeImmutable::createFromFormat("d-m-Y", $date)) {
+        $value = DateTimeImmutable::createFromFormat("d-m-Y", $date);
+        if (false === $value) {
             throw new InvalidDateException('Wrong date provided');
         }
 
         return true;
     }
 
+    public function short(): string
+    {
+        return $this->value->format('dmy');
+    }
+
     public function __toString(): string
     {
-        return $this->value;
+        return $this->value->format('d-m-Y');
     }
 }

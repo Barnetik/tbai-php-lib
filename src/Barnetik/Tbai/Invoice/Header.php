@@ -2,8 +2,6 @@
 
 namespace Barnetik\Tbai\Invoice;
 
-use Barnetik\Tbai\Exception\InvalidDateException;
-use Barnetik\Tbai\Exception\InvalidTimeException;
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\ValueObject\Date;
 use Barnetik\Tbai\ValueObject\Time;
