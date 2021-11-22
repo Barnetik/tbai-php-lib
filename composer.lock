@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b44fccaff6a4d4cf38eecbc84faf3088",
+    "content-hash": "e52545715973eef11ff27e43f9c1d999",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -179,6 +179,115 @@
             "time": "2021-11-03T10:05:01+00:00"
         },
         {
+            "name": "lyquidity/requester",
+            "version": "0.9.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bseddon/requester.git",
+                "reference": "449c07d3b39bff96bc6879842617e987237cfca6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bseddon/requester/zipball/449c07d3b39bff96bc6879842617e987237cfca6",
+                "reference": "449c07d3b39bff96bc6879842617e987237cfca6",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gmp": ">=3.0.0",
+                "php": ">=5.5.9"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "./src/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bill Seddon",
+                    "email": "bill.seddon@lyquidity.com",
+                    "homepage": "https://www.xbrlquery.com",
+                    "role": "Author"
+                }
+            ],
+            "description": "Library to query HTTPS Certificates revocation status using the Online Certificate Status Protocol (OCSP) and to make a request to a Timestamp authority (TSA)",
+            "homepage": "https://github.com/bseddon/requester/",
+            "keywords": [
+                "certificate",
+                "check",
+                "https",
+                "ocsp",
+                "online certificate status protocol",
+                "request",
+                "revocation",
+                "revoke",
+                "revoked",
+                "rfc3161",
+                "rfc6069",
+                "security",
+                "timestamp",
+                "timestamp authority",
+                "tsa"
+            ],
+            "support": {
+                "issues": "https://github.com/bseddon/requester/issues/",
+                "source": "https://github.com/bseddon/requester/"
+            },
+            "time": "2021-10-18T23:27:14+00:00"
+        },
+        {
+            "name": "lyquidity/xml-signer",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bseddon/xml-signer.git",
+                "reference": "34185ae87535096f18dbc014b17b73765bc038dd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bseddon/xml-signer/zipball/34185ae87535096f18dbc014b17b73765bc038dd",
+                "reference": "34185ae87535096f18dbc014b17b73765bc038dd",
+                "shasum": ""
+            },
+            "require": {
+                "ext-openssl": "*",
+                "lyquidity/requester": "*",
+                "php": ">= 7.2.6"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "./autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-only"
+            ],
+            "description": "A PHP to create and verify XAdES signature",
+            "homepage": "https://github.com/bseddon/xml-signer",
+            "keywords": [
+                "Policy",
+                "commitment type",
+                "counter signature",
+                "security",
+                "signature",
+                "timestamp",
+                "xades",
+                "xml",
+                "xmldsig"
+            ],
+            "support": {
+                "issues": "https://github.com/bseddon/xml-signer/issues",
+                "source": "https://github.com/bseddon/xml-signer/tree/1.0.3"
+            },
+            "time": "2021-11-03T10:41:20+00:00"
+        },
+        {
             "name": "pburggraf/crc",
             "version": "v0.8.1",
             "source": {
@@ -234,56 +343,6 @@
                 "source": "https://github.com/pburggraf/CRC/tree/v0.8.1"
             },
             "time": "2021-02-08T20:14:55+00:00"
-        },
-        {
-            "name": "selective/xmldsig",
-            "version": "2.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/selective-php/xmldsig.git",
-                "reference": "efa6066d215763229a300b535af252d44cc815c5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/selective-php/xmldsig/zipball/efa6066d215763229a300b535af252d44cc815c5",
-                "reference": "efa6066d215763229a300b535af252d44cc815c5",
-                "shasum": ""
-            },
-            "require": {
-                "ext-openssl": "*",
-                "php": "^7.2 || ^8.0"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.16",
-                "overtrue/phplint": "^2.3",
-                "phpstan/phpstan": "0.*",
-                "phpunit/phpunit": "^8 || ^9",
-                "squizlabs/php_codesniffer": "^3.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Selective\\XmlDSig\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Sign XML Documents with Digital Signatures",
-            "homepage": "https://github.com/selective-php/xmldsig",
-            "keywords": [
-                "signatures",
-                "verify",
-                "xml",
-                "xmldsig"
-            ],
-            "support": {
-                "issues": "https://github.com/selective-php/xmldsig/issues",
-                "source": "https://github.com/selective-php/xmldsig/tree/2.2.1"
-            },
-            "abandoned": "robrichards/xmlseclibs",
-            "time": "2021-10-21T14:27:37+00:00"
         }
     ],
     "packages-dev": [

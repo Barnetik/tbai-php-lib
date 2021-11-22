@@ -17,16 +17,31 @@ use Barnetik\Tbai\ValueObject\Time;
 use Barnetik\Tbai\ValueObject\VatId;
 use Barnetik\Tbai\Subject\Emitter;
 use Barnetik\Tbai\Subject\Recipient;
-use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use Selective\XmlDSig\DigestAlgorithmType;
-use Selective\XmlDSig\XmlSigner;
 
 class TicketBaiTest extends TestCase
 {
-    public function test_TicketBai_can_be_created(): void
+    public function test_unsigned_TicketBai_validates_schema(): void
     {
-        // $subject = $this->getSubject();
+        $ticketbai = $this->getTicketBai();
+        $dom = $ticketbai->toDom();
+        $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/ticketBaiV1-2-no-signature.xsd'));
+    }
+
+    public function test_TicketBai_can_be_signed_with_PFX_key(): void
+    {
+        $ticketbai = $this->getTicketBai();
+        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $ticketbai->sign($_ENV['TBAI_P12_PATH'], $_ENV['TBAI_PRIVATE_KEY'], __DIR__ . '/__files/signedXmls', basename($filename));
+        file_put_contents('./latest.xml', (string)$ticketbai);
+
+        // $qr = new Qr($ticketbai);
+        // var_dump($qr->ticketbaiIdentifier());
+        // var_dump($qr->qrUrl());
+    }
+
+    private function getTicketBai(): TicketBai
+    {
         $subject = $this->getMultipleRecipientSubject();
         $fingerprint = $this->getFingerprint();
 
@@ -40,28 +55,13 @@ class TicketBaiTest extends TestCase
         $notExemptBreakdown = new NationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1, [$vatDetail]);
         $breakdown->addNationalSubjectNotExemptBreakdownItem($notExemptBreakdown);
 
-        // (new NationalNotSubjectBreakdownItem('12.34', NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_LOCATION_RULES));
         $invoice = new Invoice($header, $data, $breakdown);
 
-        $ticketbai = new TicketBai(
+        return new TicketBai(
             $subject,
             $invoice,
             $fingerprint
         );
-
-        echo $ticketbai->sign($_ENV['TBAI_P12_PATH'], $_ENV['TBAI_PRIVATE_KEY']);
-
-        $qr = new Qr($ticketbai);
-        var_dump($qr->ticketbaiIdentifier());
-        var_dump($qr->qrUrl());
-
-        $dom = $ticketbai->toDom();
-        // $dom->formatOutput = true;
-
-        // echo $dom->saveXml();
-        $dom->schemaValidate(__DIR__ . '/__files/ticketBaiV1-2-no-signature.xsd');
-
-        $this->assertTrue(true);
     }
 
     private function getSubject(): Subject

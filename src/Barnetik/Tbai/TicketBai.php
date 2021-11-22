@@ -8,8 +8,11 @@ use Barnetik\Tbai\ValueObject\Date;
 use Barnetik\Tbai\ValueObject\VatId;
 use DOMDocument;
 use DOMNode;
-use Selective\XmlDSig\DigestAlgorithmType;
-use Selective\XmlDSig\XmlSigner;
+use lyquidity\xmldsig\CertificateResourceInfo;
+use lyquidity\xmldsig\InputResourceInfo;
+use lyquidity\xmldsig\KeyResourceInfo;
+use lyquidity\xmldsig\ResourceInfo;
+use lyquidity\xmldsig\XAdES;
 use SimpleXMLElement;
 use Stringable;
 
@@ -33,12 +36,12 @@ class TicketBai implements Stringable, TbaiXml
     public function xml(DOMDocument $document): DOMNode
     {
         $tbai = $document->createElementNS('urn:ticketbai:emision', 'T:TicketBai');
-        $tbai->append(
-            $this->header->xml($document),
-            $this->subject->xml($document),
-            $this->invoice->xml($document),
-            $this->fingerprint->xml($document),
-        );
+
+        // $tbai = $document->createElement('TicketBai');
+        $tbai->appendChild($this->header->xml($document));
+        $tbai->appendChild($this->subject->xml($document));
+        $tbai->appendChild($this->invoice->xml($document));
+        $tbai->appendChild($this->fingerprint->xml($document));
 
         $document->appendChild($tbai);
         return $tbai;
@@ -77,16 +80,28 @@ class TicketBai implements Stringable, TbaiXml
         return $xml;
     }
 
-    public function sign(string $pfxFilePath, string $password): string
+    public function sign(string $pfxFilePath, string $password, string $storeDir, string $storeFilename): void
     {
         if (!$this->signedXml) {
-            $xmlString = $this->__toString();
-            $xmlSigner = new XmlSigner();
-            $xmlSigner->loadPfxFile($pfxFilePath, $password);
-            $this->signedXml = $xmlSigner->signXml($xmlString, DigestAlgorithmType::SHA512);
-        }
+            openssl_pkcs12_read(
+                file_get_contents($pfxFilePath),
+                $certData,
+                $password
+            );
 
-        return $this->signedXml;
+            XAdES::signDocument(
+                new InputResourceInfo(
+                    $this->toDom()->saveXML(), // The source document
+                    ResourceInfo::string, // The source is a url
+                    $storeDir, // The location to save the signed document
+                    'latest', //$storeFilename, // The name of the file to save the signed document in,
+                    null,
+                    false
+                ),
+                new CertificateResourceInfo($certData['cert'], ResourceInfo::string | ResourceInfo::pem),
+                new KeyResourceInfo($certData['pkey'], ResourceInfo::string | ResourceInfo::pem),
+            );
+        }
     }
 
     public function shortSignatureValue(): string

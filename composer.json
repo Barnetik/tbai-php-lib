@@ -23,7 +23,7 @@
   },
     "require": {
         "endroid/qr-code": "^4.4",
-        "selective/xmldsig": "^2.2",
-        "pburggraf/crc": "^0.8.1"
+        "pburggraf/crc": "^0.8.1",
+        "lyquidity/xml-signer": "^1.0"
     }
 }
