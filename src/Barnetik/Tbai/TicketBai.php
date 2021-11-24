@@ -6,6 +6,7 @@ use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\ValueObject\Ammount;
 use Barnetik\Tbai\ValueObject\Date;
 use Barnetik\Tbai\ValueObject\VatId;
+use Barnetik\Tbai\Xades\TicketBai as XadesTicketBai;
 use DOMDocument;
 use DOMNode;
 use lyquidity\xmldsig\CertificateResourceInfo;
@@ -23,7 +24,8 @@ class TicketBai implements Stringable, TbaiXml
     private Invoice $invoice;
     private Fingerprint $fingerprint;
 
-    private ?string $signedXml = null;
+    private ?XAdES $signedXml = null;
+    private ?string $signedXmlPath = null;
 
     public function __construct(Subject $subject, Invoice $invoice, Fingerprint $fingerprint)
     {
@@ -35,9 +37,8 @@ class TicketBai implements Stringable, TbaiXml
 
     public function xml(DOMDocument $document): DOMNode
     {
-        $tbai = $document->createElementNS('urn:ticketbai:emision', 'T:TicketBai');
-
-        // $tbai = $document->createElement('TicketBai');
+        // $tbai = $document->createElementNS('urn:ticketbai:emision', 'T:TicketBai');
+        $tbai = $document->createElement('TicketBai');
         $tbai->appendChild($this->header->xml($document));
         $tbai->appendChild($this->subject->xml($document));
         $tbai->appendChild($this->invoice->xml($document));
@@ -89,24 +90,25 @@ class TicketBai implements Stringable, TbaiXml
                 $password
             );
 
-            XAdES::signDocument(
+            $this->signedXml = XadesTicketBai::signDocument(
                 new InputResourceInfo(
-                    $this->toDom()->saveXML(), // The source document
+                    $this->toDom()->C14N(true, false), // The source document
                     ResourceInfo::string, // The source is a url
                     $storeDir, // The location to save the signed document
-                    'latest', //$storeFilename, // The name of the file to save the signed document in,
+                    $storeFilename, //$storeFilename, // The name of the file to save the signed document in,
                     null,
                     false
                 ),
                 new CertificateResourceInfo($certData['cert'], ResourceInfo::string | ResourceInfo::pem),
                 new KeyResourceInfo($certData['pkey'], ResourceInfo::string | ResourceInfo::pem),
             );
+            $this->signedXmlPath = $storeDir . '/' . $storeFilename;
         }
     }
 
     public function shortSignatureValue(): string
     {
-        $simpleXml = new SimpleXMLElement($this->signedXml);
+        $simpleXml = new SimpleXMLElement(file_get_contents($this->signedXmlPath));
         return substr($simpleXml->Signature->SignatureValue, 0, 13);
     }
 
