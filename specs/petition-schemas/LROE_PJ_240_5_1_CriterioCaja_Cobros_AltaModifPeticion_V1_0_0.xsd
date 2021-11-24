@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/LROE_PJ_240_5_1_CriterioCaja_Cobros_AltaModifPeticion_V1_0_0.xsd"
+	xmlns:lrpjcccamp="https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/LROE_PJ_240_5_1_CriterioCaja_Cobros_AltaModifPeticion_V1_0_0.xsd"
+	xmlns:tiposcomplejos="https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/batuz_TiposComplejos.xsd">
+
+	<import namespace="https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/batuz_TiposComplejos.xsd" schemaLocation="batuz_TiposComplejos.xsd"/>
+
+	<element name="LROEPJ240CriterioCajaCobrosAltaModifPeticion">
+		<complexType>
+			<sequence>
+				<element name="Cabecera" type="tiposcomplejos:Cabecera240Type"/>
+				<element name="Cobros" type="tiposcomplejos:CriterioCajaCobrosPJType"/>
+			</sequence>
+		</complexType>
+	</element>
+</schema>

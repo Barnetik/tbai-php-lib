@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/LROE_PF_140_7_3_OtraInfoTrascTributaria_TransmisionesInmuebles_ConsultaPeticion_V1_0_0.xsd"
+	xmlns:lrpfticp="https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/LROE_PF_140_7_3_OtraInfoTrascTributaria_TransmisionesInmuebles_ConsultaPeticion_V1_0_0.xsd"
+	xmlns:tiposcomplejos="https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/batuz_TiposComplejos.xsd"
+	xmlns:tiposconsulta="https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/batuz_TiposConsulta.xsd">
+	
+	<import namespace="https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/batuz_TiposComplejos.xsd" schemaLocation="batuz_TiposComplejos.xsd"/>
+	<import namespace="https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/batuz_TiposConsulta.xsd" schemaLocation="batuz_TiposConsulta.xsd"/>
+
+	<element name="LROEPF140TransmisionesInmueblesConsultaPeticion">
+		<complexType>
+			<sequence>
+				<element name="Cabecera" type="tiposcomplejos:Cabecera140Type"/>
+				<element name="FiltroConsultaTransmisionesInmuebles" type="tiposconsulta:FiltroConsultaArrendamientosTransmisionesMetalicoType"/>
+			</sequence>
+		</complexType>
+	</element>
+</schema>

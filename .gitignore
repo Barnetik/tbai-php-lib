@@ -4,3 +4,4 @@ phpunit.xml
 .phpunit.*
 tests/Barnetik/Tbai/__files/signedXmls/
 tests/tools/*.p12
+/nbproject

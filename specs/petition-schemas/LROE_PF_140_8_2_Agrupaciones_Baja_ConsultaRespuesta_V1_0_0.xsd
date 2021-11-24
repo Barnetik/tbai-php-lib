@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="https://www.batuz.eus/fitxategiak/batuz/LROE_PF_140_8_2_Agrupaciones_Baja_ConsultaRespuesta_V1_0_0.xsd"
+	xmlns:lrpfabcr="https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/LROE_PF_140_8_2_Agrupaciones_Baja_ConsultaRespuesta_V1_0_0.xsd"
+	xmlns:tiposcomplejos="https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/batuz_TiposComplejos.xsd"
+	xmlns:tiposconsulta="https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/batuz_TiposConsulta.xsd">
+	
+	<import namespace="https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/batuz_TiposComplejos.xsd" schemaLocation="batuz_TiposComplejos.xsd"/>
+	<import namespace="https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/batuz_TiposConsulta.xsd" schemaLocation="batuz_TiposConsulta.xsd"/>
+
+	<element name="LROEPF140AgrupacionesBajaConsultaRespuesta">
+		<complexType>
+			<sequence>
+				<element name="Cabecera" type="tiposcomplejos:Cabecera140Type"/>
+				<element name="ResultadoConsulta" type="tiposconsulta:ResultadoConsultaType"/>
+				<element name="AgrupacionesBaja" type="tiposconsulta:AgrupacionesBajaConsultaRespuestaType" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+</schema>

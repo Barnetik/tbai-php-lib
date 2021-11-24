@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/XML/XMLDocument.xml to edit this template
+-->
+
+
+
+<ns4:LROEPF140IngresosConFacturaConSGAltaPeticion
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns:ns4='https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/LROE_PF_140_1_1_Ingresos_ConfacturaConSG_AltaPeticion_V1_0_2.xsd'
+    xmlns:ns3='https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/batuz_TiposComplejos.xsd'
+    xmlns:ns2='https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/batuz_Enumerados.xsd'
+    xmlns:ns1='https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/batuz_TiposBasicos.xsd'
+    xsi:schemaLocation='https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/LROE_PF_140_1_1_Ingresos_ConfacturaConSG_AltaPeticion_V1_0_2.xsd file:/home/alayn/Proiektuak/tbai-php-lib/specs/petition-schemas/LROE_PF_140_1_1_Ingresos_ConfacturaConSG_AltaPeticion_V1_0_2.xsd
+   https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/batuz_TiposComplejos.xsd file:/home/alayn/Proiektuak/tbai-php-lib/specs/petition-schemas/batuz_TiposComplejos.xsd
+   https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/batuz_Enumerados.xsd file:/home/alayn/Proiektuak/tbai-php-lib/specs/petition-schemas/batuz_Enumerados.xsd
+   https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/batuz_TiposBasicos.xsd file:/home/alayn/Proiektuak/tbai-php-lib/specs/petition-schemas/batuz_TiposBasicos.xsd'>
+    
+</ns4:LROEPF140IngresosConFacturaConSGAltaPeticion>
+
