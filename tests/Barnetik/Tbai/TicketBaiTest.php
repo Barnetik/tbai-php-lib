@@ -17,6 +17,7 @@ use Barnetik\Tbai\ValueObject\Time;
 use Barnetik\Tbai\ValueObject\VatId;
 use Barnetik\Tbai\Subject\Emitter;
 use Barnetik\Tbai\Subject\Recipient;
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 
 class TicketBaiTest extends TestCase
@@ -31,9 +32,12 @@ class TicketBaiTest extends TestCase
     public function test_TicketBai_can_be_signed_with_PFX_key(): void
     {
         $ticketbai = $this->getTicketBai();
-        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-') . '.xml';
         $ticketbai->sign($_ENV['TBAI_P12_PATH'], $_ENV['TBAI_PRIVATE_KEY'], __DIR__ . '/__files/signedXmls', basename($filename));
-        file_put_contents('./latest.xml', (string)$ticketbai);
+        $signedDom = new DOMDocument();
+        $signedDom->load($filename);
+        // $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/ticketBaiV1-2.xsd'));
+        // file_put_contents('./latest.xml', (string)$ticketbai);
 
         // $qr = new Qr($ticketbai);
         // var_dump($qr->ticketbaiIdentifier());

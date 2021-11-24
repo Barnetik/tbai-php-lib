@@ -1,0 +1,23 @@
+CA erroa instalatu behar baduzu, CARAIZ.crt fitxategia eta erabili nahi duzun ziurtagiriari dagokiona instalatu beharko dituzu:
+
+AUTONOMOArentzat:
+	CCEENR_AUTONOMO.crt
+
+PERTSONAFISIKOA, ENTITATEORDEZKARIA, ENPRESAZIGILUArentzat:
+	CCEER_RESTO_CERTIFICADOS.crt
+
+GAILUArentzat:
+	AAPPNR_DISPOSITIVO.crt
+
+
+
+Si precisa instalarse la CA raíz, debe instalarse el fichero CARAIZ.crt y el que corresponda al certificado que desee utilizar:
+
+Para AUTÓNOMO:
+	CCEENR_AUTONOMO.crt
+
+Para PERSONAFÍSICA, REPRESENTANTEDEENTIDAD, SELLODEEMPRESA:
+	CCEER_RESTO_CERTIFICADOS.crt
+
+Para DISPOSITIVO:
+	AAPPNR_DISPOSITIVO.crt
