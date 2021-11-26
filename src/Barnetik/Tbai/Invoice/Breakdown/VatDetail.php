@@ -60,4 +60,39 @@ class VatDetail implements TbaiXml
         $vatDetail->appendChild($domDocument->createElement('OperacionEnRecargoDeEquivalenciaORegimenSimplificado', $this->isEquivalenceOperation ? 'S' : 'N'));
         return $vatDetail;
     }
+
+    public static function docJson(): array
+    {
+        return [
+            'type' => 'object',
+            'properties' => [
+                'taxBase' => [
+                    'type' => 'string',
+                    'description' => 'Zerga oinarria (2 dezimalekin) - Base imponible (2 decimales)'
+                ],
+                'taxRate' => [
+                    'type' => 'string',
+                    'description' => 'Zerga tasa - Tipo impositivo'
+                ],
+                'taxQuota' => [
+                    'type' => 'string',
+                    'description' => 'Zergaren kuota - Cuota del impuesto'
+                ],
+                'equivalenceRate' => [
+                    'type' => 'string',
+                    'description' => 'Baliokidetasun errekarguaren tasa - Tipo del recargo de equivalencia'
+                ],
+                'equivalenceQuota' => [
+                    'type' => 'string',
+                    'description' => 'Baliokidetasun errekarguaren kuota - Cuota del recargo de equivalencia'
+                ],
+                'isEquivalenceOperation' => [
+                    'type' => 'boolean',
+                    'default' => false,
+                    'description' =>  'Baliokidetasun errekargudun eragiketa edo araubide erraztuko eragiketa bat da - Es una operación en recargo de equivalencia o Régimen simplificado'
+                ]
+            ],
+            'required' => ['taxBase']
+        ];
+    }
 }

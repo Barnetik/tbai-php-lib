@@ -149,6 +149,44 @@ class Data implements TbaiXml
     {
         return $this->total;
     }
-}
 
+    public static function docJson(): array
+    {
+        return [
+            'type' => 'object',
+            'properties' => [
+                'description' => [
+                    'type' => 'string',
+                    'maxLength' => 250,
+                ],
+                'total' => [
+                    'type' => 'string',
+                    'pattern' => '(\+|-)?\d{1,12}(\.\d{0,2})?$',
+                    'description' => 'Zenbatekoa guztira (2 dezimalekin) - Importe total (2 decimales)'
+                ],
+                'vatRegimes' => [
+                    'type' => 'array',
+                    'items' => [
+                        'type' => 'string',
+                        'description'
+                    ],
+                    'minItem' => 1,
+                    'maxItems' => 3,
+                    'description' => 'Gakoak: BEZaren araubideen eta zerga-ondorioak dauzkaten eragiketak - Claves de regímenes de IVA y operaciones con trascendencia tributaria'
+                ],
+                'supportedRetention' => [
+                    'type' => 'string',
+                    'pattern' => '(\+|-)?\d{1,12}(\.\d{0,2})?$',
+                    'description' => 'Jasandako atxikipena (2 dezimalekin) - Retención soportada (2 decimales)'
+                ],
+                'taxBaseCost' => [
+                    'type' => 'string',
+                    'pattern' => '(\+|-)?\d{1,12}(\.\d{0,2})?$',
+                    'description' => 'Kosturako zerga-oinarria (2 dezimalekin) - Base imponible a coste (2 decimales)'
+                ]
+            ],
+            'required' => ['description', 'total', 'vatRegimes']
+        ];
+    }
+}
 // <element name="FechaOperacion" type="T:FechaType" minOccurs="0"/>

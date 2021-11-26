@@ -88,6 +88,34 @@ class Breakdown implements TbaiXml
         $breakdown->appendChild($invoiceBreakdown);
         return $breakdown;
     }
+
+    public static function docJson(): array
+    {
+        return [
+            'type' => 'object',
+            'properties' => [
+                'NationalSubjectExemptBreakdownItems' => [
+                    'type' => 'array',
+                    'maxItems' => 3,
+                    'items' => NationalSubjectExemptBreakdownItem::docJson(),
+                    'description' => 'Kargapean eta salbuetsitakoak - Sujeta a carga y exentas'
+                ],
+                'NationalSubjectNotExemptBreakdownItems' => [
+                    'type' => 'array',
+                    'maxItems' => 8,
+                    'items' => NationalSubjectNotExemptBreakdownItem::docJson(),
+                    'description' => 'Kargapean eta salbuetsi gabe - Sujetas a carga y no exentas'
+                ],
+                'NationalNotSubjectBreakdownItems' => [
+                    'type' => 'array',
+                    'maxItems' => 8,
+                    'items' => NationalNotSubjectBreakdownItem::docJson(),
+                    'description' => 'Kargapean ez daudenak - No sujetas a carga'
+                ]
+            ]
+
+        ];
+    }
 }
 
 // <complexType name="NoExentaType">

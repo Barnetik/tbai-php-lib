@@ -78,11 +78,38 @@ class Header implements TbaiXml
     public static function docJson(): array
     {
         return [
-            'serie',
-            'invoiceNumber',
-            'expeditionDate',
-            'expeditionTime',
-            'simplifiedInvoice'
+            'type' => 'object',
+            'properties' => [
+                'serie' => [
+                    'type' => 'string',
+                    'maxLength' => 20,
+                    'description' => 'Fakturaren seriea - Serie factura'
+                ],
+                'invoiceNumber' => [
+                    'type' => 'string',
+                    'maxLength' => 20,
+                    'description' => 'Fakturaren zenbakia - Número factura'
+                ],
+                'expeditionDate' => [
+                    'type' => 'string',
+                    'minLength' => 10,
+                    'maxLength' => 10,
+                    'pattern' => '\d{2,2}-\d{2,2}-\d{4,4}',
+                    'description' => 'Faktura bidali den data (adib: 21-12-2020) - Fecha de expedición de factura (ej: 21-12-2020)'
+                ],
+                'expeditionTime' => [
+                    'type' => 'string',
+                    'minLength' => 10,
+                    'maxLength' => 10,
+                    'pattern' => '\d{2,2}:\d{2,2}:\d{2,2}',
+                    'description' => 'Faktura bidali den ordua (adib: 21:00:00) - Hora de expedición de factura (ej: 21:00:00)'
+                ],
+                'simplifiedInvoice' => [
+                    'type' => 'boolean',
+                    'default' => false,
+                    'description' => 'Faktura erraztua - Factura simplificada'
+                ]
+            ]
         ];
     }
 }

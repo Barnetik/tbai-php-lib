@@ -24,7 +24,7 @@ class NationalNotSubjectBreakdownItem implements TbaiXml
         $this->setNotSubjectReason($reason);
     }
 
-    private function validNotSubjectReasons(): array
+    private static function validNotSubjectReasons(): array
     {
         return [
             self::NOT_SUBJECT_REASON_RL,
@@ -34,7 +34,7 @@ class NationalNotSubjectBreakdownItem implements TbaiXml
 
     private function setNotSubjectReason(string $reason): self
     {
-        if (!in_array($reason, $this->validNotSubjectReasons())) {
+        if (!in_array($reason, self::validNotSubjectReasons())) {
             throw new InvalidArgumentException('Subject reason is not valid');
         }
         $this->notSubjectReason = $reason;
@@ -55,5 +55,23 @@ class NationalNotSubjectBreakdownItem implements TbaiXml
             $domDocument->createElement('Importe', $this->ammount),
         );
         return $notSubjectDetail;
+    }
+
+    public static function docJson(): array
+    {
+        return [
+            'type' => 'object',
+            'properties' => [
+                'ammount' => [
+                    'type' => 'string',
+                    'description' => 'Zenbatekoa (2 dezimalekin) - Importe (2 decimales)'
+                ],
+                'notSubjectReason' => [
+                    'type' => 'string',
+                    'enum' => self::validNotSubjectReasons(),
+                    'description' => 'Kargapean ez egoteko arrazoia - Causa no sujeción'
+                ],
+            ]
+        ];
     }
 }

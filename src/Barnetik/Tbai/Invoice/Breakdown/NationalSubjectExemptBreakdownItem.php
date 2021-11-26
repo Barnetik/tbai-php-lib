@@ -33,7 +33,7 @@ class NationalSubjectExemptBreakdownItem implements TbaiXml
         $this->setExemptionReason($reason);
     }
 
-    private function validExemptionReasons(): array
+    private static function validExemptionReasons(): array
     {
         return [
             self::EXEMPT_REASON_E1,
@@ -47,7 +47,7 @@ class NationalSubjectExemptBreakdownItem implements TbaiXml
 
     private function setExemptionReason(string $reason): self
     {
-        if (!in_array($reason, $this->validExemptionReasons())) {
+        if (!in_array($reason, self::validExemptionReasons())) {
             throw new InvalidExemptionReasonException();
         }
         $this->exemptionReason = $reason;
@@ -63,5 +63,24 @@ class NationalSubjectExemptBreakdownItem implements TbaiXml
             $domDocument->createElement('BaseImponible', $this->taxBase),
         );
         return $exemptDetail;
+    }
+
+    public static function docJson(): array
+    {
+        return [
+            'type' => 'object',
+            'properties' => [
+                'taxBase' => [
+                    'type' => 'string',
+                    'description' => 'Salbuetsitako zerga-oinarria (2 dezimalekin) - Base imponible exenta (2 decimales)'
+                ],
+                'exemptionReason' => [
+                    'type' => 'string',
+                    'enum' => self::validExemptionReasons(),
+                    'description' => 'Arrazoia - Razón'
+                ],
+            ]
+
+        ];
     }
 }

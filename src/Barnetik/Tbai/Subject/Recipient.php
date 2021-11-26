@@ -135,9 +135,11 @@ class Recipient implements TbaiXml
                 //     'maxLength': 250
 
                 // ],
-                'countryId' => [
+                'countryCode' => [
                     'type' => 'string',
-                    'maxLength' => 20
+                    'minLength' => 2,
+                    'maxLength' => 2,
+                    'description' => 'Herrialdearen kodea (ISO3166 alpha2) - Código de país (ISO3166 alpha2)',
                 ]
             ],
             'required' => ['vatId', 'name']

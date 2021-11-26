@@ -22,7 +22,7 @@ class NationalSubjectNotExemptBreakdownItem implements TbaiXml
         $this->vatDetails = $vatDetails;
     }
 
-    private function validNotExemptTypes(): array
+    private static function validNotExemptTypes(): array
     {
         return [
             self::NOT_EXEMPT_TYPE_S1,
@@ -32,7 +32,7 @@ class NationalSubjectNotExemptBreakdownItem implements TbaiXml
 
     private function setNotExemptType(string $type): self
     {
-        if (!in_array($type, $this->validNotExemptTypes())) {
+        if (!in_array($type, self::validNotExemptTypes())) {
             throw new InvalidNotExemptTypeException();
         }
         $this->notExemptType = $type;
@@ -62,5 +62,25 @@ class NationalSubjectNotExemptBreakdownItem implements TbaiXml
         }
 
         return $notExentType;
+    }
+
+    public static function docJson(): array
+    {
+        return [
+            'type' => 'object',
+            'properties' => [
+                'vatDetails' => [
+                    'type' => 'array',
+                    'description' => 'Zenbatekoak - Importes',
+                    'items' => VatDetail::docJson()
+                ],
+                'notExemptType' => [
+                    'type' => 'string',
+                    'enum' => self::validNotExemptTypes(),
+                    'description' => 'Salbuetsi gabeko mota - Tipo de no exenta'
+                ],
+            ]
+
+        ];
     }
 }
