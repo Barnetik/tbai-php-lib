@@ -29,4 +29,12 @@ class Fingerprint implements TbaiXml
         $fingerprint->appendChild($this->vendor->xml($domDocument));
         return $fingerprint;
     }
+
+    public function docJson(): array
+    {
+        return [
+            'vendor',
+            'previousInvoice'
+        ];
+    }
 }

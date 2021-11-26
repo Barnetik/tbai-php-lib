@@ -17,59 +17,22 @@ use lyquidity\xmldsig\xml\SigPolicyId;
 
 class TicketBai extends XAdES
 {
-    const POLICY_IDENTIFIER = 'http://ticketbai.eus/politicafirma';
-    const POLICY_DIGEST = 'lX1xDvBVAsPXkkJ7R07WCVbAm9e0H33I1sCpDtQNkbc=';
-    const POLICY_DOCUMENT_URL = 'https://www.euskadi.eus/contenidos/informacion/ticketbai/es_14815/adjuntos/TicketBAI_Politica_firma_v_1_0.pdf';
+    const POLICY_IDENTIFIER = 'https://www.batuz.eus/fitxategiak/batuz/ticketbai/sinadura_elektronikoaren_zehaztapenak_especificaciones_de_la_firma_electronica_v1_0.pdf';
+    const POLICY_DIGEST = 'Quzn98x3PMbSHwbUzaj5f5KOpiH0u8bvmwbbbNkO9Es=';
+    // const POLICY_DOCUMENT_URL = 'https://www.batuz.eus/fitxategiak/batuz/ticketbai/sinadura_elektronikoaren_zehaztapenak_especificaciones_de_la_firma_electronica_v1_0.pdf.';
     const ALGORITHM = XMLSecurityDSig::SHA256;
 
     protected function getSignaturePolicyIdentifier()
     {
-        // $policyDoc = $this->getXmlDocument($this->getPolicyDocument());
-
-        // // Load the policy document
-        // $sbrPolicy = Generic::fromNode($policyDoc);
-
-        // // Get the transforms
-        // /** @var Transforms */
-        // $transforms = $sbrPolicy->getObjectFromPath(
-        //     array("SignaturePolicy", "Transforms"),
-        //     "Unable to locate <Transforms> in the SBR policy document"
-        // );
-
-        // $transforms->parent = null;
-
-        // Use the traverse function to set the prefix to null on this an all descendents
-        // $transforms->traverse(function ($node) {
-        //     $node->prefix = null;
-        // });
-
-        // $transforms = new Transforms();
-
-        // Create the policy object
         $spi = new SignaturePolicyIdentifier(
             new SignaturePolicyId(
                 new SigPolicyId(self::POLICY_IDENTIFIER),
                 null,
                 new SigPolicyHash(new DigestMethod(self::ALGORITHM), new DigestValue(self::POLICY_DIGEST)),
-                null // No qualifiers
+                null
             )
         );
 
         return $spi;
     }
-
-    //     /**
-    //      * Its expected this will be overridden in a descendent class
-    //      * @var string $policyIdentifier
-    //      * @return string A path or URL to the policy document
-    //      */
-    //     public function getPolicyDocument($policyIdentifier = null)
-    //     {
-    //         $this->policyIdentifier = $policyIdentifier ?? self::policyIdentifier;
-
-    //         if ($this->policyIdentifier == self::policyIdentifier)
-    //             return self::policyDocumentUrl;
-    //         else
-    //             throw new \Exception("The policy identifier '$policyIdentifier' is not supported");
-    //     }
 }

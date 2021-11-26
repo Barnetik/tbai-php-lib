@@ -56,4 +56,13 @@ class Invoice implements TbaiXml
     {
         return $this->data->total();
     }
+
+    public function docJson(): array
+    {
+        return [
+            'header' => $this->header->docJson(),
+            'data',
+            'breakdown'
+        ];
+    }
 }

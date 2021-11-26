@@ -25,7 +25,7 @@ class TicketBaiTest extends TestCase
     public function test_unsigned_TicketBai_validates_schema(): void
     {
         $ticketbai = $this->getTicketBai();
-        $dom = $ticketbai->toDom();
+        $dom = $ticketbai->dom();
         $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/ticketBaiV1-2-no-signature.xsd'));
     }
 

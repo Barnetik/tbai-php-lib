@@ -17,4 +17,11 @@ class Header implements TbaiXml
         $header->appendChild($version);
         return $header;
     }
+
+    public function docJson(): array
+    {
+        return [
+            'tbaiVersion'
+        ];
+    }
 }

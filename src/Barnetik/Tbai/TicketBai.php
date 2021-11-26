@@ -53,6 +53,11 @@ class TicketBai implements Stringable, TbaiXml
         return $this->subject->emitterVatId();
     }
 
+    public function emitterName(): string
+    {
+        return $this->subject->emitterName();
+    }
+
     public function expeditionDate(): Date
     {
         return $this->invoice->expeditionDate();
@@ -73,7 +78,7 @@ class TicketBai implements Stringable, TbaiXml
         return $this->invoice->totalAmmount();
     }
 
-    public function toDom(): DomDocument
+    public function dom(): DomDocument
     {
         $xml = new DOMDocument('1.0', 'utf-8');
         $domNode = $this->xml($xml);
@@ -92,7 +97,7 @@ class TicketBai implements Stringable, TbaiXml
 
             $this->signedXml = XadesTicketBai::signDocument(
                 new InputResourceInfo(
-                    $this->toDom()->C14N(true, false), // The source document
+                    $this->dom()->C14N(true, false), // The source document
                     ResourceInfo::string, // The source is a url
                     $storeDir, // The location to save the signed document
                     $storeFilename, //$storeFilename, // The name of the file to save the signed document in,
@@ -106,14 +111,40 @@ class TicketBai implements Stringable, TbaiXml
         }
     }
 
+    public function base64Signed(): string
+    {
+        return base64_encode(file_get_contents($this->signedXmlPath()));
+    }
+
     public function shortSignatureValue(): string
     {
         $simpleXml = new SimpleXMLElement(file_get_contents($this->signedXmlPath));
         return substr($simpleXml->Signature->SignatureValue, 0, 13);
     }
 
+    public function signedXmlPath(): string
+    {
+        return $this->signedXmlPath;
+    }
+
+    public function isSigned(): bool
+    {
+        return (bool)$this->signedXmlPath;
+    }
+
     public function __toString(): string
     {
-        return $this->toDom()->saveXml();
+        return $this->dom()->saveXml();
+    }
+
+    public function docJson(): array
+    {
+        $json = [
+            'header' => $this->header->docJson(),
+            'subject' => $this->subject->docJson(),
+            'invoice' => $this->invoice->docJson(),
+            'fingerprint' => $this->fingerprint->docJson(),
+        ];
+        return $json;
     }
 }

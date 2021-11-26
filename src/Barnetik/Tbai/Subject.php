@@ -47,6 +47,11 @@ class Subject implements TbaiXml
         return $this->emitter->vatId();
     }
 
+    public function emitterName(): string
+    {
+        return $this->emitter->name();
+    }
+
     public function multipleRecipients(): string
     {
         if ($this->hasMultipleRecipients()) {
@@ -75,15 +80,23 @@ class Subject implements TbaiXml
                 $recipient->xml($document)
             );
         }
-        $subject->appendChild($recipients);
 
-        $subject->append(
-            $this->emitter->xml($document),
-            $recipients,
-            $document->createElement('VariosDestinatarios', $this->multipleRecipients()),
-            $document->createElement('EmitidaPorTercerosODestinatario', $this->emittedBy()),
-        );
+        $subject->appendChild($this->emitter->xml($document));
+        $subject->appendChild($recipients);
+        // $subject->appendChild($recipients);
+        $subject->appendChild($document->createElement('VariosDestinatarios', $this->multipleRecipients()));
+        $subject->appendChild($document->createElement('EmitidaPorTercerosODestinatario', $this->emittedBy()));
 
         return $subject;
+    }
+
+    public function docJson(): array
+    {
+        return [
+            'recipients',
+            'emmiter',
+            'multipleRecipients',
+            'emitedBy',
+        ];
     }
 }
