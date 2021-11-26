@@ -109,4 +109,38 @@ class Recipient implements TbaiXml
         }
         return $recipient;
     }
+
+    public static function docJson(): array
+    {
+        return [
+            'type' => 'object',
+            'properties' => [
+                'vatId' => [
+                    'type' => 'string',
+                ],
+                'vatIdType' => [
+                    'type' => 'string',
+                    'enum' => VatId::validIdTypeValues()
+                ],
+                'name' => [
+                    'type' => 'string',
+                    'maxLength' => 20
+                ],
+                'postalCode' => [
+                    'type' => 'string',
+                    'maxLength' => 20
+                ],
+                // 'address' => [
+                //     'type' => 'string',
+                //     'maxLength': 250
+
+                // ],
+                'countryId' => [
+                    'type' => 'string',
+                    'maxLength' => 20
+                ]
+            ],
+            'required' => ['vatId', 'name']
+        ];
+    }
 }

@@ -30,12 +30,12 @@ class VatId implements Stringable
 
     public function check(string $vatId, string $type): bool
     {
-        if (!in_array($type, $this->validIdTypes())) {
-            throw new InvalidVatIdException('Wrong VatId Type');
+        if (!in_array($type, self::validIdTypeValues())) {
+            throw new InvalidVatIdException('Wrong VatId Type provided');
         }
 
         if ($type === self::VAT_ID_TYPE_NIF && !preg_match('/^(([a-z|A-Z]{1}\d{7}[a-z|A-Z]{1})|(\d{8}[a-z|A-Z]{1})|([a-z|A-Z]{1}\d{8}))$/', $vatId, $matches)) {
-            throw new InvalidVatIdException('Wrong VATId provided');
+            throw new InvalidVatIdException('Wrong VatId provided');
         }
 
         return true;
@@ -46,11 +46,10 @@ class VatId implements Stringable
         return $this->value;
     }
 
-    protected function validIdTypes(): array
+    public static function validIdTypeValues(): array
     {
         return [
             self::VAT_ID_TYPE_IFZ,
-            self::VAT_ID_TYPE_NIF,
             self::VAT_ID_TYPE_PASSPORT,
             self::VAT_ID_TYPE_NATIONAL_ID,
             self::VAT_ID_TYPE_RESIDENCE_CERTIFICATE,

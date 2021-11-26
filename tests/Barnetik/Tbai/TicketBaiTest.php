@@ -15,7 +15,7 @@ use Barnetik\Tbai\ValueObject\Ammount;
 use Barnetik\Tbai\ValueObject\Date;
 use Barnetik\Tbai\ValueObject\Time;
 use Barnetik\Tbai\ValueObject\VatId;
-use Barnetik\Tbai\Subject\Emitter;
+use Barnetik\Tbai\Subject\Issuer;
 use Barnetik\Tbai\Subject\Recipient;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
@@ -33,7 +33,7 @@ class TicketBaiTest extends TestCase
     {
         $ticketbai = $this->getTicketBai();
         $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-') . '.xml';
-        $ticketbai->sign($_ENV['TBAI_P12_PATH'], $_ENV['TBAI_PRIVATE_KEY'], __DIR__ . '/__files/signedXmls', basename($filename));
+        $ticketbai->sign($_ENV['TBAI_P12_PATH'], $_ENV['TBAI_PRIVATE_KEY'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
         // $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/ticketBaiV1-2.xsd'));
@@ -49,7 +49,7 @@ class TicketBaiTest extends TestCase
         $subject = $this->getMultipleRecipientSubject();
         $fingerprint = $this->getFingerprint();
 
-        $header = Header::create('0000002', new Date(date('d-m-Y')), new Time(date('H:i:s')), 'TEST-SERIE-');
+        $header = Header::create('0000002', new Date('02-11-2021'), new Time('11:12:10'), 'TESTSERIE');
         $data = new Data('test-description', new Ammount('12.34'), [Data::VAT_REGIME_01]);
         $breakdown = new Breakdown();
         $breakdown->addNationalNotSubjectBreakdownItem(new NationalNotSubjectBreakdownItem(new Ammount('12.34'), NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_LOCATION_RULES));
@@ -70,9 +70,9 @@ class TicketBaiTest extends TestCase
 
     private function getSubject(): Subject
     {
-        $emitter = new Emitter(new VatId('11111111H'), 'Emitter Name');
+        $issuer = new Issuer(new VatId('11111111H'), 'Emitter Name');
         $recipient = Recipient::createNationalRecipient(new VatId('00000000T'), 'Client Name');
-        return new Subject($emitter, $recipient, Subject::EMITTED_BY_EMITTER);
+        return new Subject($issuer, $recipient, Subject::ISSUED_BY_ISSUER);
     }
 
     private function getMultipleRecipientSubject(): Subject
@@ -85,7 +85,7 @@ class TicketBaiTest extends TestCase
     private function getFingerprint(): Fingerprint
     {
         $vendor = new Vendor('testLicenseKey', 'F95780987');
-        $previousInvoice = new PreviousInvoice('0000002', new Date('02-12-2020'), 'abcdefgkauskjsa', 'TEST-SERIE-');
+        $previousInvoice = new PreviousInvoice('0000002', new Date('02-12-2020'), 'abcdefgkauskjsa', 'TESTSERIE');
         return new Fingerprint($vendor, $previousInvoice);
     }
 }

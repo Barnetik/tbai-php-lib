@@ -30,7 +30,7 @@ class Fingerprint implements TbaiXml
         return $fingerprint;
     }
 
-    public function docJson(): array
+    public static function docJson(): array
     {
         return [
             'vendor',

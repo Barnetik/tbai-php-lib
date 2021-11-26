@@ -3,27 +3,31 @@
 namespace Barnetik\Tbai;
 
 use Barnetik\Tbai\Interfaces\TbaiXml;
-use Barnetik\Tbai\Subject\Emitter;
+use Barnetik\Tbai\Subject\Issuer;
 use Barnetik\Tbai\Subject\Recipient;
 use Barnetik\Tbai\ValueObject\VatId;
 use DOMDocument;
 use DOMNode;
+use InvalidArgumentException;
 
 class Subject implements TbaiXml
 {
-    const EMITTED_BY_EMITTER = 'N';
-    const EMITTED_BY_THIRD_PARTY = 'T';
-    const EMITTED_BY_RECIPIENT = 'D';
+    const ISSUED_BY_ISSUER = 'N';
+    const ISSUED_BY_THIRD_PARTY = 'T';
+    const ISSUED_BY_RECIPIENT = 'D';
 
-    protected Emitter $emitter;
+    protected Issuer $issuer;
     protected array $recipients = [];
-    protected string $emittedBy;
+    protected string $issuedBy;
 
-    public function __construct(Emitter $emitter, Recipient $recipient, string $emittedBy = self::EMITTED_BY_EMITTER)
+    public function __construct(Issuer $issuer, Recipient $recipient, string $issuedBy = self::ISSUED_BY_ISSUER)
     {
-        $this->emitter = $emitter;
+        $this->issuer = $issuer;
         $this->addRecipient($recipient);
-        $this->emittedBy = $emittedBy;
+        if (!in_array($issuedBy, self::validIssuedByValues())) {
+            throw new InvalidArgumentException('Invalid issuedBy value provided');
+        }
+        $this->issuedBy = $issuedBy;
     }
 
     public function addRecipient(Recipient $recipient): self
@@ -32,9 +36,9 @@ class Subject implements TbaiXml
         return $this;
     }
 
-    public function emitter(): Emitter
+    public function issuer(): Issuer
     {
-        return $this->emitter;
+        return $this->issuer;
     }
 
     public function recipients(): array
@@ -42,14 +46,14 @@ class Subject implements TbaiXml
         return $this->recipients;
     }
 
-    public function emitterVatId(): VatId
+    public function issuerVatId(): VatId
     {
-        return $this->emitter->vatId();
+        return $this->issuer->vatId();
     }
 
-    public function emitterName(): string
+    public function issuerName(): string
     {
-        return $this->emitter->name();
+        return $this->issuer->name();
     }
 
     public function multipleRecipients(): string
@@ -65,9 +69,9 @@ class Subject implements TbaiXml
         return sizeof($this->recipients) > 1;
     }
 
-    public function emittedBy(): string
+    public function issuedBy(): string
     {
-        return $this->emittedBy;
+        return $this->issuedBy;
     }
 
     public function xml(DOMDocument $document): DOMNode
@@ -81,22 +85,36 @@ class Subject implements TbaiXml
             );
         }
 
-        $subject->appendChild($this->emitter->xml($document));
+        $subject->appendChild($this->issuer->xml($document));
         $subject->appendChild($recipients);
-        // $subject->appendChild($recipients);
         $subject->appendChild($document->createElement('VariosDestinatarios', $this->multipleRecipients()));
-        $subject->appendChild($document->createElement('EmitidaPorTercerosODestinatario', $this->emittedBy()));
+        $subject->appendChild($document->createElement('EmitidaPorTercerosODestinatario', $this->issuedBy()));
 
         return $subject;
     }
 
-    public function docJson(): array
+    private static function validIssuedByValues(): array
     {
         return [
-            'recipients',
-            'emmiter',
-            'multipleRecipients',
-            'emitedBy',
+            self::ISSUED_BY_ISSUER,
+            self::ISSUED_BY_THIRD_PARTY,
+            self::ISSUED_BY_RECIPIENT
+        ];
+    }
+
+    public static function docJson(): array
+    {
+        return [
+            'type' => 'object',
+            'properties' => [
+                'issuer' => Issuer::docJson(),
+                'recipient' => Recipient::docJson(),
+                'issuedBy' => [
+                    'type' => 'string',
+                    'enum' => self::validIssuedByValues(),
+                    'description' => 'N: issuer | T: Third party | D: Recipient',
+                ],
+            ]
         ];
     }
 }

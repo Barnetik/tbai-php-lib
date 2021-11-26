@@ -35,27 +35,14 @@ class TicketBai implements Stringable, TbaiXml
         $this->fingerprint = $fingerprint;
     }
 
-    public function xml(DOMDocument $document): DOMNode
+    public function issuerVatId(): VatId
     {
-        $tbai = $document->createElementNS('urn:ticketbai:emision', 'TicketBai');
-        // $tbai = $document->createElement('TicketBai');
-        $tbai->appendChild($this->header->xml($document));
-        $tbai->appendChild($this->subject->xml($document));
-        $tbai->appendChild($this->invoice->xml($document));
-        $tbai->appendChild($this->fingerprint->xml($document));
-
-        $document->appendChild($tbai);
-        return $tbai;
+        return $this->subject->issuerVatId();
     }
 
-    public function emitterVatId(): VatId
+    public function issuerName(): string
     {
-        return $this->subject->emitterVatId();
-    }
-
-    public function emitterName(): string
-    {
-        return $this->subject->emitterName();
+        return $this->subject->issuerName();
     }
 
     public function expeditionDate(): Date
@@ -86,7 +73,20 @@ class TicketBai implements Stringable, TbaiXml
         return $xml;
     }
 
-    public function sign(string $pfxFilePath, string $password, string $storeDir, string $storeFilename): void
+    public function xml(DOMDocument $document): DOMNode
+    {
+        $tbai = $document->createElementNS('urn:ticketbai:emision', 'TicketBai');
+        // $tbai = $document->createElement('TicketBai');
+        $tbai->appendChild($this->header->xml($document));
+        $tbai->appendChild($this->subject->xml($document));
+        $tbai->appendChild($this->invoice->xml($document));
+        $tbai->appendChild($this->fingerprint->xml($document));
+
+        $document->appendChild($tbai);
+        return $tbai;
+    }
+
+    public function sign(string $pfxFilePath, string $password, string $signedFilePath): void
     {
         if (!$this->signedXml) {
             openssl_pkcs12_read(
@@ -99,15 +99,15 @@ class TicketBai implements Stringable, TbaiXml
                 new InputResourceInfo(
                     $this->dom()->C14N(true, false), // The source document
                     ResourceInfo::string, // The source is a url
-                    $storeDir, // The location to save the signed document
-                    $storeFilename, //$storeFilename, // The name of the file to save the signed document in,
+                    dirname($signedFilePath), // The location to save the signed document
+                    basename($signedFilePath), //$storeFilename, // The name of the file to save the signed document in,
                     null,
                     false
                 ),
                 new CertificateResourceInfo($certData['cert'], ResourceInfo::string | ResourceInfo::pem),
                 new KeyResourceInfo($certData['pkey'], ResourceInfo::string | ResourceInfo::pem),
             );
-            $this->signedXmlPath = $storeDir . '/' . $storeFilename;
+            $this->signedXmlPath = $signedFilePath;
         }
     }
 
@@ -137,13 +137,16 @@ class TicketBai implements Stringable, TbaiXml
         return $this->dom()->saveXml();
     }
 
-    public function docJson(): array
+    public static function docJson(): array
     {
         $json = [
-            'header' => $this->header->docJson(),
-            'subject' => $this->subject->docJson(),
-            'invoice' => $this->invoice->docJson(),
-            'fingerprint' => $this->fingerprint->docJson(),
+            'type' => 'object',
+            'properties' => [
+                'subject' => Subject::docJson(),
+                'invoice' => Invoice::docJson(),
+                'fingerprint' => Fingerprint::docJson()
+            ],
+            'required' => ['subject', 'invoice', 'fingerprint']
         ];
         return $json;
     }

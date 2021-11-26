@@ -75,7 +75,7 @@ class Header implements TbaiXml
         return $header;
     }
 
-    public function docJson(): array
+    public static function docJson(): array
     {
         return [
             'serie',

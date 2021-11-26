@@ -57,10 +57,10 @@ class Invoice implements TbaiXml
         return $this->data->total();
     }
 
-    public function docJson(): array
+    public static function docJson(): array
     {
         return [
-            'header' => $this->header->docJson(),
+            'header' => Header::docJson(),
             'data',
             'breakdown'
         ];

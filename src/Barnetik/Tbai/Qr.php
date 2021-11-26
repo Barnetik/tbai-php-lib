@@ -17,7 +17,7 @@ class Qr
     {
         $code = sprintf(
             'TBAI-%s-%s-%s',
-            $this->ticketBai->emitterVatId(),
+            $this->ticketBai->issuerVatId(),
             $this->ticketBai->expeditionDate()->short(),
             $this->ticketBai->shortSignatureValue()
         );
