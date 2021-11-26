@@ -60,9 +60,13 @@ class Invoice implements TbaiXml
     public static function docJson(): array
     {
         return [
-            'header' => Header::docJson(),
-            'data',
-            'breakdown'
+            'types' => 'object',
+            'properties' => [
+                'header' => Header::docJson(),
+                'data' => Data::docJson(),
+                'breakdown' => Breakdown::docJson()
+            ],
+            'required' => ['header', 'data', 'breakdown']
         ];
     }
 }
