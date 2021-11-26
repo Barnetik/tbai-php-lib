@@ -65,7 +65,7 @@ class Header implements TbaiXml
         }
 
         $header->append(
-            $domDocument->createElement('NumFactura', $this->series()),
+            $domDocument->createElement('NumFactura', $this->invoiceNumber()),
             $domDocument->createElement('FechaExpedicionFactura', $this->expeditionDate()),
             $domDocument->createElement('HoraExpedicionFactura', $this->expeditionTime()),
             $domDocument->createElement('FacturaSimplificada', $this->isSimplified ? 'S' : 'N')
@@ -74,12 +74,15 @@ class Header implements TbaiXml
 
         return $header;
     }
-}
 
-    // <complexType name="CabeceraFacturaType">
-    //  <sequence>
-    //      <element name="FacturaEmitidaSustitucionSimplificada" type="T:SiNoType" minOccurs="0"/>
-    //      <element name="FacturaRectificativa" type="T:FacturaRectificativaType" minOccurs="0"/>
-    //      <element name="FacturasRectificadasSustituidas" type="T:FacturasRectificadasSustituidasType" minOccurs="0"/>
-    //  </sequence>
-    // </complexType>
+    public function docJson(): array
+    {
+        return [
+            'serie',
+            'invoiceNumber',
+            'expeditionDate',
+            'expeditionTime',
+            'simplifiedInvoice'
+        ];
+    }
+}
