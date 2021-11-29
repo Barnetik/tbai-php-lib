@@ -32,7 +32,7 @@ echo json_encode([
                     [
                         'in' => 'body',
                         'name' => 'body',
-                        'description' => 'Sinatu beharreko faktura (Invoice motakoa) - Factura a firma (de tipo Invoice) ',
+                        'description' => 'Sinatu beharreko faktura (Invoice motakoa) - Factura a firmar (de tipo Invoice) ',
                         'schema' => [
                             '$ref' =>  '#/definitions/Invoice'
                         ],
