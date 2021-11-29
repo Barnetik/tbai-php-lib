@@ -45,13 +45,13 @@ class Issuer implements TbaiXml
             'properties' => [
                 'vatId' => [
                     'type' => 'string',
-                    'minLength' => 9,
-                    'maxLength' => 9,
-                    'pattern' => '(([a-z|A-Z]{1}\d{7}[a-z|A-Z]{1})|(\d{8}[a-z|A-Z]{1})|([a-z|A-Z]{1}\d{8}))'
+                    'pattern' => '^(([a-z|A-Z]{1}\d{7}[a-z|A-Z]{1})|(\d{8}[a-z|A-Z]{1})|([a-z|A-Z]{1}\d{8}))$',
+                    'description' => 'IFZ - NIF'
                 ],
                 'name' => [
                     'type' => 'string',
-                    'maxLength' => 120
+                    'maxLength' => 120,
+                    'description' => 'Abizenak eta izena edo Sozietatearen izena - Apellidos y nombre o Razón social'
                 ]
             ],
             'required' => ['vatId', 'name']

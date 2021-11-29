@@ -108,13 +108,25 @@ class Subject implements TbaiXml
             'type' => 'object',
             'properties' => [
                 'issuer' => Issuer::docJson(),
-                'recipient' => Recipient::docJson(),
+                'recipients' => [
+                    'type' => 'array',
+                    'items' => Recipient::docJson(),
+                    'minItems' => 1,
+                    'maxItems' => 100
+                ],
                 'issuedBy' => [
                     'type' => 'string',
                     'enum' => self::validIssuedByValues(),
-                    'description' => 'N: issuer | T: Third party | D: Recipient',
+                    'default' => 'N',
+                    'description' => '
+Hirugarren batek edo hartzaileak egindako faktura - Factura emitida por tecero o por destinatario
+    N: Ez. Faktura egileak berak egin du - No. Factura emitida por el propio emisor
+    T: Faktura hirugarren batek egin du - Factura emitida por un tercero
+    D: Faktura eragiketaren hartzaileak egin du -  Factura emitida por el destinatario de la operación
+                    ',
                 ],
-            ]
+            ],
+            'required' => ['issuer', 'recipients']
         ];
     }
 }

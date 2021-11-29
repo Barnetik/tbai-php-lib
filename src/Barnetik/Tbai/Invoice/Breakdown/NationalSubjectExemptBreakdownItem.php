@@ -74,11 +74,21 @@ class NationalSubjectExemptBreakdownItem implements TbaiXml
                     'type' => 'string',
                     'description' => 'Salbuetsitako zerga-oinarria (2 dezimalekin) - Base imponible exenta (2 decimales)'
                 ],
-                'exemptionReason' => [
+                'reason' => [
                     'type' => 'string',
                     'enum' => self::validExemptionReasons(),
-                    'description' => 'Arrazoia - Razón'
+                    'description' => '
+Arrazoia - Razón:
+  * E1: Salbuetsita 20. art. - Exenta Art.20
+  * E2: Salbuetsita 21. art. - Exenta Art.21
+  * E3: Salbuetsita 22. art. - Exenta Art.22
+  * E4: Salbuetsita 23. art. eta 24. art. - Exenta Art.23 y 24
+  * E5: Salbuetsita 25. art. - Exenta Art.25
+  * E6: Salbuetsita Beste batzuk - Exenta Otros
+
+'
                 ],
+                'required' => ['taxBase', 'reason']
             ]
 
         ];

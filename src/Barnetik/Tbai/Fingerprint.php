@@ -33,8 +33,10 @@ class Fingerprint implements TbaiXml
     public static function docJson(): array
     {
         return [
-            'vendor',
-            'previousInvoice'
+            'type' => 'object',
+            'properties' => [
+                'previousInvoice' => PreviousInvoice::docJson()
+            ]
         ];
     }
 }

@@ -94,14 +94,14 @@ class Header implements TbaiXml
                     'type' => 'string',
                     'minLength' => 10,
                     'maxLength' => 10,
-                    'pattern' => '\d{2,2}-\d{2,2}-\d{4,4}',
+                    'pattern' => '^\d{2,2}-\d{2,2}-\d{4,4}$',
                     'description' => 'Faktura bidali den data (adib: 21-12-2020) - Fecha de expedición de factura (ej: 21-12-2020)'
                 ],
                 'expeditionTime' => [
                     'type' => 'string',
                     'minLength' => 10,
                     'maxLength' => 10,
-                    'pattern' => '\d{2,2}:\d{2,2}:\d{2,2}',
+                    'pattern' => '^\d{2,2}:\d{2,2}:\d{2,2}$',
                     'description' => 'Faktura bidali den ordua (adib: 21:00:00) - Hora de expedición de factura (ej: 21:00:00)'
                 ],
                 'simplifiedInvoice' => [

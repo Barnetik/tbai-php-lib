@@ -29,6 +29,7 @@ class Data implements TbaiXml
     const VAT_REGIME_15 = '15';
     const VAT_REGIME_51 = '51';
     const VAT_REGIME_52 = '52';
+    const VAT_REGIME_53 = '53';
 
     private string $description;
     private Ammount $total;
@@ -67,7 +68,7 @@ class Data implements TbaiXml
 
     public function addVatRegime(string $vatRegime): self
     {
-        if (!in_array($vatRegime, $this->validVatRegimes())) {
+        if (!in_array($vatRegime, self::validVatRegimes())) {
             throw new InvalidVatRegimeException();
         }
 
@@ -79,7 +80,7 @@ class Data implements TbaiXml
         return $this;
     }
 
-    private function validVatRegimes(): array
+    private static function validVatRegimes(): array
     {
         return [
             self::VAT_REGIME_01,
@@ -99,6 +100,7 @@ class Data implements TbaiXml
             self::VAT_REGIME_15,
             self::VAT_REGIME_51,
             self::VAT_REGIME_52,
+            self::VAT_REGIME_53,
         ];
     }
 
@@ -161,14 +163,34 @@ class Data implements TbaiXml
                 ],
                 'total' => [
                     'type' => 'string',
-                    'pattern' => '(\+|-)?\d{1,12}(\.\d{0,2})?$',
+                    'pattern' => '^(\+|-)?\d{1,12}(\.\d{0,2})?$',
                     'description' => 'Zenbatekoa guztira (2 dezimalekin) - Importe total (2 decimales)'
                 ],
                 'vatRegimes' => [
                     'type' => 'array',
                     'items' => [
                         'type' => 'string',
-                        'description'
+                        'enum' => self::validVatRegimes(),
+                        'description' => '
+ * 01: Erregimen orokorreko eragiketa eta hurrengo balioetan jaso gabe dagoen beste edozein kasu - Operación de régimen general y cualquier otro supuesto que no esté recogido en los siguientes valores
+ * 02: Esportazioa - Exportación
+ * 03: Erabilitako ondasunen, arte objektuen, zaharkinen eta bilduma objektuen araudi berezia aplikatzen zaien eragiketak - Operaciones a las que se aplique el régimen especial de bienes usados, objetos de arte, antigüedades y objetos de colección
+ * 04: Inbertsio urrearen araubide berezia - Régimen especial del oro de inversión
+ * 05: Bidaia-agentzien araubide berezia - Régimen especial de las agencias de viajes
+ * 06: BEZeko erakundeen multzoaren araudi berezia (maila aurreratua) - Régimen especial grupo de entidades en IVA (Nivel Avanzado)
+ * 07: Kutxa-irizpidearen araubide berezia - Régimen especial del criterio de caja
+ * 08: Ekoizpen, Zerbitzu eta Inportazioaren gaineko Zergari / Kanarietako Zeharkako Zerga Orokorrari lotutako eragiketak - Operaciones sujetas al IPSI/IGIC (Impuesto sobre la Producción, los Servicios y la Importación / Impuesto General Indirecto Canario)
+ * 09: Besteren izenean eta kontura ari diren bidai agentziek egindako zerbitzuen fakturazioa(Fakturazio Araudiko 3. xedapen gehigarria) - Facturación de las prestaciones de servicios de agencias de viaje que actúan como mediadoras en nombre y por cuenta ajena (disposición adicional 3ª del Reglamento de Facturación)
+ * 10: Hirugarrenen kontura kobratzea ordainsari profesionalak edo jabetza industrialetik eratorritako eskubideak, egilearenak edo bazkideen, bazkideen edo elkargokideen kontura kobratzeko eginkizun horiek betetzen dituzten sozietate, elkarte, elkargo profesional edo bestelako erakundeek egindakoak - Cobros por cuenta de terceros o terceras de honorarios profesionales o de derechos derivados de la propiedad industrial, de autor u otros por cuenta de sus socios, socias, asociados, asociadas, colegiados o colegiadas efectuados por sociedades, asociaciones, colegios profesionales u otras entidades que realicen estas funciones de cobro
+ * 11: Negozio lokala errentatzeko eragiketak, atxikipenari lotuak - Operaciones de arrendamiento de local de negocio sujetos a retención
+ * 12: Negozio lokala errentatzeko eragiketak, atxikipenari lotu gabeak - Operaciones de arrendamiento de local de negocio no sujetos a retención
+ * 13: Negozio lokala errentatzeko eragiketak, atxikipenari lotuak eta lotu gabeak - Operaciones de arrendamiento de local de negocio sujetas y no sujetas a retención
+ * 14: Hartzailea administrazio publiko bat denean ordaintzeke dauden BEZdun fakturak, obra ziurtagirietakoak - Factura con IVA pendiente de devengo en certificaciones de obra cuyo destinatario sea una Administración Pública
+ * 15: Segidako traktuko eragiketetan ordaintzeke dagoen BEZdun faktura - Factura con IVA pendiente de devengo en operaciones de tracto sucesivo
+ * 51: Baliokidetasun errekarguko eragiketak - Operaciones en recargo de equivalencia
+ * 52: Erregimen erraztuko eragiketak - Operaciones en régimen simplificado
+ * 53: BEZaren ondorioetarako enpresari edo profesionaltzat jotzen ez diren pertsona edo erakundeek egindako eragiketak - Operaciones realizadas por personas o entidades que no tengan la consideración de empresarios, empresarias o profesionales a efectos del IVA
+                        '
                     ],
                     'minItem' => 1,
                     'maxItems' => 3,
@@ -176,12 +198,12 @@ class Data implements TbaiXml
                 ],
                 'supportedRetention' => [
                     'type' => 'string',
-                    'pattern' => '(\+|-)?\d{1,12}(\.\d{0,2})?$',
+                    'pattern' => '^(\+|-)?\d{1,12}(\.\d{0,2})?$',
                     'description' => 'Jasandako atxikipena (2 dezimalekin) - Retención soportada (2 decimales)'
                 ],
                 'taxBaseCost' => [
                     'type' => 'string',
-                    'pattern' => '(\+|-)?\d{1,12}(\.\d{0,2})?$',
+                    'pattern' => '^(\+|-)?\d{1,12}(\.\d{0,2})?$',
                     'description' => 'Kosturako zerga-oinarria (2 dezimalekin) - Base imponible a coste (2 decimales)'
                 ]
             ],
@@ -189,4 +211,4 @@ class Data implements TbaiXml
         ];
     }
 }
-// <element name="FechaOperacion" type="T:FechaType" minOccurs="0"/>
+// element name="FechaOperacion" type="T:FechaType" minOccurs="0"/>

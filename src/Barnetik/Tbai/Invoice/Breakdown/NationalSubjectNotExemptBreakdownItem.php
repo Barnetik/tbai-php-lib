@@ -72,14 +72,21 @@ class NationalSubjectNotExemptBreakdownItem implements TbaiXml
                 'vatDetails' => [
                     'type' => 'array',
                     'description' => 'Zenbatekoak - Importes',
+                    'minItems' => 1,
+                    'maxItems' => 6,
                     'items' => VatDetail::docJson()
                 ],
-                'notExemptType' => [
+                'type' => [
                     'type' => 'string',
                     'enum' => self::validNotExemptTypes(),
-                    'description' => 'Salbuetsi gabeko mota - Tipo de no exenta'
+                    'description' => '
+Salbuetsi gabeko mota - Tipo de no exenta
+  * S1: sub. pas. inbertsiorik ez - sin ISP
+  * S2: sub. pas. inbertsioa - con ISP
+'
                 ],
-            ]
+            ],
+            'required' => ['type', 'vatDetails']
 
         ];
     }

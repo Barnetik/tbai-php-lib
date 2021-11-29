@@ -66,12 +66,17 @@ class NationalNotSubjectBreakdownItem implements TbaiXml
                     'type' => 'string',
                     'description' => 'Zenbatekoa (2 dezimalekin) - Importe (2 decimales)'
                 ],
-                'notSubjectReason' => [
+                'reason' => [
                     'type' => 'string',
                     'enum' => self::validNotSubjectReasons(),
-                    'description' => 'Kargapean ez egoteko arrazoia - Causa no sujeción'
+                    'description' => '
+Kargapean ez egoteko arrazoia - Causa no sujeción:
+  * RL: Kargapean ez kokapen arauak direla eta - No sujeto por reglas de localización
+  * OT: Kargapean ez 7., 14. art, Beste batzuk - No sujeto art. 7, 14, Otros
+'
                 ],
-            ]
+            ],
+            'required' => ['ammount', 'reason']
         ];
     }
 }

@@ -72,19 +72,19 @@ class VatDetail implements TbaiXml
                 ],
                 'taxRate' => [
                     'type' => 'string',
-                    'description' => 'Zerga tasa - Tipo impositivo'
+                    'description' => 'Zerga tasa (2 dezimalekin) - Tipo impositivo (2 decimales)'
                 ],
                 'taxQuota' => [
                     'type' => 'string',
-                    'description' => 'Zergaren kuota - Cuota del impuesto'
+                    'description' => 'Zergaren kuota (2 dezimalekin) - Cuota del impuesto (2 decimales)'
                 ],
                 'equivalenceRate' => [
                     'type' => 'string',
-                    'description' => 'Baliokidetasun errekarguaren tasa - Tipo del recargo de equivalencia'
+                    'description' => 'Baliokidetasun errekarguaren tasa (2 dezimalekin) - Tipo del recargo de equivalencia (2 decimales)'
                 ],
                 'equivalenceQuota' => [
                     'type' => 'string',
-                    'description' => 'Baliokidetasun errekarguaren kuota - Cuota del recargo de equivalencia'
+                    'description' => 'Baliokidetasun errekarguaren kuota (2 dezimalekin) - Cuota del recargo de equivalencia (2 decimales)'
                 ],
                 'isEquivalenceOperation' => [
                     'type' => 'boolean',

@@ -117,14 +117,25 @@ class Recipient implements TbaiXml
             'properties' => [
                 'vatId' => [
                     'type' => 'string',
+                    'description' => 'IFZ edo Identifikatzailea - NIF o Identificador'
                 ],
                 'vatIdType' => [
                     'type' => 'string',
-                    'enum' => VatId::validIdTypeValues()
+                    'enum' => VatId::validIdTypeValues(),
+                    'default' => '02',
+                    'description' => '
+Dokumentu mota - Tipo de documento:
+    02: IFZ - NIF
+    03: Pasaportea - Pasaporte
+    04: Egoitza dagoen herrialdeak edo lurraldeak emandako nortasun agiri ofiziala - Documento oficial de identificación expedido por el país o territorio de residencia
+    05: Egoitza ziurtagiria - Certificado de residencia
+    06: Beste frogagiri bat - Otro documento probatorio
+                    '
                 ],
                 'name' => [
                     'type' => 'string',
-                    'maxLength' => 20
+                    'maxLength' => 120,
+                    'description' => 'Abizenak eta izena edo Sozietatearen izena - Apellidos y nombre o Razón social'
                 ],
                 'postalCode' => [
                     'type' => 'string',
@@ -137,9 +148,8 @@ class Recipient implements TbaiXml
                 // ],
                 'countryCode' => [
                     'type' => 'string',
-                    'minLength' => 2,
-                    'maxLength' => 2,
                     'description' => 'Herrialdearen kodea (ISO3166 alpha2) - Código de país (ISO3166 alpha2)',
+                    'default' => 'ES'
                 ]
             ],
             'required' => ['vatId', 'name']

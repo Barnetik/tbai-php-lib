@@ -94,21 +94,21 @@ class Breakdown implements TbaiXml
         return [
             'type' => 'object',
             'properties' => [
-                'NationalSubjectExemptBreakdownItems' => [
+                'nationalSubjectExemptBreakdownItems' => [
                     'type' => 'array',
-                    'maxItems' => 3,
+                    'maxItems' => 2,
                     'items' => NationalSubjectExemptBreakdownItem::docJson(),
-                    'description' => 'Kargapean eta salbuetsitakoak - Sujeta a carga y exentas'
+                    'description' => 'Kargapean eta salbuetsitakoak - Sujetas a carga y exentas'
                 ],
-                'NationalSubjectNotExemptBreakdownItems' => [
+                'nationalSubjectNotExemptBreakdownItems' => [
                     'type' => 'array',
-                    'maxItems' => 8,
+                    'maxItems' => 7,
                     'items' => NationalSubjectNotExemptBreakdownItem::docJson(),
                     'description' => 'Kargapean eta salbuetsi gabe - Sujetas a carga y no exentas'
                 ],
-                'NationalNotSubjectBreakdownItems' => [
+                'nationalNotSubjectBreakdownItems' => [
                     'type' => 'array',
-                    'maxItems' => 8,
+                    'maxItems' => 7,
                     'items' => NationalNotSubjectBreakdownItem::docJson(),
                     'description' => 'Kargapean ez daudenak - No sujetas a carga'
                 ]
@@ -117,30 +117,3 @@ class Breakdown implements TbaiXml
         ];
     }
 }
-
-// <complexType name="NoExentaType">
-//     <sequence>
-//         <element name="DetalleNoExenta" type="T:DetalleNoExentaType" minOccurs="1" maxOccurs="2"/>
-//     </sequence>
-// </complexType>
-// <complexType name="DetalleNoExentaType">
-//     <sequence>
-//         <element name="TipoNoExenta" type="T:TipoOperacionSujetaNoExentaType"/>
-//         <element name="DesgloseIVA" type="T:DesgloseIVAType"/>
-//     </sequence>
-// </complexType>
-// <complexType name="DesgloseIVAType">
-//     <sequence>
-//         <element name="DetalleIVA" type="T:DetalleIVAType" maxOccurs="6"/>
-//     </sequence>
-// </complexType>
-// <complexType name="DetalleIVAType">
-//     <sequence>
-//         <element name="BaseImponible" type="T:ImporteSgn12.2Type"/>
-//         <element name="TipoImpositivo" type="T:Tipo3.2Type" minOccurs="0"/>
-//         <element name="CuotaImpuesto" type="T:ImporteSgn12.2Type" minOccurs="0"/>
-//         <element name="TipoRecargoEquivalencia" type="T:Tipo3.2Type" minOccurs="0"/>
-//         <element name="CuotaRecargoEquivalencia" type="T:ImporteSgn12.2Type" minOccurs="0"/>
-//         <element name="OperacionEnRecargoDeEquivalenciaORegimenSimplificado" type="T:SiNoType" minOccurs="0"/>
-//     </sequence>
-// </complexType>

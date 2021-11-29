@@ -12,22 +12,22 @@ class PreviousInvoice implements TbaiXml
     private string $invoiceNumber;
     private Date $sentDate;
     private string $signature;
-    private ?string $sequence;
+    private ?string $series;
 
-    public function __construct(string $invoiceNumber, Date $sentDate, string $signature, ?string $sequence)
+    public function __construct(string $invoiceNumber, Date $sentDate, string $signature, ?string $series)
     {
         $this->invoiceNumber = $invoiceNumber;
         $this->sentDate = $sentDate;
         $this->signature = $signature;
-        $this->sequence = $sequence;
+        $this->series = $series;
     }
 
     public function xml(DOMDocument $domDocument): DOMNode
     {
         $previousInvoice = $domDocument->createElement('EncadenamientoFacturaAnterior');
-        if ($this->sequence) {
+        if ($this->series) {
             $previousInvoice->appendChild(
-                $domDocument->createElement('SerieFacturaAnterior', $this->sequence)
+                $domDocument->createElement('SerieFacturaAnterior', $this->series)
             );
         }
 
@@ -37,5 +37,35 @@ class PreviousInvoice implements TbaiXml
             $domDocument->createElement('SignatureValueFirmaFacturaAnterior', $this->signature)
         );
         return $previousInvoice;
+    }
+
+    public static function docJson(): array
+    {
+        return [
+            'type' => 'object',
+            'properties' => [
+                'invoiceNumber' => [
+                    'type' => 'string',
+                    'maxLength' => 20,
+                    'description' => 'Aurreko fakturaren zenbakia - Número factura factura anterior'
+                ],
+                'sentDate' => [
+                    'type' => 'string',
+                    'pattern' => '^\d{2,2}-\d{2,2}-\d{4,4}$',
+                    'description' => 'Aurreko faktura bidali zen data (adib: 21-12-2020) - Fecha de expedición de factura anterior (ej: 21-12-2020)'
+                ],
+                'signature' => [
+                    'type' => 'string',
+                    'maxLength' => 100,
+                    'description' => 'Aurreko fakturaren TBAI fitxategiko SignatureValue eremuko lehen ehun karaktereak - Primeros cien caracteres del campo SignatureValue del fichero TBAI de la factura anterior'
+                ],
+                'serie' => [
+                    'type' => 'string',
+                    'maxLength' => 20,
+                    'description' => 'Aurreko fakturaren seriea - Serie factura anterior'
+                ]
+            ],
+            'required' => ['invoiceNumber', 'sentDate', 'signature']
+        ];
     }
 }
