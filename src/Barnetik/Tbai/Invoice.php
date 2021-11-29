@@ -57,6 +57,16 @@ class Invoice implements TbaiXml
         return $this->data->total();
     }
 
+    public static function createFromJson(array $jsonData): self
+    {
+        $header = Header::createFromJson($jsonData['header']);
+        $data = Data::createFromJson($jsonData['data']);
+        $breakdown = Breakdown::createFromJson($jsonData['breakdown']);
+        $invoice = new Invoice($header, $data, $breakdown);
+        return $invoice;
+    }
+
+
     public static function docJson(): array
     {
         return [

@@ -38,6 +38,15 @@ class Issuer implements TbaiXml
         return $issuer;
     }
 
+    public static function createFromJson(array $jsonData): self
+    {
+        $vatId = new VatId($jsonData['vatId']);
+        $name = $jsonData['name'];
+        $issuer = new Issuer($vatId, $name);
+        return $issuer;
+    }
+
+
     public static function docJson(): array
     {
         return [

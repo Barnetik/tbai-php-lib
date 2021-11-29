@@ -39,6 +39,13 @@ class PreviousInvoice implements TbaiXml
         return $previousInvoice;
     }
 
+    public static function createFromJson(array $jsonData): self
+    {
+        $previousInvoice = new PreviousInvoice($jsonData['invoiceNumber'], new Date($jsonData['sentDate']), $jsonData['signature'], $jsonData['serie'] ?? null);
+        return $previousInvoice;
+    }
+
+
     public static function docJson(): array
     {
         return [

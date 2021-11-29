@@ -30,6 +30,14 @@ class Fingerprint implements TbaiXml
         return $fingerprint;
     }
 
+    public static function createFromJson(array $jsonData): self
+    {
+        $vendor = new Vendor($jsonData['license'], $jsonData['developerId'], $jsonData['name'] ?? null, $jsonData['version'] ?? null);
+        $previousInvoice = PreviousInvoice::createFromJson($jsonData['previousInvoice']);
+        $fingerprint = new Fingerprint($vendor, $previousInvoice);
+        return $fingerprint;
+    }
+
     public static function docJson(): array
     {
         return [

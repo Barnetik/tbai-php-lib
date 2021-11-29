@@ -137,6 +137,15 @@ class TicketBai implements Stringable, TbaiXml
         return $this->dom()->saveXml();
     }
 
+    public static function createFromJson(array $jsonData): self
+    {
+        $subject = Subject::createFromJson($jsonData['subject']);
+        $invoice = Invoice::createFromJson($jsonData['invoice']);
+        $fingerprint = Fingerprint::createFromJson($jsonData['fingerprint']);
+        $ticketBai = new TicketBai($subject, $invoice, $fingerprint);
+        return $ticketBai;
+    }
+
     public static function docJson(): array
     {
         $json = [

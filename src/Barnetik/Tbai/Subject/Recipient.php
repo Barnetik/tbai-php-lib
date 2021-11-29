@@ -72,6 +72,21 @@ class Recipient implements TbaiXml
         return $this->vatIdType() === VatId::VAT_ID_TYPE_NIF;
     }
 
+    public static function createFromJson(array $jsonData): self
+    {
+        $countryCode = $jsonData['countryCode'] ?? 'ES';
+        $name = $jsonData['name'];
+        $postalCode = $jsonData['postalCode'] ?? null;
+        if ($countryCode === 'ES') {
+            $vatId = new VatId($jsonData['vatId']);
+            $recipient = self::createNationalRecipient($vatId, $name, $postalCode);
+        } else {
+            $vatId = new VatId($jsonData['vatId'], $jsonData['vatIdType']);
+            $recipient = self::createGenericRecipient($vatId, $name, $postalCode, $countryCode);
+        }
+        return $recipient;
+    }
+
     public function xml(DOMDocument $domDocument): DOMNode
     {
         $recipient = $domDocument->createElement('IDDestinatario');

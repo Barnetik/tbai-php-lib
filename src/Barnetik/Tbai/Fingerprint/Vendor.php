@@ -16,12 +16,12 @@ class Vendor implements TbaiXml
     private string $name;
     private string $version;
 
-    public function __construct(string $license, string $developerId, string $name = self::NAME, string $version = self::VERSION)
+    public function __construct(string $license, string $developerId, string $name = null, string $version = null)
     {
         $this->license = $license;
         $this->developerId = $developerId;
-        $this->name = $name;
-        $this->version = $version;
+        $this->name = $name ?? self::NAME;
+        $this->version = $version ?? self::VERSION;
     }
 
     public function xml(DOMDocument $domDocument): DOMNode
