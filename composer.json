@@ -1,5 +1,5 @@
 {
-    "name": "barnetik/tbai",
+    "name": "barnetik/tbai-lib",
     "description": "Generate and sign TicketBAI compatible invoices",
     "type": "library",
     "license": "MIT",
