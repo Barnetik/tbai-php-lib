@@ -130,10 +130,17 @@ class TicketBai implements Stringable, TbaiXml
         return base64_encode(file_get_contents($this->signedXmlPath()));
     }
 
-    public function shortSignatureValue(): string
+    public function signatureValue(): string
     {
         $simpleXml = new SimpleXMLElement(file_get_contents($this->signedXmlPath));
-        return substr($simpleXml->Signature->SignatureValue, 0, 13);
+        $namespaces = $simpleXml->getNamespaces(true);
+        $ds = $simpleXml->children($namespaces['ds']);
+        return (string)$ds->Signature->SignatureValue;
+    }
+
+    public function shortSignatureValue(): string
+    {
+        return substr($this->signatureValue(), 0, 13);
     }
 
     public function signedXmlPath(): string
