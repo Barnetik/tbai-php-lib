@@ -75,12 +75,27 @@ class Header implements TbaiXml
         return $header;
     }
 
+    public static function createFromJson(array $jsonData): self
+    {
+        $isSimplified = $jsonData('simplifiedInvoice') ?? false;
+        $invoiceNumber = $jsonData['invoiceNumber'];
+        $expeditionDate = new Date($jsonData['expeditionDate']);
+        $expeditionTime = new Time($jsonData['expeditionTime']);
+        $series = $jsonData['series'] ?? null;
+
+        if ($isSimplified) {
+            return self::createSimplified($invoiceNumber, $expeditionDate, $expeditionTime, $series);
+        }
+
+        return self::create($invoiceNumber, $expeditionDate, $expeditionTime, $series);
+    }
+
     public static function docJson(): array
     {
         return [
             'type' => 'object',
             'properties' => [
-                'serie' => [
+                'series' => [
                     'type' => 'string',
                     'maxLength' => 20,
                     'description' => 'Fakturaren seriea - Serie factura'

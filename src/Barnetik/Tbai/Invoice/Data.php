@@ -152,6 +152,17 @@ class Data implements TbaiXml
         return $this->total;
     }
 
+    public static function createFromJson(array $jsonData): self
+    {
+        $description = $jsonData['description'];
+        $total = $jsonData['total'];
+        $vatRegimes = $jsonData['vatRegimes'];
+        $supportedRetention = $jsonData['supportedRetention'] ?? null;
+        $taxBaseCost = $jsonData['taxBaseCost'] ?? null;
+        $invoiceData = new Data($description, $total, $vatRegimes, $supportedRetention, $taxBaseCost);
+        return $invoiceData;
+    }
+
     public static function docJson(): array
     {
         return [
