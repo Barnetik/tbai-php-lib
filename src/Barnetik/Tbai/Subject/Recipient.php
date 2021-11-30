@@ -140,11 +140,11 @@ class Recipient implements TbaiXml
                     'default' => '02',
                     'description' => '
 Dokumentu mota - Tipo de documento:
-    02: IFZ - NIF
-    03: Pasaportea - Pasaporte
-    04: Egoitza dagoen herrialdeak edo lurraldeak emandako nortasun agiri ofiziala - Documento oficial de identificación expedido por el país o territorio de residencia
-    05: Egoitza ziurtagiria - Certificado de residencia
-    06: Beste frogagiri bat - Otro documento probatorio
+ * 02: IFZ - NIF
+ * 03: Pasaportea - Pasaporte
+ * 04: Egoitza dagoen herrialdeak edo lurraldeak emandako nortasun agiri ofiziala - Documento oficial de identificación expedido por el país o territorio de residencia
+ * 05: Egoitza ziurtagiria - Certificado de residencia
+ * 06: Beste frogagiri bat - Otro documento probatorio
                     '
                 ],
                 'name' => [

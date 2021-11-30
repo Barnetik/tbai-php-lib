@@ -213,7 +213,7 @@ class Data implements TbaiXml
  * 53: BEZaren ondorioetarako enpresari edo profesionaltzat jotzen ez diren pertsona edo erakundeek egindako eragiketak - Operaciones realizadas por personas o entidades que no tengan la consideración de empresarios, empresarias o profesionales a efectos del IVA
                         '
                     ],
-                    'minItem' => 1,
+                    'minItems' => 1,
                     'maxItems' => 3,
                     'description' => 'Gakoak: BEZaren araubideen eta zerga-ondorioak dauzkaten eragiketak - Claves de regímenes de IVA y operaciones con trascendencia tributaria'
                 ],

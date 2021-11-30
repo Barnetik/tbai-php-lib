@@ -134,9 +134,9 @@ class Subject implements TbaiXml
                     'default' => 'N',
                     'description' => '
 Hirugarren batek edo hartzaileak egindako faktura - Factura emitida por tecero o por destinatario
-    N: Ez. Faktura egileak berak egin du - No. Factura emitida por el propio emisor
-    T: Faktura hirugarren batek egin du - Factura emitida por un tercero
-    D: Faktura eragiketaren hartzaileak egin du -  Factura emitida por el destinatario de la operación
+ * N: Ez. Faktura egileak berak egin du - No. Factura emitida por el propio emisor
+ * T: Faktura hirugarren batek egin du - Factura emitida por un tercero
+ * D: Faktura eragiketaren hartzaileak egin du - Factura emitida por el destinatario de la operación
                     ',
                 ],
             ],
