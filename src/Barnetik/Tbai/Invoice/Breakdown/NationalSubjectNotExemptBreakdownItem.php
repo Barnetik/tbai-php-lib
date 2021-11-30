@@ -6,6 +6,7 @@ use Barnetik\Tbai\Exception\InvalidNotExemptTypeException;
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use DOMDocument;
 use DOMNode;
+use InvalidArgumentException;
 use OutOfBoundsException;
 
 class NationalSubjectNotExemptBreakdownItem implements TbaiXml
@@ -19,7 +20,12 @@ class NationalSubjectNotExemptBreakdownItem implements TbaiXml
     public function __construct(string $type, array $vatDetails)
     {
         $this->setNotExemptType($type);
-        $this->vatDetails = $vatDetails;
+        if (!sizeof($vatDetails)) {
+            throw new InvalidArgumentException('VatDetails cannot be empty');
+        }
+        foreach ($vatDetails as $vatDetail) {
+            $this->addVatDetail($vatDetail);
+        }
     }
 
     private static function validNotExemptTypes(): array
@@ -62,6 +68,16 @@ class NationalSubjectNotExemptBreakdownItem implements TbaiXml
         }
 
         return $notExentType;
+    }
+
+    public static function createFromJson(array $jsonData): self
+    {
+        $type = $jsonData['type'];
+        $vatDetails = [];
+        foreach ($jsonData['vatDetails'] as $vatDetailData) {
+            $vatDetails[] = VatDetail::createFromJson($vatDetailData);
+        }
+        return new self($type, $vatDetails);
     }
 
     public static function docJson(): array

@@ -46,6 +46,27 @@ class Breakdown implements TbaiXml
         throw new OutOfBoundsException('Too many subject and not exempt breakdown items');
     }
 
+    public static function createFromJson(array $jsonData): self
+    {
+        $breakdown = new self();
+
+        $nationalSubjectExemptBreakdownItems = $jsonData['nationalSubjectExemptBreakdownItems'] ?? [];
+        foreach ($nationalSubjectExemptBreakdownItems as $nationalSubjectExemptBreakdownItem) {
+            $breakdown->addNationalSubjectExemptBreakdownItem(NationalSubjectExemptBreakdownItem::createFromJson($nationalSubjectExemptBreakdownItem));
+        }
+
+        $nationalSubjectNotExemptBreakdownItems = $jsonData['nationalSubjectNotExemptBreakdownItems'] ?? [];
+        foreach ($nationalSubjectNotExemptBreakdownItems as $nationalSubjectNotExemptBreakdownItem) {
+            $breakdown->addNationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem::createFromJson($nationalSubjectNotExemptBreakdownItem));
+        }
+
+        $nationalNotSubjectBreakdownItems = $jsonData['nationalNotSubjectBreakdownItems'] ?? [];
+        foreach ($nationalNotSubjectBreakdownItems as $nationalNotSubjectBreakdownItem) {
+            $breakdown->addNationalNotSubjectBreakdownItem(NationalNotSubjectBreakdownItem::createFromJson($nationalNotSubjectBreakdownItem));
+        }
+        return $breakdown;
+    }
+
     public function xml(DOMDocument $domDocument): DOMNode
     {
         $breakdown = $domDocument->createElement('TipoDesglose');

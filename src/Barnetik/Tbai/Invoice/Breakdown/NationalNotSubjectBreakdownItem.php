@@ -57,6 +57,13 @@ class NationalNotSubjectBreakdownItem implements TbaiXml
         return $notSubjectDetail;
     }
 
+    public static function createFromJson(array $jsonData): self
+    {
+        $ammount = new Ammount($jsonData['ammount']);
+        $reason = $jsonData['reason'];
+        return new self($ammount, $reason);
+    }
+
     public static function docJson(): array
     {
         return [

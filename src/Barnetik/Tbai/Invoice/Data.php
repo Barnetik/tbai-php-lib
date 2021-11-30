@@ -155,10 +155,20 @@ class Data implements TbaiXml
     public static function createFromJson(array $jsonData): self
     {
         $description = $jsonData['description'];
-        $total = $jsonData['total'];
+        $total = new Ammount($jsonData['total']);
         $vatRegimes = $jsonData['vatRegimes'];
-        $supportedRetention = $jsonData['supportedRetention'] ?? null;
-        $taxBaseCost = $jsonData['taxBaseCost'] ?? null;
+
+        $supportedRetention = null;
+        $taxBaseCost = null;
+
+        if (isset($jsonData['supportedRetention'])) {
+            $supportedRetention = new Ammount($jsonData['supportedRetention']);
+        }
+
+        if (isset($jsonData['taxBaseCost'])) {
+            $taxBaseCost = new Ammount($jsonData['taxBaseCost']);
+        }
+
         $invoiceData = new Data($description, $total, $vatRegimes, $supportedRetention, $taxBaseCost);
         return $invoiceData;
     }

@@ -19,21 +19,11 @@ class VatDetail implements TbaiXml
     public function __construct(Ammount $taxBase, ?Ammount $taxRate = null, ?Ammount $taxQuota = null, ?Ammount $equivalenceRate = null, ?Ammount $equivalenceQuota = null, ?bool $isEquivalenceOperation = null)
     {
         $this->taxBase = $taxBase;
-
-        if ($taxRate) {
-            $this->taxRate = $taxRate;
-        }
-        if ($taxQuota) {
-            $this->taxQuota = $taxQuota;
-        }
-        if ($equivalenceRate) {
-            $this->equivalenceRate = $equivalenceRate;
-        }
-        if ($equivalenceQuota) {
-            $this->equivalenceQuota = $equivalenceQuota;
-        }
-
-        $this->isEquivalenceOperation = $isEquivalenceOperation;
+        $this->taxRate = $taxRate ?? null;
+        $this->taxQuota = $taxQuota ?? null;
+        $this->equivalenceRate = $equivalenceRate ?? null;
+        $this->equivalenceQuota = $equivalenceQuota ?? null;
+        $this->isEquivalenceOperation = $isEquivalenceOperation ?? null;
     }
 
     public function xml(DOMDocument $domDocument): DOMNode
@@ -59,6 +49,35 @@ class VatDetail implements TbaiXml
 
         $vatDetail->appendChild($domDocument->createElement('OperacionEnRecargoDeEquivalenciaORegimenSimplificado', $this->isEquivalenceOperation ? 'S' : 'N'));
         return $vatDetail;
+    }
+
+    public static function createFromJson(array $jsonData): self
+    {
+        $taxBase = new Ammount($jsonData['taxBase']);
+
+        $taxRate = null;
+        if (isset($jsonData['taxRate'])) {
+            $taxRate = new Ammount($jsonData['taxRate']);
+        }
+
+        $taxQuota = null;
+        if (isset($jsonData['taxQuota'])) {
+            $taxQuota = new Ammount($jsonData['taxQuota']);
+        }
+
+        $equivalenceRate = null;
+        if (isset($jsonData['equi$equivalenceRate'])) {
+            $equivalenceRate = new Ammount($jsonData['equivalenceRate']);
+        }
+
+        $equivalenceQuota = null;
+        if (isset($jsonData['equivalenceQuota'])) {
+            $equivalenceQuota = new Ammount($jsonData['equivalenceQuota']);
+        }
+
+        $isEquivalenceOperation = $jsonData['isEquivalenceOperation'] ?? false;
+
+        return new self($taxBase, $taxRate, $taxQuota, $equivalenceRate, $equivalenceQuota, $isEquivalenceOperation);
     }
 
     public static function docJson(): array

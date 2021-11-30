@@ -65,6 +65,13 @@ class NationalSubjectExemptBreakdownItem implements TbaiXml
         return $exemptDetail;
     }
 
+    public static function createFromJson(array $jsonData): self
+    {
+        $taxBase = new Ammount($jsonData['taxBase']);
+        $reason = $jsonData['reason'];
+        return new self($taxBase, $reason);
+    }
+
     public static function docJson(): array
     {
         return [
@@ -88,9 +95,8 @@ Arrazoia - Razón:
 
 '
                 ],
-                'required' => ['taxBase', 'reason']
-            ]
-
+            ],
+            'required' => ['taxBase', 'reason']
         ];
     }
 }

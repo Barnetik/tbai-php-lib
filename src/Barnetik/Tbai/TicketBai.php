@@ -19,6 +19,10 @@ use Stringable;
 
 class TicketBai implements Stringable, TbaiXml
 {
+    const TERRITORY_ARABA = '01';
+    const TERRITORY_BIZKAIA = '02';
+    const TERRITORY_GIPUZKOA = '03';
+
     private Header $header;
     private Subject $subject;
     private Invoice $invoice;
@@ -33,6 +37,16 @@ class TicketBai implements Stringable, TbaiXml
         $this->subject = $subject;
         $this->invoice = $invoice;
         $this->fingerprint = $fingerprint;
+
+    }
+
+    private static function validTerritories(): array
+    {
+        return [
+            self::TERRITORY_ARABA,
+            self::TERRITORY_BIZKAIA,
+            self::TERRITORY_GIPUZKOA,
+        ];
     }
 
     public function issuerVatId(): VatId
@@ -151,11 +165,21 @@ class TicketBai implements Stringable, TbaiXml
         $json = [
             'type' => 'object',
             'properties' => [
+                'territory' => [
+                    'type' => 'string',
+                    'enum' => self::validTerritories(),
+                    'description' => '
+Faktura aurkeztuko den lurraldea - Territorio en el que se presentará la factura
+  * 01: Araba
+  * 02: Bizkaia
+  * 03: Gipuzkoa
+'
+                ],
                 'subject' => Subject::docJson(),
                 'invoice' => Invoice::docJson(),
                 'fingerprint' => Fingerprint::docJson()
             ],
-            'required' => ['subject', 'invoice', 'fingerprint']
+            'required' => ['territory', 'subject', 'invoice', 'fingerprint']
         ];
         return $json;
     }

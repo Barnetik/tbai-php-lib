@@ -77,7 +77,7 @@ class Header implements TbaiXml
 
     public static function createFromJson(array $jsonData): self
     {
-        $isSimplified = $jsonData('simplifiedInvoice') ?? false;
+        $isSimplified = $jsonData['simplifiedInvoice'] ?? false;
         $invoiceNumber = $jsonData['invoiceNumber'];
         $expeditionDate = new Date($jsonData['expeditionDate']);
         $expeditionTime = new Time($jsonData['expeditionTime']);
