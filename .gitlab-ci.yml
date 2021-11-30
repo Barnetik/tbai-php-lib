@@ -2,6 +2,9 @@ stages:
   - build
   - test
 
+before_script:
+    - bash ci/docker-install.sh > /dev/null
+
 build:
   stage: build
   image: composer
