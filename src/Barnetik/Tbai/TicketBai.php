@@ -37,7 +37,6 @@ class TicketBai implements Stringable, TbaiXml
         $this->subject = $subject;
         $this->invoice = $invoice;
         $this->fingerprint = $fingerprint;
-
     }
 
     private static function validTerritories(): array

@@ -22,7 +22,7 @@ class SubmitInvoiceRequest implements ApiRequestInterface
         $this->document = new DOMDocument('1.0', 'utf-8');
         $rootElement = $this->document->createElementNS(
             'https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/LROE_PJ_240_1_1_FacturasEmitidas_ConSG_AltaPeticion_V1_0_2.xsd',
-            'LROEPJ240FacturasEmitidasConSGAltaPeticion'
+            'lrpjfecsgap:LROEPJ240FacturasEmitidasConSGAltaPeticion'
         );
 
         $this->document->appendChild($rootElement);
@@ -72,7 +72,6 @@ class SubmitInvoiceRequest implements ApiRequestInterface
 
     public function data(): string
     {
-        // return file_get_contents(__DIR__ . '/tbaifroga.xml');
         return $this->document->saveXML();
     }
 
