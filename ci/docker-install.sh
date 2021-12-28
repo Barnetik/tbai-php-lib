@@ -5,5 +5,5 @@
 
 set -xe
 
-apt-get update -yqq
+apt update -yqq
 docker-php-ext-install gmp
