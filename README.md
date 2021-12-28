@@ -1,3 +1,4 @@
 # Tbai PHP lib
 
-Ticket bai sistema erabiltzeko php libreria
+TicketBai sistema erabiltzeko PHP liburutegia (Lanean oraindik)
+Librería para integrarse con el sistema TicketBai (En desarrollo)
