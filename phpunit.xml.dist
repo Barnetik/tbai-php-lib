@@ -16,7 +16,7 @@
   </testsuites>
   <php>
     <env name="TBAI_PRIVATE_KEY" value="IZDesa2021" />
-    <env name="TBAI_P12_PATH" value="./tests/__files/PertsonaFisikoa_PersonaFísica.p12" />
+    <env name="TBAI_P12_PATH" value="./tests/__files/PertsonaFisikoa_PersonaFisica.p12" />
     <env name="TBAI_ISSUER_NIF" value="" />
     <env name="TBAI_ISSUER_NAME" value="" />
   </php>

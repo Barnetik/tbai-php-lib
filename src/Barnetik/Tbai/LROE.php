@@ -10,6 +10,7 @@ use Barnetik\Tbai\LROE\AbstractTerritory;
 use Barnetik\Tbai\LROE\Araba;
 use Barnetik\Tbai\LROE\Bizkaia;
 use Barnetik\Tbai\LROE\Gipuzkoa;
+use Barnetik\Tbai\LROE\Response;
 
 class LROE
 {
@@ -36,7 +37,7 @@ class LROE
         }
     }
 
-    public function submitInvoice(TicketBai $ticketBai, string $pfxFilePath, string $password): void
+    public function submitInvoice(TicketBai $ticketBai, string $pfxFilePath, string $password): Response
     {
         if (!$ticketBai->isSigned()) {
             throw new UnsignedException();
@@ -45,20 +46,12 @@ class LROE
         $curl = curl_init();
         $submitInvoiceRequest = new SubmitInvoiceRequest($ticketBai);
         curl_setopt_array($curl, $this->getOptArray($submitInvoiceRequest, $pfxFilePath, $password));
-        curl_setopt($curl, CURLOPT_STDERR, fopen(__DIR__ . '/curl.log', 'w+'));
+        // curl_setopt($curl, CURLOPT_STDERR, fopen(__DIR__ . '/curl.log', 'w+'));
 
         $response = curl_exec($curl);
         list($headers, $content) = $this->parseCurlResponse($response);
-        var_dump($headers);
-        if ($headers['eus-bizkaia-n3-tipo-respuesta'] == 'Incorrecto') {
-            $filename = tempnam(sys_get_temp_dir(), 'tbai-response-');
-            file_put_contents($filename, $content);
-            rename($filename, $filename . '.gz');
-            error_log("Something went wrong, please check: " . $filename . '.gz');
-        }
-        // var_dump($content);
-        // $this->logInfo($curl);
         curl_close($curl);
+        return new Response($headers, $content);
     }
 
     private function parseCurlResponse(string $response): array
@@ -90,7 +83,7 @@ class LROE
             // CURLINFO_HEADER_OUT         => true,
             CURLOPT_HTTPGET             => false,
             CURLOPT_POST                => true,
-            CURLOPT_VERBOSE             => true,
+            // CURLOPT_VERBOSE             => true,
             CURLOPT_FOLLOWLOCATION      => true,
 
             CURLOPT_TIMEOUT             => 300,
@@ -108,25 +101,25 @@ class LROE
         return $data;
     }
 
-    private function logInfo($curl)
-    {
-        $curlInfo = curl_getinfo($curl);
-        extract($curlInfo); // create metrics variables from getinfo
-        $appconnect_time = curl_getinfo($curl, CURLINFO_APPCONNECT_TIME); // request this time explicitly
-        $downloadduration = number_format($total_time - $starttransfer_time, 9); // format, to get rid of scientific notation
-        $namelookup_time = number_format($namelookup_time, 9);
-        $metrics = [
-            "CURL: $url",
-            "Time: $total_time",
-            "DNS: $namelookup_time",
-            "Connect: $connect_time",
-            "SSL/SSH: $appconnect_time",
-            "PreTransfer: $pretransfer_time",
-            "StartTransfer: $starttransfer_time",
-            "Download duration: $downloadduration ",
-            "HTTP Code: $http_code",
-            "Download size: $size_download",
-        ];
-        error_log(implode("\n", $metrics));
-    }
+    // private function logInfo($curl)
+    // {
+    //     $curlInfo = curl_getinfo($curl);
+    //     extract($curlInfo); // create metrics variables from getinfo
+    //     $appconnect_time = curl_getinfo($curl, CURLINFO_APPCONNECT_TIME); // request this time explicitly
+    //     $downloadduration = number_format($total_time - $starttransfer_time, 9); // format, to get rid of scientific notation
+    //     $namelookup_time = number_format($namelookup_time, 9);
+    //     $metrics = [
+    //         "CURL: $url",
+    //         "Time: $total_time",
+    //         "DNS: $namelookup_time",
+    //         "Connect: $connect_time",
+    //         "SSL/SSH: $appconnect_time",
+    //         "PreTransfer: $pretransfer_time",
+    //         "StartTransfer: $starttransfer_time",
+    //         "Download duration: $downloadduration ",
+    //         "HTTP Code: $http_code",
+    //         "Download size: $size_download",
+    //     ];
+    //     error_log(implode("\n", $metrics));
+    // }
 }
