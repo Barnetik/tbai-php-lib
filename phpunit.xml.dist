@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  bootstrap="./tests/bootstrap.php"
-  colors="true"
-  testdox="true"
-  xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="./tests/bootstrap.php" colors="true" testdox="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd">
   <coverage>
     <include>
       <directory>./src</directory>
@@ -21,7 +15,9 @@
     </testsuite>
   </testsuites>
   <php>
-    <env name="TBAI_PRIVATE_KEY" value="tbai-test"/>
-    <env name="TBAI_P12_PATH" value="./tests/__files/tbaiTestStore.p12"/>
+    <env name="TBAI_PRIVATE_KEY" value="IZDesa2021" />
+    <env name="TBAI_P12_PATH" value="./tests/__files/PertsonaFisikoa_PersonaFísica.p12" />
+    <env name="TBAI_ISSUER_NIF" value="" />
+    <env name="TBAI_ISSUER_NAME" value="" />
   </php>
 </phpunit>

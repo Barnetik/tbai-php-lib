@@ -49,27 +49,15 @@ class LROE
 
         $response = curl_exec($curl);
         list($headers, $content) = $this->parseCurlResponse($response);
-
-        // var_dump($headers);
-        // var_dump(curl_getinfo($curl));
-        $curlInfo = curl_getinfo($curl);
-        extract($curlInfo); // create metrics variables from getinfo
-        $appconnect_time = curl_getinfo($curl, CURLINFO_APPCONNECT_TIME); // request this time explicitly
-        $downloadduration = number_format($total_time - $starttransfer_time, 9); // format, to get rid of scientific notation
-        $namelookup_time = number_format($namelookup_time, 9);
-        $metrics = [
-            "CURL: $url",
-            "Time: $total_time",
-            "DNS: $namelookup_time",
-            "Connect: $connect_time",
-            "SSL/SSH: $appconnect_time",
-            "PreTransfer: $pretransfer_time",
-            "StartTransfer: $starttransfer_time",
-            "Download duration: $downloadduration ",
-            "HTTP Code: $http_code",
-            "Download size: $size_download",
-        ];
-        error_log(implode("\n", $metrics));
+        var_dump($headers);
+        if ($headers['eus-bizkaia-n3-tipo-respuesta'] == 'Incorrecto') {
+            $filename = tempnam(sys_get_temp_dir(), 'tbai-response-');
+            file_put_contents($filename, $content);
+            rename($filename, $filename . '.gz');
+            error_log("Something went wrong, please check: " . $filename . '.gz');
+        }
+        // var_dump($content);
+        // $this->logInfo($curl);
         curl_close($curl);
     }
 
@@ -82,8 +70,10 @@ class LROE
 
         $headers = [];
         foreach ($expHeaders as $currentHeaderData) {
-            list($key, $value) = explode(": ", $currentHeaderData, 2);
-            $headers[$key] = $value;
+            $data = explode(": ", $currentHeaderData, 2);
+            if (sizeof($data) === 2) {
+                $headers[$data[0]] = $data[1];
+            }
         }
 
         return [$headers, $content];
@@ -116,5 +106,27 @@ class LROE
 
         unlink($dataFile);
         return $data;
+    }
+
+    private function logInfo($curl)
+    {
+        $curlInfo = curl_getinfo($curl);
+        extract($curlInfo); // create metrics variables from getinfo
+        $appconnect_time = curl_getinfo($curl, CURLINFO_APPCONNECT_TIME); // request this time explicitly
+        $downloadduration = number_format($total_time - $starttransfer_time, 9); // format, to get rid of scientific notation
+        $namelookup_time = number_format($namelookup_time, 9);
+        $metrics = [
+            "CURL: $url",
+            "Time: $total_time",
+            "DNS: $namelookup_time",
+            "Connect: $connect_time",
+            "SSL/SSH: $appconnect_time",
+            "PreTransfer: $pretransfer_time",
+            "StartTransfer: $starttransfer_time",
+            "Download duration: $downloadduration ",
+            "HTTP Code: $http_code",
+            "Download size: $size_download",
+        ];
+        error_log(implode("\n", $metrics));
     }
 }
