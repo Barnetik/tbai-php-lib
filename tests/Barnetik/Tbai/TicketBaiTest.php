@@ -32,13 +32,13 @@ class TicketBaiTest extends TestCase
     public function test_TicketBai_can_be_signed_with_PFX_key(): void
     {
         $ticketbai = $this->getTicketBai();
-        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-') . '.xml';
+        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        rename($filename, $filename . '.xml');
+        $filename .= '.xml';
         $ticketbai->sign($_ENV['TBAI_P12_PATH'], $_ENV['TBAI_PRIVATE_KEY'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
-        // $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/ticketBaiV1-2.xsd'));
-        // file_put_contents('./latest.xml', (string)$ticketbai);
-
+        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/ticketBaiV1-2.xsd'));
         // $qr = new Qr($ticketbai);
         // var_dump($qr->ticketbaiIdentifier());
         // var_dump($qr->qrUrl());

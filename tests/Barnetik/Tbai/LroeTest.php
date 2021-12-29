@@ -33,15 +33,9 @@ class LroeTest extends TestCase
 
     $ticketbai->sign($certFile, $certPassword, $filename);
 
-    // $signedDom = new DOMDocument();
-    // $signedDom->load($filename);
-
-
-    // $ticketbai->sign($certFile, $certPassword, $resultFile);
-
     $lroe = new LROE(LROE::ENDPOINT_BIZKAIA);
-    $lroe->submitInvoice($ticketbai, $certFile, $certPassword);
-    // return $ticketbai;
+    $response = $lroe->submitInvoice($ticketbai, $certFile, $certPassword);
+    $this->assertTrue($response->isCorrect());
   }
 
   private function getTicketBai(): TicketBai
