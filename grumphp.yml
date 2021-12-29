@@ -1,2 +1,5 @@
 grumphp:
-    tasks: { phpcs: null, phpstan: null }
+    tasks: 
+        phpcs: null 
+        phpstan:
+            memory_limit: "-1"
