@@ -27,7 +27,7 @@ class Response
 
     public function content(): string
     {
-        return $this->content;
+        return gzdecode($this->content);
     }
 
     public function header(string $key): string

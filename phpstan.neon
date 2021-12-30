@@ -4,3 +4,10 @@ parameters:
   paths:
     - src
     - tests
+  ignoreErrors:
+    -
+      message: '#Access to an undefined property .*::\$saveFilename#'
+      path: src/Barnetik/Tbai/Xades/TicketBai.php
+    -
+      message: '#Parameter \#3 \$mimeType of class .*#'
+      path: src/Barnetik/Tbai/Xades/TicketBai.php
