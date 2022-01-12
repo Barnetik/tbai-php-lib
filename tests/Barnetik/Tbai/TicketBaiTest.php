@@ -18,6 +18,7 @@ use Barnetik\Tbai\ValueObject\VatId;
 use Barnetik\Tbai\Subject\Issuer;
 use Barnetik\Tbai\Subject\Recipient;
 use DOMDocument;
+use Exception;
 use lyquidity\xmldsig\XAdES;
 use PHPUnit\Framework\TestCase;
 
@@ -56,9 +57,14 @@ class TicketBaiTest extends TestCase
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
 
-        XAdES::verifyDocument(
-            $filename
-        );
+        try {
+            XAdES::verifyDocument(
+                $filename
+            );
+            $this->pass();
+        } catch (Exception $e) {
+            $this->fail($e->getMessage());
+        }
     }
 
     private function getTicketBai(): TicketBai

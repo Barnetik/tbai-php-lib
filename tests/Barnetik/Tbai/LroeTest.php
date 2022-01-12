@@ -35,6 +35,7 @@ class LroeTest extends TestCase
 
     $lroe = new LROE(LROE::ENDPOINT_BIZKAIA);
     $response = $lroe->submitInvoice($ticketbai, $certFile, $certPassword);
+
     $this->assertTrue($response->isCorrect());
   }
 
