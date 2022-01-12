@@ -18,6 +18,7 @@ use Barnetik\Tbai\ValueObject\VatId;
 use Barnetik\Tbai\Subject\Issuer;
 use Barnetik\Tbai\Subject\Recipient;
 use DOMDocument;
+use lyquidity\xmldsig\XAdES;
 use PHPUnit\Framework\TestCase;
 
 class TicketBaiTest extends TestCase
@@ -39,9 +40,25 @@ class TicketBaiTest extends TestCase
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
         $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/ticketBaiV1-2.xsd'));
+
         // $qr = new Qr($ticketbai);
         // var_dump($qr->ticketbaiIdentifier());
         // var_dump($qr->qrUrl());
+    }
+
+    public function test_TicketBai_signed_file_is_valid(): void
+    {
+        $ticketbai = $this->getTicketBai();
+        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        rename($filename, $filename . '.xml');
+        $filename .= '.xml';
+        $ticketbai->sign($_ENV['TBAI_P12_PATH'], $_ENV['TBAI_PRIVATE_KEY'], $filename);
+        $signedDom = new DOMDocument();
+        $signedDom->load($filename);
+
+        XAdES::verifyDocument(
+            $filename
+        );
     }
 
     private function getTicketBai(): TicketBai
