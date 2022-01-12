@@ -61,7 +61,7 @@ class TicketBaiTest extends TestCase
             XAdES::verifyDocument(
                 $filename
             );
-            $this->pass();
+            $this->assertTrue(true);
         } catch (Exception $e) {
             $this->fail($e->getMessage());
         }
