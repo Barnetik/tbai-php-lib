@@ -25,12 +25,5 @@
         "endroid/qr-code": "^4.4",
         "pburggraf/crc": "^0.8.1",
         "lyquidity/xml-signer": "dev-main"
-    },
-    "config": {
-        "preferred-install": {
-            "lyquidity/xml-signer": "source",
-            "*": "dist"
-        }
     }
-
 }
