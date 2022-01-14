@@ -18,6 +18,7 @@ use Barnetik\Tbai\ValueObject\VatId;
 use Barnetik\Tbai\Subject\Issuer;
 use Barnetik\Tbai\Subject\Recipient;
 use DOMDocument;
+use lyquidity\xmldsig\XAdES;
 use PHPUnit\Framework\TestCase;
 
 class LroeTest extends TestCase
@@ -25,18 +26,73 @@ class LroeTest extends TestCase
   public function test_TicketBai_can_be_sent_to_lroe(): void
   {
     $ticketbai = $this->getTicketBai();
-    $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
-    rename($filename, $filename . '.xml');
-    $filename = $filename . '.xml';
+    $signedFilename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+    rename($signedFilename, $signedFilename . '.xml');
+    $signedFilename = $signedFilename . '.xml';
     $certFile = $_ENV['TBAI_P12_PATH'];
     $certPassword = $_ENV['TBAI_PRIVATE_KEY'];
 
-    $ticketbai->sign($certFile, $certPassword, $filename);
+    $ticketbai->sign($certFile, $certPassword, $signedFilename);
 
-    $lroe = new LROE(LROE::ENDPOINT_BIZKAIA);
+    $lroe = new LROE(LROE::ENDPOINT_BIZKAIA, true, true);
+
     $response = $lroe->submitInvoice($ticketbai, $certFile, $certPassword);
 
+    $responseFile = tempnam(__DIR__ . '/__files/responses', 'response-');
+    file_put_contents($responseFile, $response->content());
+
+    if (!$response->isCorrect()) {
+      echo "\n";
+      echo "IFZ: " . $_ENV['TBAI_ISSUER_NIF'] . "\n";
+      echo "Data: " . date('Y-m-d H:i:s') . "\n";
+      echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
+      echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
+      echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
+      echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
+      echo "Bidalitako fitxategia: " . $lroe->debugData(LROE::DEBUG_SENT_FILE) . "\n";
+      echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
+      echo "Erantzuna: " . basename($responseFile) . "\n";
+    }
+
     $this->assertTrue($response->isCorrect());
+  }
+
+  public function test_TicketBai_sent_xml_is_valid(): void
+  {
+    $ticketbai = $this->getTicketBai();
+    $signedFilename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+    rename($signedFilename, $signedFilename . '.xml');
+    $signedFilename = $signedFilename . '.xml';
+    $certFile = $_ENV['TBAI_P12_PATH'];
+    $certPassword = $_ENV['TBAI_PRIVATE_KEY'];
+
+    $ticketbai->sign($certFile, $certPassword, $signedFilename);
+
+    $lroe = new LROE(LROE::ENDPOINT_BIZKAIA, true, true);
+
+    $response = $lroe->submitInvoice($ticketbai, $certFile, $certPassword);
+
+    $dom = new DOMDocument();
+    $dom->loadXML(gzdecode(file_get_contents($lroe->debugData(LROE::DEBUG_SENT_FILE))));
+    $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/LROE/petition-schemas/LROE_PJ_240_1_1_FacturasEmitidas_ConSG_AltaPeticion_V1_0_2.xsd'));
+
+    // $responseFile = tempnam(__DIR__ . '/__files/responses', 'response-');
+    // file_put_contents($responseFile, $response->content());
+
+    // if (!$response->isCorrect()) {
+    //   echo "\n";
+    //   echo "IFZ: " . $_ENV['TBAI_ISSUER_NIF'] . "\n";
+    //   echo "Data: " . date('Y-m-d H:i:s') . "\n";
+    //   echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
+    //   echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
+    //   echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
+    //   echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
+    //   echo "Bidalitako fitxategia: " . basename($sentFilename) . "\n";
+    //   echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
+    //   echo "Erantzuna: " . basename($responseFile) . "\n";
+    // }
+
+    // $this->assertTrue($response->isCorrect());
   }
 
   private function getTicketBai(): TicketBai

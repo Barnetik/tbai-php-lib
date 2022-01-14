@@ -28,7 +28,7 @@ class TicketBaiTest extends TestCase
     {
         $ticketbai = $this->getTicketBai();
         $dom = $ticketbai->dom();
-        $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/ticketBaiV1-2-no-signature.xsd'));
+        $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2-no-signature.xsd'));
     }
 
     public function test_TicketBai_can_be_signed_with_PFX_key(): void
@@ -40,7 +40,7 @@ class TicketBaiTest extends TestCase
         $ticketbai->sign($_ENV['TBAI_P12_PATH'], $_ENV['TBAI_PRIVATE_KEY'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
-        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/ticketBaiV1-2.xsd'));
+        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
 
         // $qr = new Qr($ticketbai);
         // var_dump($qr->ticketbaiIdentifier());

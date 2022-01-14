@@ -18,10 +18,17 @@ class LROE
     const ENDPOINT_BIZKAIA = 'bizkaia';
     const ENDPOINT_GIPUZKOA = 'gipuzkoa';
 
-    private AbstractTerritory $lroe;
+    const DEBUG_SENT_FILE = 'sentFile';
 
-    public function __construct(string $endpoint, bool $dev = false)
+    private AbstractTerritory $lroe;
+    private bool $debug = false;
+    private array $debugData = [
+        self::DEBUG_SENT_FILE => null
+    ];
+
+    public function __construct(string $endpoint, bool $dev = false, bool $debug = false)
     {
+        $this->debug = $debug;
         switch ($endpoint) {
             case self::ENDPOINT_ARABA:
                 $this->lroe = new Araba($dev);
@@ -97,8 +104,16 @@ class LROE
             CURLOPT_SSLCERTPASSWD       => $password
         ];
 
-        unlink($dataFile);
+        if ($this->debug) {
+            $this->debugData[self::DEBUG_SENT_FILE] = $dataFile;
+        } else {
+            unlink($dataFile);
+        }
         return $data;
+    }
+
+    public function debugData(string $key): mixed {
+        return $this->debugData[$key];
     }
 
     // private function logInfo($curl)
