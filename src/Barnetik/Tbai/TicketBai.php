@@ -107,10 +107,10 @@ class TicketBai implements Stringable, TbaiXml
                 $password
             );
 
-            /** @phpstan-ignore-next-line */
+
             $this->signedXml = XadesTicketBai::signDocument(
                 new InputResourceInfo(
-                    $this->dom(), // The source document
+                    $this->dom(), /** @phpstan-ignore-line */
                     ResourceInfo::xmlDocument, // The source is a DOMDocument
                     dirname($signedFilePath), // The location to save the signed document
                     basename($signedFilePath), // The name of the file to save the signed document in,
