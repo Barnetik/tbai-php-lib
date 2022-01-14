@@ -2,6 +2,7 @@
 
 namespace Barnetik\Tbai\Xades;
 
+use Barnetik\Tbai\Xades\xmldsig\xml\SigningCertificateV2;
 use lyquidity\xmldsig\XAdES;
 use lyquidity\xmldsig\XAdES_SBR;
 use lyquidity\xmldsig\xml\Generic;
@@ -19,6 +20,16 @@ use lyquidity\xmldsig\xml\SignedDataObjectProperties;
 use lyquidity\xmldsig\xml\SigPolicyId;
 use lyquidity\xmldsig\xml\SigPolicyQualifier;
 use lyquidity\xmldsig\xml\SigPolicyQualifiers;
+use lyquidity\OCSP\CertificateLoader;
+use lyquidity\xmldsig\xml\QualifyingProperties;
+use lyquidity\xmldsig\xml\SignatureProductionPlace;
+use lyquidity\xmldsig\xml\SignatureProductionPlaceV2;
+use lyquidity\xmldsig\xml\SignedProperties;
+use lyquidity\xmldsig\xml\SignedSignatureProperties;
+use lyquidity\xmldsig\xml\SignerRole;
+use lyquidity\xmldsig\xml\SignerRoleV2;
+use lyquidity\xmldsig\xml\SigningCertificateV2 as XmlSigningCertificateV2;
+use lyquidity\xmldsig\xml\SigningTime;
 
 class TicketBai extends XAdES
 {
@@ -71,5 +82,51 @@ class TicketBai extends XAdES
         );
 
         return $sdop;
+    }
+
+    protected function createQualifyingProperties(
+        $signatureId,
+        $certificate = null,
+        $signatureProductionPlace = null,
+        $signerRole = null,
+        $signaturePropertiesId = null,
+        $referenceId = null,
+        $signedPropertiesId = self::SignedPropertiesId
+    ) {
+        $loader = new CertificateLoader();
+        $certs = CertificateLoader::getCertificates($certificate);
+        $cert = null;
+        $issuer = null;
+        if ($certs) {
+            $cert = $loader->fromString(reset($certs));
+            if (next($certs))
+                $issuer = $loader->fromString(current($certs));
+        } else {
+            $cert = $loader->fromFile($certificate);
+        }
+
+        $signingCertificate = SigningCertificateV2::fromCertificate($cert, $issuer);
+
+        $qualifyingProperties = new QualifyingProperties(
+            new SignedProperties(
+                new SignedSignatureProperties(
+                    new SigningTime(),
+                    null, // signingCertificate
+                    $signingCertificate, /**  @phpstan-ignore-line */
+                    $this->getSignaturePolicyIdentifier(),
+                    $signatureProductionPlace instanceof SignatureProductionPlace ? $signatureProductionPlace : null,
+                    $signatureProductionPlace instanceof SignatureProductionPlaceV2 ? $signatureProductionPlace : null,
+                    $signerRole instanceof SignerRole ? $signerRole : null,
+                    $signerRole instanceof SignerRoleV2 ? $signerRole : null,
+                    $signaturePropertiesId
+                ),
+                $this->getSignedDataObjectProperties($referenceId),
+                $signedPropertiesId
+            ),
+            null,
+            $signatureId
+        );
+
+        return $qualifyingProperties;
     }
 }
