@@ -4,6 +4,8 @@ parameters:
   paths:
     - src
     - tests
+  excludePaths:
+    - src/Barnetik/Tbai/Xades/xmldsig/xml/SigningCertificateV2.php
   ignoreErrors:
     -
       message: '#Access to an undefined property .*::\$saveFilename#'
