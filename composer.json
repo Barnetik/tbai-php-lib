@@ -8,12 +8,6 @@
             "Barnetik\\": "src/Barnetik"
         }
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url":  "git@github.com:Barnetik/xml-signer"
-        }
-    ],
     "require-dev": {
         "phpunit/phpunit": "^9.5",
         "spatie/phpunit-watcher": "^1.23",

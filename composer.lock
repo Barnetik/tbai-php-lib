@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1ce4d0566fad7715b53edeaac11690a3",
+    "content-hash": "9d5db8a51274a25607a95b641f785b26",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -244,13 +244,13 @@
             "version": "dev-main",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Barnetik/xml-signer.git",
-                "reference": "7180e462695b41484afcec5e836faf22ca63ea3b"
+                "url": "https://github.com/bseddon/xml-signer.git",
+                "reference": "140bce0106394437550fa2335fe1aaa4c19da84a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Barnetik/xml-signer/zipball/7180e462695b41484afcec5e836faf22ca63ea3b",
-                "reference": "7180e462695b41484afcec5e836faf22ca63ea3b",
+                "url": "https://api.github.com/repos/bseddon/xml-signer/zipball/140bce0106394437550fa2335fe1aaa4c19da84a",
+                "reference": "140bce0106394437550fa2335fe1aaa4c19da84a",
                 "shasum": ""
             },
             "require": {
@@ -265,26 +265,28 @@
                     "./autoload.php"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-3.0-only"
             ],
             "description": "A PHP to create and verify XAdES signature",
             "homepage": "https://github.com/bseddon/xml-signer",
             "keywords": [
-                "XAdES",
+                "Policy",
                 "commitment type",
                 "counter signature",
-                "policy",
                 "security",
                 "signature",
                 "timestamp",
+                "xades",
                 "xml",
                 "xmldsig"
             ],
             "support": {
-                "source": "https://github.com/Barnetik/xml-signer/tree/main"
+                "issues": "https://github.com/bseddon/xml-signer/issues",
+                "source": "https://github.com/bseddon/xml-signer/tree/main"
             },
-            "time": "2021-11-04T23:30:53+00:00"
+            "time": "2022-01-14T01:17:18+00:00"
         },
         {
             "name": "pburggraf/crc",
