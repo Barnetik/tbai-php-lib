@@ -89,7 +89,6 @@ class TicketBai implements Stringable, TbaiXml
     public function xml(DOMDocument $document): DOMNode
     {
         $tbai = $document->createElementNS('urn:ticketbai:emision', 'T:TicketBai');
-        // $tbai = $document->createElement('TicketBai');
         $tbai->appendChild($this->header->xml($document));
         $tbai->appendChild($this->subject->xml($document));
         $tbai->appendChild($this->invoice->xml($document));
@@ -108,14 +107,15 @@ class TicketBai implements Stringable, TbaiXml
                 $password
             );
 
+            /** @phpstan-ignore-next-line */
             $this->signedXml = XadesTicketBai::signDocument(
                 new InputResourceInfo(
-                    $this->dom()->C14N(true, false), // The source document
-                    ResourceInfo::string, // The source is a url
+                    $this->dom(), // The source document
+                    ResourceInfo::xmlDocument, // The source is a DOMDocument
                     dirname($signedFilePath), // The location to save the signed document
-                    basename($signedFilePath), //$storeFilename, // The name of the file to save the signed document in,
+                    basename($signedFilePath), // The name of the file to save the signed document in,
                     null,
-                    false
+                    false // Enveloped signature
                 ),
                 new CertificateResourceInfo($certData['cert'], ResourceInfo::string | ResourceInfo::pem),
                 new KeyResourceInfo($certData['pkey'], ResourceInfo::string | ResourceInfo::pem),
