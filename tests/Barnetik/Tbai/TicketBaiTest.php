@@ -72,7 +72,8 @@ class TicketBaiTest extends TestCase
         $subject = $this->getMultipleRecipientSubject();
         $fingerprint = $this->getFingerprint();
 
-        $header = Header::create('0000002', new Date('02-11-2021'), new Time('11:12:10'), 'TESTSERIE');
+        $header = Header::create((string)time(), new Date('02-11-2021'), new Time('11:12:10'), 'TESTSERIE');
+        sleep(1);
         $data = new Data('test-description', new Ammount('12.34'), [Data::VAT_REGIME_01]);
         $breakdown = new Breakdown();
         $breakdown->addNationalNotSubjectBreakdownItem(new NationalNotSubjectBreakdownItem(new Ammount('12.34'), NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_LOCATION_RULES));
@@ -107,7 +108,7 @@ class TicketBaiTest extends TestCase
 
     private function getFingerprint(): Fingerprint
     {
-        $vendor = new Vendor('testLicenseKey', 'F95780987');
+        $vendor = new Vendor('TBAIBI00000000PRUEBA', 'A99800005', 'SOFTWARE GARANTE TICKETBAI PRUEBA', '1.0');
         $previousInvoice = new PreviousInvoice('0000002', new Date('02-12-2020'), 'abcdefgkauskjsa', 'TESTSERIE');
         return new Fingerprint($vendor, $previousInvoice);
     }
