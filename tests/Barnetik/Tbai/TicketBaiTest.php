@@ -39,7 +39,7 @@ class TicketBaiTest extends TestCase
         $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
-        $ticketbai->sign($_ENV['TBAI_P12_PATH'], $_ENV['TBAI_PRIVATE_KEY'], $filename);
+        $ticketbai->sign($_ENV['TBAI_GIPUZKOA_P12_PATH'], $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
         $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
@@ -55,7 +55,7 @@ class TicketBaiTest extends TestCase
         $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
-        $ticketbai->sign($_ENV['TBAI_P12_PATH'], $_ENV['TBAI_PRIVATE_KEY'], $filename);
+        $ticketbai->sign($_ENV['TBAI_GIPUZKOA_P12_PATH'], $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
 
@@ -111,7 +111,7 @@ class TicketBaiTest extends TestCase
 
     private function getFingerprint(): Fingerprint
     {
-        $vendor = new Vendor($_ENV['TBAI_APP_LICENSE'], $_ENV['TBAI_APP_DEVELOPER_NIF'], $_ENV['TBAI_APP_NAME'], $_ENV['TBAI_APP_VERSION']);
+        $vendor = new Vendor($_ENV['TBAI_GIPUZKOA_APP_LICENSE'], $_ENV['TBAI_GIPUZKOA_APP_DEVELOPER_NIF'], $_ENV['TBAI_GIPUZKOA_APP_NAME'], $_ENV['TBAI_GIPUZKOA_APP_VERSION']);
         $previousInvoice = new PreviousInvoice('0000002', new Date('02-12-2020'), 'abcdefgkauskjsa', 'TESTSERIE');
         return new Fingerprint($vendor, $previousInvoice);
     }
