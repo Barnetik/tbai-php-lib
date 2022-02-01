@@ -38,7 +38,7 @@ class SubmitInvoiceRequest implements ApiRequestInterface
         $rootElement->appendChild($this->getInvoices());
     }
 
-    public function getSubmitEndpoint(): string
+    public function url(): string
     {
         return $this->endpoint . self::URL;
     }
@@ -77,14 +77,9 @@ class SubmitInvoiceRequest implements ApiRequestInterface
         return $invoices;
     }
 
-    public function url(): string
-    {
-        return self::URL;
-    }
-
     public function data(): string
     {
-        return $this->document->saveXML();
+        return gzencode($this->document->saveXML());
     }
 
     public function jsonDataHeader(): string

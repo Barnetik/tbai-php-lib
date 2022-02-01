@@ -2,30 +2,22 @@
 
 namespace Barnetik\Tbai\Api;
 
-class Response
+abstract class Response
 {
-    private string $content;
-    private array $headers;
+    protected string $status;
+    protected string $content;
+    protected array $headers;
 
-    public function __construct(array $headers, string $content)
+    public function __construct(string $status, array $headers, string $content)
     {
+        $this->status = $status;
         $this->headers = $headers;
         $this->content = $content;
     }
 
-    public function isCorrect(): bool
+    public function status(): string
     {
-        return $this->headers['eus-bizkaia-n3-tipo-respuesta'] !== 'Incorrecto';
-    }
-
-    public function headerErrorMessage(): string
-    {
-        return $this->headers['eus-bizkaia-n3-mensaje-respuesta'];
-    }
-
-    public function content(): string
-    {
-        return gzdecode($this->content);
+        return $this->status;
     }
 
     public function header(string $key): string
@@ -37,4 +29,9 @@ class Response
     {
         file_put_contents($path, $this->content);
     }
+
+    abstract public function isCorrect(): bool;
+    abstract public function mainErrorMessage(): string;
+    abstract public function content(): string;
+
 }
