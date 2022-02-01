@@ -94,7 +94,7 @@ class Api
 
             CURLOPT_TIMEOUT             => 300,
 
-            CURLOPT_URL                 => $this->endpoint->getSubmitEndpoint(),
+            CURLOPT_URL                 => $apiRequest->getSubmitEndpoint(),
             CURLOPT_HTTPHEADER          => $this->endpoint->headers($apiRequest, $dataFile),
             CURLOPT_POSTFIELDS          => file_get_contents($dataFile),
 

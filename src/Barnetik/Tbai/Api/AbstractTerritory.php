@@ -17,7 +17,7 @@ abstract class AbstractTerritory implements EndpointInterface
         $this->dev = $dev;
     }
 
-    public function getSubmitEndpoint(): string
+    protected function getSubmitEndpoint(): string
     {
         if ($this->dev) {
             return static::SUBMIT_ENDPOINT_DEV;

@@ -13,11 +13,17 @@ class SubmitInvoiceRequest implements ApiRequestInterface
     const MODEL = '240';
     const URL = '/N3B4000M/aurkezpena';
 
+    private string $endpoint = 'https://pruesarrerak.bizkaia.eus';
+
     private TicketBai $ticketbai;
     private DOMDocument $document;
 
-    public function __construct(TicketBai $ticketbai)
+    public function __construct(TicketBai $ticketbai, string $endpoint = null)
     {
+        if ($this->endpoint) {
+            $this->endpoint = $endpoint;
+        }
+
         $this->ticketbai = $ticketbai;
 
         $this->document = new DOMDocument('1.0', 'utf-8');
@@ -30,6 +36,11 @@ class SubmitInvoiceRequest implements ApiRequestInterface
 
         $rootElement->appendChild($this->getHeader());
         $rootElement->appendChild($this->getInvoices());
+    }
+
+    public function getSubmitEndpoint(): string
+    {
+        return $this->endpoint . self::URL;
     }
 
     private function getHeader(): DOMNode

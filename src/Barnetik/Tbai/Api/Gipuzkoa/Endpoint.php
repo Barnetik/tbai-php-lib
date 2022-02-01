@@ -9,8 +9,8 @@ use Barnetik\Tbai\TicketBai;
 
 class Endpoint extends AbstractTerritory
 {
-    const SUBMIT_ENDPOINT_DEV = 'https://tbai-z.egoitza.gipuzkoa.eus/sarrerak/alta';
-    const SUBMIT_ENDPOINT = 'https://tbai-z.egoitza.gipuzkoa.eus/sarrerak/alta';
+    const SUBMIT_ENDPOINT_DEV = 'https://tbai-z.egoitza.gipuzkoa.eus';
+    const SUBMIT_ENDPOINT = 'https://tbai-z.egoitza.gipuzkoa.eus';
 
     public function headers(ApiRequestInterface $apiRequest, string $dataFile): array
     {
@@ -22,6 +22,6 @@ class Endpoint extends AbstractTerritory
 
     public function createSubmitInvoiceRequest(TicketBai $ticketBai): ApiRequestInterface
     {
-        return new SubmitInvoiceRequest($ticketBai);
+        return new SubmitInvoiceRequest($ticketBai, $this->getSubmitEndpoint());
     }
 }
