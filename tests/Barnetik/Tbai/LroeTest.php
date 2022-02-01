@@ -75,24 +75,6 @@ class LroeTest extends TestCase
     $dom = new DOMDocument();
     $dom->loadXML(gzdecode(file_get_contents($lroe->debugData(LROE::DEBUG_SENT_FILE))));
     $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/LROE/petition-schemas/LROE_PJ_240_1_1_FacturasEmitidas_ConSG_AltaPeticion_V1_0_2.xsd'));
-
-    // $responseFile = tempnam(__DIR__ . '/__files/responses', 'response-');
-    // file_put_contents($responseFile, $response->content());
-
-    // if (!$response->isCorrect()) {
-    //   echo "\n";
-    //   echo "IFZ: " . $_ENV['TBAI_ISSUER_NIF'] . "\n";
-    //   echo "Data: " . date('Y-m-d H:i:s') . "\n";
-    //   echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-    //   echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
-    //   echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
-    //   echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
-    //   echo "Bidalitako fitxategia: " . basename($sentFilename) . "\n";
-    //   echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
-    //   echo "Erantzuna: " . basename($responseFile) . "\n";
-    // }
-
-    // $this->assertTrue($response->isCorrect());
   }
 
   private function getTicketBai(): TicketBai
@@ -100,8 +82,8 @@ class LroeTest extends TestCase
     $subject = $this->getSubject();
     $fingerprint = $this->getFingerprint();
 
-    $header = Header::create((string)time(), new Date('02-11-2022'), new Time('11:12:10'), 'TESTSERIE');
-    sleep(1);
+    $header = Header::create((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), 'TESTSERIE');
+    sleep(1); // Avoid same invoice number as time is used for generation
     $data = new Data('test-description', new Ammount('12.34'), [Data::VAT_REGIME_01]);
     $breakdown = new Breakdown();
     $breakdown->addNationalNotSubjectBreakdownItem(new NationalNotSubjectBreakdownItem(new Ammount('12.34'), NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_LOCATION_RULES));
@@ -138,7 +120,7 @@ class LroeTest extends TestCase
 
   private function getFingerprint(): Fingerprint
   {
-    $vendor = new Vendor('TBAIBI00000000PRUEBA', 'A99800005', 'SOFTWARE GARANTE TICKETBAI PRUEBA', '1.0');
+    $vendor = new Vendor($_ENV['TBAI_APP_LICENSE'], $_ENV['TBAI_APP_DEVELOPER_NIF'], $_ENV['TBAI_APP_NAME'], $_ENV['TBAI_APP_VERSION']);
     $previousInvoice = new PreviousInvoice('0000002', new Date('02-12-2020'), 'abcdefgkauskjsa', 'TESTSERIE');
     return new Fingerprint($vendor, $previousInvoice);
   }
