@@ -74,7 +74,7 @@ class ApiTest extends TestCase
 
     $dom = new DOMDocument();
     $dom->loadXML(gzdecode(file_get_contents($endpoint->debugData(Api::DEBUG_SENT_FILE))));
-    $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/LROE/petition-schemas/LROE_PJ_240_1_1_FacturasEmitidas_ConSG_AltaPeticion_V1_0_2.xsd'));
+    $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/Api/Bizkaia/petition-schemas/LROE_PJ_240_1_1_FacturasEmitidas_ConSG_AltaPeticion_V1_0_2.xsd'));
   }
 
   private function getTicketBai(): TicketBai
