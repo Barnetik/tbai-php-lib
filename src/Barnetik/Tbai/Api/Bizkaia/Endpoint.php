@@ -1,10 +1,12 @@
 <?php
 
-namespace Barnetik\Tbai\LROE;
+namespace Barnetik\Tbai\Api\Bizkaia;
 
 use Barnetik\Tbai\Api\ApiRequestInterface;
+use Barnetik\Tbai\Api\AbstractTerritory;
+use Barnetik\Tbai\TicketBai;
 
-class Bizkaia extends AbstractTerritory
+class Endpoint extends AbstractTerritory
 {
     const SUBMIT_ENDPOINT_DEV = 'https://pruesarrerak.bizkaia.eus/N3B4000M/aurkezpena';
     const SUBMIT_ENDPOINT = 'https://pruesarrerak.bizkaia.eus/N3B4000M/aurkezpena';
@@ -20,5 +22,10 @@ class Bizkaia extends AbstractTerritory
             'eus-bizkaia-n3-content-type: application/xml',
             'eus-bizkaia-n3-data: ' . $apiRequest->jsonDataHeader(),
         ];
+    }
+
+    public function createSubmitInvoiceRequest(TicketBai $ticketBai): ApiRequestInterface
+    {
+        return new SubmitInvoiceRequest($ticketBai);
     }
 }

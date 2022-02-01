@@ -1,10 +1,11 @@
 <?php
 
-namespace Barnetik\Tbai\LROE;
+namespace Barnetik\Tbai\Api;
 
 use Barnetik\Tbai\Api\ApiRequestInterface;
+use Barnetik\Tbai\TicketBai;
 
-abstract class AbstractTerritory
+abstract class AbstractTerritory implements EndpointInterface
 {
     const SUBMIT_ENDPOINT = '';
     const SUBMIT_ENDPOINT_DEV = '';
@@ -26,4 +27,5 @@ abstract class AbstractTerritory
     }
 
     abstract public function headers(ApiRequestInterface $apiRequest, string $dataFile): array;
+    abstract public function createSubmitInvoiceRequest(TicketBai $ticketBai): ApiRequestInterface;
 }

@@ -21,9 +21,9 @@ use DOMDocument;
 use lyquidity\xmldsig\XAdES;
 use PHPUnit\Framework\TestCase;
 
-class LroeTest extends TestCase
+class ApiTest extends TestCase
 {
-  public function test_TicketBai_can_be_sent_to_lroe(): void
+  public function test_TicketBai_can_be_sent_to_bizkaia_endpoint(): void
   {
     $ticketbai = $this->getTicketBai();
     $signedFilename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
@@ -34,9 +34,9 @@ class LroeTest extends TestCase
 
     $ticketbai->sign($certFile, $certPassword, $signedFilename);
 
-    $lroe = new LROE(LROE::ENDPOINT_BIZKAIA, true, true);
+    $endpoint = new Api(Api::ENDPOINT_BIZKAIA, true, true);
 
-    $response = $lroe->submitInvoice($ticketbai, $certFile, $certPassword);
+    $response = $endpoint->submitInvoice($ticketbai, $certFile, $certPassword);
 
     $responseFile = tempnam(__DIR__ . '/__files/responses', 'response-');
     file_put_contents($responseFile, $response->content());
@@ -49,7 +49,7 @@ class LroeTest extends TestCase
       echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
       echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
       echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
-      echo "Bidalitako fitxategia: " . $lroe->debugData(LROE::DEBUG_SENT_FILE) . "\n";
+      echo "Bidalitako fitxategia: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
       echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
       echo "Erantzuna: " . basename($responseFile) . "\n";
     }
@@ -68,12 +68,12 @@ class LroeTest extends TestCase
 
     $ticketbai->sign($certFile, $certPassword, $signedFilename);
 
-    $lroe = new LROE(LROE::ENDPOINT_BIZKAIA, true, true);
+    $endpoint = new Api(Api::ENDPOINT_BIZKAIA, true, true);
 
-    $response = $lroe->submitInvoice($ticketbai, $certFile, $certPassword);
+    $response = $endpoint->submitInvoice($ticketbai, $certFile, $certPassword);
 
     $dom = new DOMDocument();
-    $dom->loadXML(gzdecode(file_get_contents($lroe->debugData(LROE::DEBUG_SENT_FILE))));
+    $dom->loadXML(gzdecode(file_get_contents($endpoint->debugData(Api::DEBUG_SENT_FILE))));
     $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/LROE/petition-schemas/LROE_PJ_240_1_1_FacturasEmitidas_ConSG_AltaPeticion_V1_0_2.xsd'));
   }
 

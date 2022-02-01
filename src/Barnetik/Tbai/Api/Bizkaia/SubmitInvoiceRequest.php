@@ -1,7 +1,8 @@
 <?php
 
-namespace Barnetik\Tbai\Api;
+namespace Barnetik\Tbai\Api\Bizkaia;
 
+use Barnetik\Tbai\Api\ApiRequestInterface;
 use Barnetik\Tbai\TicketBai;
 use DOMDocument;
 use DOMElement;

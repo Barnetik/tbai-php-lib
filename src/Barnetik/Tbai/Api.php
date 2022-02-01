@@ -3,16 +3,15 @@
 namespace Barnetik\Tbai;
 
 use Barnetik\Tbai\Api\ApiRequestInterface;
-use Barnetik\Tbai\Api\SubmitInvoiceRequest;
 use Barnetik\Tbai\Exception\InvalidEndpointException;
 use Barnetik\Tbai\Exception\UnsignedException;
-use Barnetik\Tbai\LROE\AbstractTerritory;
-use Barnetik\Tbai\LROE\Araba;
-use Barnetik\Tbai\LROE\Bizkaia;
-use Barnetik\Tbai\LROE\Gipuzkoa;
-use Barnetik\Tbai\LROE\Response;
+use Barnetik\Tbai\Api\Araba\Endpoint as ArabaEndpoint;
+use Barnetik\Tbai\Api\Bizkaia\Endpoint as BizkaiaEndpoint;
+use Barnetik\Tbai\Api\EndpointInterface;
+use Barnetik\Tbai\Api\Gipuzkoa\Endpoint as GipuzkoaEndpoint;
+use Barnetik\Tbai\Api\Response;
 
-class LROE
+class Api
 {
     const ENDPOINT_ARABA = 'araba';
     const ENDPOINT_BIZKAIA = 'bizkaia';
@@ -20,7 +19,7 @@ class LROE
 
     const DEBUG_SENT_FILE = 'sentFile';
 
-    private AbstractTerritory $lroe;
+    private EndpointInterface $endpoint;
     private bool $debug = false;
     private array $debugData = [
         self::DEBUG_SENT_FILE => null
@@ -31,27 +30,27 @@ class LROE
         $this->debug = $debug;
         switch ($endpoint) {
             case self::ENDPOINT_ARABA:
-                $this->lroe = new Araba($dev);
+                $this->endpoint = new ArabaEndpoint($dev);
                 break;
             case self::ENDPOINT_BIZKAIA:
-                $this->lroe = new Bizkaia($dev);
+                $this->endpoint = new BizkaiaEndpoint($dev);
                 break;
             case self::ENDPOINT_GIPUZKOA:
-                $this->lroe = new Gipuzkoa($dev);
+                $this->endpoint = new GipuzkoaEndpoint($dev);
                 break;
             default:
                 throw new InvalidEndpointException();
         }
     }
 
-    public function submitInvoice(TicketBai $ticketBai, string $pfxFilePath, string $password): Response
+    public function submitInvoice(TicketBai $ticketbai, string $pfxFilePath, string $password): Response
     {
-        if (!$ticketBai->isSigned()) {
+        if (!$ticketbai->isSigned()) {
             throw new UnsignedException();
         }
 
         $curl = curl_init();
-        $submitInvoiceRequest = new SubmitInvoiceRequest($ticketBai);
+        $submitInvoiceRequest = $this->endpoint->createSubmitInvoiceRequest($ticketbai);
         curl_setopt_array($curl, $this->getOptArray($submitInvoiceRequest, $pfxFilePath, $password));
         // curl_setopt($curl, CURLOPT_STDERR, fopen(__DIR__ . '/curl.log', 'w+'));
 
@@ -95,8 +94,8 @@ class LROE
 
             CURLOPT_TIMEOUT             => 300,
 
-            CURLOPT_URL                 => $this->lroe->getSubmitEndpoint(),
-            CURLOPT_HTTPHEADER          => $this->lroe->headers($apiRequest, $dataFile),
+            CURLOPT_URL                 => $this->endpoint->getSubmitEndpoint(),
+            CURLOPT_HTTPHEADER          => $this->endpoint->headers($apiRequest, $dataFile),
             CURLOPT_POSTFIELDS          => file_get_contents($dataFile),
 
             CURLOPT_SSLCERTTYPE         => 'P12',

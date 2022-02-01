@@ -1,8 +1,6 @@
 <?php
 
-namespace Barnetik\Tbai\LROE;
-
-use Barnetik\Tbai\Api\ApiRequestInterface;
+namespace Barnetik\Tbai\Api;
 
 class Response
 {

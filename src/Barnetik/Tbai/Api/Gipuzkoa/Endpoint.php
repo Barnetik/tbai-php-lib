@@ -1,10 +1,13 @@
 <?php
 
-namespace Barnetik\Tbai\LROE;
+namespace Barnetik\Tbai\Api\Gipuzkoa;
 
 use Barnetik\Tbai\Api\ApiRequestInterface;
+use Barnetik\Tbai\Api\AbstractTerritory;
+use Barnetik\Tbai\Api\Bizkaia\SubmitInvoiceRequest;
+use Barnetik\Tbai\TicketBai;
 
-class Gipuzkoa extends AbstractTerritory
+class Endpoint extends AbstractTerritory
 {
     const SUBMIT_ENDPOINT_DEV = 'https://tbai-z.egoitza.gipuzkoa.eus/sarrerak/alta';
     const SUBMIT_ENDPOINT = 'https://tbai-z.egoitza.gipuzkoa.eus/sarrerak/alta';
@@ -14,5 +17,11 @@ class Gipuzkoa extends AbstractTerritory
         return [
             'Content-Type: application/xml;charset=UTF-8'
         ];
+    }
+
+
+    public function createSubmitInvoiceRequest(TicketBai $ticketBai): ApiRequestInterface
+    {
+        return new SubmitInvoiceRequest($ticketBai);
     }
 }
