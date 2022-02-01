@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9d5db8a51274a25607a95b641f785b26",
+    "content-hash": "43ed7b680d49541c345f5140875ad5b7",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -241,16 +241,16 @@
         },
         {
             "name": "lyquidity/xml-signer",
-            "version": "dev-main",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bseddon/xml-signer.git",
-                "reference": "140bce0106394437550fa2335fe1aaa4c19da84a"
+                "reference": "ab7992df6de97f1267ba75ce03fb25e63523b43b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bseddon/xml-signer/zipball/140bce0106394437550fa2335fe1aaa4c19da84a",
-                "reference": "140bce0106394437550fa2335fe1aaa4c19da84a",
+                "url": "https://api.github.com/repos/bseddon/xml-signer/zipball/ab7992df6de97f1267ba75ce03fb25e63523b43b",
+                "reference": "ab7992df6de97f1267ba75ce03fb25e63523b43b",
                 "shasum": ""
             },
             "require": {
@@ -258,7 +258,6 @@
                 "lyquidity/requester": "*",
                 "php": ">= 7.2.6"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
@@ -284,9 +283,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bseddon/xml-signer/issues",
-                "source": "https://github.com/bseddon/xml-signer/tree/main"
+                "source": "https://github.com/bseddon/xml-signer/tree/1.0.4"
             },
-            "time": "2022-01-14T01:17:18+00:00"
+            "time": "2022-01-18T17:42:00+00:00"
         },
         {
             "name": "pburggraf/crc",
@@ -6207,9 +6206,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "lyquidity/xml-signer": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

@@ -24,6 +24,6 @@
     "require": {
         "endroid/qr-code": "^4.4",
         "pburggraf/crc": "^0.8.1",
-        "lyquidity/xml-signer": "dev-main"
+        "lyquidity/xml-signer": "^1.0.4"
     }
 }
