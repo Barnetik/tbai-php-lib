@@ -4,9 +4,6 @@ namespace Barnetik\Tbai\Api\Gipuzkoa;
 
 use Barnetik\Tbai\Api\ApiRequestInterface;
 use Barnetik\Tbai\TicketBai;
-use DOMDocument;
-use DOMElement;
-use DOMNode;
 
 class SubmitInvoiceRequest implements ApiRequestInterface
 {
@@ -32,7 +29,7 @@ class SubmitInvoiceRequest implements ApiRequestInterface
 
     public function data(): string
     {
-        return (string)$this->ticketbai;
+        return $this->ticketbai->signed();
     }
 
     public function jsonDataHeader(): string

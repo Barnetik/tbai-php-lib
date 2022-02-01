@@ -33,8 +33,8 @@ use lyquidity\xmldsig\xml\SigningTime;
 
 class TicketBai extends XAdES
 {
-    const POLICY_IDENTIFIER = 'https://www.batuz.eus/fitxategiak/batuz/ticketbai/sinadura_elektronikoaren_zehaztapenak_especificaciones_de_la_firma_electronica_v1_0.pdf';
-    const POLICY_DIGEST = 'Quzn98x3PMbSHwbUzaj5f5KOpiH0u8bvmwbbbNkO9Es=';
+    const POLICY_IDENTIFIER = '';
+    const POLICY_DIGEST = '';
     // const POLICY_DOCUMENT_URL = 'https://www.batuz.eus/fitxategiak/batuz/ticketbai/sinadura_elektronikoaren_zehaztapenak_especificaciones_de_la_firma_electronica_v1_0.pdf.';
     const ALGORITHM = XMLSecurityDSig::SHA256;
 
@@ -42,10 +42,10 @@ class TicketBai extends XAdES
     {
         $spi = new SignaturePolicyIdentifier(
             new SignaturePolicyId(
-                new SigPolicyId(self::POLICY_IDENTIFIER),
+                new SigPolicyId(static::POLICY_IDENTIFIER),
                 null,
-                new SigPolicyHash(new DigestMethod(self::ALGORITHM), new DigestValue(self::POLICY_DIGEST)),
-                new SigPolicyQualifiers(new SigPolicyQualifier(self::POLICY_IDENTIFIER))
+                new SigPolicyHash(new DigestMethod(static::ALGORITHM), new DigestValue(static::POLICY_DIGEST)),
+                new SigPolicyQualifiers(new SigPolicyQualifier(static::POLICY_IDENTIFIER))
             )
         );
 

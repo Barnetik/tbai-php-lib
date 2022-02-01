@@ -6,32 +6,33 @@ use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\ValueObject\VatId;
 use DOMDocument;
 use DOMNode;
-use InvalidArgumentException;
 
 class Recipient implements TbaiXml
 {
     protected VatId $vatId;
     protected string $name;
     protected string $countryCode;
-    protected ?string $postalCode;
-    protected ?string $address = null;
+    protected string $postalCode;
+    protected string $address;
 
     private function __construct()
     {
     }
 
-    public static function createNationalRecipient(VatId $vatId, string $name, ?string $postalCode = null): self
+    public static function createNationalRecipient(VatId $vatId, string $name, string $postalCode, string $address): self
     {
         $recipient = new self();
         $recipient->vatId = $vatId;
         // $recipient->setVatId(self::VAT_ID_TYPE_IFZ, $vatId);
+
         $recipient->countryCode = 'ES';
         $recipient->name = $name;
         $recipient->postalCode = $postalCode;
+        $recipient->address = $address;
         return $recipient;
     }
 
-    public static function createGenericRecipient(VatId $vatId, string $name, ?string $postalCode = null, string $countryCode = 'ES'): self
+    public static function createGenericRecipient(VatId $vatId, string $name, string $postalCode, string $address, string $countryCode = 'ES'): self
     {
         $recipient = new self();
         $recipient->vatId = $vatId;
@@ -39,6 +40,7 @@ class Recipient implements TbaiXml
         $recipient->countryCode = $countryCode;
         $recipient->name = $name;
         $recipient->postalCode = $postalCode;
+        $recipient->address = $address;
         return $recipient;
     }
 
@@ -62,6 +64,11 @@ class Recipient implements TbaiXml
         return (string) $this->postalCode;
     }
 
+    public function address(): string
+    {
+        return (string) $this->address;
+    }
+
     public function countryCode(): string
     {
         return $this->countryCode;
@@ -76,13 +83,14 @@ class Recipient implements TbaiXml
     {
         $countryCode = $jsonData['countryCode'] ?? 'ES';
         $name = $jsonData['name'];
-        $postalCode = $jsonData['postalCode'] ?? null;
+        $postalCode = $jsonData['postalCode'];
+        $address = $jsonData['address'];
         if ($countryCode === 'ES') {
             $vatId = new VatId($jsonData['vatId']);
-            $recipient = self::createNationalRecipient($vatId, $name, $postalCode);
+            $recipient = self::createNationalRecipient($vatId, $name, $postalCode, $address);
         } else {
             $vatId = new VatId($jsonData['vatId'], $jsonData['vatIdType']);
-            $recipient = self::createGenericRecipient($vatId, $name, $postalCode, $countryCode);
+            $recipient = self::createGenericRecipient($vatId, $name, $postalCode, $address, $countryCode);
         }
         return $recipient;
     }
@@ -117,9 +125,9 @@ class Recipient implements TbaiXml
             );
         }
 
-        if ($this->address) {
+        if ($this->address()) {
             $recipient->appendChild(
-                $domDocument->createElement('Direccion', $this->address)
+                $domDocument->createElement('Direccion', $this->address())
             );
         }
         return $recipient;
@@ -156,11 +164,11 @@ Dokumentu mota - Tipo de documento:
                     'type' => 'string',
                     'maxLength' => 20
                 ],
-                // 'address' => [
-                //     'type' => 'string',
-                //     'maxLength': 250
+                'address' => [
+                    'type' => 'string',
+                    'maxLength' =>  250
 
-                // ],
+                ],
                 'countryCode' => [
                     'type' => 'string',
                     'description' => 'Herrialdearen kodea (ISO3166 alpha2) - Código de país (ISO3166 alpha2)',

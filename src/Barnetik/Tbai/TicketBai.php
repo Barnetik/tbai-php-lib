@@ -2,11 +2,13 @@
 
 namespace Barnetik\Tbai;
 
+use Barnetik\Tbai\Exception\InvalidTerritoryException;
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\ValueObject\Ammount;
 use Barnetik\Tbai\ValueObject\Date;
 use Barnetik\Tbai\ValueObject\VatId;
-use Barnetik\Tbai\Xades\TicketBai as XadesTicketBai;
+use Barnetik\Tbai\Xades\Bizkaia as XadesBizkaia;
+use Barnetik\Tbai\Xades\Gipuzkoa as XadesGipuzkoa;
 use DOMDocument;
 use DOMNode;
 use lyquidity\xmldsig\CertificateResourceInfo;
@@ -27,12 +29,18 @@ class TicketBai implements Stringable, TbaiXml
     private Subject $subject;
     private Invoice $invoice;
     private Fingerprint $fingerprint;
+    private string $territory;
 
     private ?XAdES $signedXml = null;
     private ?string $signedXmlPath = null;
 
-    public function __construct(Subject $subject, Invoice $invoice, Fingerprint $fingerprint)
+    public function __construct(Subject $subject, Invoice $invoice, Fingerprint $fingerprint, string $territory)
     {
+        if (!in_array($territory, self::validTerritories())) {
+            throw new InvalidTerritoryException();
+        }
+
+        $this->territory = $territory;
         $this->header = new Header();
         $this->subject = $subject;
         $this->invoice = $invoice;
@@ -108,7 +116,7 @@ class TicketBai implements Stringable, TbaiXml
             );
 
 
-            $this->signedXml = XadesTicketBai::signDocument(
+            $this->signedXml = XadesBizkaia::signDocument(
                 new InputResourceInfo(
                     $this->dom(), /** @phpstan-ignore-line */
                     ResourceInfo::xmlDocument, // The source is a DOMDocument
@@ -147,6 +155,11 @@ class TicketBai implements Stringable, TbaiXml
         return $this->signedXmlPath;
     }
 
+    public function signed(): string
+    {
+        return file_get_contents($this->signedXmlPath);
+    }
+
     public function isSigned(): bool
     {
         return (bool)$this->signedXmlPath;
@@ -159,10 +172,11 @@ class TicketBai implements Stringable, TbaiXml
 
     public static function createFromJson(array $jsonData): self
     {
+        $territory = $jsonData['territory'];
         $subject = Subject::createFromJson($jsonData['subject']);
         $invoice = Invoice::createFromJson($jsonData['invoice']);
         $fingerprint = Fingerprint::createFromJson($jsonData['fingerprint']);
-        $ticketBai = new TicketBai($subject, $invoice, $fingerprint);
+        $ticketBai = new TicketBai($subject, $invoice, $fingerprint, $territory);
         return $ticketBai;
     }
 

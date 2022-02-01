@@ -23,6 +23,8 @@ use PHPUnit\Framework\TestCase;
 
 class ApiTest extends TestCase
 {
+  const DEFAULT_TERRITORY = TicketBai::TERRITORY_GIPUZKOA;
+
   public function test_TicketBai_can_be_sent_to_bizkaia_endpoint(): void
   {
     $ticketbai = $this->getTicketBai();
@@ -133,7 +135,8 @@ class ApiTest extends TestCase
     return new TicketBai(
       $subject,
       $invoice,
-      $fingerprint
+      $fingerprint,
+      self::DEFAULT_TERRITORY
     );
   }
 
@@ -142,21 +145,23 @@ class ApiTest extends TestCase
     $nif = $_ENV['TBAI_ISSUER_NIF'];
     $name = $_ENV['TBAI_ISSUER_NAME'];
     $issuer = new Issuer(new VatId($nif), $name);
-    $recipient = Recipient::createNationalRecipient(new VatId('00000000T'), 'Client Name');
+    $recipient = Recipient::createNationalRecipient(new VatId('00000000T'), 'Client Name', '48270', 'Markina-Xemein');
     return new Subject($issuer, $recipient, Subject::ISSUED_BY_ISSUER);
   }
 
   private function getMultipleRecipientSubject(): Subject
   {
     $subject = $this->getSubject();
-    $subject->addRecipient(Recipient::createGenericRecipient(new VatId('X0000000I', VatId::VAT_ID_TYPE_RESIDENCE_CERTIFICATE), 'Client Name 2', '48270', 'IE'));
+    $subject->addRecipient(Recipient::createGenericRecipient(new VatId('X0000000I', VatId::VAT_ID_TYPE_RESIDENCE_CERTIFICATE), 'Client Name 2', '48270', 'Gallway', 'IE'));
     return $subject;
   }
 
   private function getFingerprint(): Fingerprint
   {
     $vendor = new Vendor($_ENV['TBAI_APP_LICENSE'], $_ENV['TBAI_APP_DEVELOPER_NIF'], $_ENV['TBAI_APP_NAME'], $_ENV['TBAI_APP_VERSION']);
-    $previousInvoice = new PreviousInvoice('0000002', new Date('02-12-2020'), 'abcdefgkauskjsa', 'TESTSERIE');
-    return new Fingerprint($vendor, $previousInvoice);
+    // $previousInvoice = new PreviousInvoice('0000002', new Date('02-12-2020'), 'abcdefgkauskjsa', 'TESTSERIE');
+    // return new Fingerprint($vendor, $previousInvoice);
+    // $previousInvoice = new PreviousInvoice('0000002', new Date('02-12-2020'), 'abcdefgkauskjsa', 'TESTSERIE');
+    return new Fingerprint($vendor);
   }
 }

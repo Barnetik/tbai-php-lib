@@ -24,6 +24,8 @@ use PHPUnit\Framework\TestCase;
 
 class TicketBaiTest extends TestCase
 {
+    const DEFAULT_TERRITORY = TicketBai::TERRITORY_BIZKAIA;
+
     public function test_unsigned_TicketBai_validates_schema(): void
     {
         $ticketbai = $this->getTicketBai();
@@ -88,21 +90,22 @@ class TicketBaiTest extends TestCase
         return new TicketBai(
             $subject,
             $invoice,
-            $fingerprint
+            $fingerprint,
+            self::DEFAULT_TERRITORY
         );
     }
 
     private function getSubject(): Subject
     {
         $issuer = new Issuer(new VatId('11111111H'), 'Emitter Name');
-        $recipient = Recipient::createNationalRecipient(new VatId('00000000T'), 'Client Name');
+        $recipient = Recipient::createNationalRecipient(new VatId('00000000T'), 'Client Name', '48270', 'Markina-Xemein');
         return new Subject($issuer, $recipient, Subject::ISSUED_BY_ISSUER);
     }
 
     private function getMultipleRecipientSubject(): Subject
     {
         $subject = $this->getSubject();
-        $subject->addRecipient(Recipient::createGenericRecipient(new VatId('X0000000I', VatId::VAT_ID_TYPE_RESIDENCE_CERTIFICATE), 'Client Name 2', '48270', 'IE'));
+        $subject->addRecipient(Recipient::createGenericRecipient(new VatId('X0000000I', VatId::VAT_ID_TYPE_RESIDENCE_CERTIFICATE), 'Client Name 2', '48270', 'Ballycastle', 'IE'));
         return $subject;
     }
 
