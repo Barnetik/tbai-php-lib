@@ -4,6 +4,7 @@ namespace Barnetik\Tbai\Invoice;
 
 use Barnetik\Tbai\Exception\InvalidVatRegimeException;
 use Barnetik\Tbai\Interfaces\TbaiXml;
+use Barnetik\Tbai\Invoice\Data\Detail;
 use Barnetik\Tbai\ValueObject\Ammount;
 use DOMDocument;
 use DOMNode;
@@ -80,6 +81,12 @@ class Data implements TbaiXml
         return $this;
     }
 
+    public function addDetail(Detail $detail): self
+    {
+        array_push($this->details, $detail);
+        return $this;
+    }
+
     private static function validVatRegimes(): array
     {
         return [
@@ -110,6 +117,7 @@ class Data implements TbaiXml
         $data->appendChild(
             $domDocument->createElement('DescripcionFactura', $this->description)
         );
+
         if (sizeof($this->details)) {
             $details = $domDocument->createElement('DetallesFactura');
             foreach ($this->details as $detail) {
@@ -170,6 +178,12 @@ class Data implements TbaiXml
         }
 
         $invoiceData = new Data($description, $total, $vatRegimes, $supportedRetention, $taxBaseCost);
+
+        foreach ($jsonData['details'] as $jsonDetail) {
+            $detail = Detail::createFromJson($jsonDetail);
+            $invoiceData->addDetail($detail);
+        }
+
         return $invoiceData;
     }
 
@@ -181,6 +195,12 @@ class Data implements TbaiXml
                 'description' => [
                     'type' => 'string',
                     'maxLength' => 250,
+                ],
+                'details' => [
+                    'type' => 'array',
+                    'items' => Detail::docJson(),
+                    'minItems' => 0,
+                    'maxItems' => 1000,
                 ],
                 'total' => [
                     'type' => 'string',

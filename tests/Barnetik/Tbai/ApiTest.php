@@ -11,6 +11,7 @@ use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectExemptBreakdownItem;
 use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectNotExemptBreakdownItem;
 use Barnetik\Tbai\Invoice\Breakdown\VatDetail;
 use Barnetik\Tbai\Invoice\Data;
+use Barnetik\Tbai\Invoice\Data\Detail;
 use Barnetik\Tbai\Invoice\Header;
 use Barnetik\Tbai\ValueObject\Ammount;
 use Barnetik\Tbai\ValueObject\Date;
@@ -143,6 +144,8 @@ class ApiTest extends TestCase
         $header = Header::create((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), 'TESTSERIE');
         sleep(1); // Avoid same invoice number as time is used for generation
         $data = new Data('test-description', new Ammount('12.34'), [Data::VAT_REGIME_01]);
+        $data->addDetail(new Detail('product-name', new Ammount('12.34'), new Ammount('1.00'), new Ammount('12.34')));
+
         $breakdown = new Breakdown();
         $breakdown->addNationalNotSubjectBreakdownItem(new NationalNotSubjectBreakdownItem(new Ammount('12.34'), NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_LOCATION_RULES));
         $breakdown->addNationalSubjectExemptBreakdownItem(new NationalSubjectExemptBreakdownItem(new Ammount('56.78'), NationalSubjectExemptBreakdownItem::EXEMPT_REASON_ART_23));
