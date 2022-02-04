@@ -35,7 +35,7 @@ class ApiTest extends TestCase
         $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
         $appVersion =  $_ENV['TBAI_BIZKAIA_APP_VERSION'];
 
-        $ticketbai = $this->getTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion);
+        $ticketbai = $this->getTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_BIZKAIA);
         $signedFilename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
@@ -136,21 +136,23 @@ class ApiTest extends TestCase
         $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/Api/Bizkaia/petition-schemas/LROE_PJ_240_1_1_FacturasEmitidas_ConSG_AltaPeticion_V1_0_2.xsd'));
     }
 
-    private function getTicketBai(string $nif, string $issuer, string $license, string $developer, string $appName, string $appVersion): TicketBai
+    private function getTicketBai(string $nif, string $issuer, string $license, string $developer, string $appName, string $appVersion, string $territory = self::DEFAULT_TERRITORY): TicketBai
     {
         $subject = $this->getSubject($nif, $issuer);
         $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
 
         $header = Header::create((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), 'TESTSERIE');
         sleep(1); // Avoid same invoice number as time is used for generation
-        $data = new Data('test-description', new Ammount('12.34'), [Data::VAT_REGIME_01]);
-        $data->addDetail(new Detail('product-name', new Ammount('12.34'), new Ammount('1.00'), new Ammount('12.34')));
+        $data = new Data('factura ejemplo TBAI', new Ammount('89.36'), [Data::VAT_REGIME_01]);
+        $data->addDetail(new Detail('Artículo 1 Ejemplo', new Ammount('23.356', 12, 8), new Ammount('1'), new Ammount('25.84'), new Ammount('2.00')));
+        $data->addDetail(new Detail('Artículo 2 xxx', new Ammount('18.2', 12, 8), new Ammount('1.50'), new Ammount('33.03')));
+        $data->addDetail(new Detail('Artículo 3 aaaaaaa', new Ammount('1.40', 12, 8), new Ammount('18'), new Ammount('30.49')));
 
         $breakdown = new Breakdown();
-        $breakdown->addNationalNotSubjectBreakdownItem(new NationalNotSubjectBreakdownItem(new Ammount('12.34'), NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_LOCATION_RULES));
-        $breakdown->addNationalSubjectExemptBreakdownItem(new NationalSubjectExemptBreakdownItem(new Ammount('56.78'), NationalSubjectExemptBreakdownItem::EXEMPT_REASON_ART_23));
+        // $breakdown->addNationalNotSubjectBreakdownItem(new NationalNotSubjectBreakdownItem(new Ammount('14.93'), NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_LOCATION_RULES));
+        // $breakdown->addNationalSubjectExemptBreakdownItem(new NationalSubjectExemptBreakdownItem(new Ammount('56.78'), NationalSubjectExemptBreakdownItem::EXEMPT_REASON_ART_23));
 
-        $vatDetail = new VatDetail(new Ammount('98.76'), new Ammount('21.00'), new Ammount('20.74'));
+        $vatDetail = new VatDetail(new Ammount('73.86'), new Ammount('21'), new Ammount('15.50'));
         $notExemptBreakdown = new NationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1, [$vatDetail]);
         $breakdown->addNationalSubjectNotExemptBreakdownItem($notExemptBreakdown);
 
@@ -160,7 +162,7 @@ class ApiTest extends TestCase
             $subject,
             $invoice,
             $fingerprint,
-            self::DEFAULT_TERRITORY
+            $territory
         );
     }
 
