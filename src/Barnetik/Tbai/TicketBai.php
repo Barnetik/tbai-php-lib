@@ -141,7 +141,7 @@ class TicketBai implements Stringable, TbaiXml
             case self::TERRITORY_GIPUZKOA:
                 return XadesGipuzkoa::class;
             case self::TERRITORY_BIZKAIA:
-                return XadesGipuzkoa::class;
+                return XadesBizkaia::class;
             default:
         }
         throw new InvalidTerritoryException();
