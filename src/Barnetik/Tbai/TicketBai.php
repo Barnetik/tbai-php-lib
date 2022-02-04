@@ -115,8 +115,10 @@ class TicketBai implements Stringable, TbaiXml
                 $password
             );
 
+            $xadesClass = $this->getXadesClassForTerritory();
 
-            $this->signedXml = XadesBizkaia::signDocument(
+            $this->signedXml = call_user_func(
+                $xadesClass . '::signDocument',
                 new InputResourceInfo(
                     $this->dom(), /** @phpstan-ignore-line */
                     ResourceInfo::xmlDocument, // The source is a DOMDocument
@@ -126,10 +128,23 @@ class TicketBai implements Stringable, TbaiXml
                     false // Enveloped signature
                 ),
                 new CertificateResourceInfo($certData['cert'], ResourceInfo::string | ResourceInfo::pem),
-                new KeyResourceInfo($certData['pkey'], ResourceInfo::string | ResourceInfo::pem),
+                new KeyResourceInfo($certData['pkey'], ResourceInfo::string | ResourceInfo::pem)
             );
             $this->signedXmlPath = $signedFilePath;
         }
+    }
+
+    private function getXadesClassForTerritory(): string
+    {
+        switch ($this->territory) {
+            case self::TERRITORY_ARABA:
+            case self::TERRITORY_GIPUZKOA:
+                return XadesGipuzkoa::class;
+            case self::TERRITORY_BIZKAIA:
+                return XadesGipuzkoa::class;
+            default:
+        }
+        throw new InvalidTerritoryException();
     }
 
     public function base64Signed(): string
