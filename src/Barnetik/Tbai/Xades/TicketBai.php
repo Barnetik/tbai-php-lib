@@ -70,7 +70,7 @@ class TicketBai extends XAdES
                         : ($this->fileBeingSigned->isString()
                             ? $this->fileBeingSigned->saveFilename
                             : $this->fileBeingSigned->resource)),
-                new ObjectIdentifier('urn:oid:1.2.840.10003.5.109.10'), // ObjectIdentifier
+                null,
                 'text/xml', // MimeType
                 null, // Encoding
                 "#$referenceId"

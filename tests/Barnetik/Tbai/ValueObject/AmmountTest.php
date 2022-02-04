@@ -16,12 +16,12 @@ class AmmountTest extends TestCase
             $this->assertTrue(true);
         }
 
-        try {
-            $ammount = new Ammount("12.4");
-            $this->fail();
-        } catch (InvalidAmmountException $e) {
-            $this->assertTrue(true);
-        }
+        // try {
+        //     $ammount = new Ammount("12.4");
+        //     $this->fail();
+        // } catch (InvalidAmmountException $e) {
+        //     $this->assertTrue(true);
+        // }
 
         try {
             $ammount = new Ammount("123456.02", 2);

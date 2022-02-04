@@ -97,9 +97,6 @@ class ApiTest extends TestCase
             echo "IFZ: " . $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'] . "\n";
             echo "Data: " . date('Y-m-d H:i:s') . "\n";
             echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            // echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
-            // echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
-            // echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
             echo "Bidalitako fitxategia: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
             echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
             echo "Jasotako errore printzipala: " . $response->mainErrorMessage() . "\n";
