@@ -2,7 +2,7 @@
 
 namespace Barnetik\Tbai\Invoice\Breakdown;
 
-use Barnetik\Tbai\ValueObject\Ammount;
+use Barnetik\Tbai\ValueObject\Amount;
 use Barnetik\Tbai\Exception\InvalidExemptionReasonException;
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use DOMDocument;
@@ -25,9 +25,9 @@ class NationalSubjectExemptBreakdownItem implements TbaiXml
     const EXEMPT_REASON_OTHER = 'E6';
 
     private string $exemptionReason;
-    private Ammount $taxBase;
+    private Amount $taxBase;
 
-    public function __construct(Ammount $taxBase, string $reason)
+    public function __construct(Amount $taxBase, string $reason)
     {
         $this->taxBase = $taxBase;
         $this->setExemptionReason($reason);
@@ -67,7 +67,7 @@ class NationalSubjectExemptBreakdownItem implements TbaiXml
 
     public static function createFromJson(array $jsonData): self
     {
-        $taxBase = new Ammount($jsonData['taxBase']);
+        $taxBase = new Amount($jsonData['taxBase']);
         $reason = $jsonData['reason'];
         return new self($taxBase, $reason);
     }

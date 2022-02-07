@@ -13,7 +13,7 @@ use Barnetik\Tbai\Invoice\Breakdown\VatDetail;
 use Barnetik\Tbai\Invoice\Data;
 use Barnetik\Tbai\Invoice\Data\Detail;
 use Barnetik\Tbai\Invoice\Header;
-use Barnetik\Tbai\ValueObject\Ammount;
+use Barnetik\Tbai\ValueObject\Amount;
 use Barnetik\Tbai\ValueObject\Date;
 use Barnetik\Tbai\ValueObject\Time;
 use Barnetik\Tbai\ValueObject\VatId;
@@ -140,16 +140,16 @@ class ApiTest extends TestCase
 
         $header = Header::create((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), 'TESTSERIE');
         sleep(1); // Avoid same invoice number as time is used for generation
-        $data = new Data('factura ejemplo TBAI', new Ammount('89.36'), [Data::VAT_REGIME_01]);
-        $data->addDetail(new Detail('Artículo 1 Ejemplo', new Ammount('23.356', 12, 8), new Ammount('1'), new Ammount('25.84'), new Ammount('2.00')));
-        $data->addDetail(new Detail('Artículo 2 xxx', new Ammount('18.2', 12, 8), new Ammount('1.50'), new Ammount('33.03')));
-        $data->addDetail(new Detail('Artículo 3 aaaaaaa', new Ammount('1.40', 12, 8), new Ammount('18'), new Ammount('30.49')));
+        $data = new Data('factura ejemplo TBAI', new Amount('89.36'), [Data::VAT_REGIME_01]);
+        $data->addDetail(new Detail('Artículo 1 Ejemplo', new Amount('23.356', 12, 8), new Amount('1'), new Amount('25.84'), new Amount('2.00')));
+        $data->addDetail(new Detail('Artículo 2 xxx', new Amount('18.2', 12, 8), new Amount('1.50'), new Amount('33.03')));
+        $data->addDetail(new Detail('Artículo 3 aaaaaaa', new Amount('1.40', 12, 8), new Amount('18'), new Amount('30.49')));
 
         $breakdown = new Breakdown();
-        // $breakdown->addNationalNotSubjectBreakdownItem(new NationalNotSubjectBreakdownItem(new Ammount('14.93'), NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_LOCATION_RULES));
-        // $breakdown->addNationalSubjectExemptBreakdownItem(new NationalSubjectExemptBreakdownItem(new Ammount('56.78'), NationalSubjectExemptBreakdownItem::EXEMPT_REASON_ART_23));
+        // $breakdown->addNationalNotSubjectBreakdownItem(new NationalNotSubjectBreakdownItem(new Amount('14.93'), NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_LOCATION_RULES));
+        // $breakdown->addNationalSubjectExemptBreakdownItem(new NationalSubjectExemptBreakdownItem(new Amount('56.78'), NationalSubjectExemptBreakdownItem::EXEMPT_REASON_ART_23));
 
-        $vatDetail = new VatDetail(new Ammount('73.86'), new Ammount('21'), new Ammount('15.50'));
+        $vatDetail = new VatDetail(new Amount('73.86'), new Amount('21'), new Amount('15.50'));
         $notExemptBreakdown = new NationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1, [$vatDetail]);
         $breakdown->addNationalSubjectNotExemptBreakdownItem($notExemptBreakdown);
 

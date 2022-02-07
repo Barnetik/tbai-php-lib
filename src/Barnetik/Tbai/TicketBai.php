@@ -4,7 +4,7 @@ namespace Barnetik\Tbai;
 
 use Barnetik\Tbai\Exception\InvalidTerritoryException;
 use Barnetik\Tbai\Interfaces\TbaiXml;
-use Barnetik\Tbai\ValueObject\Ammount;
+use Barnetik\Tbai\ValueObject\Amount;
 use Barnetik\Tbai\ValueObject\Date;
 use Barnetik\Tbai\ValueObject\VatId;
 use Barnetik\Tbai\Xades\Bizkaia as XadesBizkaia;
@@ -81,9 +81,9 @@ class TicketBai implements Stringable, TbaiXml
         return $this->invoice->invoiceNumber();
     }
 
-    public function totalAmmount(): Ammount
+    public function totalAmount(): Amount
     {
-        return $this->invoice->totalAmmount();
+        return $this->invoice->totalAmount();
     }
 
     public function dom(): DomDocument

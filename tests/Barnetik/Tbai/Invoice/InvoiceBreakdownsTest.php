@@ -6,7 +6,7 @@ use Barnetik\Tbai\Invoice\Breakdown\NationalNotSubjectBreakdownItem;
 use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectExemptBreakdownItem;
 use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectNotExemptBreakdownItem;
 use Barnetik\Tbai\Invoice\Breakdown\VatDetail;
-use Barnetik\Tbai\ValueObject\Ammount;
+use Barnetik\Tbai\ValueObject\Amount;
 use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 
@@ -14,8 +14,8 @@ class InvoiceBreakdownsTest extends TestCase
 {
     public function test_NotSubjectBreakdownItem_can_be_created(): void
     {
-        $notSubjectItem = new NationalNotSubjectBreakdownItem(new Ammount('12.25'), NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_RL);
-        $this->assertEquals('12.25', $notSubjectItem->ammount());
+        $notSubjectItem = new NationalNotSubjectBreakdownItem(new Amount('12.25'), NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_RL);
+        $this->assertEquals('12.25', $notSubjectItem->amount());
     }
 
     public function test_NotSubjectBreakdownItems_are_limited(): void
@@ -23,7 +23,7 @@ class InvoiceBreakdownsTest extends TestCase
         $this->expectException(OutOfBoundsException::class);
 
         $invoiceBreakdown = new Breakdown();
-        $notSubjectItem = new NationalNotSubjectBreakdownItem(new Ammount('12.25'), NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_RL);
+        $notSubjectItem = new NationalNotSubjectBreakdownItem(new Amount('12.25'), NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_RL);
         $invoiceBreakdown->addNationalNotSubjectBreakdownItem($notSubjectItem);
         $invoiceBreakdown->addNationalNotSubjectBreakdownItem($notSubjectItem);
         $invoiceBreakdown->addNationalNotSubjectBreakdownItem($notSubjectItem);
@@ -34,7 +34,7 @@ class InvoiceBreakdownsTest extends TestCase
         $this->expectException(OutOfBoundsException::class);
 
         $invoiceBreakdown = new Breakdown();
-        $subjectExemptItem = new NationalSubjectExemptBreakdownItem(new Ammount('12.12'), NationalSubjectExemptBreakdownItem::EXEMPT_REASON_ART_20);
+        $subjectExemptItem = new NationalSubjectExemptBreakdownItem(new Amount('12.12'), NationalSubjectExemptBreakdownItem::EXEMPT_REASON_ART_20);
         $invoiceBreakdown->addNationalSubjectExemptBreakdownItem($subjectExemptItem);
         $invoiceBreakdown->addNationalSubjectExemptBreakdownItem($subjectExemptItem);
         $invoiceBreakdown->addNationalSubjectExemptBreakdownItem($subjectExemptItem);
@@ -50,7 +50,7 @@ class InvoiceBreakdownsTest extends TestCase
         $this->expectException(OutOfBoundsException::class);
 
         $invoiceBreakdown = new Breakdown();
-        $vatDetail = new VatDetail(new Ammount('12.12'), new Ammount('34.56'), new Ammount('78.90'));
+        $vatDetail = new VatDetail(new Amount('12.12'), new Amount('34.56'), new Amount('78.90'));
         $subjectExemptItem = new NationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1, [$vatDetail]);
         $invoiceBreakdown->addNationalSubjectNotExemptBreakdownItem($subjectExemptItem);
         $invoiceBreakdown->addNationalSubjectNotExemptBreakdownItem($subjectExemptItem);

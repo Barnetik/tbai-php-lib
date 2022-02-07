@@ -5,7 +5,7 @@ namespace Barnetik\Tbai\Invoice;
 use Barnetik\Tbai\Exception\InvalidVatRegimeException;
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\Invoice\Data\Detail;
-use Barnetik\Tbai\ValueObject\Ammount;
+use Barnetik\Tbai\ValueObject\Amount;
 use DOMDocument;
 use DOMNode;
 use InvalidArgumentException;
@@ -33,13 +33,13 @@ class Data implements TbaiXml
     const VAT_REGIME_53 = '53';
 
     private string $description;
-    private Ammount $total;
-    private ?Ammount $supportedRetention = null;
-    private ?Ammount $taxBaseCost = null;
+    private Amount $total;
+    private ?Amount $supportedRetention = null;
+    private ?Amount $taxBaseCost = null;
     private array $vatRegime = [];
     private array $details = [];
 
-    public function __construct(string $description, Ammount $total, array $vatRegimes, ?Ammount $supportedRetention = null, ?Ammount $taxBaseCost = null)
+    public function __construct(string $description, Amount $total, array $vatRegimes, ?Amount $supportedRetention = null, ?Amount $taxBaseCost = null)
     {
         $this->description = $description;
         $this->total = $total;
@@ -155,7 +155,7 @@ class Data implements TbaiXml
         return $data;
     }
 
-    public function total(): Ammount
+    public function total(): Amount
     {
         return $this->total;
     }
@@ -163,18 +163,18 @@ class Data implements TbaiXml
     public static function createFromJson(array $jsonData): self
     {
         $description = $jsonData['description'];
-        $total = new Ammount($jsonData['total']);
+        $total = new Amount($jsonData['total']);
         $vatRegimes = $jsonData['vatRegimes'];
 
         $supportedRetention = null;
         $taxBaseCost = null;
 
         if (isset($jsonData['supportedRetention'])) {
-            $supportedRetention = new Ammount($jsonData['supportedRetention']);
+            $supportedRetention = new Amount($jsonData['supportedRetention']);
         }
 
         if (isset($jsonData['taxBaseCost'])) {
-            $taxBaseCost = new Ammount($jsonData['taxBaseCost']);
+            $taxBaseCost = new Amount($jsonData['taxBaseCost']);
         }
 
         $invoiceData = new Data($description, $total, $vatRegimes, $supportedRetention, $taxBaseCost);

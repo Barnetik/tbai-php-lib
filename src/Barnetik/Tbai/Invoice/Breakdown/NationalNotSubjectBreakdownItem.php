@@ -2,7 +2,7 @@
 
 namespace Barnetik\Tbai\Invoice\Breakdown;
 
-use Barnetik\Tbai\ValueObject\Ammount;
+use Barnetik\Tbai\ValueObject\Amount;
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use DOMDocument;
 use DOMNode;
@@ -16,11 +16,11 @@ class NationalNotSubjectBreakdownItem implements TbaiXml
     const NOT_SUBJECT_REASON_OT = 'OT';
 
     private string $notSubjectReason;
-    private string $ammount;
+    private string $amount;
 
-    public function __construct(Ammount $ammount, string $reason)
+    public function __construct(Amount $amount, string $reason)
     {
-        $this->ammount = $ammount;
+        $this->amount = $amount;
         $this->setNotSubjectReason($reason);
     }
 
@@ -42,9 +42,9 @@ class NationalNotSubjectBreakdownItem implements TbaiXml
         return $this;
     }
 
-    public function ammount(): string
+    public function amount(): string
     {
-        return $this->ammount;
+        return $this->amount;
     }
 
     public function xml(DOMDocument $domDocument): DOMNode
@@ -52,16 +52,16 @@ class NationalNotSubjectBreakdownItem implements TbaiXml
         $notSubjectDetail = $domDocument->createElement('DetalleNoSujeta');
         $notSubjectDetail->append(
             $domDocument->createElement('Causa', $this->notSubjectReason),
-            $domDocument->createElement('Importe', $this->ammount),
+            $domDocument->createElement('Importe', $this->amount),
         );
         return $notSubjectDetail;
     }
 
     public static function createFromJson(array $jsonData): self
     {
-        $ammount = new Ammount($jsonData['ammount']);
+        $amount = new Amount($jsonData['amount']);
         $reason = $jsonData['reason'];
-        return new self($ammount, $reason);
+        return new self($amount, $reason);
     }
 
     public static function docJson(): array
@@ -69,7 +69,7 @@ class NationalNotSubjectBreakdownItem implements TbaiXml
         return [
             'type' => 'object',
             'properties' => [
-                'ammount' => [
+                'amount' => [
                     'type' => 'string',
                     'description' => 'Zenbatekoa (2 dezimalekin) - Importe (2 decimales)'
                 ],
@@ -83,7 +83,7 @@ Kargapean ez egoteko arrazoia - Causa no sujeción:
 '
                 ],
             ],
-            'required' => ['ammount', 'reason']
+            'required' => ['amount', 'reason']
         ];
     }
 }

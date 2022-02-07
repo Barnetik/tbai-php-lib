@@ -11,7 +11,7 @@ use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectNotExemptBreakdownItem;
 use Barnetik\Tbai\Invoice\Breakdown\VatDetail;
 use Barnetik\Tbai\Invoice\Data;
 use Barnetik\Tbai\Invoice\Header;
-use Barnetik\Tbai\ValueObject\Ammount;
+use Barnetik\Tbai\ValueObject\Amount;
 use Barnetik\Tbai\ValueObject\Date;
 use Barnetik\Tbai\ValueObject\Time;
 use Barnetik\Tbai\ValueObject\VatId;
@@ -76,12 +76,12 @@ class TicketBaiTest extends TestCase
 
         $header = Header::create((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), 'TESTSERIE');
         sleep(1); // Avoid same invoice number as time is used for generation
-        $data = new Data('test-description', new Ammount('12.34'), [Data::VAT_REGIME_01]);
+        $data = new Data('test-description', new Amount('12.34'), [Data::VAT_REGIME_01]);
         $breakdown = new Breakdown();
-        $breakdown->addNationalNotSubjectBreakdownItem(new NationalNotSubjectBreakdownItem(new Ammount('12.34'), NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_LOCATION_RULES));
-        $breakdown->addNationalSubjectExemptBreakdownItem(new NationalSubjectExemptBreakdownItem(new Ammount('56.78'), NationalSubjectExemptBreakdownItem::EXEMPT_REASON_ART_23));
+        $breakdown->addNationalNotSubjectBreakdownItem(new NationalNotSubjectBreakdownItem(new Amount('12.34'), NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_LOCATION_RULES));
+        $breakdown->addNationalSubjectExemptBreakdownItem(new NationalSubjectExemptBreakdownItem(new Amount('56.78'), NationalSubjectExemptBreakdownItem::EXEMPT_REASON_ART_23));
 
-        $vatDetail = new VatDetail(new Ammount('98.76'), new Ammount('4.12'), new Ammount('3.01'));
+        $vatDetail = new VatDetail(new Amount('98.76'), new Amount('4.12'), new Amount('3.01'));
         $notExemptBreakdown = new NationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1, [$vatDetail]);
         $breakdown->addNationalSubjectNotExemptBreakdownItem($notExemptBreakdown);
 

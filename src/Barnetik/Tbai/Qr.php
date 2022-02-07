@@ -50,7 +50,7 @@ class Qr
             $this->ticketbaiIdentifier(),
             $this->ticketBai->series(),
             $this->ticketBai->invoiceNumber(),
-            $this->ticketBai->totalAmmount()
+            $this->ticketBai->totalAmount()
         );
     }
 }

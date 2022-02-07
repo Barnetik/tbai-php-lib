@@ -6,7 +6,7 @@ use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\Invoice\Breakdown;
 use Barnetik\Tbai\Invoice\Data;
 use Barnetik\Tbai\Invoice\Header;
-use Barnetik\Tbai\ValueObject\Ammount;
+use Barnetik\Tbai\ValueObject\Amount;
 use Barnetik\Tbai\ValueObject\Date;
 use DOMDocument;
 use DOMNode;
@@ -52,7 +52,7 @@ class Invoice implements TbaiXml
         return $this->header->invoiceNumber();
     }
 
-    public function totalAmmount(): Ammount
+    public function totalAmount(): Amount
     {
         return $this->data->total();
     }

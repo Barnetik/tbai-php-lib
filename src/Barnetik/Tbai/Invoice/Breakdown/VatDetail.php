@@ -3,20 +3,20 @@
 namespace Barnetik\Tbai\Invoice\Breakdown;
 
 use Barnetik\Tbai\Interfaces\TbaiXml;
-use Barnetik\Tbai\ValueObject\Ammount;
+use Barnetik\Tbai\ValueObject\Amount;
 use DOMDocument;
 use DOMNode;
 
 class VatDetail implements TbaiXml
 {
-    private Ammount $taxBase;
-    private ?Ammount $taxRate = null;
-    private ?Ammount $taxQuota = null;
-    private ?Ammount $equivalenceRate = null;
-    private ?Ammount $equivalenceQuota = null;
+    private Amount $taxBase;
+    private ?Amount $taxRate = null;
+    private ?Amount $taxQuota = null;
+    private ?Amount $equivalenceRate = null;
+    private ?Amount $equivalenceQuota = null;
     private ?bool $isEquivalenceOperation = null;
 
-    public function __construct(Ammount $taxBase, ?Ammount $taxRate = null, ?Ammount $taxQuota = null, ?Ammount $equivalenceRate = null, ?Ammount $equivalenceQuota = null, ?bool $isEquivalenceOperation = null)
+    public function __construct(Amount $taxBase, ?Amount $taxRate = null, ?Amount $taxQuota = null, ?Amount $equivalenceRate = null, ?Amount $equivalenceQuota = null, ?bool $isEquivalenceOperation = null)
     {
         $this->taxBase = $taxBase;
         $this->taxRate = $taxRate ?? null;
@@ -53,26 +53,26 @@ class VatDetail implements TbaiXml
 
     public static function createFromJson(array $jsonData): self
     {
-        $taxBase = new Ammount($jsonData['taxBase']);
+        $taxBase = new Amount($jsonData['taxBase']);
 
         $taxRate = null;
         if (isset($jsonData['taxRate'])) {
-            $taxRate = new Ammount($jsonData['taxRate']);
+            $taxRate = new Amount($jsonData['taxRate']);
         }
 
         $taxQuota = null;
         if (isset($jsonData['taxQuota'])) {
-            $taxQuota = new Ammount($jsonData['taxQuota']);
+            $taxQuota = new Amount($jsonData['taxQuota']);
         }
 
         $equivalenceRate = null;
         if (isset($jsonData['equi$equivalenceRate'])) {
-            $equivalenceRate = new Ammount($jsonData['equivalenceRate']);
+            $equivalenceRate = new Amount($jsonData['equivalenceRate']);
         }
 
         $equivalenceQuota = null;
         if (isset($jsonData['equivalenceQuota'])) {
-            $equivalenceQuota = new Ammount($jsonData['equivalenceQuota']);
+            $equivalenceQuota = new Amount($jsonData['equivalenceQuota']);
         }
 
         $isEquivalenceOperation = $jsonData['isEquivalenceOperation'] ?? false;
