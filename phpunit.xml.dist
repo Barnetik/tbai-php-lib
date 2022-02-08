@@ -15,6 +15,18 @@
     </testsuite>
   </testsuites>
   <php>
+    <env name="TBAI_ARABA_APP_LICENSE" value="TBAIBI00000000PRUEBA" />
+    <env name="TBAI_ARABA_APP_NAME" value="SOFTWARE GARANTE TICKETBAI PRUEBA" />
+    <env name="TBAI_ARABA_APP_VERSION" value="1.0" />
+    <env name="TBAI_ARABA_APP_DEVELOPER_CIF" value="11111111H" />
+
+    <env name="TBAI_ARABA_PRIVATE_KEY" value="IZDesa2021" />
+    <env name="TBAI_ARABA_P12_PATH" value="./tests/__files/PertsonaFisikoa_PersonaFisica.p12" />
+
+    <env name="TBAI_ARABA_ISSUER_NIF" value="00000000T" />
+    <env name="TBAI_ARABA_ISSUER_NAME" value="Issuer name" />
+
+
     <env name="TBAI_BIZKAIA_APP_LICENSE" value="TBAIBI00000000PRUEBA" />
     <env name="TBAI_BIZKAIA_APP_NAME" value="SOFTWARE GARANTE TICKETBAI PRUEBA" />
     <env name="TBAI_BIZKAIA_APP_VERSION" value="1.0" />
@@ -25,6 +37,7 @@
 
     <env name="TBAI_BIZKAIA_ISSUER_NIF" value="00000000T" />
     <env name="TBAI_BIZKAIA_ISSUER_NAME" value="Issuer name" />
+
 
     <env name="TBAI_GIPUZKOA_APP_LICENSE" value="TBAIBI00000000PRUEBA" />
     <env name="TBAI_GIPUZKOA_APP_NAME" value="SOFTWARE GARANTE TICKETBAI PRUEBA" />

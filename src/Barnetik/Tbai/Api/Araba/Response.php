@@ -1,6 +1,6 @@
 <?php
 
-namespace Barnetik\Tbai\Api\Gipuzkoa;
+namespace Barnetik\Tbai\Api\Araba;
 
 use Barnetik\Tbai\Api\Response as ApiResponse;
 use SimpleXMLElement;
@@ -16,7 +16,6 @@ class Response extends ApiResponse
         if ($status == 200) {
             $this->responseContent = new SimpleXMLElement($this->content);
         }
-
     }
 
     public function isDelivered(): bool
@@ -54,7 +53,6 @@ class Response extends ApiResponse
             'descripcion' => (string)$this->responseContent->Salida->ResultadosValidacion->Descripcion,
             'azalpena' => (string)$this->responseContent->Salida->ResultadosValidacion->Azalpena,
         ]);
-
     }
 
     public function content(): string

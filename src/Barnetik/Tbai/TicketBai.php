@@ -7,6 +7,7 @@ use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\ValueObject\Amount;
 use Barnetik\Tbai\ValueObject\Date;
 use Barnetik\Tbai\ValueObject\VatId;
+use Barnetik\Tbai\Xades\Araba as XadesAraba;
 use Barnetik\Tbai\Xades\Bizkaia as XadesBizkaia;
 use Barnetik\Tbai\Xades\Gipuzkoa as XadesGipuzkoa;
 use DOMDocument;
@@ -138,6 +139,7 @@ class TicketBai implements Stringable, TbaiXml
     {
         switch ($this->territory) {
             case self::TERRITORY_ARABA:
+                return XadesGipuzkoa::class;
             case self::TERRITORY_GIPUZKOA:
                 return XadesGipuzkoa::class;
             case self::TERRITORY_BIZKAIA:

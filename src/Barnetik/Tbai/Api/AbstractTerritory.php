@@ -4,6 +4,7 @@ namespace Barnetik\Tbai\Api;
 
 use Barnetik\Tbai\Api\ApiRequestInterface;
 use Barnetik\Tbai\TicketBai;
+use Exception;
 
 abstract class AbstractTerritory implements EndpointInterface
 {
@@ -52,6 +53,10 @@ abstract class AbstractTerritory implements EndpointInterface
 
     protected function parseCurlResponse(string $response): array
     {
+        if (!$response) {
+            throw new Exception("No response from server");
+        }
+
         list($rawHeaders, $content) = explode("\r\n\r\n", $response, 2);
         $expHeaders = explode("\r\n", $rawHeaders);
         $headers = [];
@@ -80,7 +85,7 @@ abstract class AbstractTerritory implements EndpointInterface
             // CURLOPT_VERBOSE             => true,
             CURLOPT_FOLLOWLOCATION      => true,
 
-            CURLOPT_TIMEOUT             => 300,
+            CURLOPT_TIMEOUT             => 20,
 
             CURLOPT_URL                 => $apiRequest->url(),
             CURLOPT_HTTPHEADER          => $this->headers($apiRequest, $dataFile),

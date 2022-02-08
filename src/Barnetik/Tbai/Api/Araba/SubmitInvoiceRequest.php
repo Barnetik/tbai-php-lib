@@ -1,14 +1,14 @@
 <?php
 
-namespace Barnetik\Tbai\Api\Gipuzkoa;
+namespace Barnetik\Tbai\Api\Araba;
 
 use Barnetik\Tbai\TicketBai;
 use Barnetik\Tbai\Api\ApiRequestInterface;
 
 class SubmitInvoiceRequest implements ApiRequestInterface
 {
-    const URL = '/sarrerak/alta';
-    protected string $endpoint = 'https://tbai-z.egoitza.gipuzkoa.eus';
+    const URL = '/facturas';
+    protected string $endpoint = 'https://pruebas-ticketbai.araba.eus/TicketBAI/v1';
     protected TicketBai $ticketbai;
 
     public function __construct(TicketBai $ticketbai, string $endpoint = null)

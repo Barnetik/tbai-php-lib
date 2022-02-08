@@ -38,11 +38,6 @@ class SubmitInvoiceRequest implements ApiRequestInterface
         $rootElement->appendChild($this->getInvoices());
     }
 
-    public function url(): string
-    {
-        return $this->endpoint . self::URL;
-    }
-
     private function getHeader(): DOMNode
     {
         $header = $this->document->createElement('Cabecera');
@@ -77,6 +72,11 @@ class SubmitInvoiceRequest implements ApiRequestInterface
         return $invoices;
     }
 
+    public function url(): string
+    {
+        return $this->endpoint . static::URL;
+    }
+
     public function data(): string
     {
         return gzencode($this->document->saveXML());
@@ -97,4 +97,5 @@ class SubmitInvoiceRequest implements ApiRequestInterface
             ]
         ]);
     }
+
 }
