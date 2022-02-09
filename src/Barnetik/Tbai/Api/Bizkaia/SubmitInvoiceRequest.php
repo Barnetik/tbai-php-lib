@@ -18,12 +18,9 @@ class SubmitInvoiceRequest implements ApiRequestInterface
     private TicketBai $ticketbai;
     private DOMDocument $document;
 
-    public function __construct(TicketBai $ticketbai, string $endpoint = null)
+    public function __construct(TicketBai $ticketbai, string $endpoint)
     {
-        if ($this->endpoint) {
-            $this->endpoint = $endpoint;
-        }
-
+        $this->endpoint = $endpoint;
         $this->ticketbai = $ticketbai;
 
         $this->document = new DOMDocument('1.0', 'utf-8');

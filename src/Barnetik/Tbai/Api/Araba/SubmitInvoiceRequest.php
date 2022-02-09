@@ -8,15 +8,12 @@ use Barnetik\Tbai\Api\ApiRequestInterface;
 class SubmitInvoiceRequest implements ApiRequestInterface
 {
     const URL = '/facturas';
-    protected string $endpoint = 'https://pruebas-ticketbai.araba.eus/TicketBAI/v1';
+    protected string $endpoint;
     protected TicketBai $ticketbai;
 
-    public function __construct(TicketBai $ticketbai, string $endpoint = null)
+    public function __construct(TicketBai $ticketbai, string $endpoint)
     {
-        if ($this->endpoint) {
-            $this->endpoint = $endpoint;
-        }
-
+        $this->endpoint = $endpoint;
         $this->ticketbai = $ticketbai;
     }
 

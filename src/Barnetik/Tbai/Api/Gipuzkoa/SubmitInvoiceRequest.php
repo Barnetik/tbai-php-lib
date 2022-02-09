@@ -11,12 +11,9 @@ class SubmitInvoiceRequest implements ApiRequestInterface
     protected string $endpoint = 'https://tbai-z.egoitza.gipuzkoa.eus';
     protected TicketBai $ticketbai;
 
-    public function __construct(TicketBai $ticketbai, string $endpoint = null)
+    public function __construct(TicketBai $ticketbai, string $endpoint)
     {
-        if ($this->endpoint) {
-            $this->endpoint = $endpoint;
-        }
-
+        $this->endpoint = $endpoint;
         $this->ticketbai = $ticketbai;
     }
 
