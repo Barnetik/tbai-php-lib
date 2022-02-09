@@ -9,7 +9,7 @@ use Barnetik\Tbai\TicketBai;
 class Endpoint extends AbstractTerritory
 {
     const SUBMIT_ENDPOINT_DEV = 'https://pruebas-ticketbai.araba.eus/TicketBAI/v1';
-    const SUBMIT_ENDPOINT = 'https://pruebas-ticketbai.araba.eus/TicketBAI/v1';
+    const SUBMIT_ENDPOINT = 'https://ticketbai.araba.eus/TicketBAI/v1';
 
     public function headers(ApiRequestInterface $apiRequest, string $dataFile): array
     {
