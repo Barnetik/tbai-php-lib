@@ -48,13 +48,15 @@ class Response extends ApiResponse
                 'codigo' => $this->status
             ]);
         }
-
-        return json_encode([
-            'codigo' => (string)$this->responseContent->Salida->ResultadosValidacion->Codigo,
-            'descripcion' => (string)$this->responseContent->Salida->ResultadosValidacion->Descripcion,
-            'azalpena' => (string)$this->responseContent->Salida->ResultadosValidacion->Azalpena,
-        ]);
-
+        $result = [];
+        foreach ($this->responseContent->Salida->ResultadosValidacion as $validacion) {
+            $result[] = [
+                'codigo' => (string)$validacion->Codigo,
+                'descripcion' => (string)$validacion->Descripcion,
+                'azalpena' => (string)$validacion->Azalpena,
+            ];
+        }
+        return json_encode($result);
     }
 
     public function content(): string
