@@ -139,7 +139,7 @@ class TicketBai implements Stringable, TbaiXml
     {
         switch ($this->territory) {
             case self::TERRITORY_ARABA:
-                return XadesGipuzkoa::class;
+                return XadesAraba::class;
             case self::TERRITORY_GIPUZKOA:
                 return XadesGipuzkoa::class;
             case self::TERRITORY_BIZKAIA:

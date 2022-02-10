@@ -63,7 +63,7 @@ class EndpointTest extends TestCase
 
         $ticketbai->sign($certFile, $certPassword, $signedFilename);
 
-        $endpoint = new Api(Api::ENDPOINT_BIZKAIA, true, true);
+        $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
 
         $response = $endpoint->submitInvoice($ticketbai, $certFile, $certPassword);
 
