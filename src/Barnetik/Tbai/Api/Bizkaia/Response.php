@@ -6,6 +6,11 @@ use Barnetik\Tbai\Api\Response as ApiResponse;
 
 class Response extends ApiResponse
 {
+    public function isDelivered(): bool
+    {
+        return $this->isCorrect();
+    }
+
     public function isCorrect(): bool
     {
         return $this->headers['eus-bizkaia-n3-tipo-respuesta'] !== 'Incorrecto';

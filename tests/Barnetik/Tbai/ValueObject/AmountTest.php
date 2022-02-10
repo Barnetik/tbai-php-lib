@@ -1,8 +1,9 @@
 <?php
 
-namespace Barnetik\Tbai\ValueObject;
+namespace Test\Barnetik\Tbai\ValueObject;
 
 use Barnetik\Tbai\Exception\InvalidAmountException;
+use Barnetik\Tbai\ValueObject\Amount;
 use PHPUnit\Framework\TestCase;
 
 class AmountTest extends TestCase

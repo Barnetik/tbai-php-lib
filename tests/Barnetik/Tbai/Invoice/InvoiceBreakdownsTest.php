@@ -1,7 +1,8 @@
 <?php
 
-namespace Barnetik\Tbai\Invoice;
+namespace Test\Barnetik\Tbai\Invoice;
 
+use Barnetik\Tbai\Invoice\Breakdown;
 use Barnetik\Tbai\Invoice\Breakdown\NationalNotSubjectBreakdownItem;
 use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectExemptBreakdownItem;
 use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectNotExemptBreakdownItem;

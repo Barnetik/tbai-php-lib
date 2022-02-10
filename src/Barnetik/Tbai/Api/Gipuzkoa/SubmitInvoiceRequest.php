@@ -8,7 +8,7 @@ use Barnetik\Tbai\Api\ApiRequestInterface;
 class SubmitInvoiceRequest implements ApiRequestInterface
 {
     const URL = '/sarrerak/alta';
-    protected string $endpoint = 'https://tbai-z.egoitza.gipuzkoa.eus';
+    protected string $endpoint;
     protected TicketBai $ticketbai;
 
     public function __construct(TicketBai $ticketbai, string $endpoint)

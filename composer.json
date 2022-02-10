@@ -5,7 +5,8 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Barnetik\\": "src/Barnetik"
+            "Barnetik\\": "src/Barnetik",
+            "Test\\Barnetik\\": "tests/Barnetik"
         }
     },
     "require-dev": {

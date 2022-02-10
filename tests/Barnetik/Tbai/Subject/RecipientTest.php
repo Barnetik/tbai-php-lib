@@ -1,6 +1,6 @@
 <?php
 
-namespace Barnetik\Tbai\Subject;
+namespace Test\Barnetik\Tbai\Subject;
 
 use Barnetik\Tbai\Subject\Recipient;
 use Barnetik\Tbai\ValueObject\VatId;

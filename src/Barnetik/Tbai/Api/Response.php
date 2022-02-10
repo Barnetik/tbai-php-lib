@@ -30,6 +30,7 @@ abstract class Response
         file_put_contents($path, $this->content);
     }
 
+    abstract public function isDelivered(): bool;
     abstract public function isCorrect(): bool;
     abstract public function mainErrorMessage(): string;
     abstract public function content(): string;

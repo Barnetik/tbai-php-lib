@@ -1,30 +1,22 @@
 <?php
 
-namespace Barnetik\Tbai;
+namespace Test\Barnetik\Tbai;
 
-use Barnetik\Tbai\Fingerprint\PreviousInvoice;
-use Barnetik\Tbai\Fingerprint\Vendor;
-use Barnetik\Tbai\Invoice\Breakdown;
-use Barnetik\Tbai\Invoice\Breakdown\NationalNotSubjectBreakdownItem;
-use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectExemptBreakdownItem;
-use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectNotExemptBreakdownItem;
-use Barnetik\Tbai\Invoice\Breakdown\VatDetail;
-use Barnetik\Tbai\Invoice\Data;
-use Barnetik\Tbai\Invoice\Header;
-use Barnetik\Tbai\ValueObject\Amount;
-use Barnetik\Tbai\ValueObject\Date;
-use Barnetik\Tbai\ValueObject\Time;
-use Barnetik\Tbai\ValueObject\VatId;
-use Barnetik\Tbai\Subject\Issuer;
-use Barnetik\Tbai\Subject\Recipient;
+use Barnetik\Tbai\TicketBai;
 use DOMDocument;
 use Exception;
 use lyquidity\xmldsig\XAdES;
 use PHPUnit\Framework\TestCase;
+use Test\Barnetik\Tbai\Mother\TicketBaiMother;
 
 class TicketBaiTest extends TestCase
 {
-    const DEFAULT_TERRITORY = TicketBai::TERRITORY_BIZKAIA;
+    private TicketBaiMother $ticketBaiMother;
+
+    protected function setUp(): void
+    {
+        $this->ticketBaiMother = new TicketBaiMother;
+    }
 
     public function test_unsigned_TicketBai_validates_schema(): void
     {
@@ -39,7 +31,7 @@ class TicketBaiTest extends TestCase
         $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
-        $ticketbai->sign($_ENV['TBAI_GIPUZKOA_P12_PATH'], $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'], $filename);
+        $ticketbai->sign($_ENV['TBAI_ARABA_P12_PATH'], $_ENV['TBAI_ARABA_PRIVATE_KEY'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
         $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
@@ -55,7 +47,7 @@ class TicketBaiTest extends TestCase
         $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
-        $ticketbai->sign($_ENV['TBAI_GIPUZKOA_P12_PATH'], $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'], $filename);
+        $ticketbai->sign($_ENV['TBAI_ARABA_P12_PATH'], $_ENV['TBAI_ARABA_PRIVATE_KEY'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
 
@@ -71,48 +63,13 @@ class TicketBaiTest extends TestCase
 
     private function getTicketBai(): TicketBai
     {
-        $subject = $this->getMultipleRecipientSubject();
-        $fingerprint = $this->getFingerprint();
+        $nif = $_ENV['TBAI_ARABA_ISSUER_NIF'];
+        $issuer = $_ENV['TBAI_ARABA_ISSUER_NAME'];
+        $license = $_ENV['TBAI_ARABA_APP_LICENSE'];
+        $developer = $_ENV['TBAI_ARABA_APP_DEVELOPER_NIF'];
+        $appName = $_ENV['TBAI_ARABA_APP_NAME'];
+        $appVersion =  $_ENV['TBAI_ARABA_APP_VERSION'];
 
-        $header = Header::create((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), 'TESTSERIE');
-        sleep(1); // Avoid same invoice number as time is used for generation
-        $data = new Data('test-description', new Amount('12.34'), [Data::VAT_REGIME_01]);
-        $breakdown = new Breakdown();
-        $breakdown->addNationalNotSubjectBreakdownItem(new NationalNotSubjectBreakdownItem(new Amount('12.34'), NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_LOCATION_RULES));
-        $breakdown->addNationalSubjectExemptBreakdownItem(new NationalSubjectExemptBreakdownItem(new Amount('56.78'), NationalSubjectExemptBreakdownItem::EXEMPT_REASON_ART_23));
-
-        $vatDetail = new VatDetail(new Amount('98.76'), new Amount('4.12'), new Amount('3.01'));
-        $notExemptBreakdown = new NationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1, [$vatDetail]);
-        $breakdown->addNationalSubjectNotExemptBreakdownItem($notExemptBreakdown);
-
-        $invoice = new Invoice($header, $data, $breakdown);
-
-        return new TicketBai(
-            $subject,
-            $invoice,
-            $fingerprint,
-            self::DEFAULT_TERRITORY
-        );
-    }
-
-    private function getSubject(): Subject
-    {
-        $issuer = new Issuer(new VatId('11111111H'), 'Emitter Name');
-        $recipient = Recipient::createNationalRecipient(new VatId('00000000T'), 'Client Name', '48270', 'Markina-Xemein');
-        return new Subject($issuer, $recipient, Subject::ISSUED_BY_ISSUER);
-    }
-
-    private function getMultipleRecipientSubject(): Subject
-    {
-        $subject = $this->getSubject();
-        $subject->addRecipient(Recipient::createGenericRecipient(new VatId('X0000000I', VatId::VAT_ID_TYPE_RESIDENCE_CERTIFICATE), 'Client Name 2', '48270', 'Ballycastle', 'IE'));
-        return $subject;
-    }
-
-    private function getFingerprint(): Fingerprint
-    {
-        $vendor = new Vendor($_ENV['TBAI_GIPUZKOA_APP_LICENSE'], $_ENV['TBAI_GIPUZKOA_APP_DEVELOPER_NIF'], $_ENV['TBAI_GIPUZKOA_APP_NAME'], $_ENV['TBAI_GIPUZKOA_APP_VERSION']);
-        $previousInvoice = new PreviousInvoice('0000002', new Date('02-12-2020'), 'abcdefgkauskjsa', 'TESTSERIE');
-        return new Fingerprint($vendor, $previousInvoice);
+        return $this->ticketBaiMother->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
     }
 }

@@ -10,12 +10,11 @@ use DOMNode;
 
 class SubmitInvoiceRequest implements ApiRequestInterface
 {
-    const MODEL = '240';
     const URL = '/N3B4000M/aurkezpena';
-
-    private string $endpoint = 'https://pruesarrerak.bizkaia.eus';
-
+    private string $endpoint;
     private TicketBai $ticketbai;
+
+    const MODEL = '240';
     private DOMDocument $document;
 
     public function __construct(TicketBai $ticketbai, string $endpoint)

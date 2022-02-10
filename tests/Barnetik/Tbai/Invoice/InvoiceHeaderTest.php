@@ -1,6 +1,6 @@
 <?php
 
-namespace Barnetik\Tbai\Invoice;
+namespace Test\Barnetik\Tbai\Invoice;
 
 use Barnetik\Tbai\Exception\InvalidDateException;
 use Barnetik\Tbai\Exception\InvalidTimeException;
