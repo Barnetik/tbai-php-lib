@@ -33,6 +33,11 @@ class Api
         }
     }
 
+    public static function createForTicketBai(TicketBai $ticketbai, bool $dev = false, bool $debug = false): self
+    {
+        return new Api($ticketbai->territory(), $dev, $debug);
+    }
+
     public function submitInvoice(TicketBai $ticketbai, string $pfxFilePath, string $password): Response
     {
         if (!$ticketbai->isSigned()) {
@@ -46,4 +51,9 @@ class Api
     {
         return $this->endpoint->debugData($key);
     }
+
+	public function endpoint(): EndpointInterface
+	{
+		return $this->endpoint;
+	}
 }

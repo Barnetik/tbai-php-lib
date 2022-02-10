@@ -87,6 +87,11 @@ class TicketBai implements Stringable, TbaiXml
         return $this->invoice->totalAmount();
     }
 
+    public function territory(): string
+    {
+        return $this->territory;
+    }
+
     public function dom(): DomDocument
     {
         $xml = new DOMDocument('1.0', 'utf-8');
