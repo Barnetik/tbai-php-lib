@@ -1,6 +1,6 @@
 {
-    "name": "barnetik/tbai-lib",
-    "description": "Generate and sign TicketBAI compatible invoices",
+    "name": "barnetik/ticketbai",
+    "description": "Generate, sign and submit TicketBAI compatible invoices",
     "type": "library",
     "license": "MIT",
     "autoload": {
