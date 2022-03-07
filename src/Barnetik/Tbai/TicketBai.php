@@ -142,6 +142,12 @@ class TicketBai implements Stringable, TbaiXml, JsonSerializable
         }
     }
 
+    public function moveSignedXmlTo(string $newPath): void
+    {
+        rename($this->signedXmlPath, $newPath);
+        $this->signedXmlPath = $newPath;
+    }
+
     private function getXadesClassForTerritory(): string
     {
         switch ($this->territory) {
