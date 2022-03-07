@@ -29,7 +29,7 @@ class Detail implements TbaiXml
     public static function createFromJson(array $jsonData): self
     {
         $description = $jsonData['description'];
-        $unitPrice = new Amount($jsonData['unitPrice']);
+        $unitPrice = new Amount($jsonData['unitPrice'], 12, 8);
         $quantity = new Amount($jsonData['quantity']);
         $totalAmount = new Amount($jsonData['totalAmount']);
 
@@ -103,6 +103,17 @@ class Detail implements TbaiXml
                 ],
             ],
             'required' => ['description', 'unitPrice', 'quantity', 'totalAmount']
+        ];
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'description' => $this->description,
+            'unitPrice' => (string)$this->unitPrice,
+            'quantity' => (string)$this->quantity,
+            'discount' => $this->discount ? (string)$this->discount : null,
+            'totalAmount' => (string)$this->totalAmount,
         ];
     }
 }
