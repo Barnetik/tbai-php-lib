@@ -3,6 +3,7 @@
 namespace Barnetik\Tbai;
 
 use Barnetik\Tbai\Exception\InvalidTerritoryException;
+use Barnetik\Tbai\Fingerprint\Vendor;
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\ValueObject\Amount;
 use Barnetik\Tbai\ValueObject\Date;
@@ -192,12 +193,12 @@ class TicketBai implements Stringable, TbaiXml
         return $this->dom()->saveXml();
     }
 
-    public static function createFromJson(array $jsonData): self
+    public static function createFromJson(Vendor $vendor, array $jsonData): self
     {
         $territory = $jsonData['territory'];
         $subject = Subject::createFromJson($jsonData['subject']);
         $invoice = Invoice::createFromJson($jsonData['invoice']);
-        $fingerprint = Fingerprint::createFromJson($jsonData['fingerprint']);
+        $fingerprint = Fingerprint::createFromJson($vendor, $jsonData['fingerprint']);
         $ticketBai = new TicketBai($subject, $invoice, $fingerprint, $territory);
         return $ticketBai;
     }
