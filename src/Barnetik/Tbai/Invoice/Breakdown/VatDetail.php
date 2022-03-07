@@ -114,4 +114,16 @@ class VatDetail implements TbaiXml
             'required' => ['taxBase']
         ];
     }
+
+    public function toArray(): array
+    {
+        return [
+            'taxBase' => (string)$this->taxBase,
+            'taxRate' => $this->taxRate ? (string)$this->taxRate : null,
+            'taxQuota' => $this->taxRate ? (string)$this->taxRate : null,
+            'equivalenceRate' => $this->equivalenceRate ? (string)$this->equivalenceRate : null,
+            'equivalenceQuota' => $this->equivalenceQuota ? (string)$this->equivalenceQuota : null,
+            'isEquivalenceOperation' => $this->isEquivalenceOperation ?? null,
+        ];
+    }
 }

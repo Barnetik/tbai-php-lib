@@ -106,4 +106,14 @@ Salbuetsi gabeko mota - Tipo de no exenta
 
         ];
     }
+
+    public function toArray(): array
+    {
+        return [
+            'type' => $this->notExemptType,
+            'vatDetails' => array_map(function ($vatDetail) {
+                return $vatDetail->toArray();
+            }, $this->vatDetails),
+        ];
+    }
 }

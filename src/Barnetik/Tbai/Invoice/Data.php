@@ -36,7 +36,7 @@ class Data implements TbaiXml
     private Amount $total;
     private ?Amount $supportedRetention = null;
     private ?Amount $taxBaseCost = null;
-    private array $vatRegime = [];
+    private array $vatRegimes = [];
     private array $details = [];
 
     public function __construct(string $description, Amount $total, array $vatRegimes, ?Amount $supportedRetention = null, ?Amount $taxBaseCost = null)
@@ -73,11 +73,11 @@ class Data implements TbaiXml
             throw new InvalidVatRegimeException();
         }
 
-        if (!sizeof($this->vatRegime) < 2) {
+        if (!sizeof($this->vatRegimes) < 2) {
             throw new OutOfBoundsException('Too many subject and not exempt breakdown items');
         }
 
-        $this->vatRegime[] = $vatRegime;
+        $this->vatRegimes[] = $vatRegime;
         return $this;
     }
 
@@ -143,7 +143,7 @@ class Data implements TbaiXml
         }
 
         $vatRegimeKeys = $domDocument->createElement('Claves', $this->taxBaseCost);
-        foreach ($this->vatRegime as $vatRegime) {
+        foreach ($this->vatRegimes as $vatRegime) {
             $keyId = $domDocument->createElement('IDClave');
             $keyId->appendChild(
                 $domDocument->createElement('ClaveRegimenIvaOpTrascendencia', $vatRegime)
@@ -249,6 +249,20 @@ class Data implements TbaiXml
                 ]
             ],
             'required' => ['description', 'total', 'vatRegimes']
+        ];
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'description' => $this->description,
+            'details' => array_map(function ($detail) {
+                return $detail->toArray();
+            }, $this->details),
+            'total' => (string)$this->total,
+            'vatRegimes' => $this->vatRegimes,
+            'supportedRetention' => $this->supportedRetention ? (string)$this->supportedRetention : null,
+            'taxBaseCost' => $this->taxBaseCost ? (string)$this->taxBaseCost : null,
         ];
     }
 }

@@ -16,7 +16,7 @@ class NationalNotSubjectBreakdownItem implements TbaiXml
     const NOT_SUBJECT_REASON_OT = 'OT';
 
     private string $notSubjectReason;
-    private string $amount;
+    private Amount $amount;
 
     public function __construct(Amount $amount, string $reason)
     {
@@ -84,6 +84,14 @@ Kargapean ez egoteko arrazoia - Causa no sujeción:
                 ],
             ],
             'required' => ['amount', 'reason']
+        ];
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'amount' => (string)$this->amount,
+            'reason' => $this->notSubjectReason,
         ];
     }
 }

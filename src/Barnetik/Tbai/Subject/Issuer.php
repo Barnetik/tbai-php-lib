@@ -66,4 +66,12 @@ class Issuer implements TbaiXml
             'required' => ['vatId', 'name']
         ];
     }
+
+    public function toArray(): array
+    {
+        return [
+            'vatId' => (string)$this->vatId,
+            'name' => $this->name,
+        ];
+    }
 }

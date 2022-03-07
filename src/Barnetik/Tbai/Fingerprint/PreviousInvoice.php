@@ -75,4 +75,14 @@ class PreviousInvoice implements TbaiXml
             'required' => ['invoiceNumber', 'sentDate', 'signature']
         ];
     }
+
+    public function toArray(): mixed
+    {
+        return [
+            'invoiceNumber' => $this->invoiceNumber,
+            'sentDate' => (string)$this->sentDate,
+            'signature' => $this->signature,
+            'serie' => $this->series ?? null,
+        ];
+    }
 }

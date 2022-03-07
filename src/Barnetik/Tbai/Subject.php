@@ -143,4 +143,15 @@ Hirugarren batek edo hartzaileak egindako faktura - Factura emitida por tecero o
             'required' => ['issuer', 'recipients']
         ];
     }
+
+    public function toArray(): array
+    {
+        return [
+            'issuer' => $this->issuer->toArray(),
+            'recipients' => array_map(function ($recipient) {
+                return $recipient->toArray();
+            }, $this->recipients),
+            'issuedBy' => $this->issuedBy
+        ];
+    }
 }

@@ -127,4 +127,15 @@ class Header implements TbaiXml
             ]
         ];
     }
+
+    public function toArray(): array
+    {
+        return [
+            'series' => $this->series ?? null,
+            'invoiceNumber' => $this->invoiceNumber,
+            'expeditionDate' => (string)$this->expeditionDate,
+            'expeditionTime' => (string)$this->expeditionTime,
+            'simplifiedInvoice' => $this->isSimplified,
+        ];
+    }
 }

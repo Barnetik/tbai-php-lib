@@ -66,7 +66,6 @@ class Invoice implements TbaiXml
         return $invoice;
     }
 
-
     public static function docJson(): array
     {
         return [
@@ -77,6 +76,15 @@ class Invoice implements TbaiXml
                 'breakdown' => Breakdown::docJson()
             ],
             'required' => ['header', 'data', 'breakdown']
+        ];
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'header' => $this->header->toArray(),
+            'data' => $this->data->toArray(),
+            'breakdown' => $this->breakdown->toArray(),
         ];
     }
 }

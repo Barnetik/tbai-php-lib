@@ -99,4 +99,12 @@ Arrazoia - Razón:
             'required' => ['taxBase', 'reason']
         ];
     }
+
+    public function toArray(): array
+    {
+        return [
+            'taxBase' => (string)$this->taxBase,
+            'reason' => $this->exemptionReason,
+        ];
+    }
 }

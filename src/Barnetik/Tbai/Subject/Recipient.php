@@ -178,4 +178,16 @@ Dokumentu mota - Tipo de documento:
             'required' => ['vatId', 'name']
         ];
     }
+
+    public function toArray(): array
+    {
+        return [
+            'vatId' => (string)$this->vatId(),
+            'vatIdType' => $this->vatId()->type(),
+            'name' => $this->name(),
+            'postalCode' => $this->postalCode(),
+            'address' => $this->address(),
+            'countryCode' => $this->countryCode(),
+        ];
+    }
 }

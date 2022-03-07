@@ -137,4 +137,19 @@ class Breakdown implements TbaiXml
 
         ];
     }
+
+    public function toArray(): array
+    {
+        return [
+            'nationalSubjectExemptBreakdownItems' => array_map(function ($nationalSubjectExemptBreakdownItem) {
+                return $nationalSubjectExemptBreakdownItem->toArray();
+            }, $this->nationalSubjectExemptBreakdownItems),
+            'nationalSubjectNotExemptBreakdownItems' => array_map(function ($nationalSubjectNotExemptBreakdownItem) {
+                return $nationalSubjectNotExemptBreakdownItem->toArray();
+            }, $this->nationalSubjectNotExemptBreakdownItems),
+            'nationalNotSubjectBreakdownItems' => array_map(function ($nationalNotSubjectBreakdownItem) {
+                return $nationalNotSubjectBreakdownItem->toArray();
+            }, $this->nationalNotSubjectBreakdownItems),
+        ];
+    }
 }

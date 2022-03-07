@@ -50,4 +50,11 @@ class Fingerprint implements TbaiXml
             ]
         ];
     }
+
+    public function toArray(): array
+    {
+        return [
+            'previousInvoice' => $this->previousInvoice ? $this->previousInvoice->toArray() : null,
+        ];
+    }
 }

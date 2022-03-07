@@ -2,26 +2,27 @@
 
 namespace Barnetik\Tbai;
 
-use Barnetik\Tbai\Exception\InvalidTerritoryException;
+use DOMNode;
+use Stringable;
+use DOMDocument;
+use JsonSerializable;
+use SimpleXMLElement;
+use lyquidity\xmldsig\XAdES;
+use Barnetik\Tbai\ValueObject\Date;
+use lyquidity\xmldsig\ResourceInfo;
+use Barnetik\Tbai\ValueObject\VatId;
 use Barnetik\Tbai\Fingerprint\Vendor;
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\ValueObject\Amount;
-use Barnetik\Tbai\ValueObject\Date;
-use Barnetik\Tbai\ValueObject\VatId;
+use lyquidity\xmldsig\KeyResourceInfo;
+use lyquidity\xmldsig\InputResourceInfo;
 use Barnetik\Tbai\Xades\Araba as XadesAraba;
+use lyquidity\xmldsig\CertificateResourceInfo;
 use Barnetik\Tbai\Xades\Bizkaia as XadesBizkaia;
 use Barnetik\Tbai\Xades\Gipuzkoa as XadesGipuzkoa;
-use DOMDocument;
-use DOMNode;
-use lyquidity\xmldsig\CertificateResourceInfo;
-use lyquidity\xmldsig\InputResourceInfo;
-use lyquidity\xmldsig\KeyResourceInfo;
-use lyquidity\xmldsig\ResourceInfo;
-use lyquidity\xmldsig\XAdES;
-use SimpleXMLElement;
-use Stringable;
+use Barnetik\Tbai\Exception\InvalidTerritoryException;
 
-class TicketBai implements Stringable, TbaiXml
+class TicketBai implements Stringable, TbaiXml, JsonSerializable
 {
     const TERRITORY_ARABA = '01';
     const TERRITORY_BIZKAIA = '02';
@@ -225,5 +226,20 @@ Faktura aurkeztuko den lurraldea - Territorio en el que se presentará la factur
             'required' => ['territory', 'subject', 'invoice', 'fingerprint']
         ];
         return $json;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'territory' => $this->territory,
+            'subject' => $this->subject->toArray(),
+            'invoice' => $this->invoice->toArray(),
+            'fingerprint' => $this->fingerprint->toArray(),
+        ];
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return $this->toArray();
     }
 }

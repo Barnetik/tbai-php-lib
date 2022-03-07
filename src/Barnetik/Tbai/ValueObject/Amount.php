@@ -17,7 +17,7 @@ class Amount implements Stringable
 
     public function check(string $amount, int $intPartMaxLength = 12, int $decLength = 2): bool
     {
-        if (preg_match('/^\d{1,' . $intPartMaxLength . '}(\.\d{0,' . $decLength . '})?$/', $amount, $matches)) {
+        if (preg_match('/^-?\d{1,' . $intPartMaxLength . '}(\.\d{0,' . $decLength . '})?$/', $amount, $matches)) {
             return true;
         }
 

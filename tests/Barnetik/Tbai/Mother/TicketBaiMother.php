@@ -50,6 +50,33 @@ class TicketBaiMother
         );
     }
 
+    public function createArabaVendor(): Vendor
+    {
+        $license = $_ENV['TBAI_ARABA_APP_LICENSE'];
+        $developer = $_ENV['TBAI_ARABA_APP_DEVELOPER_NIF'];
+        $appName = $_ENV['TBAI_ARABA_APP_NAME'];
+        $appVersion =  $_ENV['TBAI_ARABA_APP_VERSION'];
+        return new Vendor($license, $developer, $appName, $appVersion);
+    }
+
+    public function createBizkaiaVendor(): Vendor
+    {
+        $license = $_ENV['TBAI_BIZKAIA_APP_LICENSE'];
+        $developer = $_ENV['TBAI_BIZKAIA_APP_DEVELOPER_NIF'];
+        $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
+        $appVersion =  $_ENV['TBAI_BIZKAIA_APP_VERSION'];
+        return new Vendor($license, $developer, $appName, $appVersion);
+    }
+
+    public function createGipuzkoaVendor(): Vendor
+    {
+        $license = $_ENV['TBAI_GIPUZKOA_APP_LICENSE'];
+        $developer = $_ENV['TBAI_GIPUZKOA_APP_DEVELOPER_NIF'];
+        $appName = $_ENV['TBAI_GIPUZKOA_APP_NAME'];
+        $appVersion =  $_ENV['TBAI_GIPUZKOA_APP_VERSION'];
+        return new Vendor($license, $developer, $appName, $appVersion);
+    }
+
     public function createArabaTicketBai(): TicketBai
     {
         $nif = $_ENV['TBAI_ARABA_ISSUER_NIF'];
