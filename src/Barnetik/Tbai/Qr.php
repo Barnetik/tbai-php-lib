@@ -8,22 +8,24 @@ use PBurggraf\CRC\CRC8\CRC8;
 class Qr
 {
     private TicketBai $ticketBai;
+    private bool $dev;
 
-    public function __construct(TicketBai $ticketBai)
+    public function __construct(TicketBai $ticketBai, bool $dev = false)
     {
         $this->ticketBai = $ticketBai;
+        $this->dev = $dev;
     }
 
     public function ticketbaiIdentifier(): string
     {
         $code = sprintf(
-            'TBAI-%s-%s-%s',
+            'TBAI-%s-%s-%s-',
             $this->ticketBai->issuerVatId(),
             $this->ticketBai->expeditionDate()->short(),
             $this->ticketBai->shortSignatureValue()
         );
 
-        return $code . '-' . $this->crc8($code);
+        return $code . $this->crc8($code);
         ;
     }
 
@@ -60,6 +62,10 @@ class Qr
 
     private function arabaUrl(): string
     {
+        if ($this->dev) {
+            return 'https://pruebas-ticketbai.araba.eus/tbai/qrtbai/';
+        }
+
         return 'https://ticketbai.araba.eus/tbai/qrtbai/';
     }
 
@@ -70,6 +76,10 @@ class Qr
 
     private function gipuzkoaUrl(): string
     {
+        if ($this->dev) {
+            return 'https://tbai.prep.gipuzkoa.eus/qr/';
+        }
+
         return 'https://tbai.egoitza.gipuzkoa.eus/qr/';
     }
 
