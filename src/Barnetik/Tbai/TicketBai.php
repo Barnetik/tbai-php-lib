@@ -205,7 +205,7 @@ class TicketBai implements Stringable, TbaiXml, JsonSerializable
         $territory = $jsonData['territory'];
         $subject = Subject::createFromJson($jsonData['subject']);
         $invoice = Invoice::createFromJson($jsonData['invoice']);
-        $fingerprint = Fingerprint::createFromJson($vendor, $jsonData['fingerprint']);
+        $fingerprint = Fingerprint::createFromJson($vendor, $jsonData['fingerprint'] ?? []);
         $ticketBai = new TicketBai($subject, $invoice, $fingerprint, $territory);
         return $ticketBai;
     }
