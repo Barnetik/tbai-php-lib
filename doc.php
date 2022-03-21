@@ -1,7 +1,7 @@
 <?php
 
 include('./vendor/autoload.php');
-use Barnetik\Tbai\TicketBai;
+use Barnetik\Tbai\SubmitInvoiceFile;
 
 echo json_encode([
     'swagger' => '2.0',
@@ -56,7 +56,7 @@ echo json_encode([
         ]
     ],
     'definitions' => [
-        'Invoice' => TicketBai::docJson()
+        'Invoice' => SubmitInvoiceFile::docJson()
     ],
 
 ]);

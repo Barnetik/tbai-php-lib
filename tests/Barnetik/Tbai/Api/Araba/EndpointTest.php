@@ -4,13 +4,13 @@ namespace Test\Barnetik\Tbai\Api\Araba;
 
 use Barnetik\Tbai\Api\AbstractTerritory;
 use Barnetik\Tbai\Api\Araba\Endpoint;
-use Barnetik\Tbai\TicketBai;
+use Barnetik\Tbai\SubmitInvoiceFile;
 use PHPUnit\Framework\TestCase;
 use Test\Barnetik\Tbai\Mother\TicketBaiMother;
 
 class EndpointTest extends TestCase
 {
-    const DEFAULT_TERRITORY = TicketBai::TERRITORY_ARABA;
+    const DEFAULT_TERRITORY = SubmitInvoiceFile::TERRITORY_ARABA;
     private TicketBaiMother $ticketBaiMother;
 
     protected function setUp(): void
@@ -27,7 +27,7 @@ class EndpointTest extends TestCase
         $appName = $_ENV['TBAI_ARABA_APP_NAME'];
         $appVersion =  $_ENV['TBAI_ARABA_APP_VERSION'];
 
-        $ticketbai = $this->ticketBaiMother->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
+        $ticketbai = $this->ticketBaiMother->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, SubmitInvoiceFile::TERRITORY_ARABA);
         $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';

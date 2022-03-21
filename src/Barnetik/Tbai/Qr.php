@@ -7,10 +7,10 @@ use PBurggraf\CRC\CRC8\CRC8;
 
 class Qr
 {
-    private TicketBai $ticketBai;
+    private SubmitInvoiceFile $ticketBai;
     private bool $dev;
 
-    public function __construct(TicketBai $ticketBai, bool $dev = false)
+    public function __construct(SubmitInvoiceFile $ticketBai, bool $dev = false)
     {
         $this->ticketBai = $ticketBai;
         $this->dev = $dev;
@@ -49,11 +49,11 @@ class Qr
     private function territoryUrl(): string
     {
         switch ($this->ticketBai->territory()) {
-            case TicketBai::TERRITORY_ARABA:
+            case SubmitInvoiceFile::TERRITORY_ARABA:
                 return $this->arabaUrl();
-            case TicketBai::TERRITORY_BIZKAIA:
+            case SubmitInvoiceFile::TERRITORY_BIZKAIA:
                 return $this->bizkaiaUrl();
-            case TicketBai::TERRITORY_GIPUZKOA:
+            case SubmitInvoiceFile::TERRITORY_GIPUZKOA:
                 return $this->gipuzkoaUrl();
             default:
                 throw new Exception('Wrong territory');

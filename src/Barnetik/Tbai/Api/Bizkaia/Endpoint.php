@@ -4,7 +4,7 @@ namespace Barnetik\Tbai\Api\Bizkaia;
 
 use Barnetik\Tbai\Api\ApiRequestInterface;
 use Barnetik\Tbai\Api\AbstractTerritory;
-use Barnetik\Tbai\TicketBai;
+use Barnetik\Tbai\SubmitInvoiceFile;
 
 class Endpoint extends AbstractTerritory
 {
@@ -24,12 +24,12 @@ class Endpoint extends AbstractTerritory
         ];
     }
 
-    public function createSubmitInvoiceRequest(TicketBai $ticketBai): ApiRequestInterface
+    public function createSubmitInvoiceRequest(SubmitInvoiceFile $ticketBai): ApiRequestInterface
     {
         return new SubmitInvoiceRequest($ticketBai, $this->getSubmitEndpoint());
     }
 
-    public function submitInvoice(TicketBai $ticketbai, string $pfxFilePath, string $password): Response
+    public function submitInvoice(SubmitInvoiceFile $ticketbai, string $pfxFilePath, string $password): Response
     {
         $curl = curl_init();
         $submitInvoiceRequest = $this->createSubmitInvoiceRequest($ticketbai);

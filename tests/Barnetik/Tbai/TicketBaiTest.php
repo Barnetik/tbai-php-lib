@@ -6,7 +6,7 @@ use Barnetik\Tbai\Api\Araba\Endpoint as ArabaEndpoint;
 use Barnetik\Tbai\Api\Bizkaia\Endpoint as BizkaiaEndpoint;
 use Barnetik\Tbai\Api\Gipuzkoa\Endpoint as GipuzkoaEndpoint;
 use Barnetik\Tbai\Qr;
-use Barnetik\Tbai\TicketBai;
+use Barnetik\Tbai\SubmitInvoiceFile;
 use DOMDocument;
 use Exception;
 use lyquidity\xmldsig\XAdES;
@@ -26,8 +26,8 @@ class TicketBaiTest extends TestCase
     {
         $json = file_get_contents(__DIR__ . '/__files/tbai-sample.json');
         $this->assertEquals(
-            TicketBai::class,
-            get_class(TicketBai::createFromJson($this->ticketBaiMother->createArabaVendor(), json_decode($json, true)))
+            SubmitInvoiceFile::class,
+            get_class(SubmitInvoiceFile::createFromJson($this->ticketBaiMother->createArabaVendor(), json_decode($json, true)))
         );
     }
 
@@ -129,7 +129,7 @@ class TicketBaiTest extends TestCase
         }
     }
 
-    private function getTicketBai(): TicketBai
+    private function getTicketBai(): SubmitInvoiceFile
     {
         $nif = $_ENV['TBAI_ARABA_ISSUER_NIF'];
         $issuer = $_ENV['TBAI_ARABA_ISSUER_NAME'];
@@ -138,6 +138,6 @@ class TicketBaiTest extends TestCase
         $appName = $_ENV['TBAI_ARABA_APP_NAME'];
         $appVersion =  $_ENV['TBAI_ARABA_APP_VERSION'];
 
-        return $this->ticketBaiMother->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
+        return $this->ticketBaiMother->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, SubmitInvoiceFile::TERRITORY_ARABA);
     }
 }

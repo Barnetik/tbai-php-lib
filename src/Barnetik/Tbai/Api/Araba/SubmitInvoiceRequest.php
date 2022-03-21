@@ -2,16 +2,16 @@
 
 namespace Barnetik\Tbai\Api\Araba;
 
-use Barnetik\Tbai\TicketBai;
+use Barnetik\Tbai\SubmitInvoiceFile;
 use Barnetik\Tbai\Api\ApiRequestInterface;
 
 class SubmitInvoiceRequest implements ApiRequestInterface
 {
     const URL = '/facturas';
     protected string $endpoint;
-    protected TicketBai $ticketbai;
+    protected SubmitInvoiceFile $ticketbai;
 
-    public function __construct(TicketBai $ticketbai, string $endpoint)
+    public function __construct(SubmitInvoiceFile $ticketbai, string $endpoint)
     {
         $this->endpoint = $endpoint;
         $this->ticketbai = $ticketbai;

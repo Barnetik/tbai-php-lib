@@ -4,14 +4,14 @@ namespace Test\Barnetik\Tbai\Api\Bizkaia;
 
 use Barnetik\Tbai\Api;
 use Barnetik\Tbai\Api\Bizkaia\Endpoint;
-use Barnetik\Tbai\TicketBai;
+use Barnetik\Tbai\SubmitInvoiceFile;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use Test\Barnetik\Tbai\Mother\TicketBaiMother;
 
 class EndpointTest extends TestCase
 {
-    const DEFAULT_TERRITORY = TicketBai::TERRITORY_GIPUZKOA;
+    const DEFAULT_TERRITORY = SubmitInvoiceFile::TERRITORY_GIPUZKOA;
     private TicketBaiMother $ticketBaiMother;
 
     protected function setUp(): void
@@ -27,7 +27,7 @@ class EndpointTest extends TestCase
         $developer = $_ENV['TBAI_BIZKAIA_APP_DEVELOPER_NIF'];
         $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
         $appVersion =  $_ENV['TBAI_BIZKAIA_APP_VERSION'];
-        $ticketbai = $this->ticketBaiMother->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_BIZKAIA);
+        $ticketbai = $this->ticketBaiMother->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, SubmitInvoiceFile::TERRITORY_BIZKAIA);
 
         $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
         rename($signedFilename, $signedFilename . '.xml');
@@ -53,7 +53,7 @@ class EndpointTest extends TestCase
         $developer = $_ENV['TBAI_BIZKAIA_APP_DEVELOPER_NIF'];
         $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
         $appVersion =  $_ENV['TBAI_BIZKAIA_APP_VERSION'];
-        $ticketbai = $this->ticketBaiMother->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_BIZKAIA);
+        $ticketbai = $this->ticketBaiMother->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, SubmitInvoiceFile::TERRITORY_BIZKAIA);
 
         $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
         rename($signedFilename, $signedFilename . '.xml');
@@ -63,7 +63,7 @@ class EndpointTest extends TestCase
 
         $ticketbai->sign($certFile, $certPassword, $signedFilename);
 
-        $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
+        $endpoint = new Api(SubmitInvoiceFile::TERRITORY_BIZKAIA, true, true);
 
         $response = $endpoint->submitInvoice($ticketbai, $certFile, $certPassword);
 

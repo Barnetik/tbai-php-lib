@@ -5,7 +5,7 @@ use Barnetik\Tbai\Api;
 use Barnetik\Tbai\Api\Araba\Endpoint as ArabaEndpoint;
 use Barnetik\Tbai\Api\Bizkaia\Endpoint as BizkaiaEndpoint;
 use Barnetik\Tbai\Api\Gipuzkoa\Endpoint as GipuzkoaEndpoint;
-use Barnetik\Tbai\TicketBai;
+use Barnetik\Tbai\SubmitInvoiceFile;
 use PHPUnit\Framework\TestCase;
 use Test\Barnetik\Tbai\Mother\TicketBaiMother;
 
@@ -27,15 +27,15 @@ class ApiTest extends TestCase
         $appName = $_ENV['TBAI_ARABA_APP_NAME'];
         $appVersion =  $_ENV['TBAI_ARABA_APP_VERSION'];
 
-        $ticketbai = $this->ticketBaiMother->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
+        $ticketbai = $this->ticketBaiMother->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, SubmitInvoiceFile::TERRITORY_ARABA);
         $api = Api::createForTicketBai($ticketbai);
         $this->assertEquals(ArabaEndpoint::class, get_class($api->endpoint()));
 
-        $ticketbai = $this->ticketBaiMother->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_BIZKAIA);
+        $ticketbai = $this->ticketBaiMother->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, SubmitInvoiceFile::TERRITORY_BIZKAIA);
         $api = Api::createForTicketBai($ticketbai);
         $this->assertEquals(BizkaiaEndpoint::class, get_class($api->endpoint()));
 
-        $ticketbai = $this->ticketBaiMother->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_GIPUZKOA);
+        $ticketbai = $this->ticketBaiMother->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, SubmitInvoiceFile::TERRITORY_GIPUZKOA);
         $api = Api::createForTicketBai($ticketbai);
         $this->assertEquals(GipuzkoaEndpoint::class, get_class($api->endpoint()));
     }

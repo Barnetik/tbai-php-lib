@@ -133,10 +133,10 @@ class Subject implements TbaiXml
                     'enum' => self::validIssuedByValues(),
                     'default' => 'N',
                     'description' => '
-Hirugarren batek edo hartzaileak egindako faktura - Factura emitida por tecero o por destinatario
- * N: Ez. Faktura egileak berak egin du - No. Factura emitida por el propio emisor
- * T: Faktura hirugarren batek egin du - Factura emitida por un tercero
- * D: Faktura eragiketaren hartzaileak egin du - Factura emitida por el destinatario de la operación
+Hirugarren batek edo hartzaileak egindako faktura - Factura emitida por tercera entidad o por entidad destinataria
+ * N: Ez. Faktura egileak berak egin du - No. Factura emitida por la propia entidad emisora
+ * T: Faktura hirugarren batek egin du - Factura emitida por tercera entidad
+ * D: Faktura eragiketaren hartzaileak egin du - Factura emitida por la entidad destinataria de la operación
                     ',
                 ],
             ],
