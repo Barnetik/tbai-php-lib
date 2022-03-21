@@ -1,6 +1,8 @@
 <?php
 namespace Test\Barnetik\Tbai\Mother;
 
+use Barnetik\Tbai\CancelInvoice\Header as CancelInvoiceHeader;
+use Barnetik\Tbai\CancelInvoice\InvoiceId;
 use Barnetik\Tbai\Fingerprint;
 use Barnetik\Tbai\Invoice\Data\Detail;
 use Barnetik\Tbai\Fingerprint\Vendor;
@@ -17,11 +19,12 @@ use Barnetik\Tbai\ValueObject\Time;
 use Barnetik\Tbai\ValueObject\VatId;
 use Barnetik\Tbai\Subject\Issuer;
 use Barnetik\Tbai\Subject\Recipient;
-use Barnetik\Tbai\SubmitInvoiceFile;
+use Barnetik\Tbai\TicketBai;
+use Barnetik\Tbai\TicketBaiCancel;
 
 class TicketBaiMother
 {
-    public function createTicketBai(string $nif, string $issuer, string $license, string $developer, string $appName, string $appVersion, string $territory): SubmitInvoiceFile
+    public function createTicketBai(string $nif, string $issuer, string $license, string $developer, string $appName, string $appVersion, string $territory): TicketBai
     {
         $subject = $this->getSubject($nif, $issuer);
         $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
@@ -42,12 +45,22 @@ class TicketBaiMother
         $breakdown->addNationalSubjectNotExemptBreakdownItem($notExemptBreakdown);
 
         $invoice = new Invoice($header, $data, $breakdown);
-        return new SubmitInvoiceFile(
+        return new TicketBai(
             $subject,
             $invoice,
             $fingerprint,
             $territory
         );
+    }
+
+    public function createTicketBaiCancel(string $nif, string $issuerName, string $license, string $developer, string $appName, string $appVersion, string $territory): TicketBaiCancel
+    {
+        $issuer = new Issuer(new VatId($nif), $issuerName);
+        $header = CancelInvoiceHeader::create((string)time(), new Date(date('d-m-Y')), 'TESTSERIE');
+        $invoiceId = new InvoiceId($issuer, $header);
+        $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
+
+        return new TicketBaiCancel($invoiceId, $fingerprint, $territory);
     }
 
     public function createArabaVendor(): Vendor
@@ -77,7 +90,7 @@ class TicketBaiMother
         return new Vendor($license, $developer, $appName, $appVersion);
     }
 
-    public function createArabaTicketBai(): SubmitInvoiceFile
+    public function createArabaTicketBai(): TicketBai
     {
         $nif = $_ENV['TBAI_ARABA_ISSUER_NIF'];
         $issuer = $_ENV['TBAI_ARABA_ISSUER_NAME'];
@@ -86,11 +99,11 @@ class TicketBaiMother
         $appName = $_ENV['TBAI_ARABA_APP_NAME'];
         $appVersion =  $_ENV['TBAI_ARABA_APP_VERSION'];
 
-        return $this->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, SubmitInvoiceFile::TERRITORY_ARABA);
+        return $this->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
     }
 
 
-    public function createBizkaiaTicketBai(): SubmitInvoiceFile
+    public function createBizkaiaTicketBai(): TicketBai
     {
         $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF'];
         $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME'];
@@ -99,11 +112,11 @@ class TicketBaiMother
         $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
         $appVersion =  $_ENV['TBAI_BIZKAIA_APP_VERSION'];
 
-        return $this->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, SubmitInvoiceFile::TERRITORY_BIZKAIA);
+        return $this->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_BIZKAIA);
     }
 
 
-    public function createGipuzkoaTicketBai(): SubmitInvoiceFile
+    public function createGipuzkoaTicketBai(): TicketBai
     {
         $nif = $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'];
         $issuer = $_ENV['TBAI_GIPUZKOA_ISSUER_NAME'];
@@ -112,7 +125,7 @@ class TicketBaiMother
         $appName = $_ENV['TBAI_GIPUZKOA_APP_NAME'];
         $appVersion =  $_ENV['TBAI_GIPUZKOA_APP_VERSION'];
 
-        return $this->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, SubmitInvoiceFile::TERRITORY_GIPUZKOA);
+        return $this->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_GIPUZKOA);
     }
 
     private function getSubject(string $nif, string $name): Subject

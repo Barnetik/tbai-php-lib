@@ -22,7 +22,7 @@ use Barnetik\Tbai\Xades\Bizkaia as XadesBizkaia;
 use Barnetik\Tbai\Xades\Gipuzkoa as XadesGipuzkoa;
 use Barnetik\Tbai\Exception\InvalidTerritoryException;
 
-class SubmitInvoiceFile implements Stringable, TbaiXml, JsonSerializable
+class TicketBai implements Stringable, TbaiXml, JsonSerializable
 {
     const TERRITORY_ARABA = '01';
     const TERRITORY_BIZKAIA = '02';
@@ -206,7 +206,7 @@ class SubmitInvoiceFile implements Stringable, TbaiXml, JsonSerializable
         $subject = Subject::createFromJson($jsonData['subject']);
         $invoice = Invoice::createFromJson($jsonData['invoice']);
         $fingerprint = Fingerprint::createFromJson($vendor, $jsonData['fingerprint'] ?? []);
-        $ticketBai = new SubmitInvoiceFile($subject, $invoice, $fingerprint, $territory);
+        $ticketBai = new TicketBai($subject, $invoice, $fingerprint, $territory);
         return $ticketBai;
     }
 

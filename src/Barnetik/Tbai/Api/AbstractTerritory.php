@@ -3,7 +3,7 @@
 namespace Barnetik\Tbai\Api;
 
 use Barnetik\Tbai\Api\ApiRequestInterface;
-use Barnetik\Tbai\SubmitInvoiceFile;
+use Barnetik\Tbai\TicketBai;
 use Exception;
 
 abstract class AbstractTerritory implements EndpointInterface
@@ -36,10 +36,10 @@ abstract class AbstractTerritory implements EndpointInterface
     }
 
     abstract public function headers(ApiRequestInterface $apiRequest, string $dataFile): array;
-    abstract public function createSubmitInvoiceRequest(SubmitInvoiceFile $ticketBai): ApiRequestInterface;
+    abstract public function createSubmitInvoiceRequest(TicketBai $ticketBai): ApiRequestInterface;
     abstract protected function response(string $status, array $headers, string $content): Response;
 
-    public function submitInvoice(SubmitInvoiceFile $ticketbai, string $pfxFilePath, string $password): Response
+    public function submitInvoice(TicketBai $ticketbai, string $pfxFilePath, string $password): Response
     {
         $curl = curl_init();
         $submitInvoiceRequest = $this->createSubmitInvoiceRequest($ticketbai);

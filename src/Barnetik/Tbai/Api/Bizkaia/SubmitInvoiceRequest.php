@@ -3,7 +3,7 @@
 namespace Barnetik\Tbai\Api\Bizkaia;
 
 use Barnetik\Tbai\Api\ApiRequestInterface;
-use Barnetik\Tbai\SubmitInvoiceFile;
+use Barnetik\Tbai\TicketBai;
 use DOMDocument;
 use DOMElement;
 use DOMNode;
@@ -12,12 +12,12 @@ class SubmitInvoiceRequest implements ApiRequestInterface
 {
     const URL = '/N3B4000M/aurkezpena';
     private string $endpoint;
-    private SubmitInvoiceFile $ticketbai;
+    private TicketBai $ticketbai;
 
     const MODEL = '240';
     private DOMDocument $document;
 
-    public function __construct(SubmitInvoiceFile $ticketbai, string $endpoint)
+    public function __construct(TicketBai $ticketbai, string $endpoint)
     {
         $this->endpoint = $endpoint;
         $this->ticketbai = $ticketbai;

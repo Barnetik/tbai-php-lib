@@ -19,13 +19,13 @@ class Api
     public function __construct(string $territory, bool $dev = false, bool $debug = false)
     {
         switch ($territory) {
-            case SubmitInvoiceFile::TERRITORY_ARABA:
+            case TicketBai::TERRITORY_ARABA:
                 $this->endpoint = new ArabaEndpoint($dev, $debug);
                 break;
-            case SubmitInvoiceFile::TERRITORY_BIZKAIA:
+            case TicketBai::TERRITORY_BIZKAIA:
                 $this->endpoint = new BizkaiaEndpoint($dev, $debug);
                 break;
-            case SubmitInvoiceFile::TERRITORY_GIPUZKOA:
+            case TicketBai::TERRITORY_GIPUZKOA:
                 $this->endpoint = new GipuzkoaEndpoint($dev, $debug);
                 break;
             default:
@@ -33,12 +33,12 @@ class Api
         }
     }
 
-    public static function createForTicketBai(SubmitInvoiceFile $ticketbai, bool $dev = false, bool $debug = false): self
+    public static function createForTicketBai(TicketBai $ticketbai, bool $dev = false, bool $debug = false): self
     {
         return new Api($ticketbai->territory(), $dev, $debug);
     }
 
-    public function submitInvoice(SubmitInvoiceFile $ticketbai, string $pfxFilePath, string $password): Response
+    public function submitInvoice(TicketBai $ticketbai, string $pfxFilePath, string $password): Response
     {
         if (!$ticketbai->isSigned()) {
             throw new UnsignedException();

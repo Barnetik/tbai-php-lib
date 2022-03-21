@@ -2,16 +2,16 @@
 
 namespace Barnetik\Tbai\Api\Gipuzkoa;
 
-use Barnetik\Tbai\SubmitInvoiceFile;
+use Barnetik\Tbai\TicketBai;
 use Barnetik\Tbai\Api\ApiRequestInterface;
 
 class SubmitInvoiceRequest implements ApiRequestInterface
 {
     const URL = '/sarrerak/alta';
     protected string $endpoint;
-    protected SubmitInvoiceFile $ticketbai;
+    protected TicketBai $ticketbai;
 
-    public function __construct(SubmitInvoiceFile $ticketbai, string $endpoint)
+    public function __construct(TicketBai $ticketbai, string $endpoint)
     {
         $this->endpoint = $endpoint;
         $this->ticketbai = $ticketbai;
