@@ -56,4 +56,43 @@ class EndpointTest extends TestCase
 
         $this->assertTrue($response->isDelivered());
     }
+
+    public function test_TicketBai_is_canceled(): void
+    {
+        $certFile = $_ENV['TBAI_ARABA_P12_PATH'];
+        $certPassword = $_ENV['TBAI_ARABA_PRIVATE_KEY'];
+
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        rename($signedFilename, $signedFilename . '.xml');
+        $signedFilename = $signedFilename . '.xml';
+
+        $ticketbai = $this->ticketBaiMother->createArabaTicketBai();
+        $ticketbai->sign($certFile, $certPassword, $signedFilename);
+        $endpoint = new Endpoint(true, true);
+        $response = $endpoint->submitInvoice($ticketbai, $certFile, $certPassword);
+
+        $ticketbaiCancel = $this->ticketBaiMother->createTicketBaiCancelForInvoice($ticketbai);
+        $signedFilename = $signedFilename . '-cancel.xml';
+        $ticketbaiCancel->sign($certFile, $certPassword, $signedFilename);
+        $response = $endpoint->cancelInvoice($ticketbaiCancel, $certFile, $certPassword);
+
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
+        var_dump($responseFile);
+        file_put_contents($responseFile, $response->content());
+
+        if (!$response->isCorrect()) {
+            echo "\n";
+            echo "IFZ: " . $_ENV['TBAI_ARABA_ISSUER_NIF'] . "\n";
+            echo "Data: " . date('Y-m-d H:i:s') . "\n";
+            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
+            echo "Bidalitako fitxategia: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
+            echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
+            echo "Jasotako errore printzipala: " . $response->mainErrorMessage() . "\n";
+            echo "Erantzuna: " . basename($responseFile) . "\n";
+        }
+
+        $this->assertTrue($response->isDelivered());
+    }
+
+
 }

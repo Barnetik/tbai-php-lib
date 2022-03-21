@@ -59,20 +59,14 @@ class EndpointTest extends TestCase
 
     public function test_TicketBai_is_canceled(): void
     {
-        $nif = $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'];
-        $issuer = $_ENV['TBAI_GIPUZKOA_ISSUER_NAME'];
-        $license = $_ENV['TBAI_GIPUZKOA_APP_LICENSE'];
-        $developer = $_ENV['TBAI_GIPUZKOA_APP_DEVELOPER_NIF'];
-        $appName = $_ENV['TBAI_GIPUZKOA_APP_NAME'];
-        $appVersion =  $_ENV['TBAI_GIPUZKOA_APP_VERSION'];
-
-        $ticketbai = $this->ticketBaiMother->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_GIPUZKOA);
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
         $certFile = $_ENV['TBAI_GIPUZKOA_P12_PATH'];
         $certPassword = $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'];
 
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        rename($signedFilename, $signedFilename . '.xml');
+        $signedFilename = $signedFilename . '.xml';
+
+        $ticketbai = $this->ticketBaiMother->createGipuzkoaTicketBai();
         $ticketbai->sign($certFile, $certPassword, $signedFilename);
         $endpoint = new Endpoint(true, true);
         $response = $endpoint->submitInvoice($ticketbai, $certFile, $certPassword);
