@@ -57,4 +57,9 @@ class Fingerprint implements TbaiXml
             'previousInvoice' => $this->previousInvoice ? $this->previousInvoice->toArray() : null,
         ];
     }
+
+    public function vendor(): Vendor
+    {
+        return $this->vendor;
+    }
 }

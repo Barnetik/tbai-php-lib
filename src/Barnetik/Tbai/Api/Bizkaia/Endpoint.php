@@ -5,6 +5,7 @@ namespace Barnetik\Tbai\Api\Bizkaia;
 use Barnetik\Tbai\Api\ApiRequestInterface;
 use Barnetik\Tbai\Api\AbstractTerritory;
 use Barnetik\Tbai\TicketBai;
+use Barnetik\Tbai\TicketBaiCancel;
 
 class Endpoint extends AbstractTerritory
 {
@@ -27,6 +28,11 @@ class Endpoint extends AbstractTerritory
     public function createSubmitInvoiceRequest(TicketBai $ticketBai): ApiRequestInterface
     {
         return new SubmitInvoiceRequest($ticketBai, $this->getSubmitEndpoint());
+    }
+
+    public function createCancelInvoiceRequest(TicketBaiCancel $ticketBaiCancel): ApiRequestInterface
+    {
+        return new CancelInvoiceRequest($ticketBaiCancel, $this->getSubmitEndpoint());
     }
 
     public function submitInvoice(TicketBai $ticketbai, string $pfxFilePath, string $password): Response

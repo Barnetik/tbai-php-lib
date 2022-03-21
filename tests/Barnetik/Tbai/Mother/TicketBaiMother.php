@@ -63,6 +63,13 @@ class TicketBaiMother
         return new TicketBaiCancel($invoiceId, $fingerprint, $territory);
     }
 
+    public function createTicketBaiCancelForInvoice(TicketBai $ticketbai): TicketBaiCancel
+    {
+        $header = CancelInvoiceHeader::create($ticketbai->invoiceNumber(), $ticketbai->expeditionDate(), $ticketbai->series());
+        $invoiceId = new InvoiceId($ticketbai->issuer(), $header);
+        return new TicketBaiCancel($invoiceId, $ticketbai->fingerprint(), $ticketbai->territory());
+    }
+
     public function createArabaVendor(): Vendor
     {
         $license = $_ENV['TBAI_ARABA_APP_LICENSE'];

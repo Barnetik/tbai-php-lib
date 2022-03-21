@@ -21,6 +21,7 @@ use lyquidity\xmldsig\CertificateResourceInfo;
 use Barnetik\Tbai\Xades\Bizkaia as XadesBizkaia;
 use Barnetik\Tbai\Xades\Gipuzkoa as XadesGipuzkoa;
 use Barnetik\Tbai\Exception\InvalidTerritoryException;
+use Barnetik\Tbai\Subject\Issuer;
 
 class TicketBai implements Stringable, TbaiXml, JsonSerializable
 {
@@ -69,6 +70,11 @@ class TicketBai implements Stringable, TbaiXml, JsonSerializable
         return $this->subject->issuerName();
     }
 
+    public function issuer(): Issuer
+    {
+        return $this->subject->issuer();
+    }
+
     public function expeditionDate(): Date
     {
         return $this->invoice->expeditionDate();
@@ -92,6 +98,11 @@ class TicketBai implements Stringable, TbaiXml, JsonSerializable
     public function territory(): string
     {
         return $this->territory;
+    }
+
+    public function fingerprint(): Fingerprint
+    {
+        return $this->fingerprint;
     }
 
     public function dom(): DomDocument

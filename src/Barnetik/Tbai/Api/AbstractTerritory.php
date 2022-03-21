@@ -4,6 +4,7 @@ namespace Barnetik\Tbai\Api;
 
 use Barnetik\Tbai\Api\ApiRequestInterface;
 use Barnetik\Tbai\TicketBai;
+use Barnetik\Tbai\TicketBaiCancel;
 use Exception;
 
 abstract class AbstractTerritory implements EndpointInterface
@@ -37,12 +38,25 @@ abstract class AbstractTerritory implements EndpointInterface
 
     abstract public function headers(ApiRequestInterface $apiRequest, string $dataFile): array;
     abstract public function createSubmitInvoiceRequest(TicketBai $ticketBai): ApiRequestInterface;
+    abstract public function createCancelInvoiceRequest(TicketBaiCancel $ticketBaiCancel): ApiRequestInterface;
     abstract protected function response(string $status, array $headers, string $content): Response;
 
     public function submitInvoice(TicketBai $ticketbai, string $pfxFilePath, string $password): Response
     {
         $curl = curl_init();
         $submitInvoiceRequest = $this->createSubmitInvoiceRequest($ticketbai);
+        curl_setopt_array($curl, $this->getOptArray($submitInvoiceRequest, $pfxFilePath, $password));
+
+        $response = curl_exec($curl);
+        list($status, $headers, $content) = $this->parseCurlResponse($response);
+        curl_close($curl);
+        return $this->response($status, $headers, $content);
+    }
+
+    public function cancelInvoice(TicketBaiCancel $ticketbaiCancel, string $pfxFilePath, string $password): Response
+    {
+        $curl = curl_init();
+        $submitInvoiceRequest = $this->createCancelInvoiceRequest($ticketbaiCancel);
         curl_setopt_array($curl, $this->getOptArray($submitInvoiceRequest, $pfxFilePath, $password));
 
         $response = curl_exec($curl);
