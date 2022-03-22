@@ -35,7 +35,7 @@ class TicketBaiCancelTest extends TestCase
     public function test_TicketBaiCancel_data_can_be_serialized(): void
     {
         $ticketbai = $this->getTicketBaiCancel();
-        echo json_encode($ticketbai->toArray());
+        // echo json_encode($ticketbai->toArray());
         $this->assertIsString(json_encode($ticketbai->toArray()));
     }
 

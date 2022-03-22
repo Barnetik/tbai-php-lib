@@ -77,7 +77,6 @@ class EndpointTest extends TestCase
         $response = $endpoint->cancelInvoice($ticketbaiCancel, $certFile, $certPassword);
 
         $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
-        var_dump($responseFile);
         file_put_contents($responseFile, $response->content());
 
         if (!$response->isCorrect()) {
