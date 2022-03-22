@@ -3,6 +3,12 @@
 namespace Barnetik\Tbai\Invoice;
 
 use Barnetik\Tbai\Interfaces\TbaiXml;
+use Barnetik\Tbai\Invoice\Breakdown\ForeignDeliveryNotSubjectBreakdownItem;
+use Barnetik\Tbai\Invoice\Breakdown\ForeignDeliverySubjectExemptBreakdownItem;
+use Barnetik\Tbai\Invoice\Breakdown\ForeignDeliverySubjectNotExemptBreakdownItem;
+use Barnetik\Tbai\Invoice\Breakdown\ForeignServiceNotSubjectBreakdownItem;
+use Barnetik\Tbai\Invoice\Breakdown\ForeignServiceSubjectExemptBreakdownItem;
+use Barnetik\Tbai\Invoice\Breakdown\ForeignServiceSubjectNotExemptBreakdownItem;
 use Barnetik\Tbai\Invoice\Breakdown\NationalNotSubjectBreakdownItem;
 use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectExemptBreakdownItem;
 use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectNotExemptBreakdownItem;
@@ -15,6 +21,14 @@ class Breakdown implements TbaiXml
     private array $nationalNotSubjectBreakdownItems = [];
     private array $nationalSubjectExemptBreakdownItems = [];
     private array $nationalSubjectNotExemptBreakdownItems = [];
+
+    private array $foreignServiceNotSubjectBreakdownItems = [];
+    private array $foreignServiceSubjectExemptBreakdownItems = [];
+    private array $foreignServiceSubjectNotExemptBreakdownItems = [];
+
+    private array $foreignDeliveryNotSubjectBreakdownItems = [];
+    private array $foreignDeliverySubjectExemptBreakdownItems = [];
+    private array $foreignDeliverySubjectNotExemptBreakdownItems = [];
 
     public function addNationalNotSubjectBreakdownItem(NationalNotSubjectBreakdownItem $notSubjectBreakdowItem): self
     {
@@ -46,6 +60,66 @@ class Breakdown implements TbaiXml
         throw new OutOfBoundsException('Too many subject and not exempt breakdown items');
     }
 
+    public function addForeignServiceNotSubjectBreakdownItem(ForeignServiceNotSubjectBreakdownItem $notSubjectBreakdowItem): self
+    {
+        if (sizeof($this->foreignServiceNotSubjectBreakdownItems) < 2) {
+            $this->foreignServiceNotSubjectBreakdownItems[] = $notSubjectBreakdowItem;
+            return $this;
+        }
+
+        throw new OutOfBoundsException('Too many not subject breakdown items');
+    }
+
+    public function addForeignServiceSubjectExemptBreakdownItem(ForeignServiceSubjectExemptBreakdownItem $subjectExemptBreakdowItem): self
+    {
+        if (sizeof($this->foreignServiceSubjectExemptBreakdownItems) < 7) {
+            $this->foreignServiceSubjectExemptBreakdownItems[] = $subjectExemptBreakdowItem;
+            return $this;
+        }
+
+        throw new OutOfBoundsException('Too many subject and exempt breakdown items');
+    }
+
+    public function addForeignServiceSubjectNotExemptBreakdownItem(ForeignServiceSubjectNotExemptBreakdownItem $subjectNotExemptBreakdowItem): self
+    {
+        if (sizeof($this->foreignServiceSubjectNotExemptBreakdownItems) < 2) {
+            $this->foreignServiceSubjectNotExemptBreakdownItems[] = $subjectNotExemptBreakdowItem;
+            return $this;
+        }
+
+        throw new OutOfBoundsException('Too many subject and not exempt breakdown items');
+    }
+
+    public function addForeignDeliveryNotSubjectBreakdownItem(ForeignDeliveryNotSubjectBreakdownItem $notSubjectBreakdowItem): self
+    {
+        if (sizeof($this->foreignDeliveryNotSubjectBreakdownItems) < 2) {
+            $this->foreignDeliveryNotSubjectBreakdownItems[] = $notSubjectBreakdowItem;
+            return $this;
+        }
+
+        throw new OutOfBoundsException('Too many not subject breakdown items');
+    }
+
+    public function addForeignDeliverySubjectExemptBreakdownItem(ForeignDeliverySubjectExemptBreakdownItem $subjectExemptBreakdowItem): self
+    {
+        if (sizeof($this->foreignDeliverySubjectExemptBreakdownItems) < 7) {
+            $this->foreignDeliverySubjectExemptBreakdownItems[] = $subjectExemptBreakdowItem;
+            return $this;
+        }
+
+        throw new OutOfBoundsException('Too many subject and exempt breakdown items');
+    }
+
+    public function addForeignDeliverySubjectNotExemptBreakdownItem(ForeignDeliverySubjectNotExemptBreakdownItem $subjectNotExemptBreakdowItem): self
+    {
+        if (sizeof($this->foreignDeliverySubjectNotExemptBreakdownItems) < 2) {
+            $this->foreignDeliverySubjectNotExemptBreakdownItems[] = $subjectNotExemptBreakdowItem;
+            return $this;
+        }
+
+        throw new OutOfBoundsException('Too many subject and not exempt breakdown items');
+    }
+
     public static function createFromJson(array $jsonData): self
     {
         $breakdown = new self();
@@ -67,9 +141,28 @@ class Breakdown implements TbaiXml
         return $breakdown;
     }
 
-    public function xml(DOMDocument $domDocument): DOMNode
+    private function hasNationalBreakdown(): bool
     {
-        $breakdown = $domDocument->createElement('TipoDesglose');
+        return sizeof($this->nationalSubjectExemptBreakdownItems) || sizeof($this->nationalSubjectNotExemptBreakdownItems) || sizeof($this->nationalNotSubjectBreakdownItems);
+    }
+
+    private function hasForeignServiceBreakdown(): bool
+    {
+        return sizeof($this->foreignServiceSubjectExemptBreakdownItems) || sizeof($this->foreignServiceSubjectNotExemptBreakdownItems) || sizeof($this->foreignServiceNotSubjectBreakdownItems);
+    }
+
+    private function hasForeignDeliveryBreakdown(): bool
+    {
+        return sizeof($this->foreignDeliverySubjectExemptBreakdownItems) || sizeof($this->foreignDeliverySubjectNotExemptBreakdownItems) || sizeof($this->foreignDeliveryNotSubjectBreakdownItems);
+    }
+
+    private function hasForeignBreakdown(): bool
+    {
+        return $this->hasForeignServiceBreakdown() || $this->hasForeignDeliveryBreakdown();
+    }
+
+    private function nationalBreakdownXml(DOMDocument $domDocument): DOMNode
+    {
         $invoiceBreakdown = $domDocument->createElement('DesgloseFactura');
 
         if (sizeof($this->nationalSubjectExemptBreakdownItems) || sizeof($this->nationalSubjectNotExemptBreakdownItems)) {
@@ -105,8 +198,106 @@ class Breakdown implements TbaiXml
             $invoiceBreakdown->appendChild($noSubject);
         }
 
+        return $invoiceBreakdown;
+    }
 
-        $breakdown->appendChild($invoiceBreakdown);
+    private function foreignServiceBreakdownXml(DOMDocument $domDocument): DOMNode
+    {
+        $invoiceBreakdown = $domDocument->createElement('PrestacionServicios');
+
+        if (sizeof($this->foreignServiceSubjectExemptBreakdownItems) || sizeof($this->foreignServiceSubjectNotExemptBreakdownItems)) {
+            $subject = $domDocument->createElement('Sujeta');
+
+            if (sizeof($this->foreignServiceSubjectExemptBreakdownItems)) {
+                $exempt = $domDocument->createElement('Exenta');
+                $subject->appendChild($exempt);
+
+                foreach ($this->foreignServiceSubjectExemptBreakdownItems as $foreignServiceSubjectExempt) {
+                    $exempt->appendChild($foreignServiceSubjectExempt->xml($domDocument));
+                }
+            }
+
+            if (sizeof($this->foreignServiceSubjectNotExemptBreakdownItems)) {
+                $notExempt = $domDocument->createElement('NoExenta');
+                $subject->appendChild($notExempt);
+
+                foreach ($this->foreignServiceSubjectNotExemptBreakdownItems as $foreignServiceSubjectNotExempt) {
+                    $notExempt->appendChild($foreignServiceSubjectNotExempt->xml($domDocument));
+                }
+            }
+
+            $invoiceBreakdown->appendChild($subject);
+        }
+
+        if (sizeof($this->foreignServiceNotSubjectBreakdownItems)) {
+            $noSubject = $domDocument->createElement('NoSujeta');
+
+            foreach ($this->foreignServiceNotSubjectBreakdownItems as $foreignServiceNotSubjectItem) {
+                $noSubject->appendChild($foreignServiceNotSubjectItem->xml($domDocument));
+            }
+            $invoiceBreakdown->appendChild($noSubject);
+        }
+
+        return $invoiceBreakdown;
+    }
+
+    private function foreignDeliveryBreakdownXml(DOMDocument $domDocument): DOMNode
+    {
+        $invoiceBreakdown = $domDocument->createElement('Entrega');
+
+        if (sizeof($this->foreignDeliverySubjectExemptBreakdownItems) || sizeof($this->foreignDeliverySubjectNotExemptBreakdownItems)) {
+            $subject = $domDocument->createElement('Sujeta');
+
+            if (sizeof($this->foreignDeliverySubjectExemptBreakdownItems)) {
+                $exempt = $domDocument->createElement('Exenta');
+                $subject->appendChild($exempt);
+
+                foreach ($this->foreignDeliverySubjectExemptBreakdownItems as $foreignDeliverySubjectExempt) {
+                    $exempt->appendChild($foreignDeliverySubjectExempt->xml($domDocument));
+                }
+            }
+
+            if (sizeof($this->foreignDeliverySubjectNotExemptBreakdownItems)) {
+                $notExempt = $domDocument->createElement('NoExenta');
+                $subject->appendChild($notExempt);
+
+                foreach ($this->foreignDeliverySubjectNotExemptBreakdownItems as $foreignDeliverySubjectNotExempt) {
+                    $notExempt->appendChild($foreignDeliverySubjectNotExempt->xml($domDocument));
+                }
+            }
+
+            $invoiceBreakdown->appendChild($subject);
+        }
+
+        if (sizeof($this->foreignDeliveryNotSubjectBreakdownItems)) {
+            $noSubject = $domDocument->createElement('NoSujeta');
+
+            foreach ($this->foreignDeliveryNotSubjectBreakdownItems as $foreignDeliveryNotSubjectItem) {
+                $noSubject->appendChild($foreignDeliveryNotSubjectItem->xml($domDocument));
+            }
+            $invoiceBreakdown->appendChild($noSubject);
+        }
+
+        return $invoiceBreakdown;
+    }
+
+    public function xml(DOMDocument $domDocument): DOMNode
+    {
+        $breakdown = $domDocument->createElement('TipoDesglose');
+
+        if ($this->hasNationalBreakdown()) {
+            $breakdown->appendChild($this->nationalBreakdownXml($domDocument));
+        } else if ($this->hasForeignBreakdown()) {
+            $foreignBreakdown = $domDocument->createElement('DesgloseTipoOperacion');
+            if ($this->hasForeignServiceBreakdown()) {
+                $foreignBreakdown->appendChild($this->foreignServiceBreakdownXml($domDocument));
+            }
+            if ($this->hasForeignDeliveryBreakdown()) {
+                $foreignBreakdown->appendChild($this->foreignDeliveryBreakdownXml($domDocument));
+            }
+            $breakdown->appendChild($foreignBreakdown);
+        }
+
         return $breakdown;
     }
 
@@ -132,6 +323,42 @@ class Breakdown implements TbaiXml
                     'maxItems' => 7,
                     'items' => NationalNotSubjectBreakdownItem::docJson(),
                     'description' => 'Kargapean ez daudenak - No sujetas a carga'
+                ],
+                'foreignServiceSubjectExemptBreakdownItems' => [
+                    'type' => 'array',
+                    'maxItems' => 2,
+                    'items' => ForeignServiceSubjectExemptBreakdownItem::docJson(),
+                    'description' => 'Kargapean eta salbuetsitakoak - Sujetas a carga y exentas'
+                ],
+                'foreignServiceSubjectNotExemptBreakdownItems' => [
+                    'type' => 'array',
+                    'maxItems' => 7,
+                    'items' => ForeignServiceSubjectNotExemptBreakdownItem::docJson(),
+                    'description' => 'Kargapean eta salbuetsi gabe - Sujetas a carga y no exentas'
+                ],
+                'foreignServiceNotSubjectBreakdownItems' => [
+                    'type' => 'array',
+                    'maxItems' => 7,
+                    'items' => ForeignServiceNotSubjectBreakdownItem::docJson(),
+                    'description' => 'Kargapean ez daudenak - No sujetas a carga'
+                ],
+                'foreignDeliverySubjectExemptBreakdownItems' => [
+                    'type' => 'array',
+                    'maxItems' => 2,
+                    'items' => ForeignDeliverySubjectExemptBreakdownItem::docJson(),
+                    'description' => 'Kargapean eta salbuetsitakoak - Sujetas a carga y exentas'
+                ],
+                'foreignDeliverySubjectNotExemptBreakdownItems' => [
+                    'type' => 'array',
+                    'maxItems' => 7,
+                    'items' => ForeignDeliverySubjectNotExemptBreakdownItem::docJson(),
+                    'description' => 'Kargapean eta salbuetsi gabe - Sujetas a carga y no exentas'
+                ],
+                'foreignDeliveryNotSubjectBreakdownItems' => [
+                    'type' => 'array',
+                    'maxItems' => 7,
+                    'items' => ForeignDeliveryNotSubjectBreakdownItem::docJson(),
+                    'description' => 'Kargapean ez daudenak - No sujetas a carga'
                 ]
             ]
 
@@ -150,6 +377,24 @@ class Breakdown implements TbaiXml
             'nationalNotSubjectBreakdownItems' => array_map(function ($nationalNotSubjectBreakdownItem) {
                 return $nationalNotSubjectBreakdownItem->toArray();
             }, $this->nationalNotSubjectBreakdownItems),
+            'foreignDeliverySubjectExemptBreakdownItems' => array_map(function ($foreignDeliverySubjectExemptBreakdownItem) {
+                return $foreignDeliverySubjectExemptBreakdownItem->toArray();
+            }, $this->foreignDeliverySubjectExemptBreakdownItems),
+            'foreignDeliverySubjectNotExemptBreakdownItems' => array_map(function ($foreignDeliverySubjectNotExemptBreakdownItem) {
+                return $foreignDeliverySubjectNotExemptBreakdownItem->toArray();
+            }, $this->foreignDeliverySubjectNotExemptBreakdownItems),
+            'foreignDeliveryNotSubjectBreakdownItems' => array_map(function ($foreignDeliveryNotSubjectBreakdownItem) {
+                return $foreignDeliveryNotSubjectBreakdownItem->toArray();
+            }, $this->foreignDeliveryNotSubjectBreakdownItems),
+            'foreignServiceSubjectExemptBreakdownItems' => array_map(function ($foreignServiceSubjectExemptBreakdownItem) {
+                return $foreignServiceSubjectExemptBreakdownItem->toArray();
+            }, $this->foreignServiceSubjectExemptBreakdownItems),
+            'foreignServiceSubjectNotExemptBreakdownItems' => array_map(function ($foreignServiceSubjectNotExemptBreakdownItem) {
+                return $foreignServiceSubjectNotExemptBreakdownItem->toArray();
+            }, $this->foreignServiceSubjectNotExemptBreakdownItems),
+            'foreignServiceNotSubjectBreakdownItems' => array_map(function ($foreignServiceNotSubjectBreakdownItem) {
+                return $foreignServiceNotSubjectBreakdownItem->toArray();
+            }, $this->foreignServiceNotSubjectBreakdownItems),
         ];
     }
 }

@@ -9,7 +9,7 @@ use Barnetik\Tbai\ValueObject\Date;
 use Barnetik\Tbai\ValueObject\VatId;
 use Barnetik\Tbai\Fingerprint\Vendor;
 
-class TicketBaiCancel extends TicketBaiAbstract
+class TicketBaiCancel extends AbstractTicketBai
 {
     private Header $header; // Same as SubmitInvoice
     private InvoiceId $invoiceId; // Does not exist on SubmitInvoice

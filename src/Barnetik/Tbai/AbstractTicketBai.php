@@ -19,7 +19,7 @@ use Barnetik\Tbai\Xades\Gipuzkoa as XadesGipuzkoa;
 use Barnetik\Tbai\Exception\InvalidTerritoryException;
 use Barnetik\Tbai\Interfaces\TbaiSignable;
 
-abstract class TicketBaiAbstract implements TbaiXml, TbaiSignable, Stringable, JsonSerializable
+abstract class AbstractTicketBai implements TbaiXml, TbaiSignable, Stringable, JsonSerializable
 {
     const TERRITORY_ARABA = '01';
     const TERRITORY_BIZKAIA = '02';

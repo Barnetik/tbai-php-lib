@@ -11,7 +11,7 @@ use Barnetik\Tbai\ValueObject\Amount;
 use Barnetik\Tbai\Exception\InvalidTerritoryException;
 use Barnetik\Tbai\Subject\Issuer;
 
-class TicketBai extends TicketBaiAbstract
+class TicketBai extends AbstractTicketBai
 {
     private Header $header;
     private Subject $subject;

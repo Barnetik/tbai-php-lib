@@ -8,6 +8,7 @@ use Barnetik\Tbai\Invoice\Data\Detail;
 use Barnetik\Tbai\Fingerprint\Vendor;
 use Barnetik\Tbai\Invoice;
 use Barnetik\Tbai\Invoice\Breakdown;
+use Barnetik\Tbai\Invoice\Breakdown\ForeignServiceSubjectNotExemptBreakdownItem;
 use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectNotExemptBreakdownItem;
 use Barnetik\Tbai\Invoice\Breakdown\VatDetail;
 use Barnetik\Tbai\Invoice\Data;
@@ -43,6 +44,9 @@ class TicketBaiMother
         $vatDetail = new VatDetail(new Amount('73.86'), new Amount('21'), new Amount('15.50'));
         $notExemptBreakdown = new NationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1, [$vatDetail]);
         $breakdown->addNationalSubjectNotExemptBreakdownItem($notExemptBreakdown);
+
+        // $foreignServiceSubjectNotExemptBreakdown = new ForeignServiceSubjectNotExemptBreakdownItem(ForeignServiceSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1, [$vatDetail]);
+        // $breakdown->addForeignServiceSubjectNotExemptBreakdownItem($foreignServiceSubjectNotExemptBreakdown);
 
         $invoice = new Invoice($header, $data, $breakdown);
         return new TicketBai(
@@ -139,7 +143,14 @@ class TicketBaiMother
     {
         $issuer = new Issuer(new VatId($nif), $name);
         $recipient = Recipient::createNationalRecipient(new VatId('00000000T'), 'Client Name', '48270', 'Markina-Xemein');
-        return new Subject($issuer, $recipient, Subject::ISSUED_BY_ISSUER);
+        return new Subject($issuer, $recipient, Subject::ISSUED_BY_THIRD_PARTY);
+    }
+
+    private function getForeignSubject(string $nif, string $name): Subject
+    {
+        $issuer = new Issuer(new VatId($nif, VatId::VAT_ID_TYPE_PASSPORT), $name);
+        $recipient = Recipient::createGenericRecipient(new VatId('00000000T', VatId::VAT_ID_TYPE_PASSPORT), 'Client Name', '48270', 'Markina-Xemein', 'IE');
+        return new Subject($issuer, $recipient, Subject::ISSUED_BY_THIRD_PARTY);
     }
 
     private function getFingerprint(string $license, string $developer, string $appName, string $appVersion): Fingerprint
