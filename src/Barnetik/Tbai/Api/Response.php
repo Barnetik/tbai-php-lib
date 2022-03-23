@@ -34,5 +34,4 @@ abstract class Response
     abstract public function isCorrect(): bool;
     abstract public function mainErrorMessage(): string;
     abstract public function content(): string;
-
 }

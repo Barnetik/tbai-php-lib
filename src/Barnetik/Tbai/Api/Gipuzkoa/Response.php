@@ -16,7 +16,6 @@ class Response extends ApiResponse
         if ($status == 200) {
             $this->responseContent = new SimpleXMLElement($this->content);
         }
-
     }
 
     public function isDelivered(): bool

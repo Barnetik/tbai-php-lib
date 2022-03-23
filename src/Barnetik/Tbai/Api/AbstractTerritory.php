@@ -118,7 +118,11 @@ abstract class AbstractTerritory implements EndpointInterface
         return $data;
     }
 
-    public function debugData(string $key): mixed
+    /**
+     *
+     * @return mixed
+     */
+    public function debugData(string $key)
     {
         return $this->debugData[$key];
     }

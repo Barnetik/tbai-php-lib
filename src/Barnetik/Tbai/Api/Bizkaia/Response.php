@@ -25,5 +25,4 @@ class Response extends ApiResponse
     {
         return gzdecode($this->content);
     }
-
 }

@@ -3,7 +3,7 @@
 namespace Barnetik\Tbai\ValueObject;
 
 use Barnetik\Tbai\Exception\InvalidAmountException;
-use Stringable;
+use Barnetik\Tbai\Interfaces\Stringable;
 
 class Amount implements Stringable
 {

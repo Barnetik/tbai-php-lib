@@ -47,7 +47,11 @@ class Api
         return $this->endpoint->submitInvoice($ticketbai, $pfxFilePath, $password);
     }
 
-    public function debugData(string $key): mixed
+    /**
+     *
+     * @return mixed
+     */
+    public function debugData(string $key)
     {
         return $this->endpoint->debugData($key);
     }

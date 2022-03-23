@@ -3,7 +3,7 @@
 namespace Barnetik\Tbai;
 
 use DOMNode;
-use Stringable;
+use Barnetik\Tbai\Interfaces\Stringable;
 use DOMDocument;
 use JsonSerializable;
 use SimpleXMLElement;
@@ -139,7 +139,7 @@ abstract class AbstractTicketBai implements TbaiXml, TbaiSignable, Stringable, J
     {
         $xml = new DOMDocument('1.0', 'utf-8');
         $domNode = $this->xml($xml);
-        $xml->append($domNode);
+        $xml->appendChild($domNode);
         return $xml;
     }
 
@@ -148,7 +148,7 @@ abstract class AbstractTicketBai implements TbaiXml, TbaiSignable, Stringable, J
         return $this->dom()->saveXml();
     }
 
-    public function jsonSerialize(): mixed
+    public function jsonSerialize(): array
     {
         return $this->toArray();
     }

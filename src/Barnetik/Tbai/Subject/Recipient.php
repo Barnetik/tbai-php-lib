@@ -104,11 +104,9 @@ class Recipient implements TbaiXml
             );
         } else {
             $otherId = $domDocument->createElement('IDOtro');
-            $otherId->append(
-                $domDocument->createElement('CodigoPais', $this->countryCode()),
-                $domDocument->createElement('IDType', $this->vatIdType()),
-                $domDocument->createElement('ID', $this->vatId())
-            );
+            $otherId->appendChild($domDocument->createElement('CodigoPais', $this->countryCode()));
+            $otherId->appendChild($domDocument->createElement('IDType', $this->vatIdType()));
+            $otherId->appendChild($domDocument->createElement('ID', $this->vatId()));
 
             $recipient->appendChild(
                 $otherId

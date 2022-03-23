@@ -3,7 +3,7 @@
 namespace Barnetik\Tbai\ValueObject;
 
 use Barnetik\Tbai\Exception\InvalidTimeException;
-use Stringable;
+use Barnetik\Tbai\Interfaces\Stringable;
 
 class Time implements Stringable
 {

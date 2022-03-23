@@ -28,11 +28,9 @@ class Invoice implements TbaiXml
     {
         $invoice = $domDocument->createElement('Factura');
 
-        $invoice->append(
-            $this->header->xml($domDocument),
-            $this->data->xml($domDocument),
-            $this->breakdown->xml($domDocument)
-        );
+        $invoice->appendChild($this->header->xml($domDocument));
+        $invoice->appendChild($this->data->xml($domDocument));
+        $invoice->appendChild($this->breakdown->xml($domDocument));
 
         return $invoice;
     }

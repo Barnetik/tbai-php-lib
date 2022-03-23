@@ -15,6 +15,6 @@
 
     <!-- Include the whole PSR12 standard -->
     <rule ref="PSR12"></rule>
-    <rule ref="vendor/suin/phpcs-psr4-sniff/src/Suin" />
+    <!-- <rule ref="vendor/suin/phpcs-psr4-sniff/src/Suin" /> -->
 
 </ruleset>

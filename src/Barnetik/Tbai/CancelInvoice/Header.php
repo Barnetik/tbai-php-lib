@@ -48,11 +48,8 @@ class Header implements TbaiXml
             $header->appendChild($domDocument->createElement('SerieFactura', $this->series()));
         }
 
-        $header->append(
-            $domDocument->createElement('NumFactura', $this->invoiceNumber()),
-            $domDocument->createElement('FechaExpedicionFactura', $this->expeditionDate()),
-        );
-
+        $header->appendChild($domDocument->createElement('NumFactura', $this->invoiceNumber()));
+        $header->appendChild($domDocument->createElement('FechaExpedicionFactura', $this->expeditionDate()));
 
         return $header;
     }

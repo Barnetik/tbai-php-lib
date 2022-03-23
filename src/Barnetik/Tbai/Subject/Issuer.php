@@ -31,10 +31,8 @@ class Issuer implements TbaiXml
     public function xml(DOMDocument $domDocument): DOMNode
     {
         $issuer = $domDocument->createElement('Emisor');
-        $issuer->append(
-            $domDocument->createElement('NIF', $this->vatId),
-            $domDocument->createElement('ApellidosNombreRazonSocial', $this->name),
-        );
+        $issuer->appendChild($domDocument->createElement('NIF', $this->vatId));
+        $issuer->appendChild($domDocument->createElement('ApellidosNombreRazonSocial', $this->name));
         return $issuer;
     }
 

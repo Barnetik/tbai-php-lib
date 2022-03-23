@@ -36,7 +36,10 @@ class AbstractSubjectNotExemptBreakdownItem implements TbaiXml
         ];
     }
 
-    private function setNotExemptType(string $type): static
+    /**
+     * @return static
+     */
+    private function setNotExemptType(string $type)
     {
         if (!in_array($type, static::validNotExemptTypes())) {
             throw new InvalidNotExemptTypeException();
@@ -46,7 +49,10 @@ class AbstractSubjectNotExemptBreakdownItem implements TbaiXml
         return $this;
     }
 
-    public function addVatDetail(VatDetail $vatDetail): static
+    /**
+     * @return static
+     */
+    public function addVatDetail(VatDetail $vatDetail)
     {
         if (sizeof($this->vatDetails) < 6) {
             $this->vatDetails[] = $vatDetail;
@@ -70,7 +76,10 @@ class AbstractSubjectNotExemptBreakdownItem implements TbaiXml
         return $notExentType;
     }
 
-    public static function createFromJson(array $jsonData): static
+    /**
+     * @return static
+     */
+    public static function createFromJson(array $jsonData)
     {
         $type = $jsonData['type'];
         $vatDetails = [];

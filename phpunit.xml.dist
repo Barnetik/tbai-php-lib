@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="./tests/bootstrap.php" colors="true" testdox="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd">
-  <coverage>
+  <!-- <coverage>
     <include>
       <directory>./src</directory>
     </include>
@@ -8,7 +8,7 @@
       <directory>./tests</directory>
       <directory>./vendor</directory>
     </exclude>
-  </coverage>
+  </coverage> -->
   <testsuites>
     <testsuite name="Tbai test suite">
       <directory suffix="Test.php">./tests</directory>

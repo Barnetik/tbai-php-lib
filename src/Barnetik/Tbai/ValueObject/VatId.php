@@ -3,7 +3,7 @@
 namespace Barnetik\Tbai\ValueObject;
 
 use Barnetik\Tbai\Exception\InvalidVatIdException;
-use Stringable;
+use Barnetik\Tbai\Interfaces\Stringable;
 
 class VatId implements Stringable
 {

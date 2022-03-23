@@ -31,11 +31,10 @@ class PreviousInvoice implements TbaiXml
             );
         }
 
-        $previousInvoice->append(
-            $domDocument->createElement('NumFacturaAnterior', $this->invoiceNumber),
-            $domDocument->createElement('FechaExpedicionFacturaAnterior', $this->sentDate),
-            $domDocument->createElement('SignatureValueFirmaFacturaAnterior', $this->signature)
-        );
+        $previousInvoice->appendChild($domDocument->createElement('NumFacturaAnterior', $this->invoiceNumber));
+        $previousInvoice->appendChild($domDocument->createElement('FechaExpedicionFacturaAnterior', $this->sentDate));
+        $previousInvoice->appendChild($domDocument->createElement('SignatureValueFirmaFacturaAnterior', $this->signature));
+
         return $previousInvoice;
     }
 
@@ -76,7 +75,7 @@ class PreviousInvoice implements TbaiXml
         ];
     }
 
-    public function toArray(): mixed
+    public function toArray(): array
     {
         return [
             'invoiceNumber' => $this->invoiceNumber,

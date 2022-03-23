@@ -1,4 +1,5 @@
 <?php
+
 namespace Barnetik\Tbai\Xades\xmldsig\xml;
 
 use lyquidity\xmldsig\xml\CertDigest;
@@ -31,5 +32,4 @@ class SigningCertificateV2 extends XmlSigningCertificateV2
             ),
         );
     }
-
 }

@@ -45,7 +45,10 @@ class AbstractSubjectExemptBreakdownItem implements TbaiXml
         ];
     }
 
-    private function setExemptionReason(string $reason): static
+    /**
+     * @return static
+     */
+    private function setExemptionReason(string $reason)
     {
         if (!in_array($reason, static::validExemptionReasons())) {
             throw new InvalidExemptionReasonException();
@@ -58,14 +61,15 @@ class AbstractSubjectExemptBreakdownItem implements TbaiXml
     public function xml(DOMDocument $domDocument): DOMNode
     {
         $exemptDetail = $domDocument->createElement('DetalleExenta');
-        $exemptDetail->append(
-            $domDocument->createElement('CausaExencion', $this->exemptionReason),
-            $domDocument->createElement('BaseImponible', $this->taxBase),
-        );
+        $exemptDetail->appendChild($domDocument->createElement('CausaExencion', $this->exemptionReason));
+        $exemptDetail->appendChild($domDocument->createElement('BaseImponible', $this->taxBase));
         return $exemptDetail;
     }
 
-    public static function createFromJson(array $jsonData): static
+    /**
+     * @return static
+     */
+    public static function createFromJson(array $jsonData)
     {
         $taxBase = new Amount($jsonData['taxBase']);
         $reason = $jsonData['reason'];

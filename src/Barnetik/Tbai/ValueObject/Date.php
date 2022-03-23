@@ -4,7 +4,7 @@ namespace Barnetik\Tbai\ValueObject;
 
 use Barnetik\Tbai\Exception\InvalidDateException;
 use DateTimeImmutable;
-use Stringable;
+use Barnetik\Tbai\Interfaces\Stringable;
 
 class Date implements Stringable
 {

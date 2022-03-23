@@ -3,3 +3,5 @@ grumphp:
         phpcs: null 
         phpstan:
             memory_limit: "-1"
+            configuration: "./phpstan.neon"
+            use_grumphp_paths: false

@@ -99,8 +99,9 @@ class TicketBai extends XAdES
         $issuer = null;
         if ($certs) {
             $cert = $loader->fromString(reset($certs));
-            if (next($certs))
+            if (next($certs)) {
                 $issuer = $loader->fromString(current($certs));
+            }
         } else {
             $cert = $loader->fromFile($certificate);
         }

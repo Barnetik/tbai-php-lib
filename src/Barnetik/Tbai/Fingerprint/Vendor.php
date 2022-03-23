@@ -31,12 +31,12 @@ class Vendor implements TbaiXml
         $developer->appendChild(
             $domDocument->createElement('NIF', $this->developerId)
         );
-        $vendor->append(
-            $domDocument->createElement('LicenciaTBAI', $this->license),
-            $developer,
-            $domDocument->createElement('Nombre', $this->name),
-            $domDocument->createElement('Version', $this->version)
-        );
+
+        $vendor->appendChild($domDocument->createElement('LicenciaTBAI', $this->license));
+        $vendor->appendChild($developer);
+        $vendor->appendChild($domDocument->createElement('Nombre', $this->name));
+        $vendor->appendChild($domDocument->createElement('Version', $this->version));
+
         return $vendor;
     }
 }

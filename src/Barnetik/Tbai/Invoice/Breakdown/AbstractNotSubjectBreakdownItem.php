@@ -32,7 +32,10 @@ class AbstractNotSubjectBreakdownItem implements TbaiXml
         ];
     }
 
-    private function setNotSubjectReason(string $reason): static
+    /**
+     * @return static
+     */
+    private function setNotSubjectReason(string $reason)
     {
         if (!in_array($reason, static::validNotSubjectReasons())) {
             throw new InvalidArgumentException('Subject reason is not valid');
@@ -50,14 +53,17 @@ class AbstractNotSubjectBreakdownItem implements TbaiXml
     public function xml(DOMDocument $domDocument): DOMNode
     {
         $notSubjectDetail = $domDocument->createElement('DetalleNoSujeta');
-        $notSubjectDetail->append(
-            $domDocument->createElement('Causa', $this->notSubjectReason),
-            $domDocument->createElement('Importe', $this->amount),
-        );
+
+        $notSubjectDetail->appendChild($domDocument->createElement('Causa', $this->notSubjectReason));
+        $notSubjectDetail->appendChild($domDocument->createElement('Importe', $this->amount));
+
         return $notSubjectDetail;
     }
 
-    public static function createFromJson(array $jsonData): static
+    /**
+     * @return static
+     */
+    public static function createFromJson(array $jsonData)
     {
         $amount = new Amount($jsonData['amount']);
         $reason = $jsonData['reason'];

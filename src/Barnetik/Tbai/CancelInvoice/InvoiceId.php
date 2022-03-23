@@ -25,10 +25,8 @@ class InvoiceId implements TbaiXml
     {
         $invoiceId = $domDocument->createElement('IDFactura');
 
-        $invoiceId->append(
-            $this->issuer->xml($domDocument),
-            $this->header->xml($domDocument),
-        );
+        $invoiceId->appendChild($this->issuer->xml($domDocument));
+        $invoiceId->appendChild($this->header->xml($domDocument));
 
         return $invoiceId;
     }
