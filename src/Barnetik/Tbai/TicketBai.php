@@ -8,7 +8,6 @@ use Barnetik\Tbai\ValueObject\Date;
 use Barnetik\Tbai\ValueObject\VatId;
 use Barnetik\Tbai\Fingerprint\Vendor;
 use Barnetik\Tbai\ValueObject\Amount;
-use Barnetik\Tbai\Exception\InvalidTerritoryException;
 use Barnetik\Tbai\Subject\Issuer;
 
 class TicketBai extends AbstractTicketBai

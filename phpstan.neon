@@ -3,6 +3,7 @@ parameters:
   checkMissingIterableValueType: false
   paths:
     - src
+    - tests
   excludePaths:
     - src/Barnetik/Tbai/Xades/xmldsig/xml/SigningCertificateV2.php
   ignoreErrors:

@@ -33,21 +33,21 @@ class TicketBaiTest extends TestCase
 
     public function test_ticketbai_data_can_be_serialized(): void
     {
-        $ticketbai = $this->getTicketBaiCancel();
+        $ticketbai = $this->getTicketBai();
         // echo json_encode($ticketbai->toArray());
         $this->assertIsString(json_encode($ticketbai->toArray()));
     }
 
     public function test_unsigned_TicketBai_validates_schema(): void
     {
-        $ticketbai = $this->getTicketBaiCancel();
+        $ticketbai = $this->getTicketBai();
         $dom = $ticketbai->dom();
         $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2-no-signature.xsd'));
     }
 
     public function test_TicketBai_can_be_signed_with_PFX_key(): void
     {
-        $ticketbai = $this->getTicketBaiCancel();
+        $ticketbai = $this->getTicketBai();
         $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
@@ -111,13 +111,14 @@ class TicketBaiTest extends TestCase
 
     public function test_TicketBai_signed_file_is_valid(): void
     {
-        $ticketbai = $this->getTicketBaiCancel();
+        $ticketbai = $this->getTicketBai();
         $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
         $ticketbai->sign($_ENV['TBAI_ARABA_P12_PATH'], $_ENV['TBAI_ARABA_PRIVATE_KEY'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
+// var_dump($filename);exit();
 
         try {
             XAdES::verifyDocument(
@@ -125,11 +126,13 @@ class TicketBaiTest extends TestCase
             );
             $this->assertTrue(true);
         } catch (Exception $e) {
+            var_dump($e->getFile());
+            var_dump($e->getLine());
             $this->fail($e->getMessage());
         }
     }
 
-    private function getTicketBaiCancel(): TicketBai
+    private function getTicketBai(): TicketBai
     {
         $nif = $_ENV['TBAI_ARABA_ISSUER_NIF'];
         $issuer = $_ENV['TBAI_ARABA_ISSUER_NAME'];

@@ -4,16 +4,11 @@ namespace Barnetik\Tbai\Xades;
 
 use Barnetik\Tbai\Xades\xmldsig\xml\SigningCertificateV2;
 use lyquidity\xmldsig\XAdES;
-use lyquidity\xmldsig\XAdES_SBR;
-use lyquidity\xmldsig\xml\Generic;
-use lyquidity\xmldsig\xml\Transforms;
 use lyquidity\xmldsig\XMLSecurityDSig;
 use lyquidity\xmldsig\xml\SigPolicyHash;
-use lyquidity\xmldsig\xml\AttributeNames;
 use lyquidity\xmldsig\xml\DataObjectFormat;
 use lyquidity\xmldsig\xml\DigestMethod;
 use lyquidity\xmldsig\xml\DigestValue;
-use lyquidity\xmldsig\xml\ObjectIdentifier;
 use lyquidity\xmldsig\xml\SignaturePolicyId;
 use lyquidity\xmldsig\xml\SignaturePolicyIdentifier;
 use lyquidity\xmldsig\xml\SignedDataObjectProperties;
@@ -28,7 +23,6 @@ use lyquidity\xmldsig\xml\SignedProperties;
 use lyquidity\xmldsig\xml\SignedSignatureProperties;
 use lyquidity\xmldsig\xml\SignerRole;
 use lyquidity\xmldsig\xml\SignerRoleV2;
-use lyquidity\xmldsig\xml\SigningCertificateV2 as XmlSigningCertificateV2;
 use lyquidity\xmldsig\xml\SigningTime;
 
 class TicketBai extends XAdES
