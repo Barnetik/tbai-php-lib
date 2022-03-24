@@ -22,25 +22,28 @@ class TicketBaiTest extends TestCase
         $this->ticketBaiMother = new TicketBaiMother;
     }
 
-    public function test_ticketbai_can_be_generated_from_json(): void
-    {
-        $json = file_get_contents(__DIR__ . '/__files/tbai-sample.json');
-        $this->assertEquals(
-            TicketBai::class,
-            get_class(TicketBai::createFromJson($this->ticketBaiMother->createArabaVendor(), json_decode($json, true)))
-        );
-    }
-
     public function test_ticketbai_data_can_be_serialized(): void
     {
         $ticketbai = $this->getTicketBai();
-        // echo json_encode($ticketbai->toArray());
         $this->assertIsString(json_encode($ticketbai->toArray()));
     }
 
     public function test_unsigned_TicketBai_validates_schema(): void
     {
         $ticketbai = $this->getTicketBai();
+        $dom = $ticketbai->dom();
+        $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2-no-signature.xsd'));
+    }
+
+    public function test_ticketbai_can_be_generated_from_json(): void
+    {
+        $json = file_get_contents(__DIR__ . '/__files/tbai-sample.json');
+        $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createArabaVendor(), json_decode($json, true));
+        $this->assertEquals(
+            TicketBai::class,
+            get_class($ticketbai)
+        );
+
         $dom = $ticketbai->dom();
         $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2-no-signature.xsd'));
     }
