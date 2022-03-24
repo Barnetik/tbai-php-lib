@@ -2,15 +2,10 @@
 
 namespace Test\Barnetik\Tbai;
 
-use Barnetik\Tbai\Api\Araba\Endpoint as ArabaEndpoint;
-use Barnetik\Tbai\Api\Bizkaia\Endpoint as BizkaiaEndpoint;
-use Barnetik\Tbai\Api\Gipuzkoa\Endpoint as GipuzkoaEndpoint;
-use Barnetik\Tbai\Qr;
+use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
 use Barnetik\Tbai\TicketBaiCancel;
 use DOMDocument;
-use Exception;
-use lyquidity\xmldsig\XAdES;
 use PHPUnit\Framework\TestCase;
 use Test\Barnetik\Tbai\Mother\TicketBaiMother;
 
@@ -45,7 +40,9 @@ class TicketBaiCancelTest extends TestCase
         $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-cancel-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
-        $ticketbai->sign($_ENV['TBAI_ARABA_P12_PATH'], $_ENV['TBAI_ARABA_PRIVATE_KEY'], $filename);
+
+        $privateKey = PrivateKey::p12($_ENV['TBAI_ARABA_P12_PATH']);
+        $ticketbai->sign($privateKey, $_ENV['TBAI_ARABA_PRIVATE_KEY'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
         $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/Anula_ticketBaiV1-2.xsd'));

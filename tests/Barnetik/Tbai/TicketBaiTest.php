@@ -5,6 +5,7 @@ namespace Test\Barnetik\Tbai;
 use Barnetik\Tbai\Api\Araba\Endpoint as ArabaEndpoint;
 use Barnetik\Tbai\Api\Bizkaia\Endpoint as BizkaiaEndpoint;
 use Barnetik\Tbai\Api\Gipuzkoa\Endpoint as GipuzkoaEndpoint;
+use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\Qr;
 use Barnetik\Tbai\TicketBai;
 use DOMDocument;
@@ -54,7 +55,9 @@ class TicketBaiTest extends TestCase
         $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
-        $ticketbai->sign($_ENV['TBAI_ARABA_P12_PATH'], $_ENV['TBAI_ARABA_PRIVATE_KEY'], $filename);
+
+        $privateKey = PrivateKey::p12($_ENV['TBAI_ARABA_P12_PATH']);
+        $ticketbai->sign($privateKey, $_ENV['TBAI_ARABA_PRIVATE_KEY'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
         $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
@@ -70,10 +73,11 @@ class TicketBaiTest extends TestCase
         $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
-        $ticketbai->sign($_ENV['TBAI_ARABA_P12_PATH'], $_ENV['TBAI_ARABA_PRIVATE_KEY'], $filename);
+        $privateKey = PrivateKey::p12($_ENV['TBAI_ARABA_P12_PATH']);
+        $ticketbai->sign($privateKey, $_ENV['TBAI_ARABA_PRIVATE_KEY'], $filename);
 
         $endpoint = new ArabaEndpoint(true, true);
-        $endpoint->submitInvoice($ticketbai, $_ENV['TBAI_ARABA_P12_PATH'], $_ENV['TBAI_ARABA_PRIVATE_KEY']);
+        $endpoint->submitInvoice($ticketbai, $privateKey, $_ENV['TBAI_ARABA_PRIVATE_KEY']);
 
         $qr = new Qr($ticketbai, true);
         $this->assertEquals(39, strlen($qr->ticketbaiIdentifier()));
@@ -86,10 +90,11 @@ class TicketBaiTest extends TestCase
         $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
-        $ticketbai->sign($_ENV['TBAI_BIZKAIA_P12_PATH'], $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'], $filename);
+        $privateKey = PrivateKey::p12($_ENV['TBAI_BIZKAIA_P12_PATH']);
+        $ticketbai->sign($privateKey, $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'], $filename);
 
         $endpoint = new BizkaiaEndpoint(true, true);
-        $endpoint->submitInvoice($ticketbai, $_ENV['TBAI_ARABA_P12_PATH'], $_ENV['TBAI_ARABA_PRIVATE_KEY']);
+        $endpoint->submitInvoice($ticketbai, $privateKey, $_ENV['TBAI_BIZKAIA_PRIVATE_KEY']);
 
         $qr = new Qr($ticketbai, true);
         $this->assertEquals(39, strlen($qr->ticketbaiIdentifier()));
@@ -102,10 +107,11 @@ class TicketBaiTest extends TestCase
         $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
-        $ticketbai->sign($_ENV['TBAI_GIPUZKOA_P12_PATH'], $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'], $filename);
+        $privateKey = PrivateKey::p12($_ENV['TBAI_GIPUZKOA_P12_PATH']);
+        $ticketbai->sign($privateKey, $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'], $filename);
 
         $endpoint = new GipuzkoaEndpoint(true, true);
-        $endpoint->submitInvoice($ticketbai, $_ENV['TBAI_GIPUZKOA_P12_PATH'], $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY']);
+        $endpoint->submitInvoice($ticketbai, $privateKey, $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY']);
 
         $qr = new Qr($ticketbai, true);
         $this->assertEquals(39, strlen($qr->ticketbaiIdentifier()));
@@ -118,7 +124,8 @@ class TicketBaiTest extends TestCase
         $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
-        $ticketbai->sign($_ENV['TBAI_ARABA_P12_PATH'], $_ENV['TBAI_ARABA_PRIVATE_KEY'], $filename);
+        $privateKey = PrivateKey::p12($_ENV['TBAI_ARABA_P12_PATH']);
+        $ticketbai->sign($privateKey, $_ENV['TBAI_ARABA_PRIVATE_KEY'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
         // var_dump($filename);exit();

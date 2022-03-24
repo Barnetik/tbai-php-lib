@@ -2,6 +2,7 @@
 
 namespace Barnetik\Tbai\Api;
 
+use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
 use Barnetik\Tbai\TicketBaiCancel;
 
@@ -16,9 +17,9 @@ interface EndpointInterface
      */
     public function debugData(string $key);
 
-    public function submitInvoice(TicketBai $ticketbai, string $pfxFilePath, string $password): Response;
+    public function submitInvoice(TicketBai $ticketbai, PrivateKey $privateKey, string $password): Response;
     public function createSubmitInvoiceRequest(TicketBai $ticketBai): ApiRequestInterface;
 
-    public function cancelInvoice(TicketBaiCancel $ticketbaiCancel, string $pfxFilePath, string $password): Response;
+    public function cancelInvoice(TicketBaiCancel $ticketbaiCancel, PrivateKey $privateKey, string $password): Response;
     public function createCancelInvoiceRequest(TicketBaiCancel $ticketBai): ApiRequestInterface;
 }

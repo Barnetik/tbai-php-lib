@@ -3,6 +3,7 @@
 namespace Barnetik\Tbai\Api;
 
 use Barnetik\Tbai\Api\ApiRequestInterface;
+use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
 use Barnetik\Tbai\TicketBaiCancel;
 use Exception;
@@ -41,11 +42,11 @@ abstract class AbstractTerritory implements EndpointInterface
     abstract public function createCancelInvoiceRequest(TicketBaiCancel $ticketBaiCancel): ApiRequestInterface;
     abstract protected function response(string $status, array $headers, string $content): Response;
 
-    public function submitInvoice(TicketBai $ticketbai, string $pfxFilePath, string $password): Response
+    public function submitInvoice(TicketBai $ticketbai, PrivateKey $privateKey, string $password): Response
     {
         $curl = curl_init();
         $submitInvoiceRequest = $this->createSubmitInvoiceRequest($ticketbai);
-        curl_setopt_array($curl, $this->getOptArray($submitInvoiceRequest, $pfxFilePath, $password));
+        curl_setopt_array($curl, $this->getOptArray($submitInvoiceRequest, $privateKey, $password));
 
         $response = curl_exec($curl);
         list($status, $headers, $content) = $this->parseCurlResponse($response);
@@ -53,11 +54,11 @@ abstract class AbstractTerritory implements EndpointInterface
         return $this->response($status, $headers, $content);
     }
 
-    public function cancelInvoice(TicketBaiCancel $ticketbaiCancel, string $pfxFilePath, string $password): Response
+    public function cancelInvoice(TicketBaiCancel $ticketbaiCancel, PrivateKey $privateKey, string $password): Response
     {
         $curl = curl_init();
         $submitInvoiceRequest = $this->createCancelInvoiceRequest($ticketbaiCancel);
-        curl_setopt_array($curl, $this->getOptArray($submitInvoiceRequest, $pfxFilePath, $password));
+        curl_setopt_array($curl, $this->getOptArray($submitInvoiceRequest, $privateKey, $password));
 
         $response = curl_exec($curl);
         list($status, $headers, $content) = $this->parseCurlResponse($response);
@@ -85,7 +86,7 @@ abstract class AbstractTerritory implements EndpointInterface
         return [$status, $headers, $content];
     }
 
-    protected function getOptArray(ApiRequestInterface $apiRequest, string $pfxFilePath, string $password): array
+    protected function getOptArray(ApiRequestInterface $apiRequest, PrivateKey $privateKey, string $password): array
     {
         $dataFile = tempnam(sys_get_temp_dir(), 'api-request-data-');
         file_put_contents($dataFile, $apiRequest->data());
@@ -104,11 +105,21 @@ abstract class AbstractTerritory implements EndpointInterface
             CURLOPT_URL                 => $apiRequest->url(),
             CURLOPT_HTTPHEADER          => $this->headers($apiRequest, $dataFile),
             CURLOPT_POSTFIELDS          => file_get_contents($dataFile),
-
-            CURLOPT_SSLCERTTYPE         => 'P12',
-            CURLOPT_SSLCERT             => $pfxFilePath,
-            CURLOPT_SSLCERTPASSWD       => $password
         ];
+
+        if ($privateKey->type() === PrivateKey::TYPE_P12) {
+            $data += [
+                CURLOPT_SSLCERTTYPE         => 'P12',
+                CURLOPT_SSLCERT             => $privateKey->keyPath(),
+                CURLOPT_SSLCERTPASSWD       => $password            ];
+        } else {
+            $data += [
+                CURLOPT_SSLCERTTYPE         => 'PEM',
+                CURLOPT_SSLCERT             => $privateKey->certPath(),
+                CURLOPT_SSLKEY             => $privateKey->keyPath(),
+                CURLOPT_SSLCERTPASSWD       => $password
+            ];
+        }
 
         if ($this->debug) {
             $this->debugData[self::DEBUG_SENT_FILE] = $dataFile;

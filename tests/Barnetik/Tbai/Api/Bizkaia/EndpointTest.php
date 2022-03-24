@@ -5,6 +5,7 @@ namespace Test\Barnetik\Tbai\Api\Bizkaia;
 use Barnetik\Tbai\Api;
 use Barnetik\Tbai\Api\AbstractTerritory;
 use Barnetik\Tbai\Api\Bizkaia\Endpoint;
+use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
@@ -33,10 +34,12 @@ class EndpointTest extends TestCase
         $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
+
         $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
         $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
+        $privateKey = PrivateKey::p12($certFile);
 
-        $ticketbai->sign($certFile, $certPassword, $signedFilename);
+        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
 
         $endpoint = new Endpoint(true, true);
 
@@ -50,17 +53,18 @@ class EndpointTest extends TestCase
     {
         $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
         $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
+        $privateKey = PrivateKey::p12($certFile);
 
         $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBai();
-        $ticketbai->sign($certFile, $certPassword, $signedFilename);
+        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
 
-        $response = $endpoint->submitInvoice($ticketbai, $certFile, $certPassword);
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword);
 
         $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
         file_put_contents($responseFile, $response->content());
@@ -86,21 +90,22 @@ class EndpointTest extends TestCase
     {
         $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
         $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
+        $privateKey = PrivateKey::p12($certFile);
 
         $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBai();
-        $ticketbai->sign($certFile, $certPassword, $signedFilename);
+        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
-        $response = $endpoint->submitInvoice($ticketbai, $certFile, $certPassword);
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword);
 
         $ticketbaiCancel = $this->ticketBaiMother->createTicketBaiCancelForInvoice($ticketbai);
         $signedFilename = $signedFilename . '-cancel.xml';
-        $ticketbaiCancel->sign($certFile, $certPassword, $signedFilename);
-        $response = $endpoint->cancelInvoice($ticketbaiCancel, $certFile, $certPassword);
+        $ticketbaiCancel->sign($privateKey, $certPassword, $signedFilename);
+        $response = $endpoint->cancelInvoice($ticketbaiCancel, $privateKey, $certPassword);
 
         $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
         file_put_contents($responseFile, $response->content());

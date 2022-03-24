@@ -38,22 +38,22 @@ class Api
         return new Api($ticketbai->territory(), $dev, $debug);
     }
 
-    public function submitInvoice(TicketBai $ticketbai, string $pfxFilePath, string $password): Response
+    public function submitInvoice(TicketBai $ticketbai, PrivateKey $privateKey, string $password): Response
     {
         if (!$ticketbai->isSigned()) {
             throw new UnsignedException();
         }
 
-        return $this->endpoint->submitInvoice($ticketbai, $pfxFilePath, $password);
+        return $this->endpoint->submitInvoice($ticketbai, $privateKey, $password);
     }
 
-    public function cancelInvoice(TicketBaiCancel $ticketbaiCancel, string $pfxFilePath, string $password): Response
+    public function cancelInvoice(TicketBaiCancel $ticketbaiCancel, PrivateKey $privateKey, string $password): Response
     {
         if (!$ticketbaiCancel->isSigned()) {
             throw new UnsignedException();
         }
 
-        return $this->endpoint->cancelInvoice($ticketbaiCancel, $pfxFilePath, $password);
+        return $this->endpoint->cancelInvoice($ticketbaiCancel, $privateKey, $password);
     }
 
     /**

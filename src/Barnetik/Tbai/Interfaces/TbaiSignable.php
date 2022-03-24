@@ -2,9 +2,11 @@
 
 namespace Barnetik\Tbai\Interfaces;
 
+use Barnetik\Tbai\PrivateKey;
+
 interface TbaiSignable
 {
-    public function sign(string $pfxFilePath, string $password, string $signedFilePath): void;
+    public function sign(PrivateKey $privateKey, string $password, string $signedFilePath): void;
     public function signed(): string;
     public function isSigned(): bool;
 

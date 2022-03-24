@@ -54,14 +54,19 @@ abstract class AbstractTicketBai implements TbaiXml, TbaiSignable, Stringable, J
         return $this->territory;
     }
 
-    public function sign(string $pfxFilePath, string $password, string $signedFilePath): void
+    public function sign(PrivateKey $privateKey, string $password, string $signedFilePath): void
     {
         if (!$this->signedXml) {
-            openssl_pkcs12_read(
-                file_get_contents($pfxFilePath),
-                $certData,
-                $password
-            );
+            if ($privateKey->type() === PrivateKey::TYPE_P12) {
+                openssl_pkcs12_read(
+                    file_get_contents($privateKey->keyPath()),
+                    $certData,
+                    $password
+                );
+            } else {
+                $certData['cert'] = file_get_contents($privateKey->certPath());
+                $certData['pkey'] = file_get_contents($privateKey->keyPath());
+            }
 
             $xadesClass = $this->getXadesClassForTerritory();
 
