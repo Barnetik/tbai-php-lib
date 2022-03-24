@@ -118,7 +118,7 @@ class TicketBaiTest extends TestCase
         $ticketbai->sign($_ENV['TBAI_ARABA_P12_PATH'], $_ENV['TBAI_ARABA_PRIVATE_KEY'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
-// var_dump($filename);exit();
+        // var_dump($filename);exit();
 
         try {
             XAdES::verifyDocument(

@@ -16,14 +16,16 @@ class TicketBai extends AbstractTicketBai
     private Subject $subject;
     private Invoice $invoice;
     private Fingerprint $fingerprint;
+    private bool $selfEmployed;
 
-    public function __construct(Subject $subject, Invoice $invoice, Fingerprint $fingerprint, string $territory)
+    public function __construct(Subject $subject, Invoice $invoice, Fingerprint $fingerprint, string $territory, bool $selfEmployed = false)
     {
         parent::__construct($territory);
         $this->header = new Header();
         $this->subject = $subject;
         $this->invoice = $invoice;
         $this->fingerprint = $fingerprint;
+        $this->selfEmployed = $selfEmployed;
     }
 
     public function issuerVatId(): VatId
@@ -66,6 +68,11 @@ class TicketBai extends AbstractTicketBai
         return $this->fingerprint;
     }
 
+    public function selfEmployed(): bool
+    {
+        return $this->selfEmployed;
+    }
+
     public function xml(DOMDocument $document): DOMNode
     {
         $tbai = $document->createElementNS('urn:ticketbai:emision', 'T:TicketBai');
@@ -84,7 +91,8 @@ class TicketBai extends AbstractTicketBai
         $subject = Subject::createFromJson($jsonData['subject']);
         $invoice = Invoice::createFromJson($jsonData['invoice']);
         $fingerprint = Fingerprint::createFromJson($vendor, $jsonData['fingerprint'] ?? []);
-        $ticketBai = new TicketBai($subject, $invoice, $fingerprint, $territory);
+        $selfEmployed = (bool)($jsonData['self_employed'] ?? false);
+        $ticketBai = new TicketBai($subject, $invoice, $fingerprint, $territory, $selfEmployed);
         return $ticketBai;
     }
 

@@ -11,10 +11,10 @@ use DOMNode;
 class SubmitInvoiceRequest implements ApiRequestInterface
 {
     const URL = '/N3B4000M/aurkezpena';
+
     private string $endpoint;
     private TicketBai $ticketbai;
 
-    const MODEL = '240';
     private DOMDocument $document;
 
     public function __construct(TicketBai $ticketbai, string $endpoint)
@@ -23,22 +23,41 @@ class SubmitInvoiceRequest implements ApiRequestInterface
         $this->ticketbai = $ticketbai;
 
         $this->document = new DOMDocument('1.0', 'utf-8');
-        $rootElement = $this->document->createElementNS(
-            'https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/LROE_PJ_240_1_1_FacturasEmitidas_ConSG_AltaPeticion_V1_0_2.xsd',
-            'lrpjfecsgap:LROEPJ240FacturasEmitidasConSGAltaPeticion'
-        );
-
+        $rootElement = $this->getRootElement();
         $this->document->appendChild($rootElement);
 
         $rootElement->appendChild($this->getHeader());
         $rootElement->appendChild($this->getInvoices());
     }
 
+    private function getRootElement(): DOMElement
+    {
+        if ($this->ticketbai->selfEmployed()) {
+            return $this->document->createElementNS(
+                'https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/LROE_PF_140_1_1_Ingresos_ConfacturaConSG_AltaPeticion_V1_0_2.xsd',
+                'lrpficfcsgap:LROEPF140IngresosConFacturaConSGAltaPeticion'
+            );
+        }
+        return $this->document->createElementNS(
+            'https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/LROE_PJ_240_1_1_FacturasEmitidas_ConSG_AltaPeticion_V1_0_2.xsd',
+            'lrpjfecsgap:LROEPJ240FacturasEmitidasConSGAltaPeticion'
+        );
+    }
+
+    private function getModel(): string
+    {
+        if ($this->ticketbai->selfEmployed()) {
+            return '140';
+        }
+
+        return '240';
+    }
+
     private function getHeader(): DOMNode
     {
         $header = $this->document->createElement('Cabecera');
         $data = [
-            'Modelo' => self::MODEL,
+            'Modelo' => $this->getModel(),
             'Capitulo' => '1',
             'Subcapitulo' => '1.1',
             'Operacion' => 'A00',
@@ -61,10 +80,33 @@ class SubmitInvoiceRequest implements ApiRequestInterface
 
     private function getInvoices(): DOMElement
     {
+        if ($this->ticketbai->selfEmployed()) {
+            return $this->getSelfEmployedInvoices();
+        }
+        return $this->getLegalPersonInvoices();
+    }
+
+    private function getSelfEmployedInvoices(): DOMElement
+    {
+        $incomes = $this->document->createElement('Ingresos');
+        $income = $this->document->createElement('Ingreso');
+        $income->appendChild($this->document->createElement('TicketBai', $this->ticketbai->base64Signed()));
+        $incomes->appendChild($income);
+
+        throw new \Exception('Not implemented yet, lacks Renta info');
+        $income->appendChild($this->document->createElement('Renta', $this->ticketbai->base64Signed()));
+        $incomes->appendChild($income);
+
+        return $incomes;
+    }
+
+    private function getLegalPersonInvoices(): DOMElement
+    {
         $invoices = $this->document->createElement('FacturasEmitidas');
         $invoice = $this->document->createElement('FacturaEmitida');
         $invoice->appendChild($this->document->createElement('TicketBai', $this->ticketbai->base64Signed()));
         $invoices->appendChild($invoice);
+
         return $invoices;
     }
 
@@ -88,7 +130,7 @@ class SubmitInvoiceRequest implements ApiRequestInterface
                 'nrs' => $this->ticketbai->issuerName()
             ],
             'drs' => [
-                'mode' => self::MODEL,
+                'mode' => $this->getModel(),
                 'ejer' => date('Y')
             ]
         ]);

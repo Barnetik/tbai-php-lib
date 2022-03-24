@@ -47,6 +47,15 @@ class Api
         return $this->endpoint->submitInvoice($ticketbai, $pfxFilePath, $password);
     }
 
+    public function cancelInvoice(TicketBaiCancel $ticketbaiCancel, string $pfxFilePath, string $password): Response
+    {
+        if (!$ticketbaiCancel->isSigned()) {
+            throw new UnsignedException();
+        }
+
+        return $this->endpoint->cancelInvoice($ticketbaiCancel, $pfxFilePath, $password);
+    }
+
     /**
      *
      * @return mixed

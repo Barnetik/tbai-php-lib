@@ -14,13 +14,15 @@ class TicketBaiCancel extends AbstractTicketBai
     private Header $header; // Same as SubmitInvoice
     private InvoiceId $invoiceId; // Does not exist on SubmitInvoice
     private Fingerprint $fingerprint; // Without previousInvoice data
+    private bool $selfEmployed;
 
-    public function __construct(InvoiceId $invoiceId, Fingerprint $fingerprint, string $territory)
+    public function __construct(InvoiceId $invoiceId, Fingerprint $fingerprint, string $territory, bool $selfEmployed = false)
     {
         parent::__construct($territory);
         $this->header = new Header();
         $this->invoiceId = $invoiceId;
         $this->fingerprint = $fingerprint;
+        $this->selfEmployed = $selfEmployed;
     }
 
     public function issuerVatId(): VatId
@@ -48,6 +50,11 @@ class TicketBaiCancel extends AbstractTicketBai
         return $this->invoiceId->invoiceNumber();
     }
 
+    public function selfEmployed(): bool
+    {
+        return $this->selfEmployed;
+    }
+
     public function xml(DOMDocument $document): DOMNode
     {
         $tbai = $document->createElementNS('urn:ticketbai:anulacion', 'T:AnulaTicketBai');
@@ -64,7 +71,8 @@ class TicketBaiCancel extends AbstractTicketBai
         $territory = $jsonData['territory'];
         $invoiceId = InvoiceId::createFromJson($jsonData['invoiceId']);
         $fingerprint = Fingerprint::createFromJson($vendor, $jsonData['fingerprint'] ?? []);
-        return new TicketBaiCancel($invoiceId, $fingerprint, $territory);
+        $selfEmployed = (bool)($jsonData['self_employed'] ?? false);
+        return new TicketBaiCancel($invoiceId, $fingerprint, $territory, $selfEmployed);
     }
 
     public static function docJson(): array

@@ -35,18 +35,6 @@ class Endpoint extends AbstractTerritory
         return new CancelInvoiceRequest($ticketBaiCancel, $this->getSubmitEndpoint());
     }
 
-    public function submitInvoice(TicketBai $ticketbai, string $pfxFilePath, string $password): Response
-    {
-        $curl = curl_init();
-        $submitInvoiceRequest = $this->createSubmitInvoiceRequest($ticketbai);
-        curl_setopt_array($curl, $this->getOptArray($submitInvoiceRequest, $pfxFilePath, $password));
-
-        $response = curl_exec($curl);
-        list($status, $headers, $content) = $this->parseCurlResponse($response);
-        curl_close($curl);
-        return new Response($status, $headers, $content);
-    }
-
     protected function response(string $status, array $headers, string $content): Response
     {
         return new Response($status, $headers, $content);

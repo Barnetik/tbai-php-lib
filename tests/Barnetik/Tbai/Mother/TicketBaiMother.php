@@ -25,7 +25,7 @@ use Barnetik\Tbai\TicketBaiCancel;
 
 class TicketBaiMother
 {
-    public function createTicketBai(string $nif, string $issuer, string $license, string $developer, string $appName, string $appVersion, string $territory): TicketBai
+    public function createTicketBai(string $nif, string $issuer, string $license, string $developer, string $appName, string $appVersion, string $territory, bool $selfEmployed = false): TicketBai
     {
         $subject = $this->getSubject($nif, $issuer);
         $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
@@ -53,25 +53,26 @@ class TicketBaiMother
             $subject,
             $invoice,
             $fingerprint,
-            $territory
+            $territory,
+            $selfEmployed
         );
     }
 
-    public function createTicketBaiCancel(string $nif, string $issuerName, string $license, string $developer, string $appName, string $appVersion, string $territory): TicketBaiCancel
+    public function createTicketBaiCancel(string $nif, string $issuerName, string $license, string $developer, string $appName, string $appVersion, string $territory, bool $selfEmployed = false): TicketBaiCancel
     {
         $issuer = new Issuer(new VatId($nif), $issuerName);
         $header = CancelInvoiceHeader::create((string)time(), new Date(date('d-m-Y')), 'TESTSERIE');
         $invoiceId = new InvoiceId($issuer, $header);
         $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
 
-        return new TicketBaiCancel($invoiceId, $fingerprint, $territory);
+        return new TicketBaiCancel($invoiceId, $fingerprint, $territory, $selfEmployed);
     }
 
     public function createTicketBaiCancelForInvoice(TicketBai $ticketbai): TicketBaiCancel
     {
         $header = CancelInvoiceHeader::create($ticketbai->invoiceNumber(), $ticketbai->expeditionDate(), $ticketbai->series());
         $invoiceId = new InvoiceId($ticketbai->issuer(), $header);
-        return new TicketBaiCancel($invoiceId, $ticketbai->fingerprint(), $ticketbai->territory());
+        return new TicketBaiCancel($invoiceId, $ticketbai->fingerprint(), $ticketbai->territory(), $ticketbai->selfEmployed());
     }
 
     public function createArabaVendor(): Vendor

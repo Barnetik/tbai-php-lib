@@ -91,7 +91,5 @@ class EndpointTest extends TestCase
         }
 
         $this->assertTrue($response->isDelivered());
-
     }
-
 }

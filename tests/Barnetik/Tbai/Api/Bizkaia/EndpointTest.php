@@ -3,6 +3,7 @@
 namespace Test\Barnetik\Tbai\Api\Bizkaia;
 
 use Barnetik\Tbai\Api;
+use Barnetik\Tbai\Api\AbstractTerritory;
 use Barnetik\Tbai\Api\Bizkaia\Endpoint;
 use Barnetik\Tbai\TicketBai;
 use DOMDocument;
@@ -11,7 +12,7 @@ use Test\Barnetik\Tbai\Mother\TicketBaiMother;
 
 class EndpointTest extends TestCase
 {
-    const DEFAULT_TERRITORY = TicketBai::TERRITORY_GIPUZKOA;
+    const DEFAULT_TERRITORY = TicketBai::TERRITORY_BIZKAIA;
     private TicketBaiMother $ticketBaiMother;
 
     protected function setUp(): void
@@ -45,22 +46,16 @@ class EndpointTest extends TestCase
         $this->assertTrue($dom->schemaValidate(__DIR__ . '/../../__files/specs/Api/Bizkaia/petition-schemas/LROE_PJ_240_1_1_FacturasEmitidas_ConSG_AltaPeticion_V1_0_2.xsd'));
     }
 
-    public function test_TicketBai_can_be_sent(): void
+    public function test_TicketBai_is_delivered(): void
     {
-        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF'];
-        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME'];
-        $license = $_ENV['TBAI_BIZKAIA_APP_LICENSE'];
-        $developer = $_ENV['TBAI_BIZKAIA_APP_DEVELOPER_NIF'];
-        $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
-        $appVersion =  $_ENV['TBAI_BIZKAIA_APP_VERSION'];
-        $ticketbai = $this->ticketBaiMother->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_BIZKAIA);
+        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
+        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
 
         $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
 
+        $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBai();
         $ticketbai->sign($certFile, $certPassword, $signedFilename);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
@@ -84,5 +79,43 @@ class EndpointTest extends TestCase
         }
 
         $this->assertTrue($response->isCorrect());
+    }
+
+
+    public function test_TicketBai_is_canceled(): void
+    {
+        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
+        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
+
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        rename($signedFilename, $signedFilename . '.xml');
+        $signedFilename = $signedFilename . '.xml';
+
+        $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBai();
+        $ticketbai->sign($certFile, $certPassword, $signedFilename);
+
+        $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
+        $response = $endpoint->submitInvoice($ticketbai, $certFile, $certPassword);
+
+        $ticketbaiCancel = $this->ticketBaiMother->createTicketBaiCancelForInvoice($ticketbai);
+        $signedFilename = $signedFilename . '-cancel.xml';
+        $ticketbaiCancel->sign($certFile, $certPassword, $signedFilename);
+        $response = $endpoint->cancelInvoice($ticketbaiCancel, $certFile, $certPassword);
+
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
+        file_put_contents($responseFile, $response->content());
+
+        if (!$response->isCorrect()) {
+            echo "\n";
+            echo "IFZ: " . $_ENV['TBAI_BIZKAIA_ISSUER_NIF'] . "\n";
+            echo "Data: " . date('Y-m-d H:i:s') . "\n";
+            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
+            echo "Bidalitako fitxategia: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
+            echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
+            echo "Jasotako errore printzipala: " . $response->mainErrorMessage() . "\n";
+            echo "Erantzuna: " . basename($responseFile) . "\n";
+        }
+
+        $this->assertTrue($response->isDelivered());
     }
 }
