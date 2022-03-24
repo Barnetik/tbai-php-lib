@@ -6,7 +6,6 @@ use Barnetik\Tbai\Api\Response as ApiResponse;
 
 class Response extends ApiResponse
 {
-
     public function isDelivered(): bool
     {
         if ($this->status != 200) {

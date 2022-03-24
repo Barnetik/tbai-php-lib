@@ -6,6 +6,7 @@ use Barnetik\Tbai\Api\ApiRequestInterface;
 use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
 use Barnetik\Tbai\TicketBaiCancel;
+use CurlHandle;
 use Exception;
 
 abstract class AbstractTerritory implements EndpointInterface
@@ -49,7 +50,7 @@ abstract class AbstractTerritory implements EndpointInterface
         curl_setopt_array($curl, $this->getOptArray($submitInvoiceRequest, $privateKey, $password));
 
         $response = curl_exec($curl);
-        list($status, $headers, $content) = $this->parseCurlResponse($response);
+        list($status, $headers, $content) = $this->parseCurlResponse($response, $curl);
         curl_close($curl);
         return $this->response($status, $headers, $content);
     }
@@ -61,12 +62,12 @@ abstract class AbstractTerritory implements EndpointInterface
         curl_setopt_array($curl, $this->getOptArray($submitInvoiceRequest, $privateKey, $password));
 
         $response = curl_exec($curl);
-        list($status, $headers, $content) = $this->parseCurlResponse($response);
+        list($status, $headers, $content) = $this->parseCurlResponse($response, $curl);
         curl_close($curl);
         return $this->response($status, $headers, $content);
     }
 
-    protected function parseCurlResponse(string $response): array
+    protected function parseCurlResponse(string $response, CurlHandle $curl): array
     {
         if (!$response) {
             throw new Exception("No response from server");
@@ -75,14 +76,14 @@ abstract class AbstractTerritory implements EndpointInterface
         list($rawHeaders, $content) = explode("\r\n\r\n", $response, 2);
         $expHeaders = explode("\r\n", $rawHeaders);
         $headers = [];
-        preg_match('/\s(\d+)\s/', $expHeaders[0], $matches);
-        $status = $matches[1];
         foreach ($expHeaders as $currentHeaderData) {
             $data = explode(": ", $currentHeaderData, 2);
             if (sizeof($data) === 2) {
                 $headers[$data[0]] = $data[1];
             }
         }
+
+        $status = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
         return [$status, $headers, $content];
     }
 
@@ -111,7 +112,8 @@ abstract class AbstractTerritory implements EndpointInterface
             $data += [
                 CURLOPT_SSLCERTTYPE         => 'P12',
                 CURLOPT_SSLCERT             => $privateKey->keyPath(),
-                CURLOPT_SSLCERTPASSWD       => $password            ];
+                CURLOPT_SSLCERTPASSWD       => $password
+            ];
         } else {
             $data += [
                 CURLOPT_SSLCERTTYPE         => 'PEM',

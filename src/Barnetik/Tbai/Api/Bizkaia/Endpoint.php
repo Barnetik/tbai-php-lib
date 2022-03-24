@@ -22,6 +22,7 @@ class Endpoint extends AbstractTerritory
             'eus-bizkaia-n3-version: 1.0',
             'eus-bizkaia-n3-content-type: application/xml',
             'eus-bizkaia-n3-data: ' . $apiRequest->jsonDataHeader(),
+            'Expect: '
         ];
     }
 

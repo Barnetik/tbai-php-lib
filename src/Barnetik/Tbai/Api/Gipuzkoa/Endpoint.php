@@ -15,7 +15,9 @@ class Endpoint extends AbstractTerritory
     public function headers(ApiRequestInterface $apiRequest, string $dataFile): array
     {
         return [
-            'Content-Type: application/xml;charset=UTF-8'
+            'Content-Type: application/xml;charset=UTF-8',
+            'Content-Length: ' . filesize($dataFile),
+            'Expect: '
         ];
     }
 
