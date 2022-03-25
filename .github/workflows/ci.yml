@@ -1,0 +1,3 @@
+- name: PHPUnit (php-actions)
+    uses: php-actions/phpunit@v3
+
