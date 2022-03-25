@@ -1,3 +1,14 @@
-- name: PHPUnit (php-actions)
-    uses: php-actions/phpunit@v3
+name: GitHub Actions Demo
+on: [push]
+jobs:
+  test:
+    name: Test with phpunit
+    runs-on: debian-latest
+    strategy:
+      matrix:
+        php_version: ['7.4', '8.0', '8.1']
+        
+    steps:
+    - name: PHPUnit (php-actions)
+      uses: php-actions/phpunit@v3
 
