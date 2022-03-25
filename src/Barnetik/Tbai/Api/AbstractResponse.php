@@ -2,7 +2,7 @@
 
 namespace Barnetik\Tbai\Api;
 
-abstract class Response
+abstract class AbstractResponse implements ResponseInterface
 {
     protected string $status;
     protected string $content;

@@ -2,7 +2,7 @@
 
 namespace Barnetik\Tbai\Api\Bizkaia;
 
-use Barnetik\Tbai\Api\Response as ApiResponse;
+use Barnetik\Tbai\Api\AbstractResponse as ApiResponse;
 
 class Response extends ApiResponse
 {

@@ -8,7 +8,7 @@ use Barnetik\Tbai\Api\Araba\Endpoint as ArabaEndpoint;
 use Barnetik\Tbai\Api\Bizkaia\Endpoint as BizkaiaEndpoint;
 use Barnetik\Tbai\Api\EndpointInterface;
 use Barnetik\Tbai\Api\Gipuzkoa\Endpoint as GipuzkoaEndpoint;
-use Barnetik\Tbai\Api\Response;
+use Barnetik\Tbai\Api\ResponseInterface;
 
 class Api
 {
@@ -38,7 +38,7 @@ class Api
         return new Api($ticketbai->territory(), $dev, $debug);
     }
 
-    public function submitInvoice(TicketBai $ticketbai, PrivateKey $privateKey, string $password): Response
+    public function submitInvoice(TicketBai $ticketbai, PrivateKey $privateKey, string $password): ResponseInterface
     {
         if (!$ticketbai->isSigned()) {
             throw new UnsignedException();
@@ -47,7 +47,7 @@ class Api
         return $this->endpoint->submitInvoice($ticketbai, $privateKey, $password);
     }
 
-    public function cancelInvoice(TicketBaiCancel $ticketbaiCancel, PrivateKey $privateKey, string $password): Response
+    public function cancelInvoice(TicketBaiCancel $ticketbaiCancel, PrivateKey $privateKey, string $password): ResponseInterface
     {
         if (!$ticketbaiCancel->isSigned()) {
             throw new UnsignedException();

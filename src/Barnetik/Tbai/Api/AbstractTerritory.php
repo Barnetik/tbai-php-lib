@@ -41,9 +41,9 @@ abstract class AbstractTerritory implements EndpointInterface
     abstract public function headers(ApiRequestInterface $apiRequest, string $dataFile): array;
     abstract public function createSubmitInvoiceRequest(TicketBai $ticketBai): ApiRequestInterface;
     abstract public function createCancelInvoiceRequest(TicketBaiCancel $ticketBaiCancel): ApiRequestInterface;
-    abstract protected function response(string $status, array $headers, string $content): Response;
+    abstract protected function response(string $status, array $headers, string $content): ResponseInterface;
 
-    public function submitInvoice(TicketBai $ticketbai, PrivateKey $privateKey, string $password): Response
+    public function submitInvoice(TicketBai $ticketbai, PrivateKey $privateKey, string $password): ResponseInterface
     {
         $curl = curl_init();
         $submitInvoiceRequest = $this->createSubmitInvoiceRequest($ticketbai);
@@ -55,7 +55,7 @@ abstract class AbstractTerritory implements EndpointInterface
         return $this->response($status, $headers, $content);
     }
 
-    public function cancelInvoice(TicketBaiCancel $ticketbaiCancel, PrivateKey $privateKey, string $password): Response
+    public function cancelInvoice(TicketBaiCancel $ticketbaiCancel, PrivateKey $privateKey, string $password): ResponseInterface
     {
         $curl = curl_init();
         $submitInvoiceRequest = $this->createCancelInvoiceRequest($ticketbaiCancel);
@@ -67,7 +67,8 @@ abstract class AbstractTerritory implements EndpointInterface
         return $this->response($status, $headers, $content);
     }
 
-    protected function parseCurlResponse(string $response, CurlHandle $curl): array
+    /** @phpstan-ignore-next-line */
+    protected function parseCurlResponse(string $response, $curlHandle): array
     {
         if (!$response) {
             throw new Exception("No response from server");
@@ -83,7 +84,7 @@ abstract class AbstractTerritory implements EndpointInterface
             }
         }
 
-        $status = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
+        $status = curl_getinfo($curlHandle, CURLINFO_RESPONSE_CODE);
         return [$status, $headers, $content];
     }
 

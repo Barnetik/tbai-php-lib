@@ -2,7 +2,7 @@
 
 namespace Barnetik\Tbai\Api\Gipuzkoa;
 
-use Barnetik\Tbai\Api\Response as ApiResponse;
+use Barnetik\Tbai\Api\AbstractResponse as ApiResponse;
 use SimpleXMLElement;
 
 class Response extends ApiResponse
