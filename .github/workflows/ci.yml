@@ -3,12 +3,12 @@ on: [push]
 jobs:
   test:
     name: Test with phpunit
-    runs-on: debian-latest
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         php_version: ['7.4', '8.0', '8.1']
         
     steps:
-    - name: PHPUnit (php-actions)
-      uses: php-actions/phpunit@v3
-
+    - uses: actions/checkout@v2
+    - uses: php-actions/composer@v5 # or alternative dependency management
+    - uses: php-actions/phpunit@v3
