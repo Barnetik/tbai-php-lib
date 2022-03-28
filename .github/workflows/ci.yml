@@ -50,7 +50,6 @@ jobs:
       with:
         php-version: ${{ matrix.php-versions }}
         extensions: gmp
-        ini-values: allow_url_fopen=On
     - name: checkout
       uses: actions/checkout@v2
     - name: composer
@@ -66,4 +65,3 @@ jobs:
         configuration: phpunit.xml.dist
         memory_limit: 1G
         filter: ^(?!.*(delivered|canceled)).*$
-        ini-values: allow_url_fopen=On
