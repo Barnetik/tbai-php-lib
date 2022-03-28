@@ -1,8 +1,8 @@
 name: GitHub Actions Demo
 on: [push]
 jobs:
-  test:
-    name: Test with phpunit
+  phpstan:
+    name: Check with phpstan
     runs-on: ubuntu-latest
     strategy:
       matrix:
