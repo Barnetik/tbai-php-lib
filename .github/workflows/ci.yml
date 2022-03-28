@@ -64,4 +64,4 @@ jobs:
         php_extensions: gmp
         configuration: phpunit.xml.dist
         memory_limit: 1G
-        filter: ^(?!.*(delivered|canceled)).*$
+        filter: ^(?!.*(araba)).*$
