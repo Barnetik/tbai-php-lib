@@ -26,3 +26,5 @@ jobs:
       with:
         php_version: ${{ matrix.php-versions }}
         php_extensions: gmp
+        configuration: phpstan.neon
+        memory_limit: 1G
