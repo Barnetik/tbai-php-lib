@@ -16,9 +16,6 @@ jobs:
         extensions: gmp
     - name: checkout
       uses: actions/checkout@v2
-      with:
-        php_version: ${{ matrix.php-versions }}
-        php_extensions: gmp
     - name: composer
       uses: php-actions/composer@v5 # or alternative dependency management
       with:
