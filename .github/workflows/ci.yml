@@ -1,4 +1,4 @@
-name: GitHub Actions Demo
+name: TicketBai Actions
 on: [push]
 jobs:
   phpstan:
