@@ -65,5 +65,5 @@ jobs:
         php_extensions: gmp
         configuration: phpunit.xml.dist
         memory_limit: 1G
-        filter: ^(?!.*(araba|canceled)).*$
+        filter: ^(?!.*(delivered|canceled)).*$
         ini-values: allow_url_fopen=1
