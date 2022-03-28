@@ -37,6 +37,7 @@ jobs:
         php-versions: ['7.4']
     env:
       TBAI_ARABA_APP_LICENSE: ${{ secrets.TBAI_ARABA_APP_LICENSE }}
+      TBAI_ARABA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_ARABA_APP_DEVELOPER_NIF }}
       TBAI_BIZKAIA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_BIZKAIA_APP_DEVELOPER_NIF }}
       TBAI_BIZKAIA_ISSUER_NAME: ${{ secrets.TBAI_BIZKAIA_ISSUER_NAME }}
       TBAI_BIZKAIA_ISSUER_NIF: ${{ secrets.TBAI_BIZKAIA_ISSUER_NIF }}
@@ -65,3 +66,4 @@ jobs:
         configuration: phpunit.xml.dist
         memory_limit: 1G
         filter: ^(?!.*araba).*$
+        ini-values: allow_url_fopen=1
