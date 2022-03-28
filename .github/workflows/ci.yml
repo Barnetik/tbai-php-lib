@@ -64,4 +64,4 @@ jobs:
         configuration: phpunit.xml.dist
         memory_limit: 1G
         filter: ^(?!.*araba).*$
-        ini-values: allow_url_fopen=On
+        ini-values: allow_url_fopen=1
