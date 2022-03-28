@@ -40,7 +40,7 @@
 
 
     <env name="TBAI_GIPUZKOA_APP_LICENSE" value="TBAIBI00000000PRUEBA" />
-    <env name="TBAI_GIPUZKOA_APP_NAME" value="SOFTWARE GARANTE TICKETBAI PRUEBA" />
+    <env name="TBAI_GIPUZKOA_APP_NAME" value="TBAI Zubia" />
     <env name="TBAI_GIPUZKOA_APP_VERSION" value="1.0" />
     <env name="TBAI_GIPUZKOA_APP_DEVELOPER_NIF" value="11111111H" />
 
