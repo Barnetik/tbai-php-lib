@@ -94,6 +94,7 @@ class SubmitInvoiceRequest implements ApiRequestInterface
         $incomes->appendChild($income);
 
         throw new \Exception('Not implemented yet, lacks Renta info');
+        /** @phpstan-ignore-next-line */
         $income->appendChild($this->document->createElement('Renta', $this->ticketbai->base64Signed()));
         $incomes->appendChild($income);
 

@@ -50,7 +50,7 @@ class AbstractSubjectExemptBreakdownItem implements TbaiXml
      */
     private function setExemptionReason(string $reason)
     {
-        if (!in_array($reason, static::validExemptionReasons())) {
+        if (!in_array($reason, self::validExemptionReasons())) {
             throw new InvalidExemptionReasonException();
         }
         $this->exemptionReason = $reason;
@@ -87,7 +87,7 @@ class AbstractSubjectExemptBreakdownItem implements TbaiXml
                 ],
                 'reason' => [
                     'type' => 'string',
-                    'enum' => static::validExemptionReasons(),
+                    'enum' => self::validExemptionReasons(),
                     'description' => '
 Arrazoia - Razón:
   * E1: Salbuetsita 20. art. - Exenta Art.20

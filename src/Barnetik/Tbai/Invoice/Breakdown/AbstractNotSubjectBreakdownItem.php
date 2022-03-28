@@ -37,7 +37,7 @@ class AbstractNotSubjectBreakdownItem implements TbaiXml
      */
     private function setNotSubjectReason(string $reason)
     {
-        if (!in_array($reason, static::validNotSubjectReasons())) {
+        if (!in_array($reason, self::validNotSubjectReasons())) {
             throw new InvalidArgumentException('Subject reason is not valid');
         }
         $this->notSubjectReason = $reason;
@@ -81,7 +81,7 @@ class AbstractNotSubjectBreakdownItem implements TbaiXml
                 ],
                 'reason' => [
                     'type' => 'string',
-                    'enum' => static::validNotSubjectReasons(),
+                    'enum' => self::validNotSubjectReasons(),
                     'description' => '
 Kargapean ez egoteko arrazoia - Causa no sujeción:
   * RL: Kargapean ez kokapen arauak direla eta - No sujeto por reglas de localización

@@ -41,7 +41,7 @@ class AbstractSubjectNotExemptBreakdownItem implements TbaiXml
      */
     private function setNotExemptType(string $type)
     {
-        if (!in_array($type, static::validNotExemptTypes())) {
+        if (!in_array($type, self::validNotExemptTypes())) {
             throw new InvalidNotExemptTypeException();
         }
         $this->notExemptType = $type;
@@ -103,7 +103,7 @@ class AbstractSubjectNotExemptBreakdownItem implements TbaiXml
                 ],
                 'type' => [
                     'type' => 'string',
-                    'enum' => static::validNotExemptTypes(),
+                    'enum' => self::validNotExemptTypes(),
                     'description' => '
 Salbuetsi gabeko mota - Tipo de no exenta
   * S1: sub. pas. inbertsiorik ez - sin ISP
