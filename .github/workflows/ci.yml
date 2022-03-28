@@ -63,4 +63,4 @@ jobs:
         php_extensions: gmp
         configuration: phpunit.xml.dist
         memory_limit: 1G
-        args: --filter '^(?!.*araba).*$'
+        filter: ^(?!.*araba).*$
