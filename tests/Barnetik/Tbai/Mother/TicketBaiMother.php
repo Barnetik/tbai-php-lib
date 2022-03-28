@@ -57,7 +57,7 @@ class TicketBaiMother
 
     public function createTicketBaiWithForeignServices(string $nif, string $issuer, string $license, string $developer, string $appName, string $appVersion, string $territory, bool $selfEmployed = false): TicketBai
     {
-        $subject = $this->getSubject($nif, $issuer);
+        $subject = $this->getForeignSubject($nif, $issuer);
         $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
 
         $header = Header::create((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), 'TESTSERIE');
