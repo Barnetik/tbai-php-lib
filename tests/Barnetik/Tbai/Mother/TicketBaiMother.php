@@ -30,7 +30,7 @@ class TicketBaiMother
         $subject = $this->getSubject($nif, $issuer);
         $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
 
-        $header = Header::create((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), 'TESTSERIE');
+        $header = Header::create((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), $this->testSerie());
         sleep(1); // Avoid same invoice number as time is used for generation
         $data = new Data('factura ejemplo TBAI', new Amount('89.36'), [Data::VAT_REGIME_01]);
         $data->addDetail(new Detail('Artículo 1 Ejemplo', new Amount('23.356', 12, 8), new Amount('1'), new Amount('25.84'), new Amount('2.00')));
@@ -60,7 +60,7 @@ class TicketBaiMother
         $subject = $this->getForeignSubject($nif, $issuer);
         $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
 
-        $header = Header::create((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), 'TESTSERIE');
+        $header = Header::create((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), $this->testSerie());
         sleep(1); // Avoid same invoice number as time is used for generation
         $data = new Data('factura ejemplo TBAI', new Amount('89.36'), [Data::VAT_REGIME_01]);
         $data->addDetail(new Detail('Artículo 1 Ejemplo', new Amount('23.356', 12, 8), new Amount('1'), new Amount('25.84'), new Amount('2.00')));
@@ -86,7 +86,7 @@ class TicketBaiMother
     public function createTicketBaiCancel(string $nif, string $issuerName, string $license, string $developer, string $appName, string $appVersion, string $territory, bool $selfEmployed = false): TicketBaiCancel
     {
         $issuer = new Issuer(new VatId($nif), $issuerName);
-        $header = CancelInvoiceHeader::create((string)time(), new Date(date('d-m-Y')), 'TESTSERIE');
+        $header = CancelInvoiceHeader::create((string)time(), new Date(date('d-m-Y')), $this->testSerie());
         $invoiceId = new InvoiceId($issuer, $header);
         $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
 
@@ -182,8 +182,15 @@ class TicketBaiMother
     private function getFingerprint(string $license, string $developer, string $appName, string $appVersion): Fingerprint
     {
         $vendor = new Vendor($license, $developer, $appName, $appVersion);
-        // $previousInvoice = new PreviousInvoice('0000002', new Date('02-12-2020'), 'abcdefgkauskjsa', 'TESTSERIE');
+        // $previousInvoice = new PreviousInvoice('0000002', new Date('02-12-2020'), 'abcdefgkauskjsa', , $this->testSerie());
         // return new Fingerprint($vendor, $previousInvoice);
         return new Fingerprint($vendor);
+    }
+
+    public function testSerie(): string
+    {
+        $version = explode('.', PHP_VERSION);
+        $phpversion = $version[0] . $version[1];
+        return  'TESTSERIE' . $phpversion;
     }
 }
