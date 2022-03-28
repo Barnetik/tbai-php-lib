@@ -31,3 +31,40 @@ jobs:
         php_extensions: gmp
         configuration: phpstan.neon
         memory_limit: 1G
+
+  phpunit:
+    name: Test with phpunit
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: ['7.4', '8.0', '8.1']
+    env:
+      TBAI_ARABA_APP_LICENSE: ${{ secrets.TBAI_ARABA_APP_LICENSE }}
+      TBAI_BIZKAIA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_BIZKAIA_APP_DEVELOPER_NIF }}
+      TBAI_BIZKAIA_ISSUER_NAME: ${{ secrets.TBAI_BIZKAIA_ISSUER_NAME }}
+      TBAI_BIZKAIA_ISSUER_NIF: ${{ secrets.TBAI_BIZKAIA_ISSUER_NIF }}
+      TBAI_GIPUZKOA_APP_LICENSE: ${{ secrets.TBAI_GIPUZKOA_APP_LICENSE }}
+        
+    steps:
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-versions }}
+        extensions: gmp
+    - name: checkout
+      uses: actions/checkout@v2
+      with:
+        php_version: ${{ matrix.php-versions }}
+        php_extensions: gmp
+    - name: composer
+      uses: php-actions/composer@v5 # or alternative dependency management
+      with:
+        php_version: ${{ matrix.php-versions }}
+        php_extensions: gmp
+    - name: phpunit
+      uses: php-actions/phpunit@v3
+      with:
+        php_version: ${{ matrix.php-versions }}
+        php_extensions: gmp
+        configuration: phpunit.xml.dist
+        memory_limit: 1G
