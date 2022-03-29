@@ -13,19 +13,19 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php-versions }}
-        extensions: gmp
+        extensions: gmp, curl
     - name: checkout
       uses: actions/checkout@v2
     - name: composer
       uses: php-actions/composer@v5 # or alternative dependency management
       with:
         php_version: ${{ matrix.php-versions }}
-        php_extensions: gmp
+        php_extensions: gmp, curl
     - name: phpstan
       uses: php-actions/phpstan@v3
       with:
         php_version: ${{ matrix.php-versions }}
-        php_extensions: gmp
+        php_extensions: gmp, curl
         configuration: phpstan.neon
         memory_limit: 1G
 
@@ -49,7 +49,7 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php-versions }}
-        extensions: gmp
+        extensions: gmp, curl
         tools: phpunit, composer
     - name: checkout
       uses: actions/checkout@v2
