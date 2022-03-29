@@ -21,7 +21,7 @@ class Amount implements Stringable
             return true;
         }
 
-        throw new InvalidAmountException();
+        throw new InvalidAmountException('Invalid ammount value: ' . $amount);
     }
 
     public function __toString(): string
