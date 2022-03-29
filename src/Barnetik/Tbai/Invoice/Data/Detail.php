@@ -34,7 +34,7 @@ class Detail implements TbaiXml
         $totalAmount = new Amount($jsonData['totalAmount']);
 
         $discount = null;
-        if (isset($jsonData['discount'])) {
+        if (isset($jsonData['discount']) && $jsonData['discount'] !== '') {
             $discount = new Amount($jsonData['discount']);
         }
 

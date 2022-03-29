@@ -169,11 +169,11 @@ class Data implements TbaiXml
         $supportedRetention = null;
         $taxBaseCost = null;
 
-        if (isset($jsonData['supportedRetention'])) {
+        if (isset($jsonData['supportedRetention']) && $jsonData['supportedRetention'] !== '') {
             $supportedRetention = new Amount($jsonData['supportedRetention']);
         }
 
-        if (isset($jsonData['taxBaseCost'])) {
+        if (isset($jsonData['taxBaseCost']) && $jsonData['taxBaseCost'] !== '') {
             $taxBaseCost = new Amount($jsonData['taxBaseCost']);
         }
 

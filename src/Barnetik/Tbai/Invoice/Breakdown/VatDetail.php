@@ -56,22 +56,22 @@ class VatDetail implements TbaiXml
         $taxBase = new Amount($jsonData['taxBase']);
 
         $taxRate = null;
-        if (isset($jsonData['taxRate'])) {
+        if (isset($jsonData['taxRate']) && $jsonData['taxRate'] !== '') {
             $taxRate = new Amount($jsonData['taxRate']);
         }
 
         $taxQuota = null;
-        if (isset($jsonData['taxQuota'])) {
+        if (isset($jsonData['taxQuota']) && $jsonData['taxQuota'] !== '') {
             $taxQuota = new Amount($jsonData['taxQuota']);
         }
 
         $equivalenceRate = null;
-        if (isset($jsonData['equi$equivalenceRate'])) {
+        if (isset($jsonData['equivalenceRate']) && $jsonData['equivalenceRate'] !== '') {
             $equivalenceRate = new Amount($jsonData['equivalenceRate']);
         }
 
         $equivalenceQuota = null;
-        if (isset($jsonData['equivalenceQuota'])) {
+        if (isset($jsonData['equivalenceQuota']) && $jsonData['equivalenceQuota'] !== '') {
             $equivalenceQuota = new Amount($jsonData['equivalenceQuota']);
         }
 
