@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: ['7.4']
+        php-versions: ['7.4', '8.0']
     env:
       TBAI_ARABA_APP_LICENSE: ${{ secrets.TBAI_ARABA_APP_LICENSE }}
       TBAI_ARABA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_ARABA_APP_DEVELOPER_NIF }}
