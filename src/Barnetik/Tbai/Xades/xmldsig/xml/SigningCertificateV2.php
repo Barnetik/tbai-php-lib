@@ -16,7 +16,7 @@ class SigningCertificateV2 extends XmlSigningCertificateV2
         // Add the digest
         $digest = base64_encode(hash($algorithm, (new \lyquidity\Asn1\Der\Encoder())->encodeElement($certificate), true));
 
-        list($certificate, $certificateInfo, $ocspResponderUrl, $issuerCertBytes, $issuerCertificate) = array_values(Ocsp::getCertificate($certificate, $issuer));
+        // list($certificate, $certificateInfo, $ocspResponderUrl, $issuerCertBytes, $issuerCertificate) = array_values(Ocsp::getCertificate($certificate, $issuer));
 
         $reflection = new \ReflectionClass('\lyquidity\xmldsig\XMLSecurityDSig');
         $algorithm = $reflection->getConstant(strtoupper($algorithm));
