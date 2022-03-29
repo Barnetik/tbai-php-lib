@@ -56,4 +56,4 @@ jobs:
     - name: Install dependencies
       run: composer install
     - name: Run phpunit
-      run: phpunit -c phpunit.xml.dist --filter "^(?!.*(araba)|(schema)).*$"
+      run: phpunit -c phpunit.xml.dist --filter "^(?!.*(araba)).*$"
