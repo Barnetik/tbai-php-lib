@@ -50,7 +50,7 @@ jobs:
       with:
         php-version: ${{ matrix.php-versions }}
         extensions: gmp, curl
-        tools: phpunit, composer
+        tools: phpunit, composer, openssl
     - name: checkout
       uses: actions/checkout@v2
     - name: Install dependencies
