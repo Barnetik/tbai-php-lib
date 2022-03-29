@@ -20,12 +20,12 @@ jobs:
       uses: php-actions/composer@v5 # or alternative dependency management
       with:
         php_version: ${{ matrix.php-versions }}
-        php_extensions: gmp, curl
+        php_extensions: gmp curl
     - name: phpstan
       uses: php-actions/phpstan@v3
       with:
         php_version: ${{ matrix.php-versions }}
-        php_extensions: gmp, curl
+        php_extensions: gmp curl
         configuration: phpstan.neon
         memory_limit: 1G
 
