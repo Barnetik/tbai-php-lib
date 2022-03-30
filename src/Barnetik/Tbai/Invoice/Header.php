@@ -2,6 +2,7 @@
 
 namespace Barnetik\Tbai\Invoice;
 
+use Barnetik\Tbai\Header\RectifyingInvoice;
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\ValueObject\Date;
 use Barnetik\Tbai\ValueObject\Time;
@@ -15,6 +16,8 @@ class Header implements TbaiXml
     private Date $expeditionDate;
     private Time $expeditionTime;
     private bool $isSimplified;
+    private ?bool $isSimplifiedSubstitute;
+    private ?RectifyingInvoice $rectifyingInvoice;
 
     private function __construct(string $invoiceNumber, Date $expeditionDate, Time $expeditionTime, ?string $series = null)
     {
@@ -30,10 +33,25 @@ class Header implements TbaiXml
         $header->isSimplified = false;
         return $header;
     }
+
     public static function createSimplified(string $invoiceNumber, Date $expeditionDate, Time $expeditionTime, ?string $series = null): self
     {
         $header = new self($invoiceNumber, $expeditionDate, $expeditionTime, $series);
         $header->isSimplified = true;
+        return $header;
+    }
+
+    public static function createSimplifiedSubstitute(string $invoiceNumber, Date $expeditionDate, Time $expeditionTime, ?string $series = null): self
+    {
+        $header = self::create($invoiceNumber, $expeditionDate, $expeditionTime, $series);
+        $header->isSimplifiedSubstitute = true;
+        return $header;
+    }
+
+    public static function createRectifyingInvoice(string $invoiceNumber, Date $expeditionDate, Time $expeditionTime, RectifyingInvoice $rectifyingInvoice, ?string $series = null): self
+    {
+        $header = self::create($invoiceNumber, $expeditionDate, $expeditionTime, $series);
+        $header->rectifyingInvoice = $rectifyingInvoice;
         return $header;
     }
 
@@ -69,6 +87,14 @@ class Header implements TbaiXml
         $header->appendChild($domDocument->createElement('HoraExpedicionFactura', $this->expeditionTime()));
         $header->appendChild($domDocument->createElement('FacturaSimplificada', $this->isSimplified ? 'S' : 'N'));
 
+        if (isset($this->isSimplifiedSubstitute)) {
+            $header->appendChild($domDocument->createElement('FacturaEmitidaSustitucionSimplificada', $this->isSimplifiedSubstitute ? 'S' : 'N'));
+        }
+
+        if (isset($this->rectifyingInvoice)) {
+            $header->appendChild($this->rectifyingInvoice->xml($domDocument));
+        }
+
         return $header;
     }
 
@@ -82,6 +108,15 @@ class Header implements TbaiXml
 
         if ($isSimplified) {
             return self::createSimplified($invoiceNumber, $expeditionDate, $expeditionTime, $series);
+        }
+
+        if (isset($jsonData['isSimplifiedSubstitute']) && $jsonData['isSimplifiedSubstitute']) {
+            return self::createSimplifiedSubstitute($invoiceNumber, $expeditionDate, $expeditionTime, $series);
+        }
+
+        if (isset($jsonData['rectifyingInvoice']) && $jsonData['rectifyingInvoice']) {
+            $rectifyingInvoice = RectifyingInvoice::createFromJson($jsonData['rectifyingInvoice']);
+            return self::createRectifyingInvoice($invoiceNumber, $expeditionDate, $expeditionTime, $rectifyingInvoice, $series);
         }
 
         return self::create($invoiceNumber, $expeditionDate, $expeditionTime, $series);
@@ -120,7 +155,8 @@ class Header implements TbaiXml
                     'type' => 'boolean',
                     'default' => false,
                     'description' => 'Faktura erraztua - Factura simplificada'
-                ]
+                ],
+                'rectifyingInvoice' => RectifyingInvoice::docJson()
             ]
         ];
     }
@@ -133,6 +169,8 @@ class Header implements TbaiXml
             'expeditionDate' => (string)$this->expeditionDate,
             'expeditionTime' => (string)$this->expeditionTime,
             'simplifiedInvoice' => $this->isSimplified,
+            'isSimplifiedSustitute' => $this->isSimplifiedSubstitute ?? null,
+            'rectifyingInvoice' => isset($this->rectifyingInvoice) ? $this->rectifyingInvoice->toArray() : null,
         ];
     }
 }

@@ -94,7 +94,7 @@ class Detail implements TbaiXml
                 'discount' => [
                     'type' => 'string',
                     'pattern' => '^(\+|-)?\d{1,12}(\.\d{0,2})?$',
-                    'description' => 'Deskontua (2 dezimalekin) - Descuento (BEZ gabe, 2 decimales)'
+                    'description' => 'Deskontua (2 dezimalekin) - Descuento (Sin IVA, 2 decimales)'
                 ],
                 'totalAmount' => [
                     'type' => 'string',
