@@ -128,7 +128,7 @@ class Header implements TbaiXml
         return $header;
     }
 
-    private static function createHeaderFromJson(array $jsonData)
+    private static function createHeaderFromJson(array $jsonData): self
     {
         $isSimplified = $jsonData['simplifiedInvoice'] ?? false;
         $invoiceNumber = $jsonData['invoiceNumber'];
