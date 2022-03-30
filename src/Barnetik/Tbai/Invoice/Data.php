@@ -122,8 +122,8 @@ class Data implements TbaiXml
             $details = $domDocument->createElement('DetallesFactura');
             foreach ($this->details as $detail) {
                 $details->appendChild($detail->xml($domDocument));
-                $data->appendChild($details);
             }
+            $data->appendChild($details);
         }
 
         $data->appendChild(

@@ -2,6 +2,7 @@
 
 namespace Barnetik\Tbai\Invoice;
 
+use Barnetik\Tbai\Header\RectifiedInvoice;
 use Barnetik\Tbai\Header\RectifyingInvoice;
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\ValueObject\Date;
@@ -18,6 +19,7 @@ class Header implements TbaiXml
     private bool $isSimplified;
     private ?bool $isSimplifiedSubstitute;
     private ?RectifyingInvoice $rectifyingInvoice;
+    private array $rectifiedInvoices = [];
 
     private function __construct(string $invoiceNumber, Date $expeditionDate, Time $expeditionTime, ?string $series = null)
     {
@@ -95,10 +97,38 @@ class Header implements TbaiXml
             $header->appendChild($this->rectifyingInvoice->xml($domDocument));
         }
 
+        if (sizeof($this->rectifiedInvoices)) {
+            $rectifiedInvoices = $domDocument->createElement('FacturasRectificadasSustituidas');
+            foreach ($this->rectifiedInvoices as $rectifiedInvoices) {
+                $rectifiedInvoices->appendChild($rectifiedInvoices->xml($domDocument));
+            }
+            $header->appendChild($rectifiedInvoices);
+        }
+
         return $header;
     }
 
+    public function addRectifiedInvoice(RectifiedInvoice $rectifiedInvoice): self
+    {
+        array_push($this->rectifiedInvoices, $rectifiedInvoice);
+        return $this;
+    }
+
     public static function createFromJson(array $jsonData): self
+    {
+        $header = self::createHeaderFromJson($jsonData);
+
+        if (isset($jsonData['rectifiedInvoices']) && $jsonData['rectifiedInvoices']) {
+            foreach ($jsonData['rectifiedInvoices'] as $jsonRectifiedInvoice) {
+                $jsonRectifiedInvoice = RectifiedInvoice::createFromJson($jsonRectifiedInvoice);
+                $header->addRectifiedInvoice($jsonRectifiedInvoice);
+            }
+        }
+
+        return $header;
+    }
+
+    private static function createHeaderFromJson(array $jsonData)
     {
         $isSimplified = $jsonData['simplifiedInvoice'] ?? false;
         $invoiceNumber = $jsonData['invoiceNumber'];
@@ -156,7 +186,13 @@ class Header implements TbaiXml
                     'default' => false,
                     'description' => 'Faktura erraztua - Factura simplificada'
                 ],
-                'rectifyingInvoice' => RectifyingInvoice::docJson()
+                'rectifyingInvoice' => RectifyingInvoice::docJson(),
+                'rectifiedInvoices' => [
+                    'type' => 'array',
+                    'items' => RectifiedInvoice::docJson(),
+                    'minItems' => 0,
+                    'maxItems' => 100,
+                ],
             ]
         ];
     }
@@ -171,6 +207,9 @@ class Header implements TbaiXml
             'simplifiedInvoice' => $this->isSimplified,
             'isSimplifiedSustitute' => $this->isSimplifiedSubstitute ?? null,
             'rectifyingInvoice' => isset($this->rectifyingInvoice) ? $this->rectifyingInvoice->toArray() : null,
+            'rectifiedInvoices' => array_map(function ($rectifiedInvoice) {
+                return $rectifiedInvoice->toArray();
+            }, $this->rectifiedInvoices),
         ];
     }
 }
