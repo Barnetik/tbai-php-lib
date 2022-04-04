@@ -99,8 +99,8 @@ class Header implements TbaiXml
 
         if (sizeof($this->rectifiedInvoices)) {
             $rectifiedInvoices = $domDocument->createElement('FacturasRectificadasSustituidas');
-            foreach ($this->rectifiedInvoices as $rectifiedInvoices) {
-                $rectifiedInvoices->appendChild($rectifiedInvoices->xml($domDocument));
+            foreach ($this->rectifiedInvoices as $rectifiedInvoice) {
+                $rectifiedInvoices->appendChild($rectifiedInvoice->xml($domDocument));
             }
             $header->appendChild($rectifiedInvoices);
         }

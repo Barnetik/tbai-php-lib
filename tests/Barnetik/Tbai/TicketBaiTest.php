@@ -76,9 +76,6 @@ class TicketBaiTest extends TestCase
         $privateKey = PrivateKey::p12($_ENV['TBAI_ARABA_P12_PATH']);
         $ticketbai->sign($privateKey, $_ENV['TBAI_ARABA_PRIVATE_KEY'], $filename);
 
-        $endpoint = new ArabaEndpoint(true, true);
-        $endpoint->submitInvoice($ticketbai, $privateKey, $_ENV['TBAI_ARABA_PRIVATE_KEY']);
-
         $qr = new Qr($ticketbai, true);
         $this->assertEquals(39, strlen($qr->ticketbaiIdentifier()));
         $this->assertStringContainsString('https://pruebas-ticketbai.araba.eus/tbai/qrtbai/?id=' . $qr->ticketbaiIdentifier(), $qr->qrUrl());
@@ -93,9 +90,6 @@ class TicketBaiTest extends TestCase
         $privateKey = PrivateKey::p12($_ENV['TBAI_BIZKAIA_P12_PATH']);
         $ticketbai->sign($privateKey, $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'], $filename);
 
-        $endpoint = new BizkaiaEndpoint(true, true);
-        $endpoint->submitInvoice($ticketbai, $privateKey, $_ENV['TBAI_BIZKAIA_PRIVATE_KEY']);
-
         $qr = new Qr($ticketbai, true);
         $this->assertEquals(39, strlen($qr->ticketbaiIdentifier()));
         $this->assertStringContainsString('https://batuz.eus/QRTBAI/?id=' . $qr->ticketbaiIdentifier(), $qr->qrUrl());
@@ -109,9 +103,6 @@ class TicketBaiTest extends TestCase
         $filename .= '.xml';
         $privateKey = PrivateKey::p12($_ENV['TBAI_GIPUZKOA_P12_PATH']);
         $ticketbai->sign($privateKey, $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'], $filename);
-
-        $endpoint = new GipuzkoaEndpoint(true, true);
-        $endpoint->submitInvoice($ticketbai, $privateKey, $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY']);
 
         $qr = new Qr($ticketbai, true);
         $this->assertEquals(39, strlen($qr->ticketbaiIdentifier()));
@@ -140,6 +131,32 @@ class TicketBaiTest extends TestCase
             var_dump($e->getLine());
             $this->fail($e->getMessage());
         }
+    }
+
+    public function test_TicketBai_rectification_validates_schema(): void
+    {
+        $certFile = $_ENV['TBAI_GIPUZKOA_P12_PATH'];
+        $certPassword = $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'];
+        $privateKey = PrivateKey::p12($certFile);
+
+        $ticketbai = $this->ticketBaiMother->createGipuzkoaTicketBai();
+        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        rename($signedFilename, $signedFilename . '.xml');
+        $signedFilename = $signedFilename . '.xml';
+
+        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+
+        $ticketbaiRectification = $this->ticketBaiMother->createGipuzkoaTicketBaiRectification($ticketbai);
+        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        rename($signedFilename, $signedFilename . '.xml');
+        $signedFilename = $signedFilename . '.xml';
+
+        $ticketbaiRectification->sign($privateKey, $certPassword, $signedFilename);
+
+        $signedDom = new DOMDocument();
+        $signedDom->load($signedFilename);
+        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
+
     }
 
     private function getTicketBai(): TicketBai

@@ -42,16 +42,16 @@ class RectifyingAmount implements TbaiXml
         $rectifyingAmount = $domDocument->createElement('ImporteRectificacionSustitutiva');
 
         $rectifyingAmount->appendChild(
-            $domDocument->createElement('BaseRectificativa', $this->base)
+            $domDocument->createElement('BaseRectificada', $this->base)
         );
 
         $rectifyingAmount->appendChild(
-            $domDocument->createElement('CuotaRectificativa', $this->quota)
+            $domDocument->createElement('CuotaRectificada', $this->quota)
         );
 
         if ($this->surcharge) {
             $rectifyingAmount->appendChild(
-                $domDocument->createElement('CuotaRecargoRectificativa', $this->surcharge)
+                $domDocument->createElement('CuotaRecargoRectificada', $this->surcharge)
             );
         }
 
