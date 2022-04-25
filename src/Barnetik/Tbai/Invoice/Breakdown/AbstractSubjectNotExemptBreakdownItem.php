@@ -65,13 +65,14 @@ class AbstractSubjectNotExemptBreakdownItem implements TbaiXml
     public function xml(DOMDocument $domDocument): DOMNode
     {
         $notExentType = $domDocument->createElement('DetalleNoExenta');
+        $notExentType->appendChild($domDocument->createElement('TipoNoExenta', $this->notExemptType));
+        $vatBreakdown = $domDocument->createElement('DesgloseIVA');
 
         foreach ($this->vatDetails as $vatDetail) {
-            $notExentType->appendChild($domDocument->createElement('TipoNoExenta', $this->notExemptType));
-            $vatBreakdown = $domDocument->createElement('DesgloseIVA');
             $vatBreakdown->appendChild($vatDetail->xml($domDocument));
-            $notExentType->appendChild($vatBreakdown);
         }
+
+        $notExentType->appendChild($vatBreakdown);
 
         return $notExentType;
     }

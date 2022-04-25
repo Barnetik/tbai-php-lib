@@ -67,6 +67,31 @@ class TicketBaiTest extends TestCase
         // var_dump($qr->qrUrl());
     }
 
+    public function test_TicketBai_can_have_multiple_vats(): void
+    {
+        $nif = $_ENV['TBAI_ARABA_ISSUER_NIF'];
+        $issuer = $_ENV['TBAI_ARABA_ISSUER_NAME'];
+        $license = $_ENV['TBAI_ARABA_APP_LICENSE'];
+        $developer = $_ENV['TBAI_ARABA_APP_DEVELOPER_NIF'];
+        $appName = $_ENV['TBAI_ARABA_APP_NAME'];
+        $appVersion =  $_ENV['TBAI_ARABA_APP_VERSION'];
+
+        $ticketbai = $this->ticketBaiMother->createTicketBaiMultiVat($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
+        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        rename($filename, $filename . '.xml');
+        $filename .= '.xml';
+
+        $privateKey = PrivateKey::p12($_ENV['TBAI_ARABA_P12_PATH']);
+        $ticketbai->sign($privateKey, $_ENV['TBAI_ARABA_PRIVATE_KEY'], $filename);
+        $signedDom = new DOMDocument();
+        $signedDom->load($filename);
+        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
+
+        // $qr = new Qr($ticketbai);
+        // var_dump($qr->ticketbaiIdentifier());
+        // var_dump($qr->qrUrl());
+    }
+
     public function test_TicketBai_QR_can_be_generated_for_araba(): void
     {
         $ticketbai = $this->ticketBaiMother->createArabaTicketBai();
