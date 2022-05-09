@@ -23,7 +23,7 @@ class RectifyingInvoice implements TbaiXml
 
     private string $code;
     private string $type;
-    private ?RectifyingAmount $rectifyingAmount;
+    private ?RectifyingAmount $rectifyingAmount = null;
 
     public function __construct(string $code, string $type, RectifyingAmount $rectifyingAmount = null)
     {

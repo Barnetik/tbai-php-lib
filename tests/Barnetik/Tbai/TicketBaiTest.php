@@ -158,30 +158,20 @@ class TicketBaiTest extends TestCase
         }
     }
 
-    public function test_TicketBai_rectification_validates_schema(): void
+    public function test_TicketBai_without_lines_validates_schema(): void
     {
-        $certFile = $_ENV['TBAI_GIPUZKOA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
 
-        $ticketbai = $this->ticketBaiMother->createGipuzkoaTicketBai();
-        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
+        $nif = $_ENV['TBAI_ARABA_ISSUER_NIF'];
+        $issuer = $_ENV['TBAI_ARABA_ISSUER_NAME'];
+        $license = $_ENV['TBAI_ARABA_APP_LICENSE'];
+        $developer = $_ENV['TBAI_ARABA_APP_DEVELOPER_NIF'];
+        $appName = $_ENV['TBAI_ARABA_APP_NAME'];
+        $appVersion =  $_ENV['TBAI_ARABA_APP_VERSION'];
 
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $ticketbai = $this->ticketBaiMother->createEmptyTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
 
-        $ticketbaiRectification = $this->ticketBaiMother->createGipuzkoaTicketBaiRectification($ticketbai);
-        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
-
-        $ticketbaiRectification->sign($privateKey, $certPassword, $signedFilename);
-
-        $signedDom = new DOMDocument();
-        $signedDom->load($signedFilename);
-        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
-
+        $dom = $ticketbai->dom();
+        $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2-no-signature.xsd'));
     }
 
     private function getTicketBai(): TicketBai

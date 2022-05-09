@@ -58,6 +58,30 @@ class TicketBaiMother
         );
     }
 
+    public function createEmptyTicketBai(string $nif, string $issuer, string $license, string $developer, string $appName, string $appVersion, string $territory, bool $selfEmployed = false): TicketBai
+    {
+        $subject = $this->getSubject($nif, $issuer);
+        $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
+
+        $header = Header::create((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), $this->testSerie());
+        sleep(1); // Avoid same invoice number as time is used for generation
+        $data = new Data('TBAI invoice without lines', new Amount('0'), [Data::VAT_REGIME_01]);
+
+        $breakdown = new Breakdown();
+        $vatDetail = new VatDetail(new Amount('0'), new Amount('21'), new Amount('0'));
+        $notExemptBreakdown = new NationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1, [$vatDetail]);
+        $breakdown->addNationalSubjectNotExemptBreakdownItem($notExemptBreakdown);
+
+        $invoice = new Invoice($header, $data, $breakdown);
+        return new TicketBai(
+            $subject,
+            $invoice,
+            $fingerprint,
+            $territory,
+            $selfEmployed
+        );
+    }
+
     public function createTicketBaiMultiVat(string $nif, string $issuer, string $license, string $developer, string $appName, string $appVersion, string $territory, bool $selfEmployed = false): TicketBai
     {
         $subject = $this->getSubject($nif, $issuer);
@@ -294,21 +318,21 @@ class TicketBaiMother
     //     return $this->createTicketBaiRectification($previousInvoice, $nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_GIPUZKOA);
     // }
 
-    private function getSubject(string $nif, string $name): Subject
+    public function getSubject(string $nif, string $name): Subject
     {
         $issuer = new Issuer(new VatId($nif), $name);
         $recipient = Recipient::createNationalRecipient(new VatId('00000000T'), 'Client Name', '48270', 'Markina-Xemein');
         return new Subject($issuer, $recipient, Subject::ISSUED_BY_THIRD_PARTY);
     }
 
-    private function getForeignSubject(string $nif, string $name): Subject
+    public function getForeignSubject(string $nif, string $name): Subject
     {
         $issuer = new Issuer(new VatId($nif, VatId::VAT_ID_TYPE_PASSPORT), $name);
         $recipient = Recipient::createGenericRecipient(new VatId('00000000T', VatId::VAT_ID_TYPE_PASSPORT), 'Client Name', '48270', 'Markina-Xemein', 'IE');
         return new Subject($issuer, $recipient, Subject::ISSUED_BY_THIRD_PARTY);
     }
 
-    private function getFingerprint(string $license, string $developer, string $appName, string $appVersion): Fingerprint
+    public function getFingerprint(string $license, string $developer, string $appName, string $appVersion): Fingerprint
     {
         $vendor = new Vendor($license, $developer, $appName, $appVersion);
         // $previousInvoice = new PreviousInvoice('0000002', new Date('02-12-2020'), 'abcdefgkauskjsa', , $this->testSerie());
