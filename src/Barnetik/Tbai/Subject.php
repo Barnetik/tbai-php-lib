@@ -20,10 +20,13 @@ class Subject implements TbaiXml
     protected array $recipients = [];
     protected string $issuedBy;
 
-    public function __construct(Issuer $issuer, Recipient $recipient, string $issuedBy = self::ISSUED_BY_ISSUER)
+    public function __construct(Issuer $issuer, Recipient $recipient = null, string $issuedBy = self::ISSUED_BY_ISSUER)
     {
         $this->issuer = $issuer;
-        $this->addRecipient($recipient);
+        if ($recipient) {
+            $this->addRecipient($recipient);
+        }
+
         if (!in_array($issuedBy, self::validIssuedByValues())) {
             throw new InvalidArgumentException('Invalid issuedBy value provided');
         }
@@ -77,18 +80,20 @@ class Subject implements TbaiXml
     public function xml(DOMDocument $document): DOMNode
     {
         $subject = $document->createElement('Sujetos');
+        $subject->appendChild($this->issuer->xml($document));
 
-        $recipients = $document->createElement('Destinatarios');
-        foreach ($this->recipients as $recipient) {
-            $recipients->appendChild(
-                $recipient->xml($document)
-            );
+        if ($this->recipients) {
+            $recipients = $document->createElement('Destinatarios');
+            foreach ($this->recipients as $recipient) {
+                $recipients->appendChild(
+                    $recipient->xml($document)
+                );
+            }
+            $subject->appendChild($recipients);
+            $subject->appendChild($document->createElement('VariosDestinatarios', $this->multipleRecipients()));
+            $subject->appendChild($document->createElement('EmitidaPorTercerosODestinatario', $this->issuedBy()));
         }
 
-        $subject->appendChild($this->issuer->xml($document));
-        $subject->appendChild($recipients);
-        $subject->appendChild($document->createElement('VariosDestinatarios', $this->multipleRecipients()));
-        $subject->appendChild($document->createElement('EmitidaPorTercerosODestinatario', $this->issuedBy()));
 
         return $subject;
     }

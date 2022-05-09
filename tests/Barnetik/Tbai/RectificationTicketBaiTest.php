@@ -2,11 +2,7 @@
 
 namespace Test\Barnetik\Tbai;
 
-use Barnetik\Tbai\Api\Araba\Endpoint as ArabaEndpoint;
-use Barnetik\Tbai\Api\Bizkaia\Endpoint as BizkaiaEndpoint;
-use Barnetik\Tbai\Api\Gipuzkoa\Endpoint as GipuzkoaEndpoint;
 use Barnetik\Tbai\Header\RectifiedInvoice;
-use Barnetik\Tbai\Header\RectifyingAmount;
 use Barnetik\Tbai\Header\RectifyingInvoice;
 use Barnetik\Tbai\Invoice;
 use Barnetik\Tbai\Invoice\Breakdown;
@@ -16,14 +12,11 @@ use Barnetik\Tbai\Invoice\Data;
 use Barnetik\Tbai\Invoice\Data\Detail;
 use Barnetik\Tbai\Invoice\Header;
 use Barnetik\Tbai\PrivateKey;
-use Barnetik\Tbai\Qr;
 use Barnetik\Tbai\TicketBai;
 use Barnetik\Tbai\ValueObject\Amount;
 use Barnetik\Tbai\ValueObject\Date;
 use Barnetik\Tbai\ValueObject\Time;
 use DOMDocument;
-use Exception;
-use lyquidity\xmldsig\XAdES;
 use PHPUnit\Framework\TestCase;
 use Test\Barnetik\Tbai\Mother\TicketBaiMother;
 

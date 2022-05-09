@@ -40,15 +40,45 @@ class TicketBaiMother
         $data->addDetail(new Detail('Artículo 2 xxx', new Amount('18.2', 12, 8), new Amount('1.50'), new Amount('33.03')));
         $data->addDetail(new Detail('Artículo 3 aaaaaaa', new Amount('1.40', 12, 8), new Amount('18'), new Amount('30.49')));
 
-        $breakdown = new Breakdown();
-        // $breakdown->addNationalNotSubjectBreakdownItem(new NationalNotSubjectBreakdownItem(new Amount('14.93'), NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_LOCATION_RULES));
-        // $breakdown->addNationalSubjectExemptBreakdownItem(new NationalSubjectExemptBreakdownItem(new Amount('56.78'), NationalSubjectExemptBreakdownItem::EXEMPT_REASON_ART_23));
-
         $vatDetail = new VatDetail(new Amount('73.86'), new Amount('21'), new Amount('15.50'));
         $notExemptBreakdown = new NationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1, [$vatDetail]);
+        $breakdown = new Breakdown();
         $breakdown->addNationalSubjectNotExemptBreakdownItem($notExemptBreakdown);
 
         $invoice = new Invoice($header, $data, $breakdown);
+        return new TicketBai(
+            $subject,
+            $invoice,
+            $fingerprint,
+            $territory,
+            $selfEmployed
+        );
+    }
+
+    public function createSimplifiedTicketBai(string $nif, string $issuer, string $license, string $developer, string $appName, string $appVersion, string $territory, bool $selfEmployed = false, bool $withRecipient = true): TicketBai
+    {
+        if ($withRecipient) {
+            $subject = $this->getSubject($nif, $issuer);
+        } else {
+            $subject = $this->getSubjectWithoutRecipient($nif, $issuer);
+        }
+        $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
+
+        $header = Header::createSimplified((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), $this->testSerie());
+        sleep(1); // Avoid same invoice number as time is used for generation
+        $data = new Data('factura ejemplo TBAI', new Amount('89.36'), [Data::VAT_REGIME_01]);
+        $data->addDetail(new Detail('Artículo 1 Ejemplo', new Amount('23.356', 12, 8), new Amount('1'), new Amount('25.84'), new Amount('2.00')));
+        $data->addDetail(new Detail('Artículo 2 xxx', new Amount('18.2', 12, 8), new Amount('1.50'), new Amount('33.03')));
+        $data->addDetail(new Detail('Artículo 3 aaaaaaa', new Amount('1.40', 12, 8), new Amount('18'), new Amount('30.49')));
+
+        $vatDetail = new VatDetail(new Amount('73.86'), new Amount('21'), new Amount('15.50'));
+        $notExemptBreakdown = new NationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1, [$vatDetail]);
+
+        $breakdown = new Breakdown();
+        $breakdown->addNationalSubjectNotExemptBreakdownItem($notExemptBreakdown);
+
+        $invoice = new Invoice($header, $data, $breakdown);
+
         return new TicketBai(
             $subject,
             $invoice,
@@ -67,9 +97,9 @@ class TicketBaiMother
         sleep(1); // Avoid same invoice number as time is used for generation
         $data = new Data('TBAI invoice without lines', new Amount('0'), [Data::VAT_REGIME_01]);
 
-        $breakdown = new Breakdown();
         $vatDetail = new VatDetail(new Amount('0'), new Amount('21'), new Amount('0'));
         $notExemptBreakdown = new NationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1, [$vatDetail]);
+        $breakdown = new Breakdown();
         $breakdown->addNationalSubjectNotExemptBreakdownItem($notExemptBreakdown);
 
         $invoice = new Invoice($header, $data, $breakdown);
@@ -95,18 +125,12 @@ class TicketBaiMother
         $data->addDetail(new Detail('Artículo 3 aaaaaaa', new Amount('1.40', 12, 8), new Amount('18'), new Amount('30.49')));
         $data->addDetail(new Detail('Artículo 4 reducido', new Amount('1.40', 12, 8), new Amount('1'), new Amount('1.46')));
 
-        $breakdown = new Breakdown();
-        // $breakdown->addNationalNotSubjectBreakdownItem(new NationalNotSubjectBreakdownItem(new Amount('14.93'), NationalNotSubjectBreakdownItem::NOT_SUBJECT_REASON_LOCATION_RULES));
-        // $breakdown->addNationalSubjectExemptBreakdownItem(new NationalSubjectExemptBreakdownItem(new Amount('56.78'), NationalSubjectExemptBreakdownItem::EXEMPT_REASON_ART_23));
-
         $vatDetail = new VatDetail(new Amount('73.86'), new Amount('21'), new Amount('15.50'));
         $vatDetail2 = new VatDetail(new Amount('1.40'), new Amount('4'), new Amount('0.06'));
-
         $notExemptBreakdown = new NationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1, [$vatDetail, $vatDetail2]);
-        $breakdown->addNationalSubjectNotExemptBreakdownItem($notExemptBreakdown);
 
-        // $notExemptBreakdown2 = new NationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1, [$vatDetail2]);
-        // $breakdown->addNationalSubjectNotExemptBreakdownItem($notExemptBreakdown2);
+        $breakdown = new Breakdown();
+        $breakdown->addNationalSubjectNotExemptBreakdownItem($notExemptBreakdown);
 
         $invoice = new Invoice($header, $data, $breakdown);
         return new TicketBai(
@@ -144,10 +168,11 @@ class TicketBaiMother
         $data->addDetail(new Detail('Artículo 1 Ejemplo', new Amount('23.356', 12, 8), new Amount('1'), new Amount('22.21'), new Amount('5')));
         $data->addDetail(new Detail('Artículo 2 xxx', new Amount('18.2', 12, 8), new Amount('1.50'), new Amount('33.03')));
 
-        $breakdown = new Breakdown();
 
         $vatDetail = new VatDetail(new Amount('45.66'), new Amount('21'), new Amount('9.59'));
         $notExemptBreakdown = new NationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1, [$vatDetail]);
+
+        $breakdown = new Breakdown();
         $breakdown->addNationalSubjectNotExemptBreakdownItem($notExemptBreakdown);
 
         $invoice = new Invoice($header, $data, $breakdown);
@@ -172,10 +197,11 @@ class TicketBaiMother
         $data->addDetail(new Detail('Artículo 2 xxx', new Amount('18.2', 12, 8), new Amount('1.50'), new Amount('33.03')));
         $data->addDetail(new Detail('Artículo 3 aaaaaaa', new Amount('1.40', 12, 8), new Amount('18'), new Amount('30.49')));
 
-        $breakdown = new Breakdown();
 
         $vatDetail = new VatDetail(new Amount('73.86'), new Amount('21'), new Amount('15.50'));
         $foreignServiceSubjectNotExemptBreakdown = new ForeignServiceSubjectNotExemptBreakdownItem(ForeignServiceSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1, [$vatDetail]);
+
+        $breakdown = new Breakdown();
         $breakdown->addForeignServiceSubjectNotExemptBreakdownItem($foreignServiceSubjectNotExemptBreakdown);
 
         $invoice = new Invoice($header, $data, $breakdown);
@@ -318,10 +344,17 @@ class TicketBaiMother
     //     return $this->createTicketBaiRectification($previousInvoice, $nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_GIPUZKOA);
     // }
 
-    public function getSubject(string $nif, string $name): Subject
+    public function getSubject(string $nif, string $name, bool $withRecipient = true): Subject
     {
         $issuer = new Issuer(new VatId($nif), $name);
         $recipient = Recipient::createNationalRecipient(new VatId('00000000T'), 'Client Name', '48270', 'Markina-Xemein');
+        return new Subject($issuer, $recipient, Subject::ISSUED_BY_THIRD_PARTY);
+    }
+
+    public function getSubjectWithoutRecipient(string $nif, string $name, bool $withRecipient = true): Subject
+    {
+        $issuer = new Issuer(new VatId($nif), $name);
+        $recipient = null;
         return new Subject($issuer, $recipient, Subject::ISSUED_BY_THIRD_PARTY);
     }
 
