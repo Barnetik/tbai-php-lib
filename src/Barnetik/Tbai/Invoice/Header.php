@@ -57,6 +57,14 @@ class Header implements TbaiXml
         return $header;
     }
 
+    public static function createSimplifiedRectifyingInvoice(string $invoiceNumber, Date $expeditionDate, Time $expeditionTime, RectifyingInvoice $rectifyingInvoice, ?string $series = null): self
+    {
+        $header = self::create($invoiceNumber, $expeditionDate, $expeditionTime, $series);
+        $header->rectifyingInvoice = $rectifyingInvoice;
+        $header->isSimplified = true;
+        return $header;
+    }
+
     public function series(): string
     {
         return $this->series;
