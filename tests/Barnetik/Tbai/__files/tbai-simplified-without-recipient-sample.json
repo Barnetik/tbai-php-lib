@@ -1,0 +1,73 @@
+{
+  "territory": "01",
+  "subject": {
+    "issuer": {
+      "vatId": "44679678Q",
+      "name": "Alayn Gortazar"
+    },
+    "issuedBy": "N"
+  },
+  "invoice": {
+    "header": {
+      "series": "TESTSERIE",
+      "invoiceNumber": "1646674248",
+      "expeditionDate": "07-03-2022",
+      "expeditionTime": "17:30:48",
+      "simplifiedInvoice": false
+    },
+    "data": {
+      "description": "factura ejemplo TBAI",
+      "details": [
+        {
+          "description": "Art\u00edculo 1 Ejemplo",
+          "unitPrice": "23.356",
+          "quantity": "1",
+          "discount": "2.00",
+          "totalAmount": "25.84"
+        },
+        {
+          "description": "Art\u00edculo 2 xxx",
+          "unitPrice": "18.2",
+          "quantity": "1.50",
+          "discount": null,
+          "totalAmount": "33.03"
+        },
+        {
+          "description": "Art\u00edculo 3 aaaaaaa",
+          "unitPrice": "1.40",
+          "quantity": "18",
+          "discount": null,
+          "totalAmount": "30.49"
+        }
+      ],
+      "total": "89.36",
+      "vatRegimes": [
+        "01"
+      ],
+      "supportedRetention": null,
+      "taxBaseCost": null
+    },
+    "breakdown": {
+      "nationalSubjectExemptBreakdownItems": [],
+      "nationalSubjectNotExemptBreakdownItems": [
+        {
+          "type": "S1",
+          "vatDetails": [
+            {
+              "taxBase": "73.86",
+              "taxRate": "21",
+              "taxQuota": "21",
+              "equivalenceRate": "",
+              "equivalenceQuota": "",
+              "isEquivalenceOperation": null
+            }
+          ]
+        }
+      ],
+      "nationalNotSubjectBreakdownItems": []
+    }
+  },
+  "fingerprint": {
+    "previousInvoice": null
+  }
+}

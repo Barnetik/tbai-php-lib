@@ -72,4 +72,18 @@ class SimplifiedTicketBaiTest extends TestCase
         $signedDom->load($signedFilename);
         $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
     }
+
+    public function test_ticketbai_simplified_without_recipient_can_be_generated_from_json(): void
+    {
+        $json = file_get_contents(__DIR__ . '/__files/tbai-simplified-without-recipient-sample.json');
+        $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createArabaVendor(), json_decode($json, true));
+        $this->assertEquals(
+            TicketBai::class,
+            get_class($ticketbai)
+        );
+
+        $dom = $ticketbai->dom();
+        $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2-no-signature.xsd'));
+    }
+
 }

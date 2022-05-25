@@ -110,12 +110,13 @@ class Subject implements TbaiXml
     public static function createFromJson(array $jsonData): self
     {
         $issuer = Issuer::createFromJson($jsonData['issuer']);
-        $recipient = Recipient::createFromJson(array_shift($jsonData['recipients']));
-        $subject = new Subject($issuer, $recipient, $jsonData['issuedBy'] ?? self::ISSUED_BY_ISSUER);
+        $subject = new Subject($issuer, null, $jsonData['issuedBy'] ?? self::ISSUED_BY_ISSUER);
 
-        foreach ($jsonData['recipients'] as $jsonRecipient) {
-            $recipient = Recipient::createFromJson($jsonRecipient);
-            $subject->addRecipient($recipient);
+        if (isset($jsonData['recipients'])) {
+            foreach ($jsonData['recipients'] as $jsonRecipient) {
+                $recipient = Recipient::createFromJson($jsonRecipient);
+                $subject->addRecipient($recipient);
+            }
         }
 
         return $subject;
@@ -130,7 +131,7 @@ class Subject implements TbaiXml
                 'recipients' => [
                     'type' => 'array',
                     'items' => Recipient::docJson(),
-                    'minItems' => 1,
+                    'minItems' => 0,
                     'maxItems' => 100
                 ],
                 'issuedBy' => [
