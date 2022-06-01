@@ -142,7 +142,7 @@ class Data implements TbaiXml
             );
         }
 
-        $vatRegimeKeys = $domDocument->createElement('Claves', $this->taxBaseCost);
+        $vatRegimeKeys = $domDocument->createElement('Claves');
         foreach ($this->vatRegimes as $vatRegime) {
             $keyId = $domDocument->createElement('IDClave');
             $keyId->appendChild(
