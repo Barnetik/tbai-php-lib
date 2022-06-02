@@ -76,7 +76,7 @@ class CancelInvoiceRequest implements ApiRequestInterface
         $issuer->appendChild(
             $this->document->createElement(
                 'ApellidosNombreRazonSocial',
-                htmlentities($this->ticketbaiCancel->issuerName(), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8')
+                htmlspecialchars($this->ticketbaiCancel->issuerName(), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8')
             )
         );
         $header->appendChild($issuer);

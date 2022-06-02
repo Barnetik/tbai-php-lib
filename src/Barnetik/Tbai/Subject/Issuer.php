@@ -32,7 +32,7 @@ class Issuer implements TbaiXml
     {
         $issuer = $domDocument->createElement('Emisor');
         $issuer->appendChild($domDocument->createElement('NIF', $this->vatId));
-        $issuer->appendChild($domDocument->createElement('ApellidosNombreRazonSocial', htmlentities($this->name, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8')));
+        $issuer->appendChild($domDocument->createElement('ApellidosNombreRazonSocial', htmlspecialchars($this->name, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8')));
         return $issuer;
     }
 

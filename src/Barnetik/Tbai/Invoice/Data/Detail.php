@@ -48,7 +48,7 @@ class Detail implements TbaiXml
         $data = $domDocument->createElement('IDDetalleFactura');
 
         $data->appendChild(
-            $domDocument->createElement('DescripcionDetalle', htmlentities($this->description, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8'))
+            $domDocument->createElement('DescripcionDetalle', htmlspecialchars($this->description, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8'))
         );
 
         $data->appendChild(

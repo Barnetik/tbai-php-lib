@@ -75,7 +75,7 @@ class SubmitInvoiceRequest implements ApiRequestInterface
         $issuer->appendChild(
             $this->document->createElement(
                 'ApellidosNombreRazonSocial',
-                htmlentities($this->ticketbai->issuerName(), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8')
+                htmlspecialchars($this->ticketbai->issuerName(), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8')
             )
         );
 

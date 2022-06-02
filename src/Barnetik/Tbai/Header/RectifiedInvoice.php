@@ -25,7 +25,7 @@ class RectifiedInvoice implements TbaiXml
         $rectifiedInvoice = $domDocument->createElement('IDFacturaRectificadaSustituida');
         if ($this->series) {
             $rectifiedInvoice->appendChild(
-                $domDocument->createElement('SerieFactura', htmlentities($this->series, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8'))
+                $domDocument->createElement('SerieFactura', htmlspecialchars($this->series, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8'))
             );
         }
 

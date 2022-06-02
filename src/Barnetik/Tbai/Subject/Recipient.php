@@ -114,18 +114,18 @@ class Recipient implements TbaiXml
         }
 
         $recipient->appendChild(
-            $domDocument->createElement('ApellidosNombreRazonSocial', htmlentities($this->name, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8'))
+            $domDocument->createElement('ApellidosNombreRazonSocial', htmlspecialchars($this->name, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8'))
         );
 
         if ($this->postalCode()) {
             $recipient->appendChild(
-                $domDocument->createElement('CodigoPostal', htmlentities($this->postalCode(), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8'))
+                $domDocument->createElement('CodigoPostal', htmlspecialchars($this->postalCode(), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8'))
             );
         }
 
         if ($this->address()) {
             $recipient->appendChild(
-                $domDocument->createElement('Direccion', htmlentities($this->address(), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8'))
+                $domDocument->createElement('Direccion', htmlspecialchars($this->address(), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8'))
             );
         }
         return $recipient;
