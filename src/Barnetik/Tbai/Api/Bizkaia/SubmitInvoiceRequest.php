@@ -72,7 +72,13 @@ class SubmitInvoiceRequest implements ApiRequestInterface
 
         $issuer = $this->document->createElement('ObligadoTributario');
         $issuer->appendChild($this->document->createElement('NIF', $this->ticketbai->issuerVatId()));
-        $issuer->appendChild($this->document->createElement('ApellidosNombreRazonSocial', $this->ticketbai->issuerName()));
+        $issuer->appendChild(
+            $this->document->createElement(
+                'ApellidosNombreRazonSocial',
+                htmlentities($this->ticketbai->issuerName(), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8')
+            )
+        );
+
         $header->appendChild($issuer);
 
         return $header;

@@ -27,7 +27,7 @@ class PreviousInvoice implements TbaiXml
         $previousInvoice = $domDocument->createElement('EncadenamientoFacturaAnterior');
         if ($this->series) {
             $previousInvoice->appendChild(
-                $domDocument->createElement('SerieFacturaAnterior', $this->series)
+                $domDocument->createElement('SerieFacturaAnterior', htmlentities($this->series, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8'))
             );
         }
 

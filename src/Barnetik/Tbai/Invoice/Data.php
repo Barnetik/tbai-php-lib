@@ -115,7 +115,9 @@ class Data implements TbaiXml
     {
         $data = $domDocument->createElement('DatosFactura');
         $data->appendChild(
-            $domDocument->createElement('DescripcionFactura', $this->description)
+            $domDocument->createElement('DescripcionFactura',
+                htmlentities($this->description, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8')
+            )
         );
 
         if (sizeof($this->details)) {

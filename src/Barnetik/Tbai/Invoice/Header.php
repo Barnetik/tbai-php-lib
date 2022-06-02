@@ -89,7 +89,7 @@ class Header implements TbaiXml
     {
         $header = $domDocument->createElement('CabeceraFactura');
         if ($this->series()) {
-            $header->appendChild($domDocument->createElement('SerieFactura', $this->series()));
+            $header->appendChild($domDocument->createElement('SerieFactura', htmlentities($this->series(), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8')));
         }
 
         $header->appendChild($domDocument->createElement('NumFactura', $this->invoiceNumber()));
