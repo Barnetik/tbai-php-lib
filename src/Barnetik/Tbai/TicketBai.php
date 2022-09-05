@@ -2,6 +2,7 @@
 
 namespace Barnetik\Tbai;
 
+use Barnetik\Tbai\Api\Bizkaia\IncomeTax\Collection;
 use DOMNode;
 use DOMDocument;
 use Barnetik\Tbai\ValueObject\Date;
@@ -17,6 +18,7 @@ class TicketBai extends AbstractTicketBai
     private Invoice $invoice;
     private Fingerprint $fingerprint;
     private bool $selfEmployed;
+    private ?Collection $batuzIncomeTaxCollection = null;
 
     public function __construct(Subject $subject, Invoice $invoice, Fingerprint $fingerprint, string $territory, bool $selfEmployed = false)
     {
@@ -93,6 +95,12 @@ class TicketBai extends AbstractTicketBai
         $fingerprint = Fingerprint::createFromJson($vendor, $jsonData['fingerprint'] ?? []);
         $selfEmployed = (bool)($jsonData['self_employed'] ?? false);
         $ticketBai = new TicketBai($subject, $invoice, $fingerprint, $territory, $selfEmployed);
+
+        if (isset($jsonData['batuzIncomeTaxes']) && isset($jsonData['batuzIncomeTaxes']) !== '') {
+            $batuzIncomeTaxCollection = Collection::createFromJson($jsonData['batuzIncomeTaxes']);
+            $ticketBai->addBatuzIncomeTaxes($batuzIncomeTaxCollection);
+        }
+
         return $ticketBai;
     }
 
@@ -113,7 +121,8 @@ Faktura aurkeztuko den lurraldea - Territorio en el que se presentará la factur
                 ],
                 'subject' => Subject::docJson(),
                 'invoice' => Invoice::docJson(),
-                'fingerprint' => Fingerprint::docJson()
+                'fingerprint' => Fingerprint::docJson(),
+                'batuzIncomeTaxes' => Collection::docJson()
             ],
             'required' => ['territory', 'subject', 'invoice', 'fingerprint']
         ];
@@ -127,6 +136,18 @@ Faktura aurkeztuko den lurraldea - Territorio en el que se presentará la factur
             'subject' => $this->subject->toArray(),
             'invoice' => $this->invoice->toArray(),
             'fingerprint' => $this->fingerprint->toArray(),
+            'batuzIncomeTaxes' =>  $this->batuzIncomeTaxCollection ? $this->batuzIncomeTaxCollection->toArray() : []
         ];
+    }
+
+    public function addBatuzIncomeTaxes(Collection $incomeTaxCollection): self
+    {
+        $this->batuzIncomeTaxCollection = $incomeTaxCollection;
+        return $this;
+    }
+
+    public function batuzIncomeTaxes(): Collection
+    {
+        return $this->batuzIncomeTaxCollection;
     }
 }

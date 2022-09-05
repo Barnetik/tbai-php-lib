@@ -30,27 +30,13 @@
       "details": [
         {
           "description": "Art\u00edculo 1 Ejemplo",
-          "unitPrice": "23.356",
+          "unitPrice": "10.00",
           "quantity": "1",
-          "discount": "2.00",
-          "totalAmount": "25.84"
-        },
-        {
-          "description": "Art\u00edculo 2 xxx",
-          "unitPrice": "18.2",
-          "quantity": "1.50",
           "discount": null,
-          "totalAmount": "33.03"
-        },
-        {
-          "description": "Art\u00edculo 3 aaaaaaa",
-          "unitPrice": "1.40",
-          "quantity": "18",
-          "discount": null,
-          "totalAmount": "30.49"
+          "totalAmount": "12.1"
         }
       ],
-      "total": "89.36",
+      "total": "12.1",
       "vatRegimes": [
         "01"
       ],
@@ -64,12 +50,12 @@
           "type": "S1",
           "vatDetails": [
             {
-              "taxBase": "73.86",
+              "taxBase": "10",
               "taxRate": "21",
-              "taxQuota": "15.51",
+              "taxQuota": "2.1",
               "equivalenceRate": "",
               "equivalenceQuota": "",
-              "isEquivalenceOperation": null
+              "isEquivalenceOperation": true
             }
           ]
         }

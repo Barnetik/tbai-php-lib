@@ -97,13 +97,8 @@ class SubmitInvoiceRequest implements ApiRequestInterface
         $incomes = $this->document->createElement('Ingresos');
         $income = $this->document->createElement('Ingreso');
         $income->appendChild($this->document->createElement('TicketBai', $this->ticketbai->base64Signed()));
+        $income->appendChild($this->ticketbai->batuzIncomeTaxes()->xml($this->document));
         $incomes->appendChild($income);
-
-        throw new \Exception('Not implemented yet, lacks Renta info');
-        /** @phpstan-ignore-next-line */
-        $income->appendChild($this->document->createElement('Renta', $this->ticketbai->base64Signed()));
-        $incomes->appendChild($income);
-
         return $incomes;
     }
 

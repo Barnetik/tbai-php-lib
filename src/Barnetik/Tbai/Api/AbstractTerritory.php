@@ -47,7 +47,6 @@ abstract class AbstractTerritory implements EndpointInterface
         $curl = curl_init();
         $submitInvoiceRequest = $this->createSubmitInvoiceRequest($ticketbai);
         curl_setopt_array($curl, $this->getOptArray($submitInvoiceRequest, $privateKey, $password));
-
         $response = curl_exec($curl);
         list($status, $headers, $content) = $this->parseCurlResponse($response, $curl);
         curl_close($curl);
@@ -72,7 +71,6 @@ abstract class AbstractTerritory implements EndpointInterface
         if (!$response) {
             throw new Exception("No response from server");
         }
-
         list($rawHeaders, $content) = explode("\r\n\r\n", $response, 2);
         $expHeaders = explode("\r\n", $rawHeaders);
         $headers = [];

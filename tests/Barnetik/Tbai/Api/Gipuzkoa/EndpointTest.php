@@ -122,7 +122,7 @@ class EndpointTest extends TestCase
             echo "\n";
             echo "IFZ: " . $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'] . "\n";
             echo "Data: " . date('Y-m-d H:i:s') . "\n";
-            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
+           // echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
             echo "Bidalitako fitxategia: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
             echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
             echo "Jasotako errore printzipala: " . $response->mainErrorMessage() . "\n";
@@ -171,6 +171,123 @@ class EndpointTest extends TestCase
             echo "Jasotako errore printzipala: " . $response->mainErrorMessage() . "\n";
             echo "Erantzuna: " . basename($responseFile) . "\n";
         }
+        $this->assertTrue($response->isDelivered());
+    }
+
+    public function test_json_data_is_correct_on_sample(): void
+    {
+        $certFile = $_ENV['TBAI_GIPUZKOA_P12_PATH'];
+        $certPassword = $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'];
+        $privateKey = PrivateKey::p12($certFile);
+
+        $json = file_get_contents(__DIR__ . '/../../__files/tbai-sample.json');
+        $jsonArray = json_decode($json, true);
+        $jsonArray['invoice']['header']['invoiceNumber'] = time();
+        sleep(1);
+        $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createGipuzkoaVendor(), $jsonArray);
+
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        rename($signedFilename, $signedFilename . '.xml');
+        $signedFilename = $signedFilename . '.xml';
+
+        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+
+        $endpoint = new Endpoint(true, true);
+
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword);
+
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
+        file_put_contents($responseFile, $response->content());
+
+        if (!$response->isCorrect()) {
+            echo "\n";
+            echo "IFZ: " . $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'] . "\n";
+            echo "Data: " . date('Y-m-d H:i:s') . "\n";
+            // echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
+            echo "Bidalitako fitxategia: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
+            echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
+            echo "Jasotako errore printzipala: " . $response->mainErrorMessage() . "\n";
+            echo "Erantzuna: " . basename($responseFile) . "\n";
+        }
+
+        $this->assertTrue($response->isDelivered());
+    }
+
+    public function test_json_data_is_correct_on_regimen_51_sample(): void
+    {
+        $certFile = $_ENV['TBAI_GIPUZKOA_P12_PATH'];
+        $certPassword = $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'];
+        $privateKey = PrivateKey::p12($certFile);
+
+        $json = file_get_contents(__DIR__ . '/../../__files/tbai-sample-regimen-51.json');
+        $jsonArray = json_decode($json, true);
+        $jsonArray['invoice']['header']['invoiceNumber'] = time();
+        sleep(1);
+        $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createGipuzkoaVendor(), $jsonArray);
+
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        rename($signedFilename, $signedFilename . '.xml');
+        $signedFilename = $signedFilename . '.xml';
+
+        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+
+        $endpoint = new Endpoint(true, true);
+
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword);
+
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
+        file_put_contents($responseFile, $response->content());
+
+        if (!$response->isCorrect()) {
+            echo "\n";
+            echo "IFZ: " . $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'] . "\n";
+            echo "Data: " . date('Y-m-d H:i:s') . "\n";
+            // echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
+            echo "Bidalitako fitxategia: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
+            echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
+            echo "Jasotako errore printzipala: " . $response->mainErrorMessage() . "\n";
+            echo "Erantzuna: " . basename($responseFile) . "\n";
+        }
+
+        $this->assertTrue($response->isDelivered());
+    }
+
+    public function test_json_data_is_correct_on_regimen_51_with_equivalence_sample(): void
+    {
+        $certFile = $_ENV['TBAI_GIPUZKOA_P12_PATH'];
+        $certPassword = $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'];
+        $privateKey = PrivateKey::p12($certFile);
+
+        $json = file_get_contents(__DIR__ . '/../../__files/tbai-sample-regimen-51-with-equivalence.json');
+        $jsonArray = json_decode($json, true);
+        $jsonArray['invoice']['header']['invoiceNumber'] = time();
+        sleep(1);
+        $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createGipuzkoaVendor(), $jsonArray);
+
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        rename($signedFilename, $signedFilename . '.xml');
+        $signedFilename = $signedFilename . '.xml';
+
+        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+
+        $endpoint = new Endpoint(true, true);
+
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword);
+
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
+        file_put_contents($responseFile, $response->content());
+
+        if (!$response->isCorrect()) {
+            echo "\n";
+            echo "IFZ: " . $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'] . "\n";
+            echo "Data: " . date('Y-m-d H:i:s') . "\n";
+            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
+            echo "Bidalitako fitxategia: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
+            echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
+            echo "Jasotako errore printzipala: " . $response->mainErrorMessage() . "\n";
+            echo "Erantzuna: " . basename($responseFile) . "\n";
+        }
+
         $this->assertTrue($response->isDelivered());
     }
 

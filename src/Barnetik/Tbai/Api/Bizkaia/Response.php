@@ -27,6 +27,10 @@ class Response extends ApiResponse
 
     public function content(): string
     {
-        return gzdecode($this->content);
+        if ($this->content) {
+            return gzdecode($this->content);
+        }
+
+        return '';
     }
 }

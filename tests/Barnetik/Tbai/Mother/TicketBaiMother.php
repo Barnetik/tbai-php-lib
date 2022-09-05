@@ -1,6 +1,8 @@
 <?php
 namespace Test\Barnetik\Tbai\Mother;
 
+use Barnetik\Tbai\Api\Bizkaia\IncomeTax\Collection;
+use Barnetik\Tbai\Api\Bizkaia\IncomeTax\Detail as IncomeTaxDetail;
 use Barnetik\Tbai\CancelInvoice\Header as CancelInvoiceHeader;
 use Barnetik\Tbai\CancelInvoice\InvoiceId;
 use Barnetik\Tbai\Fingerprint;
@@ -316,14 +318,35 @@ class TicketBaiMother
 
     public function createBizkaiaTicketBai(): TicketBai
     {
-        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF'];
-        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME'];
+        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_204'];
+        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_204'];
         $license = $_ENV['TBAI_BIZKAIA_APP_LICENSE'];
         $developer = $_ENV['TBAI_BIZKAIA_APP_DEVELOPER_NIF'];
         $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
         $appVersion =  $_ENV['TBAI_BIZKAIA_APP_VERSION'];
 
         return $this->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_BIZKAIA);
+    }
+
+    public function createBizkaiaTicketBaiSelfEmployed(bool $multipleEpigraphs = false): TicketBai
+    {
+        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_104'];
+        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_104'];
+        $license = $_ENV['TBAI_BIZKAIA_APP_LICENSE'];
+        $developer = $_ENV['TBAI_BIZKAIA_APP_DEVELOPER_NIF'];
+        $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
+        $appVersion =  $_ENV['TBAI_BIZKAIA_APP_VERSION'];
+
+        $incomingTaxCollection = new Collection();
+        if ($multipleEpigraphs) {
+            $incomingTaxCollection->addDetail(IncomeTaxDetail::create("197330", new Amount("12.02")));
+            $incomingTaxCollection->addDetail(IncomeTaxDetail::create("184990", new Amount("120.02")));
+        } else {
+            $incomingTaxCollection->addDetail(IncomeTaxDetail::create("197330"));
+        }
+        $ticketBai = $this->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_BIZKAIA, true);
+        $ticketBai->addBatuzIncomeTaxes($incomingTaxCollection);
+        return $ticketBai;
     }
 
 
@@ -377,8 +400,8 @@ class TicketBaiMother
 
     public function createBizkaiaTicketBaiRectification(TicketBai $previousInvoice): TicketBai
     {
-        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF'];
-        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME'];
+        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_204'];
+        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_204'];
         $license = $_ENV['TBAI_BIZKAIA_APP_LICENSE'];
         $developer = $_ENV['TBAI_BIZKAIA_APP_DEVELOPER_NIF'];
         $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
