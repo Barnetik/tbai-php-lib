@@ -36,7 +36,7 @@ class TicketBaiMother
         $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
 
         $header = Header::create((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), $this->testSerie());
-        sleep(1); // Avoid same invoice number as time is used for generation
+        sleep(2); // Avoid same invoice number as time is used for generation
         $data = new Data('factura ejemplo TBAI', new Amount('89.36'), [Data::VAT_REGIME_01]);
         $data->addDetail(new Detail('Artículo 1 Ejemplo', new Amount('23.356', 12, 8), new Amount('1'), new Amount('25.84'), new Amount('2.00')));
         $data->addDetail(new Detail('Artículo 2 xxx', new Amount('18.2', 12, 8), new Amount('1.50'), new Amount('33.03')));
@@ -67,7 +67,7 @@ class TicketBaiMother
         $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
 
         $header = Header::createSimplified((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), $this->testSerie());
-        sleep(1); // Avoid same invoice number as time is used for generation
+        sleep(2); // Avoid same invoice number as time is used for generation
         $data = new Data('factura ejemplo TBAI', new Amount('89.36'), [Data::VAT_REGIME_01]);
         $data->addDetail(new Detail('Artículo 1 Ejemplo', new Amount('23.356', 12, 8), new Amount('1'), new Amount('25.84'), new Amount('2.00')));
         $data->addDetail(new Detail('Artículo 2 xxx', new Amount('18.2', 12, 8), new Amount('1.50'), new Amount('33.03')));
@@ -96,7 +96,7 @@ class TicketBaiMother
         $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
 
         $header = Header::create((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), $this->testSerie());
-        sleep(1); // Avoid same invoice number as time is used for generation
+        sleep(2); // Avoid same invoice number as time is used for generation
         $data = new Data('TBAI invoice without lines', new Amount('0'), [Data::VAT_REGIME_01]);
 
         $vatDetail = new VatDetail(new Amount('0'), new Amount('21'), new Amount('0'));
@@ -120,7 +120,7 @@ class TicketBaiMother
         $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
 
         $header = Header::create((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), $this->testSerie());
-        sleep(1); // Avoid same invoice number as time is used for generation
+        sleep(2); // Avoid same invoice number as time is used for generation
         $data = new Data('factura ejemplo TBAI', new Amount('90.82'), [Data::VAT_REGIME_01]);
         $data->addDetail(new Detail('Artículo 1 Ejemplo', new Amount('23.356', 12, 8), new Amount('1'), new Amount('25.84'), new Amount('2.00')));
         $data->addDetail(new Detail('Artículo 2 xxx', new Amount('18.2', 12, 8), new Amount('1.50'), new Amount('33.03')));
@@ -165,7 +165,7 @@ class TicketBaiMother
             $previousInvoice->series()
         ));
 
-        sleep(1); // Avoid same invoice number as time is used for generation
+        sleep(2); // Avoid same invoice number as time is used for generation
         $data = new Data('factura ejemplo TBAI', new Amount('55.24'), [Data::VAT_REGIME_01]);
         $data->addDetail(new Detail('Artículo 1 Ejemplo', new Amount('23.356', 12, 8), new Amount('1'), new Amount('22.21'), new Amount('5')));
         $data->addDetail(new Detail('Artículo 2 xxx', new Amount('18.2', 12, 8), new Amount('1.50'), new Amount('33.03')));
@@ -208,7 +208,7 @@ class TicketBaiMother
             $previousInvoice->series()
         ));
 
-        sleep(1); // Avoid same invoice number as time is used for generation
+        sleep(2); // Avoid same invoice number as time is used for generation
         $data = new Data('factura ejemplo TBAI', new Amount('55.24'), [Data::VAT_REGIME_01]);
         $data->addDetail(new Detail('Artículo 1 Ejemplo', new Amount('23.356', 12, 8), new Amount('1'), new Amount('22.21'), new Amount('5')));
         $data->addDetail(new Detail('Artículo 2 xxx', new Amount('18.2', 12, 8), new Amount('1.50'), new Amount('33.03')));
@@ -236,7 +236,7 @@ class TicketBaiMother
         $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
 
         $header = Header::create((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), $this->testSerie());
-        sleep(1); // Avoid same invoice number as time is used for generation
+        sleep(2); // Avoid same invoice number as time is used for generation
         $data = new Data('factura ejemplo TBAI', new Amount('89.36'), [Data::VAT_REGIME_01]);
         $data->addDetail(new Detail('Artículo 1 Ejemplo', new Amount('23.356', 12, 8), new Amount('1'), new Amount('25.84'), new Amount('2.00')));
         $data->addDetail(new Detail('Artículo 2 xxx', new Amount('18.2', 12, 8), new Amount('1.50'), new Amount('33.03')));

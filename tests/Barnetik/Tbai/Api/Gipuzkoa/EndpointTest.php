@@ -183,7 +183,7 @@ class EndpointTest extends TestCase
         $json = file_get_contents(__DIR__ . '/../../__files/tbai-sample.json');
         $jsonArray = json_decode($json, true);
         $jsonArray['invoice']['header']['invoiceNumber'] = time();
-        sleep(1);
+        sleep(2);
         $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createGipuzkoaVendor(), $jsonArray);
 
         $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
@@ -222,7 +222,7 @@ class EndpointTest extends TestCase
         $json = file_get_contents(__DIR__ . '/../../__files/tbai-sample-regimen-51.json');
         $jsonArray = json_decode($json, true);
         $jsonArray['invoice']['header']['invoiceNumber'] = time();
-        sleep(1);
+        sleep(2);
         $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createGipuzkoaVendor(), $jsonArray);
 
         $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
@@ -261,7 +261,7 @@ class EndpointTest extends TestCase
         $json = file_get_contents(__DIR__ . '/../../__files/tbai-sample-regimen-51-with-equivalence.json');
         $jsonArray = json_decode($json, true);
         $jsonArray['invoice']['header']['invoiceNumber'] = time();
-        sleep(1);
+        sleep(2);
         $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createGipuzkoaVendor(), $jsonArray);
 
         $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
