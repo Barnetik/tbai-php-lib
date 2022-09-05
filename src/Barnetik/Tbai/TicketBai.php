@@ -96,7 +96,7 @@ class TicketBai extends AbstractTicketBai
         $selfEmployed = (bool)($jsonData['self_employed'] ?? false);
         $ticketBai = new TicketBai($subject, $invoice, $fingerprint, $territory, $selfEmployed);
 
-        if (isset($jsonData['batuzIncomeTaxes']) && isset($jsonData['batuzIncomeTaxes']) !== '') {
+        if (isset($jsonData['batuzIncomeTaxes']) && $jsonData['batuzIncomeTaxes'] !== '') {
             $batuzIncomeTaxCollection = Collection::createFromJson($jsonData['batuzIncomeTaxes']);
             $ticketBai->addBatuzIncomeTaxes($batuzIncomeTaxCollection);
         }
