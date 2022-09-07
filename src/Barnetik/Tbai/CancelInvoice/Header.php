@@ -3,6 +3,7 @@
 namespace Barnetik\Tbai\CancelInvoice;
 
 use Barnetik\Tbai\Interfaces\TbaiXml;
+use Barnetik\Tbai\TicketBai;
 use Barnetik\Tbai\ValueObject\Date;
 use DOMDocument;
 use DOMNode;
@@ -24,6 +25,11 @@ class Header implements TbaiXml
     {
         $header = new self($invoiceNumber, $expeditionDate, $series);
         return $header;
+    }
+
+    public static function createForTicketBai(TicketBai $ticketbai): self
+    {
+        return self::create($ticketbai->invoiceNumber(), $ticketbai->expeditionDate(), $ticketbai->series());
     }
 
     public function series(): string

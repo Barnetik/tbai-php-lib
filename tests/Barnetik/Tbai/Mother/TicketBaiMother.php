@@ -271,9 +271,7 @@ class TicketBaiMother
 
     public function createTicketBaiCancelForInvoice(TicketBai $ticketbai): TicketBaiCancel
     {
-        $header = CancelInvoiceHeader::create($ticketbai->invoiceNumber(), $ticketbai->expeditionDate(), $ticketbai->series());
-        $invoiceId = new InvoiceId($ticketbai->issuer(), $header);
-        return new TicketBaiCancel($invoiceId, $ticketbai->fingerprint(), $ticketbai->territory(), $ticketbai->selfEmployed());
+        return TicketBaiCancel::createForTicketBai($ticketbai);
     }
 
     public function createArabaVendor(): Vendor

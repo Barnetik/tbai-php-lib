@@ -139,6 +139,7 @@ class EndpointTest extends TestCase
         $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword);
 
         $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
+        file_put_contents($responseFile, $response->content());
 
         if (!$response->isCorrect()) {
             echo "\n";
@@ -190,7 +191,8 @@ class EndpointTest extends TestCase
             echo "Erantzuna: " . basename($responseFile) . "\n";
         }
 
-        $this->assertTrue($response->isCorrect());    }
+        $this->assertTrue($response->isCorrect());    
+    }
 
     public function test_TicketBai_is_canceled(): void
     {
@@ -203,6 +205,44 @@ class EndpointTest extends TestCase
         $signedFilename = $signedFilename . '.xml';
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBai();
+        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+
+        $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword);
+
+        $ticketbaiCancel = $this->ticketBaiMother->createTicketBaiCancelForInvoice($ticketbai);
+        $signedFilename = $signedFilename . '-cancel.xml';
+        $ticketbaiCancel->sign($privateKey, $certPassword, $signedFilename);
+        $response = $endpoint->cancelInvoice($ticketbaiCancel, $privateKey, $certPassword);
+
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
+        file_put_contents($responseFile, $response->content());
+
+        if (!$response->isCorrect()) {
+            echo "\n";
+            echo "IFZ: " . $ticketbai->issuerVatId() . "\n";
+            echo "Data: " . date('Y-m-d H:i:s') . "\n";
+            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
+            echo "Bidalitako fitxategia: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
+            echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
+            echo "Jasotako errore printzipala: " . $response->mainErrorMessage() . "\n";
+            echo "Erantzuna: " . basename($responseFile) . "\n";
+        }
+
+        $this->assertTrue($response->isDelivered());
+    }
+
+    public function test_TicketBai_is_canceled_for_selfEmployed(): void
+    {
+        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
+        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
+        $privateKey = PrivateKey::p12($certFile);
+
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        rename($signedFilename, $signedFilename . '.xml');
+        $signedFilename = $signedFilename . '.xml';
+
+        $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBaiSelfEmployed();
         $ticketbai->sign($privateKey, $certPassword, $signedFilename);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
