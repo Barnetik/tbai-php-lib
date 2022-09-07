@@ -335,6 +335,8 @@ class TicketBaiMother
         $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
         $appVersion =  $_ENV['TBAI_BIZKAIA_APP_VERSION'];
 
+        $ticketBai = $this->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_BIZKAIA, true);
+
         $incomingTaxCollection = new Collection();
         if ($multipleEpigraphs) {
             $incomingTaxCollection->addDetail(IncomeTaxDetail::create("197330", new Amount("12.02")));
@@ -342,7 +344,6 @@ class TicketBaiMother
         } else {
             $incomingTaxCollection->addDetail(IncomeTaxDetail::create("197330"));
         }
-        $ticketBai = $this->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_BIZKAIA, true);
         $ticketBai->addBatuzIncomeTaxes($incomingTaxCollection);
         return $ticketBai;
     }
@@ -408,17 +409,24 @@ class TicketBaiMother
         return $this->createTicketBaiRectification($previousInvoice, $nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_BIZKAIA);
     }
 
-    // public function createTicketBaiRectificacion($territory, TicketBai $previousInvoice)
-    // {
-    //     $nif = $_ENV['TBAI_' . mb_strtoupper($territory) . '_ISSUER_NIF'];
-    //     $issuer = $_ENV['TBAI_' . mb_strtoupper($territory) . '_ISSUER_NAME'];
-    //     $license = $_ENV['TBAI_' . mb_strtoupper($territory) . '_APP_LICENSE'];
-    //     $developer = $_ENV['TBAI_' . mb_strtoupper($territory) . '_APP_DEVELOPER_NIF'];
-    //     $appName = $_ENV['TBAI_' . mb_strtoupper($territory) . '_APP_NAME'];
-    //     $appVersion =  $_ENV['TBAI_' . mb_strtoupper($territory) . '_APP_VERSION'];
+    public function createBizkaiaTicketBaiRectificationForSelfEmployed(TicketBai $previousInvoice): TicketBai
+    {
+        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_104'];
+        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_104'];
+        $license = $_ENV['TBAI_BIZKAIA_APP_LICENSE'];
+        $developer = $_ENV['TBAI_BIZKAIA_APP_DEVELOPER_NIF'];
+        $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
+        $appVersion =  $_ENV['TBAI_BIZKAIA_APP_VERSION'];
 
-    //     return $this->createTicketBaiRectification($previousInvoice, $nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_GIPUZKOA);
-    // }
+        $ticketbai = $this->createTicketBaiRectification($previousInvoice, $nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_BIZKAIA, true);
+        $incomingTaxCollection = new Collection();
+        $incomingTaxCollection->addDetail(IncomeTaxDetail::create("197330", new Amount("11.02")));
+        $incomingTaxCollection->addDetail(IncomeTaxDetail::create("184990", new Amount("111")));
+    
+        $ticketbai->addBatuzIncomeTaxes($incomingTaxCollection);
+        return $ticketbai;
+
+    }
 
     public function getSubject(string $nif, string $name, bool $withRecipient = true): Subject
     {
