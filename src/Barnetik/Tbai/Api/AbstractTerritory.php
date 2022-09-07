@@ -42,27 +42,39 @@ abstract class AbstractTerritory implements EndpointInterface
     abstract public function createCancelInvoiceRequest(TicketBaiCancel $ticketBaiCancel): ApiRequestInterface;
     abstract protected function response(string $status, array $headers, string $content): ResponseInterface;
 
-    public function submitInvoice(TicketBai $ticketbai, PrivateKey $privateKey, string $password): ResponseInterface
+    public function submitInvoice(TicketBai $ticketbai, PrivateKey $privateKey, string $password, int $maxRetries = 1, int $retryDelay = 1): ResponseInterface
     {
-        $curl = curl_init();
         $submitInvoiceRequest = $this->createSubmitInvoiceRequest($ticketbai);
-        curl_setopt_array($curl, $this->getOptArray($submitInvoiceRequest, $privateKey, $password));
-        $response = curl_exec($curl);
-        list($status, $headers, $content) = $this->parseCurlResponse($response, $curl);
-        curl_close($curl);
-        return $this->response($status, $headers, $content);
+        return $this->doRequest($submitInvoiceRequest, $privateKey, $password, $maxRetries, $retryDelay);
     }
 
-    public function cancelInvoice(TicketBaiCancel $ticketbaiCancel, PrivateKey $privateKey, string $password): ResponseInterface
+    public function cancelInvoice(TicketBaiCancel $ticketbaiCancel, PrivateKey $privateKey, string $password, int $maxRetries = 1, int $retryDelay = 1): ResponseInterface
     {
-        $curl = curl_init();
-        $submitInvoiceRequest = $this->createCancelInvoiceRequest($ticketbaiCancel);
-        curl_setopt_array($curl, $this->getOptArray($submitInvoiceRequest, $privateKey, $password));
+        $cancelInvoiceRequest = $this->createCancelInvoiceRequest($ticketbaiCancel);
+        return $this->doRequest($cancelInvoiceRequest, $privateKey, $password, $maxRetries, $retryDelay);
+    }
 
-        $response = curl_exec($curl);
-        list($status, $headers, $content) = $this->parseCurlResponse($response, $curl);
-        curl_close($curl);
-        return $this->response($status, $headers, $content);
+    private function doRequest(ApiRequestInterface $request, PrivateKey $privateKey, string $password, int $maxRetries, int $retryDelay): ?ResponseInterface
+    {
+        $tries = 0;
+        do {
+            $tries++;
+            try {
+                $curl = curl_init();
+                curl_setopt_array($curl, $this->getOptArray($request, $privateKey, $password));
+
+                $response = curl_exec($curl);
+                list($status, $headers, $content) = $this->parseCurlResponse($response, $curl);
+                curl_close($curl);
+                return $this->response($status, $headers, $content);
+            } catch (Exception $e) {
+                if ($tries > $maxRetries || $e->getMessage() !== 'No response from server') {
+                    throw $e;
+                }
+            }
+            sleep($retryDelay);
+        } while ($tries <= $maxRetries);
+        return null;
     }
 
     /** @phpstan-ignore-next-line */

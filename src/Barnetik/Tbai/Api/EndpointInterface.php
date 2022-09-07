@@ -17,9 +17,9 @@ interface EndpointInterface
      */
     public function debugData(string $key);
 
-    public function submitInvoice(TicketBai $ticketbai, PrivateKey $privateKey, string $password): ResponseInterface;
+    public function submitInvoice(TicketBai $ticketbai, PrivateKey $privateKey, string $password, int $maxRetries = 1, int $retryDelay = 1): ResponseInterface;
     public function createSubmitInvoiceRequest(TicketBai $ticketBai): ApiRequestInterface;
 
-    public function cancelInvoice(TicketBaiCancel $ticketbaiCancel, PrivateKey $privateKey, string $password): ResponseInterface;
+    public function cancelInvoice(TicketBaiCancel $ticketbaiCancel, PrivateKey $privateKey, string $password, int $maxRetries = 1, int $retryDelay = 1): ResponseInterface;
     public function createCancelInvoiceRequest(TicketBaiCancel $ticketBai): ApiRequestInterface;
 }

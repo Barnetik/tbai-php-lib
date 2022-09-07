@@ -38,22 +38,22 @@ class Api
         return new Api($ticketbai->territory(), $dev, $debug);
     }
 
-    public function submitInvoice(TicketBai $ticketbai, PrivateKey $privateKey, string $password): ResponseInterface
+    public function submitInvoice(TicketBai $ticketbai, PrivateKey $privateKey, string $password, int $maxRetries = 1, int $retryDelay = 1): ResponseInterface
     {
         if (!$ticketbai->isSigned()) {
             throw new UnsignedException();
         }
 
-        return $this->endpoint->submitInvoice($ticketbai, $privateKey, $password);
+        return $this->endpoint->submitInvoice($ticketbai, $privateKey, $password, $maxRetries, $retryDelay);
     }
 
-    public function cancelInvoice(TicketBaiCancel $ticketbaiCancel, PrivateKey $privateKey, string $password): ResponseInterface
+    public function cancelInvoice(TicketBaiCancel $ticketbaiCancel, PrivateKey $privateKey, string $password, int $maxRetries = 1, int $retryDelay = 1): ResponseInterface
     {
         if (!$ticketbaiCancel->isSigned()) {
             throw new UnsignedException();
         }
 
-        return $this->endpoint->cancelInvoice($ticketbaiCancel, $privateKey, $password);
+        return $this->endpoint->cancelInvoice($ticketbaiCancel, $privateKey, $password, $maxRetries, $retryDelay);
     }
 
     /**

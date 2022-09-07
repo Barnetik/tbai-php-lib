@@ -86,7 +86,7 @@ class RectificationTicketBaiTest extends TestCase
             $previousInvoice->series()
         ));
 
-        sleep(2); // Avoid same invoice number as time is used for generation
+        sleep(1); // Avoid same invoice number as time is used for generation
         $data = new Data('factura ejemplo TBAI', new Amount('55.24'), [Data::VAT_REGIME_01]);
         $data->addDetail(new Detail('Artículo 1 Ejemplo', new Amount('23.356', 12, 8), new Amount('1'), new Amount('22.21'), new Amount('5')));
         $data->addDetail(new Detail('Artículo 2 xxx', new Amount('18.2', 12, 8), new Amount('1.50'), new Amount('33.03')));

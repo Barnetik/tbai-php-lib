@@ -11,7 +11,10 @@ use Test\Barnetik\Tbai\Mother\TicketBaiMother;
 
 class EndpointTest extends TestCase
 {
+    const SUBMIT_RETRIES = 3;
+    const SUBMIT_RETRY_DELAY = 3;
     const DEFAULT_TERRITORY = TicketBai::TERRITORY_ARABA;
+    
     private TicketBaiMother $ticketBaiMother;
 
     protected function setUp(): void
@@ -41,7 +44,7 @@ class EndpointTest extends TestCase
 
         $endpoint = new Endpoint(true, true);
 
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword);
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
         $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
         file_put_contents($responseFile, $response->content());
@@ -84,7 +87,7 @@ class EndpointTest extends TestCase
 
         $endpoint = new Endpoint(true, true);
 
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword);
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
         $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
         file_put_contents($responseFile, $response->content());
@@ -116,12 +119,12 @@ class EndpointTest extends TestCase
         $ticketbai = $this->ticketBaiMother->createArabaTicketBai();
         $ticketbai->sign($privateKey, $certPassword, $signedFilename);
         $endpoint = new Endpoint(true, true);
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword);
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
         $ticketbaiCancel = $this->ticketBaiMother->createTicketBaiCancelForInvoice($ticketbai);
         $signedFilename = $signedFilename . '-cancel.xml';
         $ticketbaiCancel->sign($privateKey, $certPassword, $signedFilename);
-        $response = $endpoint->cancelInvoice($ticketbaiCancel, $privateKey, $certPassword);
+        $response = $endpoint->cancelInvoice($ticketbaiCancel, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
         $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
         file_put_contents($responseFile, $response->content());
@@ -154,7 +157,7 @@ class EndpointTest extends TestCase
         $ticketbai->sign($privateKey, $certPassword, $signedFilename);
 
         $endpoint = new Endpoint(true, true);
-        $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword);
+        $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
         $ticketbaiRectification = $this->ticketBaiMother->createArabaTicketBaiRectification($ticketbai);
         $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
@@ -164,7 +167,7 @@ class EndpointTest extends TestCase
         $ticketbaiRectification->sign($privateKey, $certPassword, $signedFilename);
 
         $endpoint = new Endpoint(true, true);
-        $response = $endpoint->submitInvoice($ticketbaiRectification, $privateKey, $certPassword);
+        $response = $endpoint->submitInvoice($ticketbaiRectification, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
         $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
         file_put_contents($responseFile, $response->content());
