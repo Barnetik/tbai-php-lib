@@ -1,6 +1,6 @@
 # Tbai PHP lib
 
-TicketBai sistema erabiltzeko PHP liburutegia (Lanean oraindik)
+TicketBai sistema erabiltzeko PHP liburutegia
 
 
 Gaur egun egiteko gai dena:
@@ -14,7 +14,7 @@ Oraingoz ez da Zuzendu zerbitzuekin komunikatzeko gai
 
 ----
 
-Librería para integrarse con el sistema TicketBai (En desarrollo)
+Librería para integrarse con el sistema TicketBai
 
 Funcionalidades actuales:
 
