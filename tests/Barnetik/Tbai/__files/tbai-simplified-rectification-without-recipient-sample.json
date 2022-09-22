@@ -13,7 +13,15 @@
       "invoiceNumber": "1646674248",
       "expeditionDate": "07-03-2022",
       "expeditionTime": "17:30:48",
-      "simplifiedInvoice": true
+      "simplifiedInvoice": true,
+      "rectifyingInvoice": {
+        "code": "R5",
+        "type": "S",
+        "rectifyingAmount": {
+          "base": "200.00",
+          "quota": "21"
+        }
+      }
     },
     "data": {
       "description": "factura ejemplo TBAI",

@@ -144,17 +144,21 @@ class Header implements TbaiXml
         $expeditionTime = new Time($jsonData['expeditionTime']);
         $series = $jsonData['series'] ?? null;
 
-        if ($isSimplified) {
-            return self::createSimplified($invoiceNumber, $expeditionDate, $expeditionTime, $series);
+        if (isset($jsonData['rectifyingInvoice']) && $jsonData['rectifyingInvoice']) {
+            $rectifyingInvoice = RectifyingInvoice::createFromJson($jsonData['rectifyingInvoice']);
+            if ($isSimplified) {
+                return self::createSimplifiedRectifyingInvoice($invoiceNumber, $expeditionDate, $expeditionTime, $rectifyingInvoice, $series);
+            } else {
+                return self::createRectifyingInvoice($invoiceNumber, $expeditionDate, $expeditionTime, $rectifyingInvoice, $series);
+            }
         }
 
         if (isset($jsonData['isSimplifiedSubstitute']) && $jsonData['isSimplifiedSubstitute']) {
             return self::createSimplifiedSubstitute($invoiceNumber, $expeditionDate, $expeditionTime, $series);
         }
 
-        if (isset($jsonData['rectifyingInvoice']) && $jsonData['rectifyingInvoice']) {
-            $rectifyingInvoice = RectifyingInvoice::createFromJson($jsonData['rectifyingInvoice']);
-            return self::createRectifyingInvoice($invoiceNumber, $expeditionDate, $expeditionTime, $rectifyingInvoice, $series);
+        if ($isSimplified) {
+            return self::createSimplified($invoiceNumber, $expeditionDate, $expeditionTime, $series);
         }
 
         return self::create($invoiceNumber, $expeditionDate, $expeditionTime, $series);

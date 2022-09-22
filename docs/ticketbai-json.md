@@ -78,7 +78,7 @@
                             "name"
                         ]
                     },
-                    "minItems": 1,
+                    "minItems": 0,
                     "maxItems": 100
                 },
                 "issuedBy": {
@@ -131,6 +131,87 @@
                             "type": "boolean",
                             "default": false,
                             "description": "Faktura erraztua - Factura simplificada"
+                        },
+                        "rectifyingInvoice": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "string",
+                                    "enum": [
+                                        "R1",
+                                        "R2",
+                                        "R3",
+                                        "R4",
+                                        "R5"
+                                    ],
+                                    "description": "\n  Faktura zuzentzailearen mota identifikatzen duen kodea - C\u00f3digo que identifica el tipo de factura rectificativa\n   * R1: Faktura zuzentzailea: zuzenbidean eta BEZaren Legearen 80.Bat, Bi eta Sei artikuluan oinarritutako akatsa - Factura rectificativa: error fundado en derecho y Art. 80 Uno, Dos y Seis de la Ley del IVA\n   * R2: Faktura zuzentzailea: BEZaren Legearen 80.Hiru artikulua - Factura rectificativa: art\u00edculo 80 Tres de la Ley del IVA\n   * R3: Faktura zuzentzailea: BEZaren Legearen 80.Lau artikulua - Factura rectificativa: art\u00edculo 80 Cuatro de la Ley del IVA\n   * R4: Faktura zuzentzailea: gainerakoak - Factura rectificativa: Resto\n   * R5: Faktura sinplifikatuak zuzentzeko faktura - Factura rectificativa en facturas simplificadas\n          "
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "enum": [
+                                        "S",
+                                        "I"
+                                    ],
+                                    "description": "\nFaktura zuzentzaile mota - Tipo de factura rectificativa\n * S: Ordezkapenagatiko faktura zuzentzailea - Factura rectificativa por sustituci\u00f3n\n * I: Diferentziengatiko faktura zuzentzailea - Factura rectificativa por diferencias\n          "
+                                },
+                                "rectifyingAmount": {
+                                    "type": "object",
+                                    "properties": {
+                                        "base": {
+                                            "type": "string",
+                                            "pattern": "^(\\+|-)?\\d{1,12}(\\.\\d{0,2})?$",
+                                            "description": "Ordezkatutako fakturaren zerga oinarria (2 dezimalekin) - Base imponible de la factura sustituida (2 decimales)"
+                                        },
+                                        "quota": {
+                                            "type": "string",
+                                            "pattern": "^(\\+|-)?\\d{1,12}(\\.\\d{0,2})?$",
+                                            "description": "Ordezkatutako fakturaren jasanarazitako kuota (2 dezimalekin) - Cuota repercutida de la factura sustituida (2 decimales)"
+                                        },
+                                        "surcharge": {
+                                            "type": "string",
+                                            "pattern": "^(\\+|-)?\\d{1,12}(\\.\\d{0,2})?$",
+                                            "description": "Ordezkatutako fakturaren baliokidetasun errekarguaren kuota (2 dezimalekin) - Cuota del recargo de equivalencia de la factura sustituida. (2 decimales)"
+                                        }
+                                    },
+                                    "required": [
+                                        "base",
+                                        "quota"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "code",
+                                "type"
+                            ]
+                        },
+                        "rectifiedInvoices": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "invoiceNumber": {
+                                        "type": "string",
+                                        "maxLength": 20,
+                                        "description": "Zuzendutako edo ordezkatutako faktura identifikatzen duen zenbakia - N\u00famero de la factura rectificada o sustituida"
+                                    },
+                                    "sentDate": {
+                                        "type": "string",
+                                        "pattern": "^\\d{2,2}-\\d{2,2}-\\d{4,4}$",
+                                        "description": "Zuzendutako edo ordezkatutako faktura egin den data (adib: 21-12-2020) - Fecha de expedici\u00f3n de la factura rectificada o sustituida (ej: 21-12-2020)"
+                                    },
+                                    "serie": {
+                                        "type": "string",
+                                        "maxLength": 20,
+                                        "description": "Zuzendutako edo ordezkatutako faktura identifikatzen duen serie zenbakia - N\u00famero de serie que identifica a la factura rectificada o sustituida"
+                                    }
+                                },
+                                "required": [
+                                    "invoiceNumber",
+                                    "sentDate"
+                                ]
+                            },
+                            "minItems": 0,
+                            "maxItems": 100
                         }
                     }
                 },
@@ -163,7 +244,7 @@
                                     "discount": {
                                         "type": "string",
                                         "pattern": "^(\\+|-)?\\d{1,12}(\\.\\d{0,2})?$",
-                                        "description": "Deskontua (2 dezimalekin) - Descuento (BEZ gabe, 2 decimales)"
+                                        "description": "Deskontua (2 dezimalekin) - Descuento (Sin IVA, 2 decimales)"
                                     },
                                     "totalAmount": {
                                         "type": "string",
@@ -630,6 +711,39 @@
                     ]
                 }
             }
+        },
+        "batuzIncomeTaxes": {
+            "type": "object",
+            "properties": {
+                "incomeTaxDetails": {
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "epigraph": {
+                                "type": "string",
+                                "description": "PFEZ jardueraren epigrafe zenbakia - Ep\u00edgrafe de la actividad a la que est\u00e1 asociado el IRPF"
+                            },
+                            "incomeTaxAmount": {
+                                "type": "string",
+                                "description": "PFEZ sarrera zenbatekoa (2 dezimalekin). Epigrafe bat baino gehiago zehazten bada, derrigorezkoa - Importe del ingreso IRPF (con 2 decimales). Obligatorio si la factura lleva asociado m\u00e1s de un ep\u00edgrafe"
+                            },
+                            "collectionAndPaymentCriteria": {
+                                "type": "boolean",
+                                "default": false,
+                                "description": "Faktura Kobrantzen eta ordainketen irizpidera atxikita badago - Si la factura est\u00e1 acogida al criterio de Cobros y Pagos"
+                            }
+                        },
+                        "required": [
+                            "epigraph"
+                        ]
+                    },
+                    "minItems": 1,
+                    "maxItems": 10
+                }
+            },
+            "required": [
+                "epigraph"
+            ]
         }
     },
     "required": [
