@@ -2,7 +2,7 @@
     "name": "barnetik/ticketbai",
     "description": "Generate, sign and submit TicketBAI compatible invoices",
     "type": "library",
-    "license": "MIT",
+    "license": "GPL",
     "autoload": {
         "psr-4": {
             "Barnetik\\": "src/Barnetik",
