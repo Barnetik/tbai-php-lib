@@ -120,7 +120,7 @@ class VatDetail implements TbaiXml
         return [
             'taxBase' => (string)$this->taxBase,
             'taxRate' => $this->taxRate ? (string)$this->taxRate : null,
-            'taxQuota' => $this->taxRate ? (string)$this->taxRate : null,
+            'taxQuota' => $this->taxQuota ? (string)$this->taxQuota : null,
             'equivalenceRate' => $this->equivalenceRate ? (string)$this->equivalenceRate : null,
             'equivalenceQuota' => $this->equivalenceQuota ? (string)$this->equivalenceQuota : null,
             'isEquivalenceOperation' => $this->isEquivalenceOperation ?? null,
