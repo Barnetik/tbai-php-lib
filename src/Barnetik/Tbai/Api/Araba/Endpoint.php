@@ -6,6 +6,8 @@ use Barnetik\Tbai\Api\ApiRequestInterface;
 use Barnetik\Tbai\Api\AbstractTerritory;
 use Barnetik\Tbai\TicketBai;
 use Barnetik\Tbai\TicketBaiCancel;
+use Barnetik\Tbai\Zuzendu;
+use Barnetik\Tbai\ZuzenduCancel;
 
 class Endpoint extends AbstractTerritory
 {
@@ -29,6 +31,16 @@ class Endpoint extends AbstractTerritory
     public function createCancelInvoiceRequest(TicketBaiCancel $ticketBaiCancel): ApiRequestInterface
     {
         return new CancelInvoiceRequest($ticketBaiCancel, $this->getSubmitEndpoint());
+    }
+
+    public function createSubmitZuzenduRequest(Zuzendu $zuzendu): ApiRequestInterface
+    {
+        return new SubmitZuzenduRequest($zuzendu, $this->getSubmitEndpoint());
+    }
+
+    public function createCancelZuzenduRequest(ZuzenduCancel $zuzenduCancel): ApiRequestInterface
+    {
+        return new CancelZuzenduRequest($zuzenduCancel, $this->getSubmitEndpoint());
     }
 
     protected function response(string $status, array $headers, string $content): Response

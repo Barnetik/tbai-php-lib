@@ -5,6 +5,8 @@ namespace Barnetik\Tbai\Api;
 use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
 use Barnetik\Tbai\TicketBaiCancel;
+use Barnetik\Tbai\Zuzendu;
+use Barnetik\Tbai\ZuzenduCancel;
 
 interface EndpointInterface
 {
@@ -22,4 +24,10 @@ interface EndpointInterface
 
     public function cancelInvoice(TicketBaiCancel $ticketbaiCancel, PrivateKey $privateKey, string $password, int $maxRetries = 1, int $retryDelay = 1): ResponseInterface;
     public function createCancelInvoiceRequest(TicketBaiCancel $ticketBai): ApiRequestInterface;
+
+    public function submitZuzendu(Zuzendu $zuzendu, PrivateKey $privateKey, string $password, int $maxRetries = 1, int $retryDelay = 1): ResponseInterface;
+    public function createSubmitZuzenduRequest(Zuzendu $zuzendu): ApiRequestInterface;
+
+    public function cancelZuzendu(ZuzenduCancel $zuzenduCancel, PrivateKey $privateKey, string $password, int $maxRetries = 1, int $retryDelay = 1): ResponseInterface;
+    public function createCancelZuzenduRequest(ZuzenduCancel $zuzenduCancel): ApiRequestInterface;
 }

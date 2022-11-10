@@ -6,6 +6,8 @@ use Barnetik\Tbai\Api\ApiRequestInterface;
 use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
 use Barnetik\Tbai\TicketBaiCancel;
+use Barnetik\Tbai\Zuzendu;
+use Barnetik\Tbai\ZuzenduCancel;
 use Exception;
 
 abstract class AbstractTerritory implements EndpointInterface
@@ -40,6 +42,8 @@ abstract class AbstractTerritory implements EndpointInterface
     abstract public function headers(ApiRequestInterface $apiRequest, string $dataFile): array;
     abstract public function createSubmitInvoiceRequest(TicketBai $ticketBai): ApiRequestInterface;
     abstract public function createCancelInvoiceRequest(TicketBaiCancel $ticketBaiCancel): ApiRequestInterface;
+    abstract public function createSubmitZuzenduRequest(Zuzendu $zuzendu): ApiRequestInterface;
+    abstract public function createCancelZuzenduRequest(ZuzenduCancel $zuzenduCancel): ApiRequestInterface;
     abstract protected function response(string $status, array $headers, string $content): ResponseInterface;
 
     public function submitInvoice(TicketBai $ticketbai, PrivateKey $privateKey, string $password, int $maxRetries = 1, int $retryDelay = 1): ResponseInterface
@@ -52,6 +56,18 @@ abstract class AbstractTerritory implements EndpointInterface
     {
         $cancelInvoiceRequest = $this->createCancelInvoiceRequest($ticketbaiCancel);
         return $this->doRequest($cancelInvoiceRequest, $privateKey, $password, $maxRetries, $retryDelay);
+    }
+
+    public function submitZuzendu(Zuzendu $zuzendu, PrivateKey $privateKey, string $password, int $maxRetries = 1, int $retryDelay = 1): ResponseInterface
+    {
+        $submitZuzenduRequest = $this->createSubmitZuzenduRequest($zuzendu);
+        return $this->doRequest($submitZuzenduRequest, $privateKey, $password, $maxRetries, $retryDelay);
+    }
+
+    public function cancelZuzendu(ZuzenduCancel $zuzenduCancel, PrivateKey $privateKey, string $password, int $maxRetries = 1, int $retryDelay = 1): ResponseInterface
+    {
+        $cancelZuzenduRequest = $this->createCancelZuzenduRequest($zuzenduCancel);
+        return $this->doRequest($cancelZuzenduRequest, $privateKey, $password, $maxRetries, $retryDelay);
     }
 
     private function doRequest(ApiRequestInterface $request, PrivateKey $privateKey, string $password, int $maxRetries, int $retryDelay): ?ResponseInterface
