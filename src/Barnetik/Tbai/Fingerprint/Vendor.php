@@ -5,6 +5,7 @@ namespace Barnetik\Tbai\Fingerprint;
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use DOMDocument;
 use DOMNode;
+use DOMXPath;
 
 class Vendor implements TbaiXml
 {
@@ -38,5 +39,15 @@ class Vendor implements TbaiXml
         $vendor->appendChild($domDocument->createElement('Version', $this->version));
 
         return $vendor;
+    }
+
+    public static function createFromXml(DOMXPath $xpath): self
+    {
+        $license = $xpath->evaluate('string(/T:TicketBai/HuellaTBAI/Software/LicenciaTBAI)');
+        $name = $xpath->evaluate('string(/T:TicketBai/HuellaTBAI/Software/Nombre)');
+        $version = $xpath->evaluate('string(/T:TicketBai/HuellaTBAI/Software/Version)');
+        $nif = $xpath->evaluate('string(/T:TicketBai/HuellaTBAI/Software/EntidadDesarrolladora/NIF)');
+
+        return new self($license, $nif, $name, $version);
     }
 }

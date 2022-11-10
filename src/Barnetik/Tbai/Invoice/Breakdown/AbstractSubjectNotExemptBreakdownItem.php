@@ -6,6 +6,7 @@ use Barnetik\Tbai\Exception\InvalidNotExemptTypeException;
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use DOMDocument;
 use DOMNode;
+use DOMXPath;
 use InvalidArgumentException;
 use OutOfBoundsException;
 
@@ -75,6 +76,21 @@ class AbstractSubjectNotExemptBreakdownItem implements TbaiXml
         $notExentType->appendChild($vatBreakdown);
 
         return $notExentType;
+    }
+
+    /**
+     * @return static
+     */
+    public static function createFromXml(DOMXPath $xpath, DOMNode $contextNode)
+    {
+        $type = $xpath->evaluate('string(TipoNoExenta)', $contextNode);
+
+        $vatDetails = [];
+        foreach ($xpath->evaluate('string(DesgloseIVA/DetalleIVA)', $contextNode) as $node) {
+            $vatDetails[] = VatDetail::createFromXml($xpath, $node);
+        }
+
+        return new static($type, $vatDetails);
     }
 
     /**

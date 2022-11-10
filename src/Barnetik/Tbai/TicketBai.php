@@ -10,6 +10,8 @@ use Barnetik\Tbai\ValueObject\VatId;
 use Barnetik\Tbai\Fingerprint\Vendor;
 use Barnetik\Tbai\ValueObject\Amount;
 use Barnetik\Tbai\Subject\Issuer;
+use DOMXPath;
+use InvalidArgumentException;
 
 class TicketBai extends AbstractTicketBai
 {
@@ -85,6 +87,29 @@ class TicketBai extends AbstractTicketBai
 
         $document->appendChild($tbai);
         return $tbai;
+    }
+
+    public static function createFromXml(string $xml, string $territory, bool $selfEmployed = false): self
+    {
+        $dom = new DOMDocument();
+
+        if (!$dom->loadXML($xml)) {
+            throw new InvalidArgumentException('Invalid XML string');
+        }
+
+        $xpath = new DOMXPath($dom);
+
+        $ticketBai = new self(
+            Subject::createFromXml($xpath),
+            Invoice::createFromXml($xpath),
+            Fingerprint::createFromXml($xpath),
+            $territory,
+            $selfEmployed
+        );
+
+        $ticketBai->verifySignature($xml);
+
+        return $ticketBai;
     }
 
     public static function createFromJson(Vendor $vendor, array $jsonData): self

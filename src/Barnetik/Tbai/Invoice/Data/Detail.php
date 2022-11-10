@@ -6,6 +6,7 @@ use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\ValueObject\Amount;
 use DOMDocument;
 use DOMNode;
+use DOMXPath;
 
 class Detail implements TbaiXml
 {
@@ -41,6 +42,22 @@ class Detail implements TbaiXml
         $detail = new Detail($description, $unitPrice, $quantity, $totalAmount, $discount);
 
         return $detail;
+    }
+
+    public static function createFromXml(DOMXPath $xpath, DOMNode $contextNode): self
+    {
+        $description = $xpath->evaluate('string(DescripcionDetalle)', $contextNode);
+        $unitPrice = new Amount($xpath->evaluate('string(ImporteUnitario)', $contextNode), 12, 8);
+        $quantity = new Amount($xpath->evaluate('string(Cantidad)', $contextNode));
+        $totalAmount = new Amount($xpath->evaluate('string(ImporteTotal)', $contextNode));
+
+        $discount = null;
+        $discountValue = $xpath->evaluate('string(Descuento)', $contextNode);
+        if ($discountValue) {
+            $discount = new Amount($discountValue);
+        }
+
+        return new self($description, $unitPrice, $quantity, $totalAmount, $discount);
     }
 
     public function xml(DOMDocument $domDocument): DOMNode

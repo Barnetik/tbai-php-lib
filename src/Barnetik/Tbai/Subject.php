@@ -8,6 +8,7 @@ use Barnetik\Tbai\Subject\Recipient;
 use Barnetik\Tbai\ValueObject\VatId;
 use DOMDocument;
 use DOMNode;
+use DOMXPath;
 use InvalidArgumentException;
 
 class Subject implements TbaiXml
@@ -105,6 +106,20 @@ class Subject implements TbaiXml
             self::ISSUED_BY_THIRD_PARTY,
             self::ISSUED_BY_RECIPIENT
         ];
+    }
+
+    public static function createFromXml(DOMXPath $xpath): self
+    {
+        $issuer = Issuer::createFromXml($xpath);
+        $isuedBy = $xpath->evaluate('string(/T:TicketBai/Sujetos/EmitidaPorTercerosODestinatario)');
+        $subject = new Subject($issuer, null, $isuedBy ?: self::ISSUED_BY_ISSUER);
+
+        $recipients = $xpath->query('/T:TicketBai/Sujetos/Destinatarios/IDDestinatario');
+        foreach ($recipients as $recipient) {
+            $subject->addRecipient(Recipient::createFromXml($xpath, $recipient));
+        }
+
+        return $subject;
     }
 
     public static function createFromJson(array $jsonData): self

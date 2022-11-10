@@ -6,6 +6,7 @@ use DOMNode;
 use Barnetik\Tbai\Interfaces\Stringable;
 use DOMDocument;
 use JsonSerializable;
+use lyquidity\xmldsig\XAdESException;
 use SimpleXMLElement;
 use lyquidity\xmldsig\XAdES;
 use lyquidity\xmldsig\ResourceInfo;
@@ -84,6 +85,22 @@ abstract class AbstractTicketBai implements TbaiXml, TbaiSignable, Stringable, J
             );
             $this->signedXmlPath = $signedFilePath;
         }
+    }
+
+    public function verifySignature(string $xml): bool
+    {
+        $signedFile = tempnam(sys_get_temp_dir(), 'signed-xml');
+        file_put_contents($signedFile, $xml);
+
+        try {
+            $this->signedXml = XAdES::verifyDocument($signedFile);
+            $this->signedXmlPath = $signedFile;
+        } catch (XAdESException $exception) {
+            unlink($signedFile);
+            return false;
+        }
+
+        return true;
     }
 
     public function moveSignedXmlTo(string $newPath): void

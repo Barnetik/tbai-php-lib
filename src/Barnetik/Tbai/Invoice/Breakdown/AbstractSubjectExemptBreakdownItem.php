@@ -7,6 +7,7 @@ use Barnetik\Tbai\Exception\InvalidExemptionReasonException;
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use DOMDocument;
 use DOMNode;
+use DOMXPath;
 
 class AbstractSubjectExemptBreakdownItem implements TbaiXml
 {
@@ -64,6 +65,17 @@ class AbstractSubjectExemptBreakdownItem implements TbaiXml
         $exemptDetail->appendChild($domDocument->createElement('CausaExencion', $this->exemptionReason));
         $exemptDetail->appendChild($domDocument->createElement('BaseImponible', $this->taxBase));
         return $exemptDetail;
+    }
+
+    /**
+     * @return static
+     */
+    public static function createFromXml(DOMXPath $xpath, DOMNode $contextNode)
+    {
+        $taxBase = new Amount($xpath->evaluate('string(BaseImponible)', $contextNode));
+        $reason = $xpath->evaluate('string(CausaExencion)', $contextNode);
+
+        return new static($taxBase, $reason);
     }
 
     /**

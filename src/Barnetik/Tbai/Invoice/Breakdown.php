@@ -14,6 +14,7 @@ use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectExemptBreakdownItem;
 use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectNotExemptBreakdownItem;
 use DOMDocument;
 use DOMNode;
+use DOMXPath;
 use OutOfBoundsException;
 
 class Breakdown implements TbaiXml
@@ -167,6 +168,31 @@ class Breakdown implements TbaiXml
         $foreignDeliverySubjectNotExemptBreakdownItems = $jsonData['foreignDeliverySubjectNotExemptBreakdownItems'] ?? [];
         foreach ($foreignDeliverySubjectNotExemptBreakdownItems as $foreignDeliverySubjectNotExemptBreakdownItem) {
             $breakdown->addForeignDeliverySubjectNotExemptBreakdownItem(ForeignDeliverySubjectNotExemptBreakdownItem::createFromJson($foreignDeliverySubjectNotExemptBreakdownItem));
+        }
+
+        return $breakdown;
+    }
+
+    public static function createFromXml(DOMXPath $xpath): self
+    {
+        $breakdown = new self();
+
+        $nationalSubjectExemptBreakdown = $xpath->query('/T:TicketBai/Factura/TipoDesglose/DesgloseFactura/Sujeta/Exenta/DetalleExenta');
+        foreach ($nationalSubjectExemptBreakdown as $node) {
+            $nationalSubjectExemptBreakdownItem = NationalSubjectExemptBreakdownItem::createFromXml($xpath, $node);
+            $breakdown->addNationalSubjectExemptBreakdownItem($nationalSubjectExemptBreakdownItem);
+        }
+
+        $nationalSubjectNotExemptBreakdown = $xpath->query('/T:TicketBai/Factura/TipoDesglose/DesgloseFactura/Sujeta/NoExenta/DetalleNoExenta');
+        foreach ($nationalSubjectNotExemptBreakdown as $node) {
+            $nationalSubjectNotExemptBreakdownItem = NationalSubjectNotExemptBreakdownItem::createFromXml($xpath, $node);
+            $breakdown->addNationalSubjectNotExemptBreakdownItem($nationalSubjectNotExemptBreakdownItem);
+        }
+
+        $nationalNotSubjectBreakdown  = $xpath->query('/T:TicketBai/Factura/TipoDesglose/DesgloseFactura/NoSujeta/DetalleNoSujeta');
+        foreach ($nationalNotSubjectBreakdown as $node) {
+            $nationalNotSubjectBreakdownItem = NationalNotSubjectBreakdownItem::createFromXml($xpath, $node);
+            $breakdown->addNationalNotSubjectBreakdownItem($nationalNotSubjectBreakdownItem);
         }
 
         return $breakdown;

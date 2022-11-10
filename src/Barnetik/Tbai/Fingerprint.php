@@ -7,6 +7,7 @@ use Barnetik\Tbai\Fingerprint\Vendor;
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use DOMDocument;
 use DOMNode;
+use DOMXPath;
 
 class Fingerprint implements TbaiXml
 {
@@ -28,6 +29,18 @@ class Fingerprint implements TbaiXml
         }
         $fingerprint->appendChild($this->vendor->xml($domDocument));
         return $fingerprint;
+    }
+
+    public static function createFromXml(DOMXPath $xpath): self
+    {
+        $vendor = Vendor::createFromXml($xpath);
+
+        $previousInvoice = null;
+        if ($xpath->evaluate('boolean(/T:TicketBai/HuellaTBAI/EncadenamientoFacturaAnterior)')) {
+            $previousInvoice = PreviousInvoice::createFromXml($xpath);
+        }
+
+        return new self($vendor, $previousInvoice);
     }
 
     public static function createFromJson(Vendor $vendor, array $jsonData = []): self

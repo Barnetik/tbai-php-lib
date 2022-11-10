@@ -6,6 +6,7 @@ use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\ValueObject\VatId;
 use DOMDocument;
 use DOMNode;
+use DOMXPath;
 
 class Recipient implements TbaiXml
 {
@@ -92,6 +93,27 @@ class Recipient implements TbaiXml
             $vatId = new VatId($jsonData['vatId'], $jsonData['vatIdType']);
             $recipient = self::createGenericRecipient($vatId, $name, $postalCode, $address, $countryCode);
         }
+        return $recipient;
+    }
+
+    public static function createFromXml(DOMXPath $xpath, DOMNode $contextNode): self
+    {
+        $name = $xpath->evaluate('string(ApellidosNombreRazonSocial)', $contextNode);
+        $postalCode = $xpath->evaluate('string(CodigoPostal)', $contextNode);
+        $address = $xpath->evaluate('string(Direccion)', $contextNode);
+
+        if ($xpath->evaluate('count(NIF)', $contextNode) === 0) {
+            $vatIdValue = $xpath->evaluate('string(IDOtro/ID)', $contextNode);
+            $vatType = $xpath->evaluate('string(IDOtro/IDType)', $contextNode);
+            $countryCode = $xpath->evaluate('string(IDOtro/CodigoPais)', $contextNode);
+
+            $vatId = new VatId($vatIdValue, $vatType);
+            $recipient = self::createGenericRecipient($vatId, $name, $postalCode, $address, $countryCode);
+        } else {
+            $vatId = new VatId($xpath->evaluate('string(NIF)', $contextNode));
+            $recipient = self::createNationalRecipient($vatId, $name, $postalCode, $address);
+        }
+
         return $recipient;
     }
 

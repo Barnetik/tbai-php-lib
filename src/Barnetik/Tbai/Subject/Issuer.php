@@ -6,6 +6,7 @@ use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\ValueObject\VatId;
 use DOMDocument;
 use DOMNode;
+use DOMXPath;
 
 class Issuer implements TbaiXml
 {
@@ -34,6 +35,14 @@ class Issuer implements TbaiXml
         $issuer->appendChild($domDocument->createElement('NIF', $this->vatId));
         $issuer->appendChild($domDocument->createElement('ApellidosNombreRazonSocial', htmlspecialchars($this->name, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8')));
         return $issuer;
+    }
+
+    public static function createFromXml(DOMXPath $xpath): self
+    {
+        $vatId = new VatId($xpath->evaluate('string(/T:TicketBai/Sujetos/Emisor/NIF)'));
+        $name = $xpath->evaluate('string(/T:TicketBai/Sujetos/Emisor/ApellidosNombreRazonSocial)');
+
+        return new Issuer($vatId, $name);
     }
 
     public static function createFromJson(array $jsonData): self

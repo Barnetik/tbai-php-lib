@@ -6,6 +6,7 @@ use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\ValueObject\Amount;
 use DOMDocument;
 use DOMNode;
+use DOMXPath;
 
 class RectifyingAmount implements TbaiXml
 {
@@ -35,6 +36,20 @@ class RectifyingAmount implements TbaiXml
         $detail = new RectifyingAmount($base, $quota, $surcharge);
 
         return $detail;
+    }
+
+    public static function createFromXml(DOMXPath $xpath): self
+    {
+        $base = new Amount($xpath->evaluate('string(/T:TicketBai/Factura/CabeceraFactura/FacturaRectificativa/ImporteRectificacionSustitutiva/BaseRectificada)'));
+        $quota = new Amount($xpath->evaluate('string(/T:TicketBai/Factura/CabeceraFactura/FacturaRectificativa/ImporteRectificacionSustitutiva/CuotaRectificada)'));
+
+        $surcharge = null;
+        $surchargeValue = $xpath->evaluate('string(/T:TicketBai/Factura/CabeceraFactura/FacturaRectificativa/ImporteRectificacionSustitutiva/CuotaRecargoRectificada)');
+        if ($surchargeValue) {
+            $surcharge = new Amount($surchargeValue);
+        }
+
+        return new self($base, $quota, $surcharge);
     }
 
     public function xml(DOMDocument $domDocument): DOMNode
