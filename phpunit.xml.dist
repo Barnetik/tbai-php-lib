@@ -35,10 +35,10 @@
     <env name="TBAI_BIZKAIA_PRIVATE_KEY" value="IZDesa2021" />
     <env name="TBAI_BIZKAIA_P12_PATH" value="./tests/__files/EnpresaZigilua_SelloDeEmpresa.p12" />
 
-    <env name="TBAI_BIZKAIA_ISSUER_NIF_204" value="00000000T" />
-    <env name="TBAI_BIZKAIA_ISSUER_NAME_204" value="Issuer name" />
-    <env name="TBAI_BIZKAIA_ISSUER_NIF_104" value="00000000T" />
-    <env name="TBAI_BIZKAIA_ISSUER_NAME_104" value="Self employed Issuer name" />
+    <env name="TBAI_BIZKAIA_ISSUER_NIF_240" value="00000000T" />
+    <env name="TBAI_BIZKAIA_ISSUER_NAME_240" value="Issuer name" />
+    <env name="TBAI_BIZKAIA_ISSUER_NIF_140" value="00000000T" />
+    <env name="TBAI_BIZKAIA_ISSUER_NAME_140" value="Self employed Issuer name" />
 
 
     <env name="TBAI_GIPUZKOA_APP_LICENSE" value="TBAIBI00000000PRUEBA" />
