@@ -316,8 +316,8 @@ class TicketBaiMother
 
     public function createBizkaiaTicketBai(): TicketBai
     {
-        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_204'];
-        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_204'];
+        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_240'];
+        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_240'];
         $license = $_ENV['TBAI_BIZKAIA_APP_LICENSE'];
         $developer = $_ENV['TBAI_BIZKAIA_APP_DEVELOPER_NIF'];
         $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
@@ -328,8 +328,8 @@ class TicketBaiMother
 
     public function createBizkaiaTicketBaiSelfEmployed(bool $multipleEpigraphs = false): TicketBai
     {
-        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_104'];
-        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_104'];
+        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_140'];
+        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_140'];
         $license = $_ENV['TBAI_BIZKAIA_APP_LICENSE'];
         $developer = $_ENV['TBAI_BIZKAIA_APP_DEVELOPER_NIF'];
         $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
@@ -399,8 +399,8 @@ class TicketBaiMother
 
     public function createBizkaiaTicketBaiRectification(TicketBai $previousInvoice): TicketBai
     {
-        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_204'];
-        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_204'];
+        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_240'];
+        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_240'];
         $license = $_ENV['TBAI_BIZKAIA_APP_LICENSE'];
         $developer = $_ENV['TBAI_BIZKAIA_APP_DEVELOPER_NIF'];
         $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
@@ -411,8 +411,8 @@ class TicketBaiMother
 
     public function createBizkaiaTicketBaiRectificationForSelfEmployed(TicketBai $previousInvoice): TicketBai
     {
-        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_104'];
-        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_104'];
+        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_140'];
+        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_140'];
         $license = $_ENV['TBAI_BIZKAIA_APP_LICENSE'];
         $developer = $_ENV['TBAI_BIZKAIA_APP_DEVELOPER_NIF'];
         $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
@@ -422,7 +422,7 @@ class TicketBaiMother
         $incomingTaxCollection = new Collection();
         $incomingTaxCollection->addDetail(IncomeTaxDetail::create("197330", new Amount("11.02")));
         $incomingTaxCollection->addDetail(IncomeTaxDetail::create("184990", new Amount("111")));
-    
+
         $ticketbai->addBatuzIncomeTaxes($incomingTaxCollection);
         return $ticketbai;
 

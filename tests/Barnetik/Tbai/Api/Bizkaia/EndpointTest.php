@@ -16,7 +16,7 @@ class EndpointTest extends TestCase
     const SUBMIT_RETRIES = 3;
     const SUBMIT_RETRY_DELAY = 3;
     const DEFAULT_TERRITORY = TicketBai::TERRITORY_BIZKAIA;
-    
+
     private TicketBaiMother $ticketBaiMother;
 
     protected function setUp(): void
@@ -26,8 +26,8 @@ class EndpointTest extends TestCase
 
     public function test_sent_FacturasEmitidasConSGAltaPeticion_xml_is_valid(): void
     {
-        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_204'];
-        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_204'];
+        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_240'];
+        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_240'];
         $license = $_ENV['TBAI_BIZKAIA_APP_LICENSE'];
         $developer = $_ENV['TBAI_BIZKAIA_APP_DEVELOPER_NIF'];
         $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
@@ -194,7 +194,7 @@ class EndpointTest extends TestCase
             echo "Erantzuna: " . basename($responseFile) . "\n";
         }
 
-        $this->assertTrue($response->isCorrect());    
+        $this->assertTrue($response->isCorrect());
     }
 
     public function test_TicketBai_is_canceled(): void
@@ -356,4 +356,5 @@ class EndpointTest extends TestCase
         }
         $this->assertTrue($response->isDelivered());
     }
+
 }

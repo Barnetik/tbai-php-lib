@@ -14,7 +14,7 @@ class EndpointTest extends TestCase
     const SUBMIT_RETRIES = 3;
     const SUBMIT_RETRY_DELAY = 3;
     const DEFAULT_TERRITORY = TicketBai::TERRITORY_GIPUZKOA;
-    
+
     private TicketBaiMother $ticketBaiMother;
 
     protected function setUp(): void
@@ -294,5 +294,105 @@ class EndpointTest extends TestCase
         $this->assertTrue($response->isDelivered());
     }
 
+    public function test_foreign_invoice_can_be_created_with_foreign_breakdown_items(): void
+    {
+        $nif = $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'];
+        $issuer = $_ENV['TBAI_GIPUZKOA_ISSUER_NAME'];
+
+        $json = array(
+            'territory' => '03',
+            'subject' => array(
+                'issuer' => array(
+                    'vatId' => $nif,
+                    'name' => $issuer,
+                ),
+                'recipients' => array(
+                    0 => array(
+                        'vatId' => 'MSU871403S',
+                        'vatIdType' => '03',
+                        'name' => 'Alayn Chequebara',
+                        'postalCode' => '00522',
+                        'address' => 'Puerto Principe, 33',
+                        'countryCode' => 'HR',
+                    ),
+                ),
+                'issuedBy' => 'N',
+            ),
+            'invoice' => array(
+                'header' => array(
+                    'series' => 'A',
+                    'invoiceNumber' => '2',
+                    'expeditionDate' => '09-11-2022',
+                    'expeditionTime' => '12:44:10',
+                    'simplifiedInvoice' => false,
+                ),
+                'data' => array(
+                    'description' => 'FAC2022A1',
+                    'details' => array(
+                        0 => array(
+                            'description' => 'Producto 1',
+                            'unitPrice' => 10.0,
+                            'quantity' => 1.0,
+                            'discount' => 0.0,
+                            'totalAmount' => 12.1,
+                        ),
+                    ),
+                    'total' => 12.1,
+                    'vatRegimes' => array(
+                        0 => '01',
+                    ),
+                    'supportedRetention' => NULL,
+                ),
+                'breakdown' => array(
+                    'foreignDeliverySubjectNotExemptBreakdownItems' => array(
+                        0 => array(
+                            'type' => 'S1',
+                            'vatDetails' => array(
+                                0 => array(
+                                    'taxBase' => 10.0,
+                                    'taxRate' => 21.0,
+                                    'taxQuota' => 2.1,
+                                    'equivalenceRate' => NULL,
+                                    'equivalenceQuota' => NULL,
+                                    'isEquivalenceOperation' => false,
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        );
+
+        $certFile = $_ENV['TBAI_GIPUZKOA_P12_PATH'];
+        $certPassword = $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'];
+        $privateKey = PrivateKey::p12($certFile);
+
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        rename($signedFilename, $signedFilename . '.xml');
+        $signedFilename = $signedFilename . '.xml';
+
+        $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createGipuzkoaVendor(), $json);
+        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+
+        $endpoint = new Endpoint(true, true);
+
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
+        file_put_contents($responseFile, $response->content());
+
+        if (!$response->isCorrect()) {
+            echo "\n";
+            echo "IFZ: " . $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'] . "\n";
+            echo "Data: " . date('Y-m-d H:i:s') . "\n";
+            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
+            echo "Bidalitako fitxategia: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
+            echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
+            echo "Jasotako errore printzipala: " . $response->mainErrorMessage() . "\n";
+            echo "Erantzuna: " . basename($responseFile) . "\n";
+        }
+
+        $this->assertTrue($response->isDelivered());
+    }
 
 }

@@ -85,5 +85,4 @@ class SimplifiedTicketBaiTest extends TestCase
         $dom = $ticketbai->dom();
         $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2-no-signature.xsd'));
     }
-
 }

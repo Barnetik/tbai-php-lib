@@ -138,6 +138,37 @@ class Breakdown implements TbaiXml
         foreach ($nationalNotSubjectBreakdownItems as $nationalNotSubjectBreakdownItem) {
             $breakdown->addNationalNotSubjectBreakdownItem(NationalNotSubjectBreakdownItem::createFromJson($nationalNotSubjectBreakdownItem));
         }
+
+        $foreignServiceNotSubjectBreakdownItems = $jsonData['foreignServiceNotSubjectBreakdownItems'] ?? [];
+        foreach ($foreignServiceNotSubjectBreakdownItems as $foreignServiceNotSubjectBreakdownItem) {
+            $breakdown->addForeignServiceNotSubjectBreakdownItem(ForeignServiceNotSubjectBreakdownItem::createFromJson($foreignServiceNotSubjectBreakdownItem));
+        }
+
+        $foreignServiceSubjectExemptBreakdownItems = $jsonData['foreignServiceSubjectExemptBreakdownItems'] ?? [];
+        foreach ($foreignServiceSubjectExemptBreakdownItems as $foreignServiceSubjectExemptBreakdownItem) {
+            $breakdown->addForeignServiceSubjectExemptBreakdownItem(ForeignServiceSubjectExemptBreakdownItem::createFromJson($foreignServiceSubjectExemptBreakdownItem));
+        }
+
+        $foreignServiceSubjectNotExemptBreakdownItems = $jsonData['foreignServiceSubjectNotExemptBreakdownItems'] ?? [];
+        foreach ($foreignServiceSubjectNotExemptBreakdownItems as $foreignServiceSubjectNotExemptBreakdownItem) {
+            $breakdown->addForeignServiceSubjectNotExemptBreakdownItem(ForeignServiceSubjectNotExemptBreakdownItem::createFromJson($foreignServiceSubjectNotExemptBreakdownItem));
+        }
+
+        $foreignDeliveryNotSubjectBreakdownItems = $jsonData['foreignDeliveryNotSubjectBreakdownItems'] ?? [];
+        foreach ($foreignDeliveryNotSubjectBreakdownItems as $foreignDeliveryNotSubjectBreakdownItem) {
+            $breakdown->addForeignDeliveryNotSubjectBreakdownItem(ForeignDeliveryNotSubjectBreakdownItem::createFromJson($foreignDeliveryNotSubjectBreakdownItem));
+        }
+
+        $foreignDeliverySubjectExemptBreakdownItems = $jsonData['foreignDeliverySubjectExemptBreakdownItems'] ?? [];
+        foreach ($foreignDeliverySubjectExemptBreakdownItems as $foreignDeliverySubjectExemptBreakdownItem) {
+            $breakdown->addForeignDeliverySubjectExemptBreakdownItem(ForeignDeliverySubjectExemptBreakdownItem::createFromJson($foreignDeliverySubjectExemptBreakdownItem));
+        }
+
+        $foreignDeliverySubjectNotExemptBreakdownItems = $jsonData['foreignDeliverySubjectNotExemptBreakdownItems'] ?? [];
+        foreach ($foreignDeliverySubjectNotExemptBreakdownItems as $foreignDeliverySubjectNotExemptBreakdownItem) {
+            $breakdown->addForeignDeliverySubjectNotExemptBreakdownItem(ForeignDeliverySubjectNotExemptBreakdownItem::createFromJson($foreignDeliverySubjectNotExemptBreakdownItem));
+        }
+
         return $breakdown;
     }
 
@@ -148,12 +179,16 @@ class Breakdown implements TbaiXml
 
     private function hasForeignServiceBreakdown(): bool
     {
-        return sizeof($this->foreignServiceSubjectExemptBreakdownItems) || sizeof($this->foreignServiceSubjectNotExemptBreakdownItems) || sizeof($this->foreignServiceNotSubjectBreakdownItems);
+        return sizeof($this->foreignServiceSubjectExemptBreakdownItems)
+            || sizeof($this->foreignServiceSubjectNotExemptBreakdownItems)
+            || sizeof($this->foreignServiceNotSubjectBreakdownItems);
     }
 
     private function hasForeignDeliveryBreakdown(): bool
     {
-        return sizeof($this->foreignDeliverySubjectExemptBreakdownItems) || sizeof($this->foreignDeliverySubjectNotExemptBreakdownItems) || sizeof($this->foreignDeliveryNotSubjectBreakdownItems);
+        return sizeof($this->foreignDeliverySubjectExemptBreakdownItems)
+        || sizeof($this->foreignDeliverySubjectNotExemptBreakdownItems)
+        || sizeof($this->foreignDeliveryNotSubjectBreakdownItems);
     }
 
     private function hasForeignBreakdown(): bool
