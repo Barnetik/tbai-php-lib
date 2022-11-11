@@ -299,6 +299,8 @@ class EndpointTest extends TestCase
         $nif = $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'];
         $issuer = $_ENV['TBAI_GIPUZKOA_ISSUER_NAME'];
 
+        sleep(1);
+
         $json = array(
             'territory' => '03',
             'subject' => array(
@@ -321,9 +323,9 @@ class EndpointTest extends TestCase
             'invoice' => array(
                 'header' => array(
                     'series' => 'A',
-                    'invoiceNumber' => '2',
-                    'expeditionDate' => '09-11-2022',
-                    'expeditionTime' => '12:44:10',
+                    'invoiceNumber' => time(),
+                    'expeditionDate' => date('d-m-Y'),
+                    'expeditionTime' => date('H:i:s'),
                     'simplifiedInvoice' => false,
                 ),
                 'data' => array(
