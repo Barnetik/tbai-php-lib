@@ -60,6 +60,11 @@ class TicketBaiCancel extends AbstractTicketBai
         return $this->invoiceId->invoiceNumber();
     }
 
+    public function fingerprint(): Fingerprint
+    {
+        return $this->fingerprint;
+    }
+
     public function selfEmployed(): bool
     {
         return $this->selfEmployed;

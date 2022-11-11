@@ -33,7 +33,7 @@ class Api
         }
     }
 
-    public static function createForTicketBai(TicketBai $ticketbai, bool $dev = false, bool $debug = false): self
+    public static function createForTicketBai(AbstractTicketBai $ticketbai, bool $dev = false, bool $debug = false): self
     {
         return new Api($ticketbai->territory(), $dev, $debug);
     }
@@ -54,6 +54,16 @@ class Api
         }
 
         return $this->endpoint->cancelInvoice($ticketbaiCancel, $privateKey, $password, $maxRetries, $retryDelay);
+    }
+
+    public function submitZuzendu(Zuzendu $zuzendu, PrivateKey $privateKey, string $password, int $maxRetries = 1, int $retryDelay = 1): ResponseInterface
+    {
+        return $this->endpoint->submitZuzendu($zuzendu, $privateKey, $password, $maxRetries, $retryDelay);
+    }
+
+    public function cancelZuzendu(ZuzenduCancel $zuzenduCancel, PrivateKey $privateKey, string $password, int $maxRetries = 1, int $retryDelay = 1): ResponseInterface
+    {
+        return $this->endpoint->cancelZuzendu($zuzenduCancel, $privateKey, $password, $maxRetries, $retryDelay);
     }
 
     /**
