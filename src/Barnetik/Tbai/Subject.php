@@ -108,13 +108,15 @@ class Subject implements TbaiXml
         ];
     }
 
-    public static function createFromXml(DOMXPath $xpath): self
+    public static function createFromXml(DOMXPath $xpath, DOMNode $contextNode): self
     {
-        $issuer = Issuer::createFromXml($xpath);
-        $isuedBy = $xpath->evaluate('string(/T:TicketBai/Sujetos/EmitidaPorTercerosODestinatario)');
+        $contextNode = $xpath->query('Sujetos', $contextNode)->item(0);
+
+        $issuer = Issuer::createFromXml($xpath, $contextNode);
+        $isuedBy = $xpath->evaluate('string(EmitidaPorTercerosODestinatario)', $contextNode);
         $subject = new Subject($issuer, null, $isuedBy ?: self::ISSUED_BY_ISSUER);
 
-        $recipients = $xpath->query('/T:TicketBai/Sujetos/Destinatarios/IDDestinatario');
+        $recipients = $xpath->query('Destinatarios/IDDestinatario', $contextNode);
         foreach ($recipients as $recipient) {
             $subject->addRecipient(Recipient::createFromXml($xpath, $recipient));
         }

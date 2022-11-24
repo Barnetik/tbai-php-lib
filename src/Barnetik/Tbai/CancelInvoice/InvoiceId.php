@@ -67,10 +67,12 @@ class InvoiceId implements TbaiXml
         return $invoiceId;
     }
 
-    public static function createFromXml(DOMXPath $xpath): self
+    public static function createFromXml(DOMXPath $xpath, DOMNode $contextNode): self
     {
-        $issuer = Issuer::createFromXml($xpath);
-        $header = Header::createFromXml($xpath);
+        $contextNode = $xpath->query('IDFactura', $contextNode)->item(0);
+
+        $issuer = Issuer::createFromXml($xpath, $contextNode);
+        $header = Header::createFromXml($xpath, $contextNode);
 
         return new self($issuer, $header);
     }

@@ -104,10 +104,14 @@ class TicketBai extends AbstractTicketBai
 
         $xpath = new DOMXPath($dom);
 
+        if (($root = $xpath->query('/T:TicketBai')->item(0)) === null) {
+            throw new InvalidArgumentException('Invalid TicketBai XML');
+        }
+
         $ticketBai = new self(
-            Subject::createFromXml($xpath),
+            Subject::createFromXml($xpath, $root),
             Invoice::createFromXml($xpath),
-            Fingerprint::createFromXml($xpath),
+            Fingerprint::createFromXml($xpath, $root),
             $territory,
             $selfEmployed
         );

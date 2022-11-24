@@ -41,12 +41,12 @@ class Vendor implements TbaiXml
         return $vendor;
     }
 
-    public static function createFromXml(DOMXPath $xpath): self
+    public static function createFromXml(DOMXPath $xpath, DOMNode $contextNode): self
     {
-        $license = $xpath->evaluate('string(/T:TicketBai/HuellaTBAI/Software/LicenciaTBAI)');
-        $name = $xpath->evaluate('string(/T:TicketBai/HuellaTBAI/Software/Nombre)');
-        $version = $xpath->evaluate('string(/T:TicketBai/HuellaTBAI/Software/Version)');
-        $nif = $xpath->evaluate('string(/T:TicketBai/HuellaTBAI/Software/EntidadDesarrolladora/NIF)');
+        $license = $xpath->evaluate('string(HuellaTBAI/Software/LicenciaTBAI)', $contextNode);
+        $name = $xpath->evaluate('string(HuellaTBAI/Software/Nombre)', $contextNode);
+        $version = $xpath->evaluate('string(HuellaTBAI/Software/Version)', $contextNode);
+        $nif = $xpath->evaluate('string(HuellaTBAI/Software/EntidadDesarrolladora/NIF)', $contextNode);
 
         return new self($license, $nif, $name, $version);
     }

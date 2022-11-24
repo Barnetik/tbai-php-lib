@@ -86,7 +86,7 @@ class AbstractSubjectNotExemptBreakdownItem implements TbaiXml
         $type = $xpath->evaluate('string(TipoNoExenta)', $contextNode);
 
         $vatDetails = [];
-        foreach ($xpath->evaluate('string(DesgloseIVA/DetalleIVA)', $contextNode) as $node) {
+        foreach ($xpath->query('DesgloseIVA/DetalleIVA', $contextNode) as $node) {
             $vatDetails[] = VatDetail::createFromXml($xpath, $node);
         }
 

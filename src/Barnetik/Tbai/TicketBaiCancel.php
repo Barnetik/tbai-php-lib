@@ -113,9 +113,13 @@ class TicketBaiCancel extends AbstractTicketBai
 
         $xpath = new DOMXPath($dom);
 
+        if (($root = $xpath->query('/T:AnulaTicketBai')->item(0)) === null) {
+            throw new InvalidArgumentException('Invalid TicketBai XML');
+        }
+
         $ticketBaiCancel = new self(
-            InvoiceId::createFromXml($xpath),
-            Fingerprint::createFromXml($xpath),
+            InvoiceId::createFromXml($xpath, $root),
+            Fingerprint::createFromXml($xpath, $root),
             $territory,
             $selfEmployed
         );

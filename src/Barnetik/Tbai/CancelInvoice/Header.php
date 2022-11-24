@@ -61,11 +61,11 @@ class Header implements TbaiXml
         return $header;
     }
 
-    public static function createFromXml(DOMXPath $xpath): self
+    public static function createFromXml(DOMXPath $xpath, DOMNode $contextNode): self
     {
-        $invoiceNumber = $xpath->evaluate('string(/T:AnulaTicketBai/IDFactura/CabeceraFactura/NumFactura)');
-        $expeditionDate = new Date($xpath->evaluate('string(/T:AnulaTicketBai/IDFactura/CabeceraFactura/FechaExpedicionFactura)'));
-        $series = $xpath->evaluate('string(/T:AnulaTicketBai/IDFactura/CabeceraFactura/SerieFactura)') ?: null;
+        $invoiceNumber = $xpath->evaluate('string(CabeceraFactura/NumFactura)', $contextNode);
+        $expeditionDate = new Date($xpath->evaluate('string(CabeceraFactura/FechaExpedicionFactura)', $contextNode));
+        $series = $xpath->evaluate('string(CabeceraFactura/SerieFactura)', $contextNode) ?: null;
 
         return self::create($invoiceNumber, $expeditionDate, $series);
     }

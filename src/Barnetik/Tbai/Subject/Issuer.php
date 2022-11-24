@@ -37,10 +37,10 @@ class Issuer implements TbaiXml
         return $issuer;
     }
 
-    public static function createFromXml(DOMXPath $xpath): self
+    public static function createFromXml(DOMXPath $xpath, DOMNode $contextNode): self
     {
-        $vatId = new VatId($xpath->evaluate('string(/T:TicketBai/Sujetos/Emisor/NIF)'));
-        $name = $xpath->evaluate('string(/T:TicketBai/Sujetos/Emisor/ApellidosNombreRazonSocial)');
+        $vatId = new VatId($xpath->evaluate('string(Emisor/NIF)', $contextNode));
+        $name = $xpath->evaluate('string(Emisor/ApellidosNombreRazonSocial)', $contextNode);
 
         return new Issuer($vatId, $name);
     }

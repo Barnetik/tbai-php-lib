@@ -31,12 +31,12 @@ class Fingerprint implements TbaiXml
         return $fingerprint;
     }
 
-    public static function createFromXml(DOMXPath $xpath): self
+    public static function createFromXml(DOMXPath $xpath, DOMNode $contextNode): self
     {
-        $vendor = Vendor::createFromXml($xpath);
+        $vendor = Vendor::createFromXml($xpath, $contextNode);
 
         $previousInvoice = null;
-        if ($xpath->evaluate('boolean(/T:TicketBai/HuellaTBAI/EncadenamientoFacturaAnterior)')) {
+        if ($xpath->evaluate('boolean(HuellaTBAI/EncadenamientoFacturaAnterior)', $contextNode)) {
             $previousInvoice = PreviousInvoice::createFromXml($xpath);
         }
 
