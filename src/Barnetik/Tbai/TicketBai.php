@@ -67,6 +67,11 @@ class TicketBai extends AbstractTicketBai
         return $this->invoice->totalAmount();
     }
 
+    public function invoice(): Invoice
+    {
+        return $this->invoice;
+    }
+
     public function fingerprint(): Fingerprint
     {
         return $this->fingerprint;

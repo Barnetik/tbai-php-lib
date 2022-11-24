@@ -51,6 +51,11 @@ class Invoice implements TbaiXml
         return $this->header->invoiceNumber();
     }
 
+    public function header(): Header
+    {
+        return $this->header;
+    }
+
     public function totalAmount(): Amount
     {
         return $this->data->total();

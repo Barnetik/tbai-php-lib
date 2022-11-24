@@ -1,0 +1,75 @@
+{
+  "territory": "01",
+  "header": {
+    "action": "MODIFICAR"
+  },
+  "subject": {
+    "issuer": {
+      "vatId": "00000000T",
+      "name": "Issuer name"
+    },
+    "recipients": [
+      {
+        "vatId": "00000000T",
+        "vatIdType": "02",
+        "name": "Client Name",
+        "postalCode": "48270",
+        "address": "Markina-Xemein",
+        "countryCode": "ES"
+      }
+    ],
+    "issuedBy": "T"
+  },
+  "invoice": {
+    "header": {
+      "series": "TESTSERIE81",
+      "invoiceNumber": "1669316176",
+      "expeditionDate": "24-11-2022",
+      "expeditionTime": "18:56:16",
+      "simplifiedInvoice": false,
+      "isSimplifiedSustitute": null,
+      "rectifyingInvoice": null,
+      "rectifiedInvoices": []
+    },
+    "data": {
+      "description": "factura ejemplo TBAI",
+      "details": [
+        {
+          "description": "Art\u00edculo 1 Ejemplo",
+          "unitPrice": "5",
+          "quantity": "1",
+          "discount": null,
+          "totalAmount": "5"
+        }
+      ],
+      "total": "5",
+      "vatRegimes": [
+        "01"
+      ],
+      "supportedRetention": null,
+      "taxBaseCost": null
+    },
+    "breakdown": {
+      "nationalSubjectExemptBreakdownItems": [
+        {
+          "taxBase": "5",
+          "reason": "E1"
+        }
+      ],
+      "nationalSubjectNotExemptBreakdownItems": [],
+      "nationalNotSubjectBreakdownItems": [],
+      "foreignDeliverySubjectExemptBreakdownItems": [],
+      "foreignDeliverySubjectNotExemptBreakdownItems": [],
+      "foreignDeliveryNotSubjectBreakdownItems": [],
+      "foreignServiceSubjectExemptBreakdownItems": [],
+      "foreignServiceSubjectNotExemptBreakdownItems": [],
+      "foreignServiceNotSubjectBreakdownItems": []
+    }
+  },
+  "fingerprint": {
+    "previousInvoice": null
+  },
+  "originalSignature": {
+    "originalSignature": "L0dte3GIbZHI4bz21IBDtWBdPXH0ung5Qn+LiX5vrvI2KKA0y7l9zM2NU\/kosOISAwlvkVCCIY03W4UIwzQq1Yepq+vSK72d9bHb"
+  }
+}

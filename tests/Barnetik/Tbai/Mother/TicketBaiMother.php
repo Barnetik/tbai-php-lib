@@ -6,6 +6,7 @@ use Barnetik\Tbai\Api\Bizkaia\IncomeTax\Detail as IncomeTaxDetail;
 use Barnetik\Tbai\CancelInvoice\Header as CancelInvoiceHeader;
 use Barnetik\Tbai\CancelInvoice\InvoiceId;
 use Barnetik\Tbai\Fingerprint;
+use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectExemptBreakdownItem;
 use Barnetik\Tbai\Invoice\Data\Detail;
 use Barnetik\Tbai\Fingerprint\Vendor;
 use Barnetik\Tbai\Header\RectifiedInvoice;
@@ -27,6 +28,8 @@ use Barnetik\Tbai\Subject\Issuer;
 use Barnetik\Tbai\Subject\Recipient;
 use Barnetik\Tbai\TicketBai;
 use Barnetik\Tbai\TicketBaiCancel;
+use Barnetik\Tbai\Zuzendu;
+use Barnetik\Tbai\ZuzenduCancel;
 
 class TicketBaiMother
 {
@@ -259,6 +262,31 @@ class TicketBaiMother
         );
     }
 
+    public function createWrongTicketBai(string $nif, string $issuer, string $license, string $developer, string $appName, string $appVersion, string $territory): TicketBai
+    {
+        $subject = $this->getForeignSubject($nif, $issuer);
+        $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
+
+        $header = Header::create((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), $this->testSerie());
+        sleep(1); // Avoid same invoice number as time is used for generation
+        $data = new Data('factura ejemplo TBAI', new Amount('5'), [Data::VAT_REGIME_01]);
+        $data->addDetail(new Detail('Artículo 1 Ejemplo', new Amount('4'), new Amount('1'), new Amount('5')));
+
+        $exemptBreakdown = new NationalSubjectExemptBreakdownItem(new Amount('5'), NationalSubjectExemptBreakdownItem::EXEMPT_REASON_E1);
+
+        $breakdown = new Breakdown();
+        $breakdown->addNationalSubjectExemptBreakdownItem($exemptBreakdown);
+
+        $invoice = new Invoice($header, $data, $breakdown);
+
+        return new TicketBai(
+            $subject,
+            $invoice,
+            $fingerprint,
+            $territory
+        );
+    }
+
     public function createTicketBaiCancel(string $nif, string $issuerName, string $license, string $developer, string $appName, string $appVersion, string $territory, bool $selfEmployed = false): TicketBaiCancel
     {
         $issuer = new Issuer(new VatId($nif), $issuerName);
@@ -272,6 +300,47 @@ class TicketBaiMother
     public function createTicketBaiCancelForInvoice(TicketBai $ticketbai): TicketBaiCancel
     {
         return TicketBaiCancel::createForTicketBai($ticketbai);
+    }
+
+    public function createZuzenduToModifyInvoice(string $nif, string $issuer, Invoice $invoice, TicketBai $ticketBai): Zuzendu
+    {
+        $subject = $this->getSubject($nif, $issuer);
+
+        return Zuzendu::createForTicketBai(
+            Zuzendu\Header::createModify(),
+            $subject,
+            $invoice,
+            $ticketBai
+        );
+    }
+
+    public function createZuzenduToModifyWrongTicketBai(TicketBai $ticketBai): Zuzendu
+    {
+        $invoiceHeader = $ticketBai->invoice()->header();
+        $data = new Data('factura ejemplo TBAI', new Amount('5'), [Data::VAT_REGIME_01]);
+        $data->addDetail(new Detail('Artículo 1 Ejemplo', new Amount('5'), new Amount('1'), new Amount('5')));
+
+        $exemptBreakdown = new NationalSubjectExemptBreakdownItem(new Amount('5'), NationalSubjectExemptBreakdownItem::EXEMPT_REASON_E1);
+
+        $breakdown = new Breakdown();
+        $breakdown->addNationalSubjectExemptBreakdownItem($exemptBreakdown);
+
+        $invoice = new Invoice($invoiceHeader, $data, $breakdown);
+
+        return $this->createZuzenduToModifyInvoice(
+            $ticketBai->issuerVatId(),
+            $ticketBai->issuerName(),
+            $invoice,
+            $ticketBai
+        );
+    }
+
+    public function createZuzenduCancelForTicketBai(TicketBaiCancel $ticketBaiCancel, TicketBai $originalTicketBai): ZuzenduCancel
+    {
+        $issuer = $originalTicketBai->issuer();
+        $header = CancelInvoiceHeader::createForTicketBai($originalTicketBai);
+        $invoiceId = new InvoiceId($issuer, $header);
+        return ZuzenduCancel::createForTicketBaiCancel($invoiceId, $ticketBaiCancel);
     }
 
     public function createArabaVendor(): Vendor
@@ -313,6 +382,29 @@ class TicketBaiMother
         return $this->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
     }
 
+    public function createArabaWrongTicketBai(): TicketBai
+    {
+        $nif = $_ENV['TBAI_ARABA_ISSUER_NIF'];
+        $issuer = $_ENV['TBAI_ARABA_ISSUER_NAME'];
+        $license = $_ENV['TBAI_ARABA_APP_LICENSE'];
+        $developer = $_ENV['TBAI_ARABA_APP_DEVELOPER_NIF'];
+        $appName = $_ENV['TBAI_ARABA_APP_NAME'];
+        $appVersion =  $_ENV['TBAI_ARABA_APP_VERSION'];
+
+        return $this->createWrongTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
+    }
+
+    public function createArabaTicketBaiCancel(): TicketBaiCancel
+    {
+        $nif = $_ENV['TBAI_ARABA_ISSUER_NIF'];
+        $issuer = $_ENV['TBAI_ARABA_ISSUER_NAME'];
+        $license = $_ENV['TBAI_ARABA_APP_LICENSE'];
+        $developer = $_ENV['TBAI_ARABA_APP_DEVELOPER_NIF'];
+        $appName = $_ENV['TBAI_ARABA_APP_NAME'];
+        $appVersion =  $_ENV['TBAI_ARABA_APP_VERSION'];
+
+        return $this->createTicketBaiCancel($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
+    }
 
     public function createBizkaiaTicketBai(): TicketBai
     {
@@ -373,6 +465,30 @@ class TicketBaiMother
         $appVersion =  $_ENV['TBAI_GIPUZKOA_APP_VERSION'];
 
         return $this->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_GIPUZKOA);
+    }
+
+    public function createGipuzkoaWrongTicketBai(): TicketBai
+    {
+        $nif = $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'];
+        $issuer = $_ENV['TBAI_GIPUZKOA_ISSUER_NAME'];
+        $license = $_ENV['TBAI_GIPUZKOA_APP_LICENSE'];
+        $developer = $_ENV['TBAI_GIPUZKOA_APP_DEVELOPER_NIF'];
+        $appName = $_ENV['TBAI_GIPUZKOA_APP_NAME'];
+        $appVersion =  $_ENV['TBAI_GIPUZKOA_APP_VERSION'];
+
+        return $this->createWrongTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_GIPUZKOA);
+    }
+
+    public function createGipuzkoaTicketBaiCancel(): TicketBaiCancel
+    {
+        $nif = $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'];
+        $issuer = $_ENV['TBAI_GIPUZKOA_ISSUER_NAME'];
+        $license = $_ENV['TBAI_GIPUZKOA_APP_LICENSE'];
+        $developer = $_ENV['TBAI_GIPUZKOA_APP_DEVELOPER_NIF'];
+        $appName = $_ENV['TBAI_GIPUZKOA_APP_NAME'];
+        $appVersion =  $_ENV['TBAI_GIPUZKOA_APP_VERSION'];
+
+        return $this->createTicketBaiCancel($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_GIPUZKOA);
     }
 
     public function createGipuzkoaTicketBaiRectification(TicketBai $previousInvoice): TicketBai

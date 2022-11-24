@@ -27,16 +27,40 @@ class TicketBaiCancelTest extends TestCase
         );
     }
 
+    public function test_ticketbai_can_be_generated_from_xml(): void
+    {
+        $certFile = $_ENV['TBAI_ARABA_P12_PATH'];
+        $certPassword = $_ENV['TBAI_ARABA_PRIVATE_KEY'];
+        $privateKey = PrivateKey::p12($certFile);
+
+        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-cancel-');
+        rename($filename, $filename . '.xml');
+        $filename .= '.xml';
+
+        $ticketbai = $this->ticketBaiMother->createArabaTicketBaiCancel();
+        $ticketbai->sign($privateKey, $certPassword, $filename);
+
+        $signedDom = new DOMDocument();
+        $signedDom->load($filename);
+
+        $ticketbaiFromXml = TicketBaiCancel::createFromXml($signedDom->saveXML(), $ticketbai->territory());
+
+        $signedDom = new DOMDocument();
+        $signedDom->loadXML($ticketbaiFromXml->signed());
+
+        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/Anula_ticketBaiV1-2.xsd'));
+    }
+
     public function test_TicketBaiCancel_data_can_be_serialized(): void
     {
-        $ticketbai = $this->getTicketBaiCancel();
+        $ticketbai = $this->ticketBaiMother->createArabaTicketBaiCancel();
         // echo json_encode($ticketbai->toArray());
         $this->assertIsString(json_encode($ticketbai->toArray()));
     }
 
     public function test_signed_TicketBaiCancel_validates_schema(): void
     {
-        $ticketbai = $this->getTicketBaiCancel();
+        $ticketbai = $this->ticketBaiMother->createArabaTicketBaiCancel();
         $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-cancel-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
@@ -46,17 +70,5 @@ class TicketBaiCancelTest extends TestCase
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
         $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/Anula_ticketBaiV1-2.xsd'));
-    }
-
-    private function getTicketBaiCancel(): TicketBaiCancel
-    {
-        $nif = $_ENV['TBAI_ARABA_ISSUER_NIF'];
-        $issuer = $_ENV['TBAI_ARABA_ISSUER_NAME'];
-        $license = $_ENV['TBAI_ARABA_APP_LICENSE'];
-        $developer = $_ENV['TBAI_ARABA_APP_DEVELOPER_NIF'];
-        $appName = $_ENV['TBAI_ARABA_APP_NAME'];
-        $appVersion =  $_ENV['TBAI_ARABA_APP_VERSION'];
-
-        return $this->ticketBaiMother->createTicketBaiCancel($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
     }
 }

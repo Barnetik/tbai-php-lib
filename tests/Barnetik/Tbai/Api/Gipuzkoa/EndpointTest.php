@@ -435,4 +435,84 @@ class EndpointTest extends TestCase
 
         $this->assertTrue($response->isDelivered());
     }
+
+    public function test_Zuzendu_modify_is_delivered(): void
+    {
+        $certFile = $_ENV['TBAI_GIPUZKOA_P12_PATH'];
+        $certPassword = $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'];
+        $privateKey = PrivateKey::p12($certFile);
+
+        $ticketbai = $this->ticketBaiMother->createGipuzkoaWrongTicketBai();
+
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        rename($signedFilename, $signedFilename . '.xml');
+        $signedFilename = $signedFilename . '.xml';
+
+        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+
+        $endpoint = new Endpoint(true, true);
+        $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+
+        $zuzendu = $this->ticketBaiMother->createZuzenduToModifyWrongTicketBai($ticketbai);
+
+        $response = $endpoint->submitZuzendu($zuzendu, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
+        file_put_contents($responseFile, $response->content());
+
+        if (!$response->isCorrect()) {
+            echo "\n";
+            echo "IFZ: " . $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'] . "\n";
+            echo "Data: " . date('Y-m-d H:i:s') . "\n";
+            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
+            echo "Bidalitako fitxategia: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
+            echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
+            echo "Jasotako errore printzipala: " . $response->mainErrorMessage() . "\n";
+            echo "Erantzuna: " . basename($responseFile) . "\n";
+        }
+
+        $this->assertTrue($response->isDelivered());
+    }
+
+    public function test_ZuzenduCancel_is_delivered(): void
+    {
+        $certFile = $_ENV['TBAI_GIPUZKOA_P12_PATH'];
+        $certPassword = $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'];
+        $privateKey = PrivateKey::p12($certFile);
+
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        rename($signedFilename, $signedFilename . '.xml');
+        $signedFilename = $signedFilename . '.xml';
+
+        $ticketbai = $this->ticketBaiMother->createGipuzkoaTicketBai();
+        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $endpoint = new Endpoint(true, true);
+        $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+
+        sleep(1);
+
+        $wrongTicketBaiCancel = $this->ticketBaiMother->createGipuzkoaTicketBaiCancel();
+        $signedFilename = $signedFilename . 'wrong-cancel.xml';
+        $wrongTicketBaiCancel->sign($privateKey, $certPassword, $signedFilename);
+        $response = $endpoint->cancelInvoice($wrongTicketBaiCancel, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+
+        $zuzenduCancel = $this->ticketBaiMother->createZuzenduCancelForTicketBai($wrongTicketBaiCancel, $ticketbai);
+        $response = $endpoint->cancelZuzendu($zuzenduCancel, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
+        file_put_contents($responseFile, $response->content());
+
+        if (!$response->isCorrect()) {
+            echo "\n";
+            echo "IFZ: " . $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'] . "\n";
+            echo "Data: " . date('Y-m-d H:i:s') . "\n";
+            // echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
+            echo "Bidalitako fitxategia: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
+            echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
+            echo "Jasotako errore printzipala: " . $response->mainErrorMessage() . "\n";
+            echo "Erantzuna: " . basename($responseFile) . "\n";
+        }
+
+        $this->assertTrue($response->isDelivered());
+    }
 }
