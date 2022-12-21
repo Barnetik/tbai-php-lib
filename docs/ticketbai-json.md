@@ -11,6 +11,11 @@
             ],
             "description": "\nFaktura aurkeztuko den lurraldea - Territorio en el que se presentar\u00e1 la factura\n  * 01: Araba\n  * 02: Bizkaia\n  * 03: Gipuzkoa\n"
         },
+        "selfEmployed": {
+            "type": "boolean",
+            "default": false,
+            "description": "Fakturaren egilea autonomoa bada - Si el emisor de la factura es aut\u00f3nomo"
+        },
         "subject": {
             "type": "object",
             "properties": {

@@ -1,0 +1,66 @@
+{
+  "territory": "01",
+  "selfEmployed": true,
+  "subject": {
+    "issuer": {
+      "vatId": "44679678Q",
+      "name": "Alayn Gortazar"
+    },
+    "recipients": [
+      {
+        "vatId": "00000000T",
+        "vatIdType": "02",
+        "name": "Client Name",
+        "postalCode": "48270",
+        "address": "Markina-Xemein",
+        "countryCode": "ES"
+      }
+    ],
+    "issuedBy": "N"
+  },
+  "invoice": {
+    "header": {
+      "series": "TESTSERIE",
+      "invoiceNumber": "1646674248",
+      "expeditionDate": "07-03-2022",
+      "expeditionTime": "17:30:48",
+      "simplifiedInvoice": false
+    },
+    "data": {
+      "description": "Venta maquinaria y existencias",
+      "total": "1936.00",
+      "vatRegimes": [
+        "01"
+      ],
+      "supportedRetention": null,
+      "taxBaseCost": null
+    },
+    "breakdown": {
+      "nationalSubjectExemptBreakdownItems": [],
+      "nationalSubjectNotExemptBreakdownItems": [
+        {
+          "type": "S1",
+          "vatDetails": [
+            {
+              "taxBase": "1600",
+              "taxRate": "21",
+              "taxQuota": "336.00"
+            }
+          ]
+        }
+      ],
+      "nationalNotSubjectBreakdownItems": []
+    }
+  },
+  "fingerprint": {
+    "previousInvoice": null
+  },
+  "batuzIncomeTaxes": {
+    "incomeTaxDetails": [
+      {
+        "epigraph": "197330",
+        "incomeTaxAmount": "400.00"
+      }
+    ]
+  }
+}

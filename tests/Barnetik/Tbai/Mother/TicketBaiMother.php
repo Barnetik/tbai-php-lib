@@ -347,6 +347,18 @@ class TicketBaiMother
         $ticketBai->addBatuzIncomeTaxes($incomingTaxCollection);
         return $ticketBai;
     }
+    public function createBizkaiaTicketBaiSelfEmployedFromJson(): TicketBai
+    {
+        $json = json_decode(file_get_contents(__DIR__ . '/../__files/tbai-sample-self-employed.json'), true);
+
+        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_140'];
+        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_140'];
+        $json['subject']['issuer']['vatId'] = $nif;
+        $json['subject']['issuer']['name'] = $issuer;
+
+        $ticketBai = TicketBai::createFromJson($this->createBizkaiaVendor(), $json);
+        return $ticketBai;
+    }
 
 
     public function createGipuzkoaTicketBai(): TicketBai

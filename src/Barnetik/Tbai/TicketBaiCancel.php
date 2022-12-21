@@ -79,7 +79,20 @@ class TicketBaiCancel extends AbstractTicketBai
         $territory = $jsonData['territory'];
         $invoiceId = InvoiceId::createFromJson($jsonData['invoiceId']);
         $fingerprint = Fingerprint::createFromJson($vendor, $jsonData['fingerprint'] ?? []);
-        $selfEmployed = (bool)($jsonData['self_employed'] ?? false);
+
+        // DEPRECATE: Should only check for selfEmployed value
+        $selfEmployed = false;
+        if (isset($jsonData['selfEmployed'])) {
+            $selfEmployed = (bool)$jsonData['selfEmployed'];
+        } else if (isset($jsonData['self_employed'])) {
+            trigger_error(
+                'Deprecated. Avoid "self_employed" tag on json, "selfEmployed" should be used instead. Future versions will remove this tag',
+                E_USER_DEPRECATED
+            );
+
+            $selfEmployed = (bool)$jsonData['self_employed'];
+        }
+
         return new TicketBaiCancel($invoiceId, $fingerprint, $territory, $selfEmployed);
     }
 
@@ -98,6 +111,11 @@ Faktura baliogabetuko den lurraldea - Territorio en el que se cancelará la fact
   * 03: Gipuzkoa
 '
                 ],
+                'selfEmployed' => [
+                    'type' => 'boolean',
+                    'default' => false,
+                    'description' => 'Fakturaren egilea autonomoa bada - Si el emisor de la factura es autónomo'
+                ],
                 'invoiceId' => InvoiceId::docJson(),
                 'fingerprint' => Fingerprint::docJson()
             ],
@@ -110,6 +128,7 @@ Faktura baliogabetuko den lurraldea - Territorio en el que se cancelará la fact
     {
         return [
             'territory' => $this->territory,
+            'selfEmployed' => $this->selfEmployed,
             'invoiceId' => $this->invoiceId->toArray(),
             'fingerprint' => $this->fingerprint->toArray(),
         ];

@@ -8,18 +8,18 @@ use DOMNode;
 
 class Collection implements TbaiXml
 {
-    private array $details = [];
+    private array $incomeTaxDetails = [];
 
     public function addDetail(Detail $detail): self
     {
-        array_push($this->details, $detail);
+        array_push($this->incomeTaxDetails, $detail);
         return $this;
     }
 
     public function xml(DOMDocument $domDocument): DOMNode
     {
         $incomeTaxDetails = $domDocument->createElement('Renta');
-        foreach ($this->details as $detail) {
+        foreach ($this->incomeTaxDetails as $detail) {
             $incomeTaxDetails->appendChild($detail->xml($domDocument));
         }
         return $incomeTaxDetails;
@@ -54,9 +54,9 @@ class Collection implements TbaiXml
     public function toArray(): array
     {
         return [
-            'details' => array_map(function ($detail) {
-                return $detail->toArray();
-            }, $this->details),
+            'incomeTaxDetails' => array_map(function ($incomeTaxDetail) {
+                return $incomeTaxDetail->toArray();
+            }, $this->incomeTaxDetails),
         ];
     }
 }

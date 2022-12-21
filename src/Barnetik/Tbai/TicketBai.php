@@ -93,10 +93,23 @@ class TicketBai extends AbstractTicketBai
         $subject = Subject::createFromJson($jsonData['subject']);
         $invoice = Invoice::createFromJson($jsonData['invoice']);
         $fingerprint = Fingerprint::createFromJson($vendor, $jsonData['fingerprint'] ?? []);
-        $selfEmployed = (bool)($jsonData['self_employed'] ?? false);
+
+        // DEPRECATE: Should only check for selfEmployed value
+        $selfEmployed = false;
+        if (isset($jsonData['selfEmployed'])) {
+            $selfEmployed = (bool)$jsonData['selfEmployed'];
+        } else if (isset($jsonData['self_employed'])) {
+            trigger_error(
+                'Deprecated. Avoid "self_employed" tag on json, "selfEmployed" should be used instead. Future versions will remove this tag',
+                E_USER_DEPRECATED
+            );
+
+            $selfEmployed = (bool)$jsonData['self_employed'];
+        }
+
         $ticketBai = new TicketBai($subject, $invoice, $fingerprint, $territory, $selfEmployed);
 
-        if (isset($jsonData['batuzIncomeTaxes']) && $jsonData['batuzIncomeTaxes'] !== '') {
+        if (isset($jsonData['batuzIncomeTaxes']) && is_array($jsonData['batuzIncomeTaxes']) && $jsonData['batuzIncomeTaxes']) {
             $batuzIncomeTaxCollection = Collection::createFromJson($jsonData['batuzIncomeTaxes']);
             $ticketBai->addBatuzIncomeTaxes($batuzIncomeTaxCollection);
         }
@@ -119,6 +132,11 @@ Faktura aurkeztuko den lurraldea - Territorio en el que se presentará la factur
   * 03: Gipuzkoa
 '
                 ],
+                'selfEmployed' => [
+                    'type' => 'boolean',
+                    'default' => false,
+                    'description' => 'Fakturaren egilea autonomoa bada - Si el emisor de la factura es autónomo'
+                ],
                 'subject' => Subject::docJson(),
                 'invoice' => Invoice::docJson(),
                 'fingerprint' => Fingerprint::docJson(),
@@ -133,6 +151,7 @@ Faktura aurkeztuko den lurraldea - Territorio en el que se presentará la factur
     {
         return [
             'territory' => $this->territory,
+            'selfEmployed' => $this->selfEmployed,
             'subject' => $this->subject->toArray(),
             'invoice' => $this->invoice->toArray(),
             'fingerprint' => $this->fingerprint->toArray(),
