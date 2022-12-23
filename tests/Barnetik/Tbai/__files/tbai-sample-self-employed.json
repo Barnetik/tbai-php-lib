@@ -32,6 +32,7 @@
       "vatRegimes": [
         "01"
       ],
+      "details": [],
       "supportedRetention": null,
       "taxBaseCost": null
     },
