@@ -355,6 +355,8 @@ class TicketBaiMother
         $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_140'];
         $json['subject']['issuer']['vatId'] = $nif;
         $json['subject']['issuer']['name'] = $issuer;
+        $json['invoice']['header']['invoiceNumber'] = (string)time();
+        sleep(1);
 
         $ticketBai = TicketBai::createFromJson($this->createBizkaiaVendor(), $json);
         return $ticketBai;
