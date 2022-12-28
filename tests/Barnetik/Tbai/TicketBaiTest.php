@@ -2,11 +2,7 @@
 
 namespace Test\Barnetik\Tbai;
 
-use Barnetik\Tbai\Api\Araba\Endpoint as ArabaEndpoint;
-use Barnetik\Tbai\Api\Bizkaia\Endpoint as BizkaiaEndpoint;
-use Barnetik\Tbai\Api\Gipuzkoa\Endpoint as GipuzkoaEndpoint;
 use Barnetik\Tbai\PrivateKey;
-use Barnetik\Tbai\Qr;
 use Barnetik\Tbai\TicketBai;
 use DOMDocument;
 use Exception;
@@ -122,10 +118,6 @@ class TicketBaiTest extends TestCase
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
         $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
-
-        // $qr = new Qr($ticketbai);
-        // var_dump($qr->ticketbaiIdentifier());
-        // var_dump($qr->qrUrl());
     }
 
     public function test_TicketBai_can_have_multiple_vats(): void
@@ -147,52 +139,6 @@ class TicketBaiTest extends TestCase
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
         $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
-
-        // $qr = new Qr($ticketbai);
-        // var_dump($qr->ticketbaiIdentifier());
-        // var_dump($qr->qrUrl());
-    }
-
-    public function test_TicketBai_QR_can_be_generated_for_araba(): void
-    {
-        $ticketbai = $this->ticketBaiMother->createArabaTicketBai();
-        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
-        rename($filename, $filename . '.xml');
-        $filename .= '.xml';
-        $privateKey = PrivateKey::p12($_ENV['TBAI_ARABA_P12_PATH']);
-        $ticketbai->sign($privateKey, $_ENV['TBAI_ARABA_PRIVATE_KEY'], $filename);
-
-        $qr = new Qr($ticketbai, true);
-        $this->assertEquals(39, strlen($qr->ticketbaiIdentifier()));
-        $this->assertStringContainsString('https://pruebas-ticketbai.araba.eus/tbai/qrtbai/?id=' . $qr->ticketbaiIdentifier(), $qr->qrUrl());
-    }
-
-    public function test_TicketBai_QR_can_be_generated_for_bizkaia(): void
-    {
-        $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBai();
-        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
-        rename($filename, $filename . '.xml');
-        $filename .= '.xml';
-        $privateKey = PrivateKey::p12($_ENV['TBAI_BIZKAIA_P12_PATH']);
-        $ticketbai->sign($privateKey, $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'], $filename);
-
-        $qr = new Qr($ticketbai, true);
-        $this->assertEquals(39, strlen($qr->ticketbaiIdentifier()));
-        $this->assertStringContainsString('https://batuz.eus/QRTBAI/?id=' . $qr->ticketbaiIdentifier(), $qr->qrUrl());
-    }
-
-    public function test_TicketBai_QR_can_be_generated_for_gipuzkoa(): void
-    {
-        $ticketbai = $this->ticketBaiMother->createGipuzkoaTicketBai();
-        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
-        rename($filename, $filename . '.xml');
-        $filename .= '.xml';
-        $privateKey = PrivateKey::p12($_ENV['TBAI_GIPUZKOA_P12_PATH']);
-        $ticketbai->sign($privateKey, $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'], $filename);
-
-        $qr = new Qr($ticketbai, true);
-        $this->assertEquals(39, strlen($qr->ticketbaiIdentifier()));
-        $this->assertStringContainsString('https://tbai.prep.gipuzkoa.eus/qr/?id=' . $qr->ticketbaiIdentifier(), $qr->qrUrl());
     }
 
     public function test_TicketBai_signed_file_is_valid(): void
@@ -266,9 +212,5 @@ class TicketBaiTest extends TestCase
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
         $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
-
-        // $qr = new Qr($ticketbai);
-        // var_dump($qr->ticketbaiIdentifier());
-        // var_dump($qr->qrUrl());
     }
 }

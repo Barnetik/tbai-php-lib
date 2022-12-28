@@ -26,7 +26,6 @@ class Qr
         );
 
         return $code . $this->crc8($code);
-        ;
     }
 
     public function qrUrl(): string
@@ -87,10 +86,10 @@ class Qr
     {
         return sprintf(
             'id=%s&s=%s&nf=%s&i=%s',
-            $this->ticketbaiIdentifier(),
-            $this->ticketBai->series(),
-            $this->ticketBai->invoiceNumber(),
-            $this->ticketBai->totalAmount()
+            rawurlencode($this->ticketbaiIdentifier()),
+            rawurlencode($this->ticketBai->series()),
+            rawurlencode($this->ticketBai->invoiceNumber()),
+            rawurlencode($this->ticketBai->totalAmount())
         );
     }
 }
