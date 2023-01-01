@@ -157,4 +157,10 @@ abstract class AbstractTicketBai implements TbaiXml, TbaiSignable, Stringable, J
     {
         return $this->toArray();
     }
+
+
+    public function setSignedPath(string $path):void{
+        $this->signedXmlPath = $path;
+
+    }
 }
