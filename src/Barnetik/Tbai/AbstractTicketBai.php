@@ -26,7 +26,6 @@ abstract class AbstractTicketBai implements TbaiXml, TbaiSignable, Stringable, J
     const TERRITORY_GIPUZKOA = '03';
 
     protected string $territory;
-    private ?XAdES $signedXml = null;
     private ?string $signedXmlPath = null;
 
     public function __construct(string $territory)
@@ -70,7 +69,7 @@ abstract class AbstractTicketBai implements TbaiXml, TbaiSignable, Stringable, J
 
             $xadesClass = $this->getXadesClassForTerritory();
 
-            $this->signedXml = call_user_func(
+            call_user_func(
                 $xadesClass . '::signDocument',
                 new InputResourceInfo(
                     $this->dom(), /** @phpstan-ignore-line */
