@@ -56,7 +56,7 @@ abstract class AbstractTicketBai implements TbaiXml, TbaiSignable, Stringable, J
 
     public function sign(PrivateKey $privateKey, string $password, string $signedFilePath): void
     {
-        if (!$this->signedXml) {
+        if (!$this->isSigned()) {
             if ($privateKey->type() === PrivateKey::TYPE_P12) {
                 openssl_pkcs12_read(
                     file_get_contents($privateKey->keyPath()),
@@ -159,8 +159,8 @@ abstract class AbstractTicketBai implements TbaiXml, TbaiSignable, Stringable, J
     }
 
 
-    public function setSignedPath(string $path):void{
+    public function setSignedXmlPath(string $path): void
+    {
         $this->signedXmlPath = $path;
-
     }
 }
