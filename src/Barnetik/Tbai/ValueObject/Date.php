@@ -31,6 +31,21 @@ class Date implements Stringable
         return $this->value->format('dmy');
     }
 
+    public function day(): string
+    {
+        return $this->value->format('d');
+    }
+
+    public function month(): string
+    {
+        return $this->value->format('m');
+    }
+
+    public function year(): string
+    {
+        return $this->value->format('Y');
+    }
+
     public function __toString(): string
     {
         return $this->value->format('d-m-Y');

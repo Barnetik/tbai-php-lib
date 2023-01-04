@@ -63,7 +63,7 @@ class CancelInvoiceRequest implements ApiRequestInterface
             'Subcapitulo' => '1.1',
             'Operacion' => 'AN0',
             'Version' => '1.0',
-            'Ejercicio' => date('Y'),
+            'Ejercicio' => $this->ticketbaiCancel->expeditionDate()->year(),
         ];
         foreach ($data as $element => $value) {
             $header->appendChild(
@@ -133,7 +133,7 @@ class CancelInvoiceRequest implements ApiRequestInterface
             ],
             'drs' => [
                 'mode' => $this->getModel(),
-                'ejer' => date('Y')
+                'ejer' => $this->ticketbaiCancel->expeditionDate()->year()
             ]
         ]);
     }

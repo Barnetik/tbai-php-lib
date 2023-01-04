@@ -62,7 +62,7 @@ class SubmitInvoiceRequest implements ApiRequestInterface
             'Subcapitulo' => '1.1',
             'Operacion' => 'A00',
             'Version' => '1.0',
-            'Ejercicio' => date('Y'),
+            'Ejercicio' => $this->ticketbai->expeditionDate()->year(),
         ];
         foreach ($data as $element => $value) {
             $header->appendChild(
@@ -133,7 +133,7 @@ class SubmitInvoiceRequest implements ApiRequestInterface
             ],
             'drs' => [
                 'mode' => $this->getModel(),
-                'ejer' => date('Y')
+                'ejer' => $this->ticketbai->expeditionDate()->year()
             ]
         ]);
     }
