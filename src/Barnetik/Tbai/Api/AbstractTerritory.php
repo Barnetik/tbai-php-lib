@@ -7,6 +7,9 @@ use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
 use Barnetik\Tbai\TicketBaiCancel;
 use Exception;
+use GuzzleHttp\Client;
+use http\Client\Response;
+
 
 abstract class AbstractTerritory implements EndpointInterface
 {
@@ -42,9 +45,11 @@ abstract class AbstractTerritory implements EndpointInterface
     abstract public function createCancelInvoiceRequest(TicketBaiCancel $ticketBaiCancel): ApiRequestInterface;
     abstract protected function response(string $status, array $headers, string $content): ResponseInterface;
 
-    public function submitInvoice(TicketBai $ticketbai, PrivateKey $privateKey, string $password, int $maxRetries = 1, int $retryDelay = 1): ResponseInterface
+    public function submitInvoice(TicketBai $ticketbai, PrivateKey $privateKey, string $password, bool $guzzle = false,int $maxRetries = 1, int $retryDelay = 1): ResponseInterface
     {
         $submitInvoiceRequest = $this->createSubmitInvoiceRequest($ticketbai);
+        if($guzzle)
+            return $this->doRequestGuzzle($submitInvoiceRequest, $privateKey, $password, $maxRetries, $retryDelay);
         return $this->doRequest($submitInvoiceRequest, $privateKey, $password, $maxRetries, $retryDelay);
     }
 
@@ -67,6 +72,45 @@ abstract class AbstractTerritory implements EndpointInterface
                 list($status, $headers, $content) = $this->parseCurlResponse($response, $curl);
                 curl_close($curl);
                 return $this->response($status, $headers, $content);
+            } catch (Exception $e) {
+                if ($tries > $maxRetries || $e->getMessage() !== 'No response from server') {
+                    throw $e;
+                }
+            }
+            sleep($retryDelay);
+        } while ($tries <= $maxRetries);
+        return null;
+    }
+
+    private function doRequestGuzzle(ApiRequestInterface $request, PrivateKey $privateKey, string $password, int $maxRetries, int $retryDelay): ?ResponseInterface
+    {
+        $tries = 0;
+        do {
+            $tries++;
+            try {
+
+                $url = $request->url();
+                $client = new Client(['base_uri' => $url,
+                    'timeout'  => 60.0,]);
+                $ticket = $request->data();
+
+                $response = $client->postAsync($url,[
+                    'headers' => [
+                        'Content-Type' => 'application/xml',
+                    ],
+                    'cert' => [$privateKey->keyPath(), $password],
+                    'body' => $ticket
+                ])->wait();
+                $content = '';
+
+
+
+                if($response->getStatusCode() == 200) {
+                    //$content = json_encode(json_decode(json_encode($response->getBody()),1));
+                    $content = (string)$response->getBody()->getContents();
+                    $element = simplexml_load_string($content);
+                }
+                return $this->response($response->getStatusCode(),$response->getHeaders(),$element->asXML());
             } catch (Exception $e) {
                 if ($tries > $maxRetries || $e->getMessage() !== 'No response from server') {
                     throw $e;
@@ -111,7 +155,7 @@ abstract class AbstractTerritory implements EndpointInterface
             // CURLOPT_VERBOSE             => true,
             CURLOPT_FOLLOWLOCATION      => true,
 
-            CURLOPT_TIMEOUT             => 20,
+            CURLOPT_TIMEOUT             => 60,
 
             CURLOPT_URL                 => $apiRequest->url(),
             CURLOPT_HTTPHEADER          => $this->headers($apiRequest, $dataFile),
