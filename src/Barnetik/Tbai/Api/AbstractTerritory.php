@@ -108,8 +108,9 @@ abstract class AbstractTerritory implements EndpointInterface
                 if($response->getStatusCode() == 200) {
                     //$content = json_encode(json_decode(json_encode($response->getBody()),1));
                     $content = (string)$response->getBody()->getContents();
-                    $element = simplexml_load_string($content);
+
                 }
+                $element = simplexml_load_string($content);
                 return $this->response($response->getStatusCode(),$response->getHeaders(),$element->asXML());
             } catch (Exception $e) {
                 if ($tries > $maxRetries || $e->getMessage() !== 'No response from server') {
