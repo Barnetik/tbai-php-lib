@@ -32,6 +32,11 @@ class TicketBai extends AbstractTicketBai
         $this->selfEmployed = $selfEmployed;
     }
 
+    public function subject(): Subject
+    {
+        return $this->subject;
+    }
+
     public function issuerVatId(): VatId
     {
         return $this->subject->issuerVatId();
