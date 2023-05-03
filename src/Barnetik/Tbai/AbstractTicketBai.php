@@ -93,7 +93,7 @@ abstract class AbstractTicketBai implements TbaiXml, TbaiSignable, Stringable, J
         file_put_contents($signedFile, $xml);
 
         try {
-            $this->signedXml = XAdES::verifyDocument($signedFile);
+            XAdES::verifyDocument($signedFile);
             $this->signedXmlPath = $signedFile;
         } catch (XAdESException $exception) {
             unlink($signedFile);
