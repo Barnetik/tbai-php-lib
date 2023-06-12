@@ -10,6 +10,7 @@ use Barnetik\Tbai\ValueObject\Amount;
 use Barnetik\Tbai\ValueObject\Date;
 use DOMDocument;
 use DOMNode;
+use DOMXPath;
 
 class Invoice implements TbaiXml
 {
@@ -50,9 +51,23 @@ class Invoice implements TbaiXml
         return $this->header->invoiceNumber();
     }
 
+    public function header(): Header
+    {
+        return $this->header;
+    }
+
     public function totalAmount(): Amount
     {
         return $this->data->total();
+    }
+
+    public static function createFromXml(DOMXPath $xpath): self
+    {
+        $header = Header::createFromXml($xpath);
+        $data = Data::createFromXml($xpath);
+        $breakdown = Breakdown::createFromXml($xpath);
+
+        return new self($header, $data, $breakdown);
     }
 
     public static function createFromJson(array $jsonData): self

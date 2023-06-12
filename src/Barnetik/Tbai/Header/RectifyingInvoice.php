@@ -8,6 +8,7 @@ use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\ValueObject\Amount;
 use DOMDocument;
 use DOMNode;
+use DOMXPath;
 
 class RectifyingInvoice implements TbaiXml
 {
@@ -86,6 +87,19 @@ class RectifyingInvoice implements TbaiXml
 
         $rectifyingInvoice = new RectifyingInvoice($code, $type, $rectifyingAmount);
         return $rectifyingInvoice;
+    }
+
+    public static function createFromXml(DOMXPath $xpath): self
+    {
+        $code = $xpath->evaluate('string(/T:TicketBai/Factura/CabeceraFactura/FacturaRectificativa/Codigo)');
+        $type = $xpath->evaluate('string(/T:TicketBai/Factura/CabeceraFactura/FacturaRectificativa/Tipo)');
+
+        $rectifyingAmount = null;
+        if ($xpath->evaluate('boolean(/T:TicketBai/Factura/CabeceraFactura/FacturaRectificativa/ImporteRectificacionSustitutiva)')) {
+            $rectifyingAmount = RectifyingAmount::createFromXml($xpath);
+        }
+
+        return new self($code, $type, $rectifyingAmount);
     }
 
     public function xml(DOMDocument $domDocument): DOMNode

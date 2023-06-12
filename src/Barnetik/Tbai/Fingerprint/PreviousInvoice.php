@@ -6,6 +6,7 @@ use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\ValueObject\Date;
 use DOMDocument;
 use DOMNode;
+use DOMXPath;
 
 class PreviousInvoice implements TbaiXml
 {
@@ -36,6 +37,16 @@ class PreviousInvoice implements TbaiXml
         $previousInvoice->appendChild($domDocument->createElement('SignatureValueFirmaFacturaAnterior', $this->signature));
 
         return $previousInvoice;
+    }
+
+    public static function createFromXml(DOMXPath $xpath): self
+    {
+        $series = $xpath->evaluate('string(/T:TicketBai/HuellaTBAI/EncadenamientoFacturaAnterior/SerieFacturaAnterior)');
+        $number = $xpath->evaluate('string(/T:TicketBai/HuellaTBAI/EncadenamientoFacturaAnterior/NumFacturaAnterior)');
+        $date = $xpath->evaluate('string(/T:TicketBai/HuellaTBAI/EncadenamientoFacturaAnterior/FechaExpedicionFacturaAnterior)');
+        $signature = $xpath->evaluate('string(/T:TicketBai/HuellaTBAI/EncadenamientoFacturaAnterior/SignatureValueFirmaFacturaAnterior)');
+
+        return new self($number, new Date($date), $signature, $series ?: null);
     }
 
     public static function createFromJson(array $jsonData): self

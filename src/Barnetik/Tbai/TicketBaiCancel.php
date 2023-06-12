@@ -9,6 +9,8 @@ use DOMDocument;
 use Barnetik\Tbai\ValueObject\Date;
 use Barnetik\Tbai\ValueObject\VatId;
 use Barnetik\Tbai\Fingerprint\Vendor;
+use DOMXPath;
+use InvalidArgumentException;
 
 class TicketBaiCancel extends AbstractTicketBai
 {
@@ -58,6 +60,11 @@ class TicketBaiCancel extends AbstractTicketBai
         return $this->invoiceId->invoiceNumber();
     }
 
+    public function fingerprint(): Fingerprint
+    {
+        return $this->fingerprint;
+    }
+
     public function selfEmployed(): bool
     {
         return $this->selfEmployed;
@@ -94,6 +101,32 @@ class TicketBaiCancel extends AbstractTicketBai
         }
 
         return new TicketBaiCancel($invoiceId, $fingerprint, $territory, $selfEmployed);
+    }
+
+    public static function createFromXml(string $xml, string $territory, bool $selfEmployed = false): self
+    {
+        $dom = new DOMDocument();
+
+        if (!$dom->loadXML($xml)) {
+            throw new InvalidArgumentException('Invalid XML string');
+        }
+
+        $xpath = new DOMXPath($dom);
+
+        if (($root = $xpath->query('/T:AnulaTicketBai')->item(0)) === null) {
+            throw new InvalidArgumentException('Invalid TicketBai XML');
+        }
+
+        $ticketBaiCancel = new self(
+            InvoiceId::createFromXml($xpath, $root),
+            Fingerprint::createFromXml($xpath, $root),
+            $territory,
+            $selfEmployed
+        );
+
+        $ticketBaiCancel->verifySignature($xml);
+
+        return $ticketBaiCancel;
     }
 
     public static function docJson(): array

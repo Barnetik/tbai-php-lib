@@ -9,6 +9,7 @@ use Barnetik\Tbai\ValueObject\Date;
 use Barnetik\Tbai\ValueObject\Time;
 use DOMDocument;
 use DOMNode;
+use DOMXPath;
 
 class Header implements TbaiXml
 {
@@ -120,6 +121,48 @@ class Header implements TbaiXml
     {
         array_push($this->rectifiedInvoices, $rectifiedInvoice);
         return $this;
+    }
+
+    public static function createFromXml(DOMXPath $xpath): self
+    {
+        $header = self::createHeaderFromXml($xpath);
+
+        $rectifiedInvoices = $xpath->query('/T:TicketBai/Factura/CabeceraFactura/FacturasRectificadasSustituidas/IDFacturaRectificadaSustituida');
+        foreach ($rectifiedInvoices as $rectifiedInvoiceNode) {
+            $rectifiedInvoice = RectifiedInvoice::createFromXml($xpath, $rectifiedInvoiceNode);
+            $header->addRectifiedInvoice($rectifiedInvoice);
+        }
+
+        return $header;
+    }
+
+    public static function createHeaderFromXml(DOMXPath $xpath): self
+    {
+        $isSimplified = $xpath->evaluate('/T:TicketBai/Factura/CabeceraFactura/FacturaSimplificada = "S"');
+        $invoiceNumber = $xpath->evaluate('string(/T:TicketBai/Factura/CabeceraFactura/NumFactura)');
+        $expeditionDate = new Date($xpath->evaluate('string(/T:TicketBai/Factura/CabeceraFactura/FechaExpedicionFactura)'));
+        $expeditionTime = new Time($xpath->evaluate('string(/T:TicketBai/Factura/CabeceraFactura/HoraExpedicionFactura)'));
+        $series = $xpath->evaluate('string(/T:TicketBai/Factura/CabeceraFactura/SerieFactura)');
+
+        if ($xpath->evaluate('boolean(/T:TicketBai/Factura/CabeceraFactura/FacturaRectificativa)')) {
+            $rectifyingInvoice = RectifyingInvoice::createFromXml($xpath);
+
+            if ($isSimplified) {
+                return self::createSimplifiedRectifyingInvoice($invoiceNumber, $expeditionDate, $expeditionTime, $rectifyingInvoice, $series);
+            }
+
+            return self::createRectifyingInvoice($invoiceNumber, $expeditionDate, $expeditionTime, $rectifyingInvoice, $series);
+        }
+
+        if ($xpath->evaluate('/T:TicketBai/Factura/CabeceraFactura/FacturaEmitidaSustitucionSimplificada = "S"')) {
+            return self::createSimplifiedSubstitute($invoiceNumber, $expeditionDate, $expeditionTime, $series);
+        }
+
+        if ($isSimplified) {
+            return self::createSimplified($invoiceNumber, $expeditionDate, $expeditionTime, $series);
+        }
+
+        return self::create($invoiceNumber, $expeditionDate, $expeditionTime, $series);
     }
 
     public static function createFromJson(array $jsonData): self

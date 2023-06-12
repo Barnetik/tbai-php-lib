@@ -106,6 +106,30 @@ class TicketBaiTest extends TestCase
         $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2-no-signature.xsd'));
     }
 
+    public function test_ticketbai_can_be_generated_from_xml(): void
+    {
+        $certFile = $_ENV['TBAI_ARABA_P12_PATH'];
+        $certPassword = $_ENV['TBAI_ARABA_PRIVATE_KEY'];
+        $privateKey = PrivateKey::p12($certFile);
+
+        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        rename($filename, $filename . '.xml');
+        $filename .= '.xml';
+
+        $ticketbai = $this->getTicketBai();
+        $ticketbai->sign($privateKey, $certPassword, $filename);
+
+        $signedDom = new DOMDocument();
+        $signedDom->load($filename);
+
+        $ticketbaiFromXml = TicketBai::createFromXml($signedDom->saveXML(), $ticketbai->territory());
+
+        $signedDom = new DOMDocument();
+        $signedDom->loadXML($ticketbaiFromXml->signed());
+
+        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
+    }
+
     public function test_TicketBai_can_be_signed_with_PFX_key(): void
     {
         $ticketbai = $this->getTicketBai();

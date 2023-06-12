@@ -1,0 +1,20 @@
+{
+  "territory": "01",
+  "invoiceId": {
+    "issuer": {
+      "vatId": "00000000T",
+      "name": "Issuer name"
+    },
+    "header": {
+      "series": "TESTSERIE81",
+      "invoiceNumber": "1669316700",
+      "expeditionDate": "24-11-2022"
+    }
+  },
+  "fingerprint": {
+    "previousInvoice": null
+  },
+  "originalSignature": {
+    "originalSignature": "wmVxT9kbWRox+eUrYuAovwEpnf089beJRZGkTMqNQ8zcNh8cZnwZhq85GOKBnqdWfNal6vOX9H3BoOI92LC7hk\/Anmq\/q0QuKBBb"
+  }
+}

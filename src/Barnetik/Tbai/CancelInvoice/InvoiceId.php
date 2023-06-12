@@ -9,6 +9,7 @@ use Barnetik\Tbai\ValueObject\Date;
 use Barnetik\Tbai\ValueObject\VatId;
 use DOMDocument;
 use DOMNode;
+use DOMXPath;
 
 class InvoiceId implements TbaiXml
 {
@@ -64,6 +65,16 @@ class InvoiceId implements TbaiXml
         $header = Header::createFromJson($jsonData['header']);
         $invoiceId = new InvoiceId($issuer, $header);
         return $invoiceId;
+    }
+
+    public static function createFromXml(DOMXPath $xpath, DOMNode $contextNode): self
+    {
+        $contextNode = $xpath->query('IDFactura', $contextNode)->item(0);
+
+        $issuer = Issuer::createFromXml($xpath, $contextNode);
+        $header = Header::createFromXml($xpath, $contextNode);
+
+        return new self($issuer, $header);
     }
 
     public static function docJson(): array

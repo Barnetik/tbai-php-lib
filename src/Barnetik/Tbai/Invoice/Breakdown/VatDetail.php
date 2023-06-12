@@ -6,6 +6,7 @@ use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\ValueObject\Amount;
 use DOMDocument;
 use DOMNode;
+use DOMXPath;
 
 class VatDetail implements TbaiXml
 {
@@ -49,6 +50,39 @@ class VatDetail implements TbaiXml
 
         $vatDetail->appendChild($domDocument->createElement('OperacionEnRecargoDeEquivalenciaORegimenSimplificado', $this->isEquivalenceOperation ? 'S' : 'N'));
         return $vatDetail;
+    }
+
+    public static function createFromXml(DOMXPath $xpath, DOMNode $contextNode): self
+    {
+        $taxBase = new Amount($xpath->evaluate('string(BaseImponible)', $contextNode));
+
+        $taxRate = null;
+        $taxRateValue = $xpath->evaluate('string(TipoImpositivo)', $contextNode);
+        if ($taxRateValue) {
+            $taxRate = new Amount($taxRateValue);
+        }
+
+        $taxQuota = null;
+        $taxQuotaValue = $xpath->evaluate('string(CuotaImpuesto)', $contextNode);
+        if ($taxQuotaValue) {
+            $taxQuota = new Amount($taxQuotaValue);
+        }
+
+        $equivalenceRate = null;
+        $equivalenceRateValue = $xpath->evaluate('string(TipoRecargoEquivalencia)', $contextNode);
+        if ($equivalenceRateValue) {
+            $equivalenceRate = new Amount($equivalenceRateValue);
+        }
+
+        $equivalenceQuota = null;
+        $equivalenceQuotaValue = $xpath->evaluate('string(CuotaRecargoEquivalencia)', $contextNode);
+        if ($equivalenceQuotaValue) {
+            $equivalenceQuota = new Amount($equivalenceQuotaValue);
+        }
+
+        $isEquivalenceOperation = $xpath->evaluate('OperacionEnRecargoDeEquivalenciaORegimenSimplificado = "S"', $contextNode);
+
+        return new self($taxBase, $taxRate, $taxQuota, $equivalenceRate, $equivalenceQuota, $isEquivalenceOperation);
     }
 
     public static function createFromJson(array $jsonData): self

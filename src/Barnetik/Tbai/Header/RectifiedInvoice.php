@@ -6,6 +6,7 @@ use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\ValueObject\Date;
 use DOMDocument;
 use DOMNode;
+use DOMXPath;
 
 class RectifiedInvoice implements TbaiXml
 {
@@ -33,6 +34,15 @@ class RectifiedInvoice implements TbaiXml
         $rectifiedInvoice->appendChild($domDocument->createElement('FechaExpedicionFactura', $this->sentDate));
 
         return $rectifiedInvoice;
+    }
+
+    public static function createFromXml(DOMXPath $xpath, DOMNode $contextNode): self
+    {
+        $invoiceNumber = $xpath->evaluate('string(SerieFactura)', $contextNode);
+        $sentDate = new Date($xpath->evaluate('string(FechaExpedicionFactura)', $contextNode));
+        $serie = $xpath->evaluate('string(SerieFactura)', $contextNode) ?: null;
+
+        return new self($invoiceNumber, $sentDate, $serie);
     }
 
     public static function createFromJson(array $jsonData): self

@@ -8,6 +8,7 @@ use Barnetik\Tbai\Invoice\Data\Detail;
 use Barnetik\Tbai\ValueObject\Amount;
 use DOMDocument;
 use DOMNode;
+use DOMXPath;
 use InvalidArgumentException;
 use OutOfBoundsException;
 
@@ -160,6 +161,38 @@ class Data implements TbaiXml
     public function total(): Amount
     {
         return $this->total;
+    }
+
+    public static function createFromXml(DOMXPath $xpath): self
+    {
+        $description = $xpath->evaluate('string(/T:TicketBai/Factura/DatosFactura/DescripcionFactura)');
+        $total = new Amount($xpath->evaluate('string(/T:TicketBai/Factura/DatosFactura/ImporteTotalFactura)'));
+
+        $vatRegimes = [];
+        foreach ($xpath->query('/T:TicketBai/Factura/DatosFactura/Claves/IDClave') as $node) {
+            $vatRegimes[] = $xpath->evaluate('string(ClaveRegimenIvaOpTrascendencia)', $node);
+        }
+
+        $supportedRetention = null;
+        $supportedRetentionValue = $xpath->evaluate('string(/T:TicketBai/Factura/DatosFactura/RetencionSoportada)');
+        if ($supportedRetentionValue) {
+            $supportedRetention = new Amount($supportedRetentionValue);
+        }
+
+        $taxBaseCost = null;
+        $taxBaseCostValue = $xpath->evaluate('string(/T:TicketBai/Factura/DatosFactura/BaseImponibleACoste)');
+        if ($taxBaseCostValue) {
+            $taxBaseCost = new Amount($taxBaseCostValue);
+        }
+
+        $invoiceData = new Data($description, $total, $vatRegimes, $supportedRetention, $taxBaseCost);
+
+        foreach ($xpath->query('/T:TicketBai/Factura/DatosFactura/DetallesFactura/IDDetalleFactura') as $node) {
+            $detail = Detail::createFromXml($xpath, $node);
+            $invoiceData->addDetail($detail);
+        }
+
+        return $invoiceData;
     }
 
     public static function createFromJson(array $jsonData): self

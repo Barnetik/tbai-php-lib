@@ -6,6 +6,7 @@ use Barnetik\Tbai\ValueObject\Amount;
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use DOMDocument;
 use DOMNode;
+use DOMXPath;
 use InvalidArgumentException;
 
 class AbstractNotSubjectBreakdownItem implements TbaiXml
@@ -58,6 +59,17 @@ class AbstractNotSubjectBreakdownItem implements TbaiXml
         $notSubjectDetail->appendChild($domDocument->createElement('Importe', $this->amount));
 
         return $notSubjectDetail;
+    }
+
+    /**
+     * @return static
+     */
+    public static function createFromXml(DOMXPath $xpath, DOMNode $contextNode)
+    {
+        $amount = new Amount($xpath->evaluate('string(Importe)', $contextNode));
+        $reason = $xpath->evaluate('string(Causa)', $contextNode);
+
+        return new static($amount, $reason);
     }
 
     /**

@@ -14,6 +14,7 @@ use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectExemptBreakdownItem;
 use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectNotExemptBreakdownItem;
 use DOMDocument;
 use DOMNode;
+use DOMXPath;
 use OutOfBoundsException;
 
 class Breakdown implements TbaiXml
@@ -167,6 +168,67 @@ class Breakdown implements TbaiXml
         $foreignDeliverySubjectNotExemptBreakdownItems = $jsonData['foreignDeliverySubjectNotExemptBreakdownItems'] ?? [];
         foreach ($foreignDeliverySubjectNotExemptBreakdownItems as $foreignDeliverySubjectNotExemptBreakdownItem) {
             $breakdown->addForeignDeliverySubjectNotExemptBreakdownItem(ForeignDeliverySubjectNotExemptBreakdownItem::createFromJson($foreignDeliverySubjectNotExemptBreakdownItem));
+        }
+
+        return $breakdown;
+    }
+
+    public static function createFromXml(DOMXPath $xpath): self
+    {
+        $breakdown = new self();
+
+        $nationalSubjectExemptBreakdown = $xpath->query('/T:TicketBai/Factura/TipoDesglose/DesgloseFactura/Sujeta/Exenta/DetalleExenta');
+        foreach ($nationalSubjectExemptBreakdown as $node) {
+            $nationalSubjectExemptBreakdownItem = NationalSubjectExemptBreakdownItem::createFromXml($xpath, $node);
+            $breakdown->addNationalSubjectExemptBreakdownItem($nationalSubjectExemptBreakdownItem);
+        }
+
+        $nationalSubjectNotExemptBreakdown = $xpath->query('/T:TicketBai/Factura/TipoDesglose/DesgloseFactura/Sujeta/NoExenta/DetalleNoExenta');
+        foreach ($nationalSubjectNotExemptBreakdown as $node) {
+            $nationalSubjectNotExemptBreakdownItem = NationalSubjectNotExemptBreakdownItem::createFromXml($xpath, $node);
+            $breakdown->addNationalSubjectNotExemptBreakdownItem($nationalSubjectNotExemptBreakdownItem);
+        }
+
+        $nationalNotSubjectBreakdown = $xpath->query('/T:TicketBai/Factura/TipoDesglose/DesgloseFactura/NoSujeta/DetalleNoSujeta');
+        foreach ($nationalNotSubjectBreakdown as $node) {
+            $nationalNotSubjectBreakdownItem = NationalNotSubjectBreakdownItem::createFromXml($xpath, $node);
+            $breakdown->addNationalNotSubjectBreakdownItem($nationalNotSubjectBreakdownItem);
+        }
+
+        $foreignServiceSubjectExemptBreakdown = $xpath->query('/T:TicketBai/Factura/TipoDesglose/DesgloseTipoOperacion/PrestacionServicios/Sujeta/Exenta/DetalleExenta');
+        foreach ($foreignServiceSubjectExemptBreakdown as $node) {
+            $foreignServiceSubjectExemptBreakdownItem = ForeignServiceSubjectExemptBreakdownItem::createFromXml($xpath, $node);
+            $breakdown->addForeignServiceSubjectExemptBreakdownItem($foreignServiceSubjectExemptBreakdownItem);
+        }
+
+        $foreignServiceSubjectNotExemptBreakdown = $xpath->query('/T:TicketBai/Factura/TipoDesglose/DesgloseTipoOperacion/PrestacionServicios/Sujeta/NoExenta/DetalleNoExenta');
+        foreach ($foreignServiceSubjectNotExemptBreakdown as $node) {
+            $foreignServiceSubjectNotExemptBreakdownItem = ForeignServiceSubjectNotExemptBreakdownItem::createFromXml($xpath, $node);
+            $breakdown->addForeignServiceSubjectNotExemptBreakdownItem($foreignServiceSubjectNotExemptBreakdownItem);
+        }
+
+        $foreignServiceNotSubjectBreakdown = $xpath->query('/T:TicketBai/Factura/TipoDesglose/DesgloseTipoOperacion/PrestacionServicios/NoSujeta/DetalleNoSujeta');
+        foreach ($foreignServiceNotSubjectBreakdown as $node) {
+            $foreignServiceNotSubjectBreakdownItem = ForeignServiceNotSubjectBreakdownItem::createFromXml($xpath, $node);
+            $breakdown->addForeignServiceNotSubjectBreakdownItem($foreignServiceNotSubjectBreakdownItem);
+        }
+
+        $foreignDeliverySubjectExemptBreakdown = $xpath->query('/T:TicketBai/Factura/TipoDesglose/DesgloseTipoOperacion/Entrega/Sujeta/Exenta/DetalleExenta');
+        foreach ($foreignDeliverySubjectExemptBreakdown as $node) {
+            $foreignDeliverySubjectExemptBreakdownItem = ForeignDeliverySubjectExemptBreakdownItem::createFromXml($xpath, $node);
+            $breakdown->addForeignDeliverySubjectExemptBreakdownItem($foreignDeliverySubjectExemptBreakdownItem);
+        }
+
+        $foreignDeliverySubjectNotExemptBreakdown = $xpath->query('/T:TicketBai/Factura/TipoDesglose/DesgloseTipoOperacion/Entrega/Sujeta/NoExenta/DetalleNoExenta');
+        foreach ($foreignDeliverySubjectNotExemptBreakdown as $node) {
+            $foreignDeliverySubjectNotExemptBreakdownItem = ForeignDeliverySubjectNotExemptBreakdownItem::createFromXml($xpath, $node);
+            $breakdown->addForeignDeliverySubjectNotExemptBreakdownItem($foreignDeliverySubjectNotExemptBreakdownItem);
+        }
+
+        $foreignDeliveryNotSubjectBreakdown = $xpath->query('/T:TicketBai/Factura/TipoDesglose/DesgloseTipoOperacion/Entrega/NoSujeta/DetalleNoSujeta');
+        foreach ($foreignDeliveryNotSubjectBreakdown as $node) {
+            $foreignDeliveryNotSubjectBreakdownItem = ForeignDeliveryNotSubjectBreakdownItem::createFromXml($xpath, $node);
+            $breakdown->addForeignDeliveryNotSubjectBreakdownItem($foreignDeliveryNotSubjectBreakdownItem);
         }
 
         return $breakdown;

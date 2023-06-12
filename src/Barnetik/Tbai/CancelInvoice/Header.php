@@ -7,6 +7,7 @@ use Barnetik\Tbai\TicketBai;
 use Barnetik\Tbai\ValueObject\Date;
 use DOMDocument;
 use DOMNode;
+use DOMXPath;
 
 class Header implements TbaiXml
 {
@@ -58,6 +59,15 @@ class Header implements TbaiXml
         $header->appendChild($domDocument->createElement('FechaExpedicionFactura', $this->expeditionDate()));
 
         return $header;
+    }
+
+    public static function createFromXml(DOMXPath $xpath, DOMNode $contextNode): self
+    {
+        $invoiceNumber = $xpath->evaluate('string(CabeceraFactura/NumFactura)', $contextNode);
+        $expeditionDate = new Date($xpath->evaluate('string(CabeceraFactura/FechaExpedicionFactura)', $contextNode));
+        $series = $xpath->evaluate('string(CabeceraFactura/SerieFactura)', $contextNode) ?: null;
+
+        return self::create($invoiceNumber, $expeditionDate, $series);
     }
 
     public static function createFromJson(array $jsonData): self
