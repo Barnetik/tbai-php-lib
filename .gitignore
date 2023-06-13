@@ -2,6 +2,7 @@
 /vendor/
 phpunit.xml
 .phpunit.*
+composer.lock
 tests/Barnetik/Tbai/__files/signedXmls/
 tests/Barnetik/Tbai/__files/responses/
 tests/Barnetik/Tbai/__files/sentFiles/
