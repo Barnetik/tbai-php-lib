@@ -6,6 +6,7 @@ use Barnetik\Tbai\Exception\InvalidVatRegimeException;
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\Invoice\Data\Detail;
 use Barnetik\Tbai\ValueObject\Amount;
+use Barnetik\Tbai\ValueObject\Date;
 use DOMDocument;
 use DOMNode;
 use DOMXPath;
@@ -33,6 +34,7 @@ class Data implements TbaiXml
     const VAT_REGIME_52 = '52';
     const VAT_REGIME_53 = '53';
 
+    private ?Date $operationDate;
     private string $description;
     private Amount $total;
     private ?Amount $supportedRetention = null;
@@ -40,7 +42,7 @@ class Data implements TbaiXml
     private array $vatRegimes = [];
     private array $details = [];
 
-    public function __construct(string $description, Amount $total, array $vatRegimes, ?Amount $supportedRetention = null, ?Amount $taxBaseCost = null)
+    public function __construct(string $description, Amount $total, array $vatRegimes, ?Amount $supportedRetention = null, ?Amount $taxBaseCost = null, ?Date $operationDate = null)
     {
         $this->description = $description;
         $this->total = $total;
@@ -52,6 +54,10 @@ class Data implements TbaiXml
 
         if ($taxBaseCost) {
             $this->taxBaseCost = $taxBaseCost;
+        }
+
+        if ($operationDate) {
+            $this->operationDate = $operationDate;
         }
     }
 
@@ -115,6 +121,13 @@ class Data implements TbaiXml
     public function xml(DOMDocument $domDocument): DOMNode
     {
         $data = $domDocument->createElement('DatosFactura');
+
+        if ($this->operationDate) {
+            $data->appendChild(
+                $domDocument->createElement('FechaOperacion', $this->operationDate)
+            );
+        }
+
         $data->appendChild(
             $domDocument->createElement('DescripcionFactura',
                 htmlspecialchars($this->description, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8')
@@ -185,7 +198,13 @@ class Data implements TbaiXml
             $taxBaseCost = new Amount($taxBaseCostValue);
         }
 
-        $invoiceData = new Data($description, $total, $vatRegimes, $supportedRetention, $taxBaseCost);
+        $operationDate = null;
+        $operationDateValue = $xpath->evaluate('string(/T:TicketBai/Factura/DatosFactura/FechaOperacion)');
+        if ($operationDateValue) {
+            $operationDate = new Date($operationDateValue);
+        }
+
+        $invoiceData = new Data($description, $total, $vatRegimes, $supportedRetention, $taxBaseCost, $operationDate);
 
         foreach ($xpath->query('/T:TicketBai/Factura/DatosFactura/DetallesFactura/IDDetalleFactura') as $node) {
             $detail = Detail::createFromXml($xpath, $node);
@@ -203,6 +222,7 @@ class Data implements TbaiXml
 
         $supportedRetention = null;
         $taxBaseCost = null;
+        $operationDate = null;
 
         if (isset($jsonData['supportedRetention']) && $jsonData['supportedRetention'] !== '') {
             $supportedRetention = new Amount($jsonData['supportedRetention']);
@@ -212,7 +232,11 @@ class Data implements TbaiXml
             $taxBaseCost = new Amount($jsonData['taxBaseCost']);
         }
 
-        $invoiceData = new Data($description, $total, $vatRegimes, $supportedRetention, $taxBaseCost);
+        if (isset($jsonData['operationDate']) && $jsonData['operationDate'] !== '') {
+            $operationDate = new Date($jsonData['operationDate']);
+        }
+
+        $invoiceData = new Data($description, $total, $vatRegimes, $supportedRetention, $taxBaseCost, $operationDate);
 
         foreach ($jsonData['details'] as $jsonDetail) {
             $detail = Detail::createFromJson($jsonDetail);
@@ -227,6 +251,13 @@ class Data implements TbaiXml
         return [
             'type' => 'object',
             'properties' => [
+                'operationDate' => [
+                    'type' => 'string',
+                    'minLength' => 10,
+                    'maxLength' => 10,
+                    'pattern' => '^\d{2,2}-\d{2,2}-\d{4,4}$',
+                    'description' => 'Fecha de operación de factura (ej: 21-12-2020)'
+                ],
                 'description' => [
                     'type' => 'string',
                     'maxLength' => 250,
@@ -290,6 +321,7 @@ class Data implements TbaiXml
     public function toArray(): array
     {
         return [
+            'operationDate' => $this->operationDate ?? null,
             'description' => $this->description,
             'details' => array_map(function ($detail) {
                 return $detail->toArray();
