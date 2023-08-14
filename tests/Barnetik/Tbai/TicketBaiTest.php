@@ -5,6 +5,7 @@ namespace Test\Barnetik\Tbai;
 use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
 use DOMDocument;
+use DOMXPath;
 use Exception;
 use lyquidity\xmldsig\XAdES;
 use PHPUnit\Framework\TestCase;
@@ -237,5 +238,28 @@ class TicketBaiTest extends TestCase
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
         $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
+    }
+
+    public function test_gh29_TicketBai_sends_operation_date_element(): void
+    {
+        $nif = $_ENV['TBAI_ARABA_ISSUER_NIF'];
+        $issuer = 'Test with & on issuer name';
+        $license = $_ENV['TBAI_ARABA_APP_LICENSE'];
+        $developer = $_ENV['TBAI_ARABA_APP_DEVELOPER_NIF'];
+        $appName = $_ENV['TBAI_ARABA_APP_NAME'];
+        $appVersion =  $_ENV['TBAI_ARABA_APP_VERSION'];
+
+        $ticketbai = $this->ticketBaiMother->createTicketBaiWithOperationDate($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
+        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        rename($filename, $filename . '.xml');
+        $filename .= '.xml';
+
+        $privateKey = PrivateKey::p12($_ENV['TBAI_ARABA_P12_PATH']);
+        $ticketbai->sign($privateKey, $_ENV['TBAI_ARABA_PRIVATE_KEY'], $filename);
+        $signedDom = new DOMDocument();
+        $signedDom->load($filename);
+        $xpath = new DOMXPath($signedDom);
+        $operationDateValue = $xpath->evaluate('string(/T:TicketBai/Factura/DatosFactura/FechaOperacion)');
+        $this->assertFalse(empty($operationDateValue));
     }
 }

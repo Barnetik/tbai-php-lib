@@ -88,6 +88,49 @@ class EndpointTest extends TestCase
         $this->assertTrue($response->isCorrect());
     }
 
+    public function test_TicketBai_with_operation_date_is_delivered(): void
+    {
+
+        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_240'];
+        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_240'];
+        $license = $_ENV['TBAI_BIZKAIA_APP_LICENSE'];
+        $developer = $_ENV['TBAI_BIZKAIA_APP_DEVELOPER_NIF'];
+        $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
+        $appVersion =  $_ENV['TBAI_BIZKAIA_APP_VERSION'];
+
+        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
+        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
+        $privateKey = PrivateKey::p12($certFile);
+
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        rename($signedFilename, $signedFilename . '.xml');
+        $signedFilename = $signedFilename . '.xml';
+
+        $ticketbai = $this->ticketBaiMother->createTicketBaiWithOperationDate($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_BIZKAIA);
+        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+
+        $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
+
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
+        file_put_contents($responseFile, $response->content());
+
+        if (!$response->isCorrect()) {
+            echo "\n";
+            echo "IFZ: " . $ticketbai->issuerVatId() . "\n";
+            echo "Data: " . date('Y-m-d H:i:s') . "\n";
+            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
+            echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
+            echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
+            echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
+            echo "Bidalitako fitxategia: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
+            echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
+            echo "Erantzuna: " . basename($responseFile) . "\n";
+        }
+        $this->assertTrue($response->isCorrect());
+    }
+
     public function test_TicketBai_is_delivered_for_selfEmployed(): void
     {
         $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
@@ -430,5 +473,4 @@ class EndpointTest extends TestCase
         }
         $this->assertTrue($response->isDelivered());
     }
-
 }

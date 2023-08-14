@@ -1,4 +1,5 @@
 <?php
+
 namespace Test\Barnetik\Tbai\Mother;
 
 use Barnetik\Tbai\Api\Bizkaia\IncomeTax\Collection;
@@ -41,6 +42,33 @@ class TicketBaiMother
         $header = Header::create((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), $this->testSerie());
         sleep(1); // Avoid same invoice number as time is used for generation
         $data = new Data('factura ejemplo TBAI', new Amount('89.36'), [Data::VAT_REGIME_01]);
+        $data->addDetail(new Detail('Artículo 1 Ejemplo', new Amount('23.356', 12, 8), new Amount('1'), new Amount('25.84'), new Amount('2.00')));
+        $data->addDetail(new Detail('Artículo 2 xxx', new Amount('18.2', 12, 8), new Amount('1.50'), new Amount('33.03')));
+        $data->addDetail(new Detail('Artículo 3 aaaaaaa', new Amount('1.40', 12, 8), new Amount('18'), new Amount('30.49')));
+
+        $vatDetail = new VatDetail(new Amount('73.86'), new Amount('21'), new Amount('15.50'));
+        $notExemptBreakdown = new NationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1, [$vatDetail]);
+        $breakdown = new Breakdown();
+        $breakdown->addNationalSubjectNotExemptBreakdownItem($notExemptBreakdown);
+
+        $invoice = new Invoice($header, $data, $breakdown);
+        return new TicketBai(
+            $subject,
+            $invoice,
+            $fingerprint,
+            $territory,
+            $selfEmployed
+        );
+    }
+
+    public function createTicketBaiWithOperationDate(string $nif, string $issuer, string $license, string $developer, string $appName, string $appVersion, string $territory, bool $selfEmployed = false): TicketBai
+    {
+        $subject = $this->getSubject($nif, $issuer);
+        $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
+
+        $header = Header::create((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), $this->testSerie());
+        sleep(1); // Avoid same invoice number as time is used for generation
+        $data = new Data('factura ejemplo TBAI', new Amount('89.36'), [Data::VAT_REGIME_01], null, null, new Date(date('d-m-Y')));
         $data->addDetail(new Detail('Artículo 1 Ejemplo', new Amount('23.356', 12, 8), new Amount('1'), new Amount('25.84'), new Amount('2.00')));
         $data->addDetail(new Detail('Artículo 2 xxx', new Amount('18.2', 12, 8), new Amount('1.50'), new Amount('33.03')));
         $data->addDetail(new Detail('Artículo 3 aaaaaaa', new Amount('1.40', 12, 8), new Amount('18'), new Amount('30.49')));
@@ -555,7 +583,6 @@ class TicketBaiMother
 
         $ticketbai->addBatuzIncomeTaxes($incomingTaxCollection);
         return $ticketbai;
-
     }
 
     public function getSubject(string $nif, string $name, bool $withRecipient = true): Subject

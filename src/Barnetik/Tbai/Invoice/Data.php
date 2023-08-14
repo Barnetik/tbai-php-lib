@@ -39,6 +39,7 @@ class Data implements TbaiXml
     private Amount $total;
     private ?Amount $supportedRetention = null;
     private ?Amount $taxBaseCost = null;
+    private ?Date $operationDate = null;
     private array $vatRegimes = [];
     private array $details = [];
 
@@ -129,7 +130,8 @@ class Data implements TbaiXml
         }
 
         $data->appendChild(
-            $domDocument->createElement('DescripcionFactura',
+            $domDocument->createElement(
+                'DescripcionFactura',
                 htmlspecialchars($this->description, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8')
             )
         );
@@ -256,7 +258,7 @@ class Data implements TbaiXml
                     'minLength' => 10,
                     'maxLength' => 10,
                     'pattern' => '^\d{2,2}-\d{2,2}-\d{4,4}$',
-                    'description' => 'Fecha de operación de factura (ej: 21-12-2020)'
+                    'description' => 'Faktura bidali den data (adib: 21-12-2020) - Fecha de operación de factura (ej: 21-12-2020)'
                 ],
                 'description' => [
                     'type' => 'string',
