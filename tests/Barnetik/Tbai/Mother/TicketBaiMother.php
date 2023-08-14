@@ -4,6 +4,7 @@ namespace Test\Barnetik\Tbai\Mother;
 
 use Barnetik\Tbai\Api\Bizkaia\IncomeTax\Collection;
 use Barnetik\Tbai\Api\Bizkaia\IncomeTax\Detail as IncomeTaxDetail;
+use Barnetik\Tbai\CancelInvoice\Fingerprint as CancelInvoiceFingerprint;
 use Barnetik\Tbai\CancelInvoice\Header as CancelInvoiceHeader;
 use Barnetik\Tbai\CancelInvoice\InvoiceId;
 use Barnetik\Tbai\Fingerprint;
@@ -320,7 +321,7 @@ class TicketBaiMother
         $issuer = new Issuer(new VatId($nif), $issuerName);
         $header = CancelInvoiceHeader::create((string)time(), new Date(date('d-m-Y')), $this->testSerie());
         $invoiceId = new InvoiceId($issuer, $header);
-        $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
+        $fingerprint = $this->getCancelInvoiceFingerprint($license, $developer, $appName, $appVersion);
 
         return new TicketBaiCancel($invoiceId, $fingerprint, $territory, $selfEmployed);
     }
@@ -612,6 +613,12 @@ class TicketBaiMother
         // $previousInvoice = new PreviousInvoice('0000002', new Date('02-12-2020'), 'abcdefgkauskjsa', , $this->testSerie());
         // return new Fingerprint($vendor, $previousInvoice);
         return new Fingerprint($vendor);
+    }
+
+    public function getCancelInvoiceFingerprint(string $license, string $developer, string $appName, string $appVersion): CancelInvoiceFingerprint
+    {
+        $vendor = new Vendor($license, $developer, $appName, $appVersion);
+        return new CancelInvoiceFingerprint($vendor);
     }
 
     public function testSerie(): string

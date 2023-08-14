@@ -2,6 +2,7 @@
 
 namespace Barnetik\Tbai;
 
+use Barnetik\Tbai\CancelInvoice\Fingerprint;
 use Barnetik\Tbai\CancelInvoice\Header as CancelInvoiceHeader;
 use Barnetik\Tbai\CancelInvoice\InvoiceId;
 use DOMNode;
@@ -32,7 +33,8 @@ class TicketBaiCancel extends AbstractTicketBai
     {
         $header = CancelInvoiceHeader::createForTicketBai($ticketbai);
         $invoiceId = new InvoiceId($ticketbai->issuer(), $header);
-        return new self($invoiceId, $ticketbai->fingerprint(), $ticketbai->territory(), $ticketbai->selfEmployed());
+        $fingerprint = new Fingerprint($ticketbai->fingerprint()->vendor());
+        return new self($invoiceId, $fingerprint, $ticketbai->territory(), $ticketbai->selfEmployed());
     }
 
     public function issuerVatId(): VatId

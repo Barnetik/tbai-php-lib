@@ -6,6 +6,7 @@ use Barnetik\Tbai\Fingerprint\Vendor;
 use Barnetik\Tbai\Interfaces\TbaiXml;
 use DOMDocument;
 use DOMNode;
+use DOMXPath;
 
 class Fingerprint implements TbaiXml
 {
@@ -24,6 +25,13 @@ class Fingerprint implements TbaiXml
         return $fingerprint;
     }
 
+    public static function createFromXml(DOMXPath $xpath, DOMNode $contextNode): self
+    {
+        $vendor = Vendor::createFromXml($xpath, $contextNode);
+
+        return new self($vendor);
+    }
+
     public static function createFromJson(Vendor $vendor, array $jsonData = []): self
     {
         $fingerprint = new Fingerprint($vendor);
@@ -38,5 +46,10 @@ class Fingerprint implements TbaiXml
     public function toArray(): array
     {
         return [];
+    }
+
+    public function vendor(): Vendor
+    {
+        return $this->vendor;
     }
 }

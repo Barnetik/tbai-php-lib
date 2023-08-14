@@ -2,6 +2,7 @@
 
 namespace Barnetik\Tbai;
 
+use Barnetik\Tbai\CancelInvoice\Fingerprint;
 use Barnetik\Tbai\CancelInvoice\InvoiceId;
 use Barnetik\Tbai\Fingerprint\Vendor;
 use Barnetik\Tbai\Zuzendu\OriginalSignature;
