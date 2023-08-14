@@ -34,6 +34,7 @@ class Data implements TbaiXml
     const VAT_REGIME_52 = '52';
     const VAT_REGIME_53 = '53';
 
+    private ?Date $operationDate;
     private string $description;
     private Amount $total;
     private ?Amount $supportedRetention = null;
@@ -121,6 +122,7 @@ class Data implements TbaiXml
     public function xml(DOMDocument $domDocument): DOMNode
     {
         $data = $domDocument->createElement('DatosFactura');
+
         if ($this->operationDate) {
             $data->appendChild(
                 $domDocument->createElement('FechaOperacion', $this->operationDate)
