@@ -56,7 +56,7 @@ class Response extends ApiResponse
         $result = [];
 
         foreach ($this->responseContent->Registros->Registro as $registro) {
-            if ($registro->SituacioRegistro->CodigoErrorRegistro) {
+            if ($registro->SituacionRegistro->CodigoErrorRegistro) {
                 $result[] = [
                     'errorCode' => (string)$registro->SituacionRegistro->CodigoErrorRegistro,
                     'errorMessage' => [
