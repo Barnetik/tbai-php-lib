@@ -553,6 +553,7 @@ class EndpointTest extends TestCase
             echo "Response file: " . basename($responseFile) . "\n";
         }
 
+        $this->assertFalse($response->hasErrorData());
         $this->assertTrue($response->isCorrect());
     }
 
@@ -579,7 +580,7 @@ class EndpointTest extends TestCase
         $responseFile = $responseFile . '-duplicated';
         file_put_contents($responseFile, $response->content());
 
-        $registryError = $response->registryErrorData();
+        $registryError = $response->errorDataRegistry();
         $this->assertTrue($response->hasErrorData());
         $this->assertArrayHasKey('errorCode', $registryError[0]);
         $this->assertArrayHasKey('errorMessage', $registryError[0]);

@@ -48,26 +48,29 @@ class Response extends ApiResponse
         return '';
     }
 
-    public function registryErrorData(): array
+    public function errorDataRegistry(): array
     {
         if ($this->status != 200) {
             return [];
         }
         $result = [];
+
         foreach ($this->responseContent->Registros->Registro as $registro) {
-            $result[] = [
-                'errorCode' => (string)$registro->SituacionRegistro->CodigoErrorRegistro,
-                'errorMessage' => [
-                    'eu' => (string)$registro->SituacionRegistro->DescripcionErrorRegistroEU,
-                    'es' => (string)$registro->SituacionRegistro->DescripcionErrorRegistroES,
-                ],
-            ];
+            if ($registro->SituacioRegistro->CodigoErrorRegistro) {
+                $result[] = [
+                    'errorCode' => (string)$registro->SituacionRegistro->CodigoErrorRegistro,
+                    'errorMessage' => [
+                        'eu' => (string)$registro->SituacionRegistro->DescripcionErrorRegistroEU,
+                        'es' => (string)$registro->SituacionRegistro->DescripcionErrorRegistroES,
+                    ],
+                ];
+            }
         }
         return $result;
     }
 
     public function hasErrorData(): bool
     {
-        return sizeof($this->registryErrorData()) > 0;
+        return sizeof($this->errorDataRegistry()) > 0;
     }
 }

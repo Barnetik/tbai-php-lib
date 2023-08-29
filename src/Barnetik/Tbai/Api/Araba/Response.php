@@ -58,7 +58,7 @@ class Response extends ApiResponse
         return json_encode($result);
     }
 
-    public function registryErrorData(): array
+    public function errorDataRegistry(): array
     {
         if ($this->status != 200) {
             return [];
@@ -79,7 +79,7 @@ class Response extends ApiResponse
 
     public function hasErrorData(): bool
     {
-        return sizeof($this->registryErrorData()) > 0;
+        return sizeof($this->errorDataRegistry()) > 0;
     }
 
     public function content(): string

@@ -34,6 +34,6 @@ abstract class AbstractResponse implements ResponseInterface
     abstract public function isCorrect(): bool;
     abstract public function mainErrorMessage(): string;
     abstract public function content(): string;
-    abstract public function registryErrorData(): array;
+    abstract public function errorDataRegistry(): array;
     abstract public function hasErrorData(): bool;
 }
