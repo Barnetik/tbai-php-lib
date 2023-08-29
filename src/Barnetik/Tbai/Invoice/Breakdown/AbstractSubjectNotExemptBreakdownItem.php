@@ -123,8 +123,8 @@ class AbstractSubjectNotExemptBreakdownItem implements TbaiXml
                     'enum' => self::validNotExemptTypes(),
                     'description' => '
 Salbuetsi gabeko mota - Tipo de no exenta
-  * S1: sub. pas. inbertsiorik ez - sin ISP
-  * S2: sub. pas. inbertsioa - con ISP
+  * S1: sub. pas. inbertsiorik ez - sin Inversión de Sujeto Pasivo (ISP)
+  * S2: sub. pas. inbertsioa - con Inversión de Sujeto Pasivo (ISP)
 '
                 ],
             ],

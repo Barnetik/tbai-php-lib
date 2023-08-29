@@ -128,7 +128,6 @@ class Subject implements TbaiXml
     {
         $issuer = Issuer::createFromJson($jsonData['issuer']);
         $subject = new Subject($issuer, null, $jsonData['issuedBy'] ?? self::ISSUED_BY_ISSUER);
-
         if (isset($jsonData['recipients'])) {
             foreach ($jsonData['recipients'] as $jsonRecipient) {
                 $recipient = Recipient::createFromJson($jsonRecipient);

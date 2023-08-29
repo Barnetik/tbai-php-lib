@@ -468,12 +468,28 @@ class TicketBaiMother
         $ticketBai->addBatuzIncomeTaxes($incomingTaxCollection);
         return $ticketBai;
     }
-    public function createBizkaiaTicketBaiSelfEmployedFromJson(): TicketBai
+
+    public function createBizkaiaTicketBaiForSelfEmployedFromJson(): TicketBai
     {
         $json = json_decode(file_get_contents(__DIR__ . '/../__files/tbai-sample-self-employed.json'), true);
 
         $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_140'];
         $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_140'];
+        $json['subject']['issuer']['vatId'] = $nif;
+        $json['subject']['issuer']['name'] = $issuer;
+        $json['invoice']['header']['invoiceNumber'] = (string)time();
+        sleep(1);
+
+        $ticketBai = TicketBai::createFromJson($this->createBizkaiaVendor(), $json);
+        return $ticketBai;
+    }
+
+    public function createBizkaiaTicketBaiForCompanyFromJson(string $jsonFile): TicketBai
+    {
+        $json = json_decode(file_get_contents($jsonFile), true);
+
+        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_240'];
+        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_240'];
         $json['subject']['issuer']['vatId'] = $nif;
         $json['subject']['issuer']['name'] = $issuer;
         $json['invoice']['header']['invoiceNumber'] = (string)time();

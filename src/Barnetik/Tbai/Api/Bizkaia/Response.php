@@ -3,9 +3,23 @@
 namespace Barnetik\Tbai\Api\Bizkaia;
 
 use Barnetik\Tbai\Api\AbstractResponse as ApiResponse;
+use DOMDocument;
+use DOMXPath;
+use SimpleXMLElement;
 
 class Response extends ApiResponse
 {
+    private SimpleXMLElement $responseContent;
+
+    public function __construct(string $status, array $headers, string $content)
+    {
+        parent::__construct($status, $headers, $content);
+
+        if ($status == 200) {
+            $this->responseContent = new SimpleXMLElement($this->content());
+        }
+    }
+
     public function isDelivered(): bool
     {
         if ($this->status != 200) {
@@ -32,5 +46,23 @@ class Response extends ApiResponse
         }
 
         return '';
+    }
+
+    public function registryErrorData(): array
+    {
+        if ($this->status != 200) {
+            return [];
+        }
+        $result = [];
+        foreach ($this->responseContent->Registros->Registro as $registro) {
+            $result[] = [
+                'errorCode' => (string)$registro->SituacionRegistro->CodigoErrorRegistro,
+                'errorMessage' => [
+                    'eu' => (string)$registro->SituacionRegistro->DescripcionErrorRegistroEU,
+                    'es' => (string)$registro->SituacionRegistro->DescripcionErrorRegistroES,
+                ],
+            ];
+        }
+        return $result;
     }
 }

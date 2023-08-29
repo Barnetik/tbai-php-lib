@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phive xmlns="https://phar.io/phive">
-  <phar name="phpunit" version="^8.0" installed="8.5.25" location="./tools/phpunit" copy="true"/>
-  <phar name="phpstan" version="^0.12.99" installed="0.12.99" location="./tools/phpstan" copy="true"/>
+  <phar name="phpstan" version="^0.12.99" installed="0.12.99" location="./tools/phpstan" copy="false"/>
   <phar name="phpcs" version="^3.6.2" installed="3.6.2" location="./tools/phpcs" copy="true"/>
   <phar name="grumphp" version="1.5" installed="1.5.0" location="./tools/grumphp" copy="true"/>
   <phar name="phpcbf" version="^3.6.2" installed="3.6.2" location="./tools/phpcbf" copy="true"/>
+  <phar name="phpunit" version="^10.3.2" installed="10.3.2" location="./tools/phpunit" copy="false"/>
 </phive>

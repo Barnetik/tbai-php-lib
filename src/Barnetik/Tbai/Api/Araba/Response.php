@@ -51,11 +51,30 @@ class Response extends ApiResponse
         foreach ($this->responseContent->Salida->ResultadosValidacion as $validacion) {
             $result[] = [
                 'codigo' => (string)$validacion->Codigo,
-                'descripcion' => (string)$validacion->Descripcion,
                 'azalpena' => (string)$validacion->Azalpena,
+                'descripcion' => (string)$validacion->Descripcion,
             ];
         }
         return json_encode($result);
+    }
+
+    public function registryErrorData(): array
+    {
+        if ($this->status != 200) {
+            return [];
+        }
+
+        $result = [];
+        foreach ($this->responseContent->Salida->ResultadosValidacion as $validacion) {
+            $result[] = [
+                'errorCode' => (string)$validacion->Codigo,
+                'errorMessage' => [
+                    'eu' => (string)$validacion->Azalpena,
+                    'es' => (string)$validacion->Descripcion,
+                ],
+            ];
+        }
+        return $result;
     }
 
     public function content(): string

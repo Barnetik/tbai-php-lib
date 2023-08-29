@@ -70,10 +70,15 @@ abstract class AbstractTicketBai implements TbaiXml, TbaiSignable, Stringable, J
 
             $xadesClass = $this->getXadesClassForTerritory();
 
+            if (!file_exists(dirname($signedFilePath))) {
+                mkdir(dirname($signedFilePath), 0777, true);
+            }
+
             call_user_func(
                 $xadesClass . '::signDocument',
                 new InputResourceInfo(
-                    $this->dom(), /** @phpstan-ignore-line */
+                    /** @phpstan-ignore-next-line */
+                    $this->dom(),
                     ResourceInfo::xmlDocument, // The source is a DOMDocument
                     dirname($signedFilePath), // The location to save the signed document
                     basename($signedFilePath), // The name of the file to save the signed document in,

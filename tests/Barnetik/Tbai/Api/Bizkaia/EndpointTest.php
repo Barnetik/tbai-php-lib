@@ -5,6 +5,7 @@ namespace Test\Barnetik\Tbai\Api\Bizkaia;
 use Barnetik\Tbai\Api;
 use Barnetik\Tbai\Api\AbstractTerritory;
 use Barnetik\Tbai\Api\Bizkaia\Endpoint;
+use Barnetik\Tbai\Api\Bizkaia\LroeResultInterface;
 use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
 use DOMDocument;
@@ -74,15 +75,16 @@ class EndpointTest extends TestCase
 
         if (!$response->isCorrect()) {
             echo "\n";
-            echo "IFZ: " . $ticketbai->issuerVatId() . "\n";
-            echo "Data: " . date('Y-m-d H:i:s') . "\n";
+            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
+            echo "Date:" . date('Y-m-d H:i:s') . "\n";
             echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
             echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
             echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
             echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
-            echo "Bidalitako fitxategia: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
-            echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
-            echo "Erantzuna: " . basename($responseFile) . "\n";
+            echo "Main error message: " . $response->mainErrorMessage() . "\n";
+            echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
+            echo "Signed file: " . basename($signedFilename) . "\n";
+            echo "Response file: " . basename($responseFile) . "\n";
         }
 
         $this->assertTrue($response->isCorrect());
@@ -118,15 +120,16 @@ class EndpointTest extends TestCase
 
         if (!$response->isCorrect()) {
             echo "\n";
-            echo "IFZ: " . $ticketbai->issuerVatId() . "\n";
-            echo "Data: " . date('Y-m-d H:i:s') . "\n";
+            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
+            echo "Date:" . date('Y-m-d H:i:s') . "\n";
             echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
             echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
             echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
             echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
-            echo "Bidalitako fitxategia: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
-            echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
-            echo "Erantzuna: " . basename($responseFile) . "\n";
+            echo "Main error message: " . $response->mainErrorMessage() . "\n";
+            echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
+            echo "Signed file: " . basename($signedFilename) . "\n";
+            echo "Response file: " . basename($responseFile) . "\n";
         }
         $this->assertTrue($response->isCorrect());
     }
@@ -153,15 +156,16 @@ class EndpointTest extends TestCase
 
         if (!$response->isCorrect()) {
             echo "\n";
-            echo "IFZ: " . $ticketbai->issuerVatId() . "\n";
-            echo "Data: " . date('Y-m-d H:i:s') . "\n";
+            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
+            echo "Date:" . date('Y-m-d H:i:s') . "\n";
             echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
             echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
             echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
             echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
-            echo "Bidalitako fitxategia: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
-            echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
-            echo "Erantzuna: " . basename($responseFile) . "\n";
+            echo "Main error message: " . $response->mainErrorMessage() . "\n";
+            echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
+            echo "Signed file: " . basename($signedFilename) . "\n";
+            echo "Response file: " . basename($responseFile) . "\n";
         }
 
         $this->assertTrue($response->isCorrect());
@@ -177,7 +181,7 @@ class EndpointTest extends TestCase
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
 
-        $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBaiSelfEmployedFromJson();
+        $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBaiForSelfEmployedFromJson();
         $ticketbai->sign($privateKey, $certPassword, $signedFilename);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
@@ -189,15 +193,16 @@ class EndpointTest extends TestCase
 
         if (!$response->isCorrect()) {
             echo "\n";
-            echo "IFZ: " . $ticketbai->issuerVatId() . "\n";
-            echo "Data: " . date('Y-m-d H:i:s') . "\n";
+            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
+            echo "Date:" . date('Y-m-d H:i:s') . "\n";
             echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
             echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
             echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
             echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
-            echo "Bidalitako fitxategia: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
-            echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
-            echo "Erantzuna: " . basename($responseFile) . "\n";
+            echo "Main error message: " . $response->mainErrorMessage() . "\n";
+            echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
+            echo "Signed file: " . basename($signedFilename) . "\n";
+            echo "Response file: " . basename($responseFile) . "\n";
         }
 
         $this->assertTrue($response->isCorrect());
@@ -225,16 +230,17 @@ class EndpointTest extends TestCase
 
         if (!$response->isCorrect()) {
             echo "\n";
-            echo "IFZ: " . $ticketbai->issuerVatId() . "\n";
-            echo "Data: " . date('Y-m-d H:i:s') . "\n";
+            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
+            echo "Date:" . date('Y-m-d H:i:s') . "\n";
             echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
             echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
             echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
             echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
             echo "eus-bizkaia-n3-mensaje-respuesta: " . $response->header('eus-bizkaia-n3-mensaje-respuesta') . "\n";
-            echo "Bidalitako fitxategia: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
-            echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
-            echo "Erantzuna: " . basename($responseFile) . "\n";
+            echo "Main error message: " . $response->mainErrorMessage() . "\n";
+            echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
+            echo "Signed file: " . basename($signedFilename) . "\n";
+            echo "Response file: " . basename($responseFile) . "\n";
         }
 
         $this->assertTrue($response->isCorrect());
@@ -262,15 +268,16 @@ class EndpointTest extends TestCase
 
         if (!$response->isCorrect()) {
             echo "\n";
-            echo "IFZ: " . $ticketbai->issuerVatId() . "\n";
-            echo "Data: " . date('Y-m-d H:i:s') . "\n";
+            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
+            echo "Date:" . date('Y-m-d H:i:s') . "\n";
             echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
             echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
             echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
             echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
-            echo "Bidalitako fitxategia: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
-            echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
-            echo "Erantzuna: " . basename($responseFile) . "\n";
+            echo "Main error message: " . $response->mainErrorMessage() . "\n";
+            echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
+            echo "Signed file: " . basename($signedFilename) . "\n";
+            echo "Response file: " . basename($responseFile) . "\n";
         }
 
         $this->assertTrue($response->isCorrect());
@@ -302,13 +309,13 @@ class EndpointTest extends TestCase
 
         if (!$response->isCorrect()) {
             echo "\n";
-            echo "IFZ: " . $ticketbai->issuerVatId() . "\n";
-            echo "Data: " . date('Y-m-d H:i:s') . "\n";
+            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
+            echo "Date:" . date('Y-m-d H:i:s') . "\n";
             echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "Bidalitako fitxategia: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
-            echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
-            echo "Jasotako errore printzipala: " . $response->mainErrorMessage() . "\n";
-            echo "Erantzuna: " . basename($responseFile) . "\n";
+            echo "Sent file: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
+            echo "Signed file: " . basename($signedFilename) . "\n";
+            echo "Main error message: " . $response->mainErrorMessage() . "\n";
+            echo "Response file: " . basename($responseFile) . "\n";
         }
 
         $this->assertTrue($response->isDelivered());
@@ -340,13 +347,13 @@ class EndpointTest extends TestCase
 
         if (!$response->isCorrect()) {
             echo "\n";
-            echo "IFZ: " . $ticketbai->issuerVatId() . "\n";
-            echo "Data: " . date('Y-m-d H:i:s') . "\n";
+            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
+            echo "Date:" . date('Y-m-d H:i:s') . "\n";
             echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "Bidalitako fitxategia: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
-            echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
-            echo "Jasotako errore printzipala: " . $response->mainErrorMessage() . "\n";
-            echo "Erantzuna: " . basename($responseFile) . "\n";
+            echo "Sent file: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
+            echo "Signed file: " . basename($signedFilename) . "\n";
+            echo "Main error message: " . $response->mainErrorMessage() . "\n";
+            echo "Response file: " . basename($responseFile) . "\n";
         }
 
         $this->assertTrue($response->isDelivered());
@@ -383,13 +390,13 @@ class EndpointTest extends TestCase
 
         if (!$response->isCorrect()) {
             echo "\n";
-            echo "IFZ: " . $ticketbai->issuerVatId() . "\n";
-            echo "Data: " . date('Y-m-d H:i:s') . "\n";
+            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
+            echo "Date:" . date('Y-m-d H:i:s') . "\n";
             echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "Bidalitako fitxategia: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
-            echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
-            echo "Jasotako errore printzipala: " . $response->mainErrorMessage() . "\n";
-            echo "Erantzuna: " . basename($responseFile) . "\n";
+            echo "Sent file: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
+            echo "Signed file: " . basename($signedFilename) . "\n";
+            echo "Main error message: " . $response->mainErrorMessage() . "\n";
+            echo "Response file: " . basename($responseFile) . "\n";
         }
         $this->assertTrue($response->isDelivered());
     }
@@ -425,13 +432,13 @@ class EndpointTest extends TestCase
 
         if (!$response->isCorrect()) {
             echo "\n";
-            echo "IFZ: " . $ticketbai->issuerVatId() . "\n";
-            echo "Data: " . date('Y-m-d H:i:s') . "\n";
+            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
+            echo "Date:" . date('Y-m-d H:i:s') . "\n";
             echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "Bidalitako fitxategia: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
-            echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
-            echo "Jasotako errore printzipala: " . $response->mainErrorMessage() . "\n";
-            echo "Erantzuna: " . basename($responseFile) . "\n";
+            echo "Sent file: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
+            echo "Signed file: " . basename($signedFilename) . "\n";
+            echo "Main error message: " . $response->mainErrorMessage() . "\n";
+            echo "Response file: " . basename($responseFile) . "\n";
         }
         $this->assertTrue($response->isDelivered());
     }
@@ -463,14 +470,124 @@ class EndpointTest extends TestCase
 
         if (!$response->isCorrect()) {
             echo "\n";
-            echo "IFZ: " . $ticketbai->issuerVatId() . "\n";
-            echo "Data: " . date('Y-m-d H:i:s') . "\n";
+            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
+            echo "Date:" . date('Y-m-d H:i:s') . "\n";
             echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "Bidalitako fitxategia: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
-            echo "Sinatutako fitxategia: " . basename($signedFilename) . "\n";
-            echo "Jasotako errore printzipala: " . $response->mainErrorMessage() . "\n";
-            echo "Erantzuna: " . basename($responseFile) . "\n";
+            echo "Sent file: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
+            echo "Signed file: " . basename($signedFilename) . "\n";
+            echo "Main error message: " . $response->mainErrorMessage() . "\n";
+            echo "Response file: " . basename($responseFile) . "\n";
         }
         $this->assertTrue($response->isDelivered());
+    }
+
+
+    public function test_json_data_is_correct_on_sample_with_multiple_same_vat(): void
+    {
+        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
+        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
+        $privateKey = PrivateKey::p12($certFile);
+
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        rename($signedFilename, $signedFilename . '.xml');
+        $signedFilename = $signedFilename . '.xml';
+
+        $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBaiForCompanyFromJson(__DIR__ . '/../../__files/tbai-sample-with-multiple-same-vat.json');
+        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+
+        $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
+
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
+        file_put_contents($responseFile, $response->content());
+
+        if (!$response->isCorrect()) {
+            echo "\n";
+            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
+            echo "Date:" . date('Y-m-d H:i:s') . "\n";
+            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
+            echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
+            echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
+            echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
+            echo "Main error message: " . $response->mainErrorMessage() . "\n";
+            echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
+            echo "Signed file: " . basename($signedFilename) . "\n";
+            echo "Response file: " . basename($responseFile) . "\n";
+        }
+
+        $this->assertTrue($response->isCorrect());
+    }
+
+    public function test_json_data_is_correct_on_json_file_sample(): void
+    {
+        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
+        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
+        $privateKey = PrivateKey::p12($certFile);
+
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        rename($signedFilename, $signedFilename . '.xml');
+        $signedFilename = $signedFilename . '.xml';
+
+        $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBaiForCompanyFromJson(__DIR__ . '/../../__files/tbai-sample.json');
+        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+
+        $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
+
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
+        file_put_contents($responseFile, $response->content());
+
+        if (!$response->isCorrect()) {
+            echo "\n";
+            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
+            echo "Date:" . date('Y-m-d H:i:s') . "\n";
+            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
+            echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
+            echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
+            echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
+            echo "Main error message: " . $response->mainErrorMessage() . "\n";
+            echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
+            echo "Signed file: " . basename($signedFilename) . "\n";
+            echo "Response file: " . basename($responseFile) . "\n";
+        }
+
+        $this->assertTrue($response->isCorrect());
+    }
+
+    public function test_sending_duplicated_invoice_number_returns_duplicated_error(): void
+    {
+        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
+        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
+        $privateKey = PrivateKey::p12($certFile);
+
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        rename($signedFilename, $signedFilename . '.xml');
+        $signedFilename = $signedFilename . '.xml';
+
+        $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBai();
+        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+
+        $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
+
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
+        file_put_contents($responseFile, $response->content());
+
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+        $responseFile = $responseFile . '-duplicated';
+        file_put_contents($responseFile, $response->content());
+
+        $registryError = $response->registryErrorData();
+        $this->assertNotEmpty($registryError);
+        $this->assertArrayHasKey('errorCode', $registryError[0]);
+        $this->assertArrayHasKey('errorMessage', $registryError[0]);
+        $this->assertEquals('B4_2000003', $registryError[0]['errorCode']);
+        $this->assertEquals('Registro duplicado.', $registryError[0]['errorMessage']['es']);
+        $this->assertEquals('Erregistro bikoiztua.', $registryError[0]['errorMessage']['eu']);
+
+        $this->assertFalse($response->isDelivered());
+        $this->assertFalse($response->isCorrect());
     }
 }

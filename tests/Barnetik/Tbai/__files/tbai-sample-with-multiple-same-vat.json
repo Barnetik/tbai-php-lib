@@ -1,0 +1,124 @@
+{
+  "territory": "02",
+  "selfEmployed": false,
+  "subject": {
+    "issuer": {
+      "vatId": "A99800658",
+      "name": "euVgEpRFCMPE4RWRkeq34ahgypjhQS"
+    },
+    "recipients": [
+      {
+        "vatId": "A86602158",
+        "vatIdType": "02",
+        "name": "SAREB, SA",
+        "postalCode": "28034",
+        "address": "Calle de la Costa Brava, 12 - MADRID",
+        "countryCode": "ES"
+      }
+    ],
+    "issuedBy": "T"
+  },
+  "invoice": {
+    "header": {
+      "series": "FAC23",
+      "invoiceNumber": "1",
+      "expeditionDate": "29-08-2023",
+      "expeditionTime": "06:53:55",
+      "simplifiedInvoice": false,
+      "isSimplifiedSustitute": null,
+      "rectifyingInvoice": null,
+      "rectifiedInvoices": []
+    },
+    "data": {
+      "operationDate": null,
+      "description": "2\u00aa SUBASTA EDIFICIOS RESIDENCIALES JAIZKIBEL HONDARRIBIA - Gipuzkoa",
+      "details": [
+        {
+          "description": "Lote 6",
+          "unitPrice": "357136.70",
+          "quantity": "1",
+          "discount": null,
+          "totalAmount": "432135.40"
+        },
+        {
+          "description": "Comisi\u00f3n - Lote 6",
+          "unitPrice": "17856.83",
+          "quantity": "1",
+          "discount": null,
+          "totalAmount": "21606.76"
+        },
+        {
+          "description": "Lote 3",
+          "unitPrice": "598827.35",
+          "quantity": "1",
+          "discount": null,
+          "totalAmount": "724581.09"
+        },
+        {
+          "description": "Comisi\u00f3n - Lote 3",
+          "unitPrice": "29941.36",
+          "quantity": "1",
+          "discount": null,
+          "totalAmount": "36229.04"
+        },
+        {
+          "description": "Lote 2",
+          "unitPrice": "173735.43",
+          "quantity": "1",
+          "discount": null,
+          "totalAmount": "210219.87"
+        },
+        {
+          "description": "Comisi\u00f3n - Lote 2",
+          "unitPrice": "8686.77",
+          "quantity": "1",
+          "discount": null,
+          "totalAmount": "10510.99"
+        }
+      ],
+      "total": "1435283.17",
+      "vatRegimes": [
+        "01"
+      ],
+      "supportedRetention": null,
+      "taxBaseCost": null
+    },
+    "breakdown": {
+      "nationalSubjectExemptBreakdownItems": [],
+      "nationalSubjectNotExemptBreakdownItems": [
+        {
+          "type": "S1",
+          "vatDetails": [
+            {
+              "taxBase": "1129699.48",
+              "taxRate": "21",
+              "taxQuota": "237236.89",
+              "equivalenceRate": null,
+              "equivalenceQuota": null,
+              "isEquivalenceOperation": false
+            },
+            {
+              "taxBase": "56484.96",
+              "taxRate": "21",
+              "taxQuota": "11861.84",
+              "equivalenceRate": null,
+              "equivalenceQuota": null,
+              "isEquivalenceOperation": false
+            }
+          ]
+        }
+      ],
+      "nationalNotSubjectBreakdownItems": [],
+      "foreignDeliverySubjectExemptBreakdownItems": [],
+      "foreignDeliverySubjectNotExemptBreakdownItems": [],
+      "foreignDeliveryNotSubjectBreakdownItems": [],
+      "foreignServiceSubjectExemptBreakdownItems": [],
+      "foreignServiceSubjectNotExemptBreakdownItems": [],
+      "foreignServiceNotSubjectBreakdownItems": []
+    }
+  },
+  "fingerprint": {
+    "previousInvoice": null
+  },
+  "batuzIncomeTaxes": []
+}
