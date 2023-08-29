@@ -77,6 +77,11 @@ class Response extends ApiResponse
         return $result;
     }
 
+    public function hasErrorData(): bool
+    {
+        return sizeof($this->registryErrorData()) > 0;
+    }
+
     public function content(): string
     {
         return $this->content;

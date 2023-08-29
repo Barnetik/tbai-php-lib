@@ -13,4 +13,5 @@ interface ResponseInterface
     public function mainErrorMessage(): string;
     public function saveResponseContent(string $path): void;
     public function registryErrorData(): array;
+    public function hasErrorData(): bool;
 }

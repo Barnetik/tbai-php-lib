@@ -578,19 +578,8 @@ class EndpointTest extends TestCase
         $responseFile = $responseFile . '-duplicated';
         file_put_contents($responseFile, $response->content());
 
-        if (!$response->isCorrect()) {
-            echo "\n";
-            echo "VatId / IFZ / NIF: " . $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'] . "\n";
-            echo "Date:" . date('Y-m-d H:i:s') . "\n";
-            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "Sent file: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
-            echo "Signed file: " . basename($signedFilename) . "\n";
-            echo "Main error message: " . $response->mainErrorMessage() . "\n";
-            echo "Response file: " . basename($responseFile) . "\n";
-        }
-
         $registryError = $response->registryErrorData();
-        $this->assertNotEmpty($registryError);
+        $this->assertTrue($response->hasErrorData());
         $this->assertArrayHasKey('errorCode', $registryError[0]);
         $this->assertArrayHasKey('errorMessage', $registryError[0]);
         $this->assertEquals('005', $registryError[0]['errorCode']);

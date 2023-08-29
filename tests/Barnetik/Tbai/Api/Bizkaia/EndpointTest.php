@@ -580,7 +580,7 @@ class EndpointTest extends TestCase
         file_put_contents($responseFile, $response->content());
 
         $registryError = $response->registryErrorData();
-        $this->assertNotEmpty($registryError);
+        $this->assertTrue($response->hasErrorData());
         $this->assertArrayHasKey('errorCode', $registryError[0]);
         $this->assertArrayHasKey('errorMessage', $registryError[0]);
         $this->assertEquals('B4_2000003', $registryError[0]['errorCode']);
