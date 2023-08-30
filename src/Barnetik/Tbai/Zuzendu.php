@@ -8,7 +8,7 @@ use Barnetik\Tbai\Zuzendu\Header;
 use DOMDocument;
 use DOMNode;
 
-class Zuzendu extends AbstractTicketBai
+class Zuzendu extends AbstractZuzendu
 {
     private Header $header;
     private Subject $subject;

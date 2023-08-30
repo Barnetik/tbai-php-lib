@@ -51,7 +51,7 @@ class QrTest extends TestCase
         $requestData = parse_url($qr->qrUrl());
         $this->assertEquals('batuz.eus', $requestData['host']);
         $this->assertEquals('/QRTBAI/', $requestData['path']);
-        
+
         $this->assertQrUrlQuery($qr);
     }
 
@@ -68,7 +68,7 @@ class QrTest extends TestCase
         $requestData = parse_url($qr->qrUrl());
         $this->assertEquals('tbai.prep.gipuzkoa.eus', $requestData['host']);
         $this->assertEquals('/qr/', $requestData['path']);
-        
+
         $this->assertQrUrlQuery($qr);
     }
 
@@ -107,21 +107,18 @@ class QrTest extends TestCase
         $tbaiMock->method('totalAmount')->willReturn($amount);
 
         $qr = new Qr($tbaiMock, true);
-        $this->assertQrUrlQuery($qr);
 
         $query = $this->getQueryParams($qr->qrUrl());
         $this->assertEquals($series, $query['s']);
         $this->assertEquals($invoiceNumber, $query['nf']);
         $this->assertEquals((string)$amount, $query['i']);
-
     }
 
-    private function getQueryParams(string $url): array 
+    private function getQueryParams(string $url): array
     {
         $queryString = parse_url($url, PHP_URL_QUERY);
         $query = [];
         parse_str($queryString, $query);
         return $query;
     }
-
 }

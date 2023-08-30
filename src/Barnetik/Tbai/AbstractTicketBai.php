@@ -19,6 +19,9 @@ use Barnetik\Tbai\Xades\Bizkaia as XadesBizkaia;
 use Barnetik\Tbai\Xades\Gipuzkoa as XadesGipuzkoa;
 use Barnetik\Tbai\Exception\InvalidTerritoryException;
 use Barnetik\Tbai\Interfaces\TbaiSignable;
+use Barnetik\Tbai\ValueObject\Date;
+use Barnetik\Tbai\ValueObject\VatId;
+use PBurggraf\CRC\CRC8\CRC8;
 
 abstract class AbstractTicketBai implements TbaiXml, TbaiSignable, Stringable, JsonSerializable
 {
@@ -39,6 +42,8 @@ abstract class AbstractTicketBai implements TbaiXml, TbaiSignable, Stringable, J
 
     abstract public function xml(DOMDocument $document): DOMNode;
     abstract public function toArray(): array;
+    abstract public function issuerVatId(): VatId;
+    abstract public function expeditionDate(): Date;
 
     protected static function validTerritories(): array
     {
@@ -188,5 +193,28 @@ abstract class AbstractTicketBai implements TbaiXml, TbaiSignable, Stringable, J
     public function setSignedXmlPath(string $path): void
     {
         $this->signedXmlPath = $path;
+    }
+
+    public function ticketbaiIdentifier(): string
+    {
+        $code = sprintf(
+            'TBAI-%s-%s-%s-',
+            $this->issuerVatId(),
+            $this->expeditionDate()->short(),
+            $this->shortSignatureValue()
+        );
+
+        return $code . $this->crc8($code);
+    }
+
+    private function crc8(string $data): string
+    {
+        $crc8 = new CRC8();
+        return str_pad(
+            (string)$crc8->calculate($data),
+            3,
+            '0',
+            STR_PAD_LEFT
+        );
     }
 }

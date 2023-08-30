@@ -10,7 +10,7 @@ use Barnetik\Tbai\Zuzendu\Header;
 use DOMDocument;
 use DOMNode;
 
-class ZuzenduCancel extends AbstractTicketBai
+class ZuzenduCancel extends AbstractZuzendu
 {
     private Header $header;
     private InvoiceId $invoiceId;

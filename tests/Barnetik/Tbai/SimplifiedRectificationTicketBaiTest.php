@@ -2,20 +2,8 @@
 
 namespace Test\Barnetik\Tbai;
 
-use Barnetik\Tbai\Header\RectifiedInvoice;
-use Barnetik\Tbai\Header\RectifyingInvoice;
-use Barnetik\Tbai\Invoice;
-use Barnetik\Tbai\Invoice\Breakdown;
-use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectNotExemptBreakdownItem;
-use Barnetik\Tbai\Invoice\Breakdown\VatDetail;
-use Barnetik\Tbai\Invoice\Data;
-use Barnetik\Tbai\Invoice\Data\Detail;
-use Barnetik\Tbai\Invoice\Header;
 use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
-use Barnetik\Tbai\ValueObject\Amount;
-use Barnetik\Tbai\ValueObject\Date;
-use Barnetik\Tbai\ValueObject\Time;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use Test\Barnetik\Tbai\Mother\TicketBaiMother;
@@ -67,6 +55,4 @@ class SimplifiedRectificationTicketBaiTest extends TestCase
         $this->assertStringContainsString('<FacturaRectificativa><Codigo>R5</Codigo><Tipo>S</Tipo>', (string)$ticketbai);
         $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2-no-signature.xsd'));
     }
-
-
 }

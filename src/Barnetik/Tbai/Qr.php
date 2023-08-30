@@ -18,14 +18,7 @@ class Qr
 
     public function ticketbaiIdentifier(): string
     {
-        $code = sprintf(
-            'TBAI-%s-%s-%s-',
-            $this->ticketBai->issuerVatId(),
-            $this->ticketBai->expeditionDate()->short(),
-            $this->ticketBai->shortSignatureValue()
-        );
-
-        return $code . $this->crc8($code);
+        return $this->ticketBai->ticketbaiIdentifier();
     }
 
     public function qrUrl(): string

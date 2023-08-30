@@ -3,7 +3,6 @@
 namespace Test\Barnetik\Tbai;
 
 use Barnetik\Tbai\PrivateKey;
-use Barnetik\Tbai\TicketBai;
 use Barnetik\Tbai\TicketBaiCancel;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;

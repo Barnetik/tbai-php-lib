@@ -17,4 +17,6 @@ interface TbaiSignable
 
     public function moveSignedXmlTo(string $newPath): void;
     public function signedXmlPath(): string;
+
+    public function ticketbaiIdentifier(): string;
 }
