@@ -99,7 +99,7 @@ class TicketBai extends AbstractTicketBai
         return $tbai;
     }
 
-    public static function createFromXml(string $xml, string $territory, bool $selfEmployed = false): self
+    public static function createFromXml(string $xml, string $territory, bool $selfEmployed = false, string $signedFileStoragePath = null): self
     {
         $dom = new DOMDocument();
 
@@ -121,7 +121,7 @@ class TicketBai extends AbstractTicketBai
             $selfEmployed
         );
 
-        $ticketBai->verifySignature($xml);
+        $ticketBai->verifySignature($xml, $signedFileStoragePath);
 
         return $ticketBai;
     }

@@ -54,7 +54,7 @@ abstract class AbstractTicketBai implements TbaiXml, TbaiSignable, Stringable, J
         return $this->territory;
     }
 
-    public function sign(PrivateKey $privateKey, string $password, string $signedFilePath): void
+    public function sign(PrivateKey $privateKey, string $password, string $signedFileStoragePath): void
     {
         if (!$this->isSigned()) {
             if ($privateKey->type() === PrivateKey::TYPE_P12) {
@@ -70,8 +70,8 @@ abstract class AbstractTicketBai implements TbaiXml, TbaiSignable, Stringable, J
 
             $xadesClass = $this->getXadesClassForTerritory();
 
-            if (!file_exists(dirname($signedFilePath))) {
-                mkdir(dirname($signedFilePath), 0777, true);
+            if (!file_exists(dirname($signedFileStoragePath))) {
+                mkdir(dirname($signedFileStoragePath), 0777, true);
             }
 
             call_user_func(
@@ -80,30 +80,33 @@ abstract class AbstractTicketBai implements TbaiXml, TbaiSignable, Stringable, J
                     /** @phpstan-ignore-next-line */
                     $this->dom(),
                     ResourceInfo::xmlDocument, // The source is a DOMDocument
-                    dirname($signedFilePath), // The location to save the signed document
-                    basename($signedFilePath), // The name of the file to save the signed document in,
+                    dirname($signedFileStoragePath), // The location to save the signed document
+                    basename($signedFileStoragePath), // The name of the file to save the signed document in,
                     null,
                     false // Enveloped signature
                 ),
                 new CertificateResourceInfo($certData['cert'], ResourceInfo::string | ResourceInfo::pem),
                 new KeyResourceInfo($certData['pkey'], ResourceInfo::string | ResourceInfo::pem)
             );
-            $this->signedXmlPath = $signedFilePath;
+            $this->signedXmlPath = $signedFileStoragePath;
         }
     }
 
-    public function verifySignature(string $xml): bool
+    public function verifySignature(string $xml, string $signedFileStoragePath = null): bool
     {
-        $signedFile = tempnam(sys_get_temp_dir(), 'signed-xml');
-        file_put_contents($signedFile, $xml);
+        if (!$signedFileStoragePath) {
+            $signedFileStoragePath = tempnam(sys_get_temp_dir(), 'signed-xml');
+        }
+
+        file_put_contents($signedFileStoragePath, $xml);
 
         try {
             ob_start();
-            XAdES::verifyDocument($signedFile);
+            XAdES::verifyDocument($signedFileStoragePath);
             ob_end_clean();
-            $this->signedXmlPath = $signedFile;
+            $this->signedXmlPath = $signedFileStoragePath;
         } catch (XAdESException $exception) {
-            unlink($signedFile);
+            unlink($signedFileStoragePath);
             return false;
         }
 

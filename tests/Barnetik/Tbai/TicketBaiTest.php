@@ -123,7 +123,10 @@ class TicketBaiTest extends TestCase
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
 
-        $ticketbaiFromXml = TicketBai::createFromXml($signedDom->saveXML(), $ticketbai->territory());
+        $createdFromXmlSignedFile = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        rename($createdFromXmlSignedFile, $createdFromXmlSignedFile . '.xml');
+        $createdFromXmlSignedFile .= '.xml';
+        $ticketbaiFromXml = TicketBai::createFromXml($signedDom->saveXML(), $ticketbai->territory(), false, $createdFromXmlSignedFile);
 
         $signedDom = new DOMDocument();
         $signedDom->loadXML($ticketbaiFromXml->signed());

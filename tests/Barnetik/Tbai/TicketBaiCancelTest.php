@@ -34,7 +34,10 @@ class TicketBaiCancelTest extends TestCase
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
 
-        $ticketbaiFromXml = TicketBaiCancel::createFromXml($signedDom->saveXML(), $ticketbai->territory());
+        $createdFromXmlSignedFile = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        rename($createdFromXmlSignedFile, $createdFromXmlSignedFile . '.xml');
+        $createdFromXmlSignedFile .= '.xml';
+        $ticketbaiFromXml = TicketBaiCancel::createFromXml($signedDom->saveXML(), $ticketbai->territory(), false, $createdFromXmlSignedFile);
 
         $signedDom = new DOMDocument();
         $signedDom->loadXML($ticketbaiFromXml->signed());
