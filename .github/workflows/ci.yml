@@ -3,7 +3,7 @@ on: [push]
 jobs:
   phpstan:
     name: Check with phpstan
-    uses: shivammathur/setup-php@v2
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         php-versions: ['7.4', '8.0', '8.1', '8.2']
