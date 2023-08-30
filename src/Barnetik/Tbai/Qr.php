@@ -2,6 +2,16 @@
 
 namespace Barnetik\Tbai;
 
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
+use Endroid\QrCode\Label\Alignment\LabelAlignmentCenter;
+use Endroid\QrCode\Label\Font\NotoSans;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\Writer\Result\ResultInterface;
+use Endroid\QrCode\Writer\SvgWriter;
 use Exception;
 use PBurggraf\CRC\CRC8\CRC8;
 
@@ -84,5 +94,27 @@ class Qr
             rawurlencode($this->ticketBai->invoiceNumber()),
             rawurlencode($this->ticketBai->totalAmount())
         );
+    }
+
+    public function png(int $size = 300, int $margin = 5): ResultInterface
+    {
+        $result = Builder::create()
+            ->writer(new PngWriter())
+            ->writerOptions([])
+            ->data($this->qrUrl())
+            ->encoding(new Encoding('UTF-8'))
+            ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
+            ->size($size)
+            ->margin($margin)
+            ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
+            ->validateResult(false)
+            ->build();
+
+        return $result;
+    }
+
+    public function savePng(string $filePath, int $size = 300, int $margin = 5): void
+    {
+        $this->png($size, $margin)->saveToFile($filePath);
     }
 }

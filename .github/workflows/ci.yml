@@ -3,29 +3,29 @@ on: [push]
 jobs:
   phpstan:
     name: Check with phpstan
-    runs-on: ubuntu-latest
+    uses: shivammathur/setup-php@v2
     strategy:
       matrix:
-        php-versions: ['7.4', '8.0', '8.1']
+        php-versions: ['7.4', '8.0', '8.1', '8.2']
 
     steps:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php-versions }}
-        extensions: gmp, curl
+        extensions: gmp, curl, gd
     - name: checkout
       uses: actions/checkout@v2
     - name: composer
       uses: php-actions/composer@v5 # or alternative dependency management
       with:
         php_version: ${{ matrix.php-versions }}
-        php_extensions: gmp curl
+        php_extensions: gmp curl gd
     - name: phpstan
       uses: php-actions/phpstan@v3
       with:
         php_version: ${{ matrix.php-versions }}
-        php_extensions: gmp curl
+        php_extensions: gmp curl gd
         configuration: phpstan.neon
         memory_limit: 1G
 
@@ -51,7 +51,7 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php-versions }}
-        extensions: gmp, curl
+        extensions: gmp, curl, gd
         tools: phpunit, composer, openssl
     - name: checkout
       uses: actions/checkout@v2
