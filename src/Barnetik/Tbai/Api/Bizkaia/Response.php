@@ -15,7 +15,7 @@ class Response extends ApiResponse
     {
         parent::__construct($status, $headers, $content);
 
-        if ($status == 200) {
+        if ($status == 200 && $this->content()) {
             $this->responseContent = new SimpleXMLElement($this->content());
         }
     }

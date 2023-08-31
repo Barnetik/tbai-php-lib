@@ -591,4 +591,28 @@ class EndpointTest extends TestCase
         $this->assertFalse($response->isDelivered());
         $this->assertFalse($response->isCorrect());
     }
+
+    public function test_wrong_issuer_is_marked_as_incorrect_response(): void
+    {
+        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
+        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
+        $privateKey = PrivateKey::p12($certFile);
+
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        rename($signedFilename, $signedFilename . '.xml');
+        $signedFilename = $signedFilename . '.xml';
+
+        $json = json_decode(file_get_contents(__DIR__ . '/../../__files/tbai-sample-with-multiple-same-vat.json'), true);
+        $json['invoice']['header']['invoiceNumber'] = (string)time();
+        sleep(1);
+
+        $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createBizkaiaVendor(), $json);
+        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+
+        $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+
+        $this->assertFalse($response->isCorrect());
+        $this->assertFalse($response->isDelivered());
+    }
 }

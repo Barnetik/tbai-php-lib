@@ -546,7 +546,7 @@ class EndpointTest extends TestCase
             echo "\n";
             echo "VatId / IFZ / NIF: " . $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'] . "\n";
             echo "Date:" . date('Y-m-d H:i:s') . "\n";
-            // echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
+            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
             echo "Sent file: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
             echo "Signed file: " . basename($signedFilename) . "\n";
             echo "Main error message: " . $response->mainErrorMessage() . "\n";

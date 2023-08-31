@@ -3,16 +3,16 @@
   "selfEmployed": false,
   "subject": {
     "issuer": {
-      "vatId": "A99800658",
-      "name": "euVgEpRFCMPE4RWRkeq34ahgypjhQS"
+      "vatId": "00000015S",
+      "name": "Gaueko Akerbeltz"
     },
     "recipients": [
       {
-        "vatId": "A86602158",
+        "vatId": "00000000T",
         "vatIdType": "02",
-        "name": "SAREB, SA",
-        "postalCode": "28034",
-        "address": "Calle de la Costa Brava, 12 - MADRID",
+        "name": "Client Name",
+        "postalCode": "48270",
+        "address": "Markina-Xemein",
         "countryCode": "ES"
       }
     ],
@@ -20,10 +20,10 @@
   },
   "invoice": {
     "header": {
-      "series": "FAC23",
-      "invoiceNumber": "1",
-      "expeditionDate": "29-08-2023",
-      "expeditionTime": "06:53:55",
+      "series": "TESTSERIE",
+      "invoiceNumber": "1646674248",
+      "expeditionDate": "07-03-2022",
+      "expeditionTime": "17:30:48",
       "simplifiedInvoice": false,
       "isSimplifiedSustitute": null,
       "rectifyingInvoice": null,
@@ -31,7 +31,7 @@
     },
     "data": {
       "operationDate": null,
-      "description": "2\u00aa SUBASTA EDIFICIOS RESIDENCIALES JAIZKIBEL HONDARRIBIA - Gipuzkoa",
+      "description": "Lotes variados",
       "details": [
         {
           "description": "Lote 6",
