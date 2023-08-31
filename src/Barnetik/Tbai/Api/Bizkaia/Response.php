@@ -29,12 +29,17 @@ class Response extends ApiResponse
 
     public function isCorrect(): bool
     {
-        return $this->headers['eus-bizkaia-n3-tipo-respuesta'] !== 'Incorrecto';
+        return array_key_exists('eus-bizkaia-n3-tipo-respuesta', $this->headers)
+            && $this->headers['eus-bizkaia-n3-tipo-respuesta'] !== 'Incorrecto';
     }
 
     public function mainErrorMessage(): string
     {
-        return $this->headers['eus-bizkaia-n3-mensaje-respuesta'];
+        if (array_key_exists('eus-bizkaia-n3-mensaje-respuesta', $this->headers)) {
+            return $this->headers['eus-bizkaia-n3-mensaje-respuesta'];
+        }
+
+        return '';
     }
 
     public function content(): string

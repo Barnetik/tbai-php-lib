@@ -7,13 +7,13 @@ use SimpleXMLElement;
 
 class Response extends ApiResponse
 {
-    private SimpleXMLElement $responseContent;
+    private ?SimpleXMLElement $responseContent;
 
     public function __construct(string $status, array $headers, string $content)
     {
         parent::__construct($status, $headers, $content);
 
-        if ($status == 200) {
+        if ($status == 200 && $this->content) {
             $this->responseContent = new SimpleXMLElement($this->content);
         }
     }
@@ -24,7 +24,11 @@ class Response extends ApiResponse
             return false;
         }
 
-        return ((string)$this->responseContent->Salida->Estado === '00');
+        if (!$this->responseContent) {
+            return false;
+        }
+
+        return (string)$this->responseContent->Salida->Estado === '00';
     }
 
     public function isCorrect(): bool
@@ -47,14 +51,18 @@ class Response extends ApiResponse
                 'codigo' => $this->status
             ]);
         }
+
         $result = [];
-        foreach ($this->responseContent->Salida->ResultadosValidacion as $validacion) {
-            $result[] = [
-                'codigo' => (string)$validacion->Codigo,
-                'azalpena' => (string)$validacion->Azalpena,
-                'descripcion' => (string)$validacion->Descripcion,
-            ];
+        if ($this->responseContent) {
+            foreach ($this->responseContent->Salida->ResultadosValidacion as $validacion) {
+                $result[] = [
+                    'codigo' => (string)$validacion->Codigo,
+                    'azalpena' => (string)$validacion->Azalpena,
+                    'descripcion' => (string)$validacion->Descripcion,
+                ];
+            }
         }
+
         return json_encode($result);
     }
 
@@ -65,14 +73,17 @@ class Response extends ApiResponse
         }
 
         $result = [];
-        foreach ($this->responseContent->Salida->ResultadosValidacion as $validacion) {
-            $result[] = [
-                'errorCode' => (string)$validacion->Codigo,
-                'errorMessage' => [
-                    'eu' => (string)$validacion->Azalpena,
-                    'es' => (string)$validacion->Descripcion,
-                ],
-            ];
+        if ($this->responseContent) {
+            $result = [];
+            foreach ($this->responseContent->Salida->ResultadosValidacion as $validacion) {
+                $result[] = [
+                    'errorCode' => (string)$validacion->Codigo,
+                    'errorMessage' => [
+                        'eu' => (string)$validacion->Azalpena,
+                        'es' => (string)$validacion->Descripcion,
+                    ],
+                ];
+            }
         }
         return $result;
     }
