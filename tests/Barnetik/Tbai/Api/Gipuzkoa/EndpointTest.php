@@ -69,7 +69,7 @@ class EndpointTest extends TestCase
         $appName = $_ENV['TBAI_GIPUZKOA_APP_NAME'];
         $appVersion =  $_ENV['TBAI_GIPUZKOA_APP_VERSION'];
 
-        $ticketbai = $this->ticketBaiMother->createTicketBaiMultiVat($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
+        $ticketbai = $this->ticketBaiMother->createTicketBaiMultiVat($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_GIPUZKOA);
 
         $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
         rename($signedFilename, $signedFilename . '.xml');
