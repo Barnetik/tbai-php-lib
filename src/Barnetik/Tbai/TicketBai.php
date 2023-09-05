@@ -135,9 +135,9 @@ class TicketBai extends AbstractTicketBai
 
         // DEPRECATE: Should only check for selfEmployed value
         $selfEmployed = false;
-        if (isset($jsonData['selfEmployed'])) {
+        if (array_key_exists('selfEmployed', $jsonData)) {
             $selfEmployed = (bool)$jsonData['selfEmployed'];
-        } else if (isset($jsonData['self_employed'])) {
+        } else if (array_key_exists('self_employed', $jsonData)) {
             trigger_error(
                 'Deprecated. Avoid "self_employed" tag on json, "selfEmployed" should be used instead. Future versions will remove this tag',
                 E_USER_DEPRECATED
@@ -148,7 +148,7 @@ class TicketBai extends AbstractTicketBai
 
         $ticketBai = new TicketBai($subject, $invoice, $fingerprint, $territory, $selfEmployed);
 
-        if (isset($jsonData['batuzIncomeTaxes']) && is_array($jsonData['batuzIncomeTaxes']) && $jsonData['batuzIncomeTaxes']) {
+        if (array_key_exists('batuzIncomeTaxes', $jsonData) && is_array($jsonData['batuzIncomeTaxes']) && $jsonData['batuzIncomeTaxes']) {
             $batuzIncomeTaxCollection = Collection::createFromJson($jsonData['batuzIncomeTaxes']);
             $ticketBai->addBatuzIncomeTaxes($batuzIncomeTaxCollection);
         }

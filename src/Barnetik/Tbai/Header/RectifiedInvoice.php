@@ -40,14 +40,27 @@ class RectifiedInvoice implements TbaiXml
     {
         $invoiceNumber = $xpath->evaluate('string(SerieFactura)', $contextNode);
         $sentDate = new Date($xpath->evaluate('string(FechaExpedicionFactura)', $contextNode));
-        $serie = $xpath->evaluate('string(SerieFactura)', $contextNode) ?: null;
+        $series = $xpath->evaluate('string(SerieFactura)', $contextNode) ?: null;
 
-        return new self($invoiceNumber, $sentDate, $serie);
+        return new self($invoiceNumber, $sentDate, $series);
     }
 
     public static function createFromJson(array $jsonData): self
     {
-        $previousInvoice = new RectifiedInvoice($jsonData['invoiceNumber'], new Date($jsonData['sentDate']), $jsonData['serie'] ?? null);
+        $series = null;
+        if (array_key_exists('series', $jsonData)) {
+            $series = $jsonData['series'];
+        } else if (array_key_exists('serie', $jsonData)) {
+            trigger_error(
+                'Deprecated. Avoid "serie" tag on json, "series" should be used instead. Future versions will remove this tag',
+                E_USER_DEPRECATED
+            );
+
+            $series = $jsonData['serie'];
+        }
+
+
+        $previousInvoice = new RectifiedInvoice($jsonData['invoiceNumber'], new Date($jsonData['sentDate']), $series);
         return $previousInvoice;
     }
 
@@ -67,7 +80,7 @@ class RectifiedInvoice implements TbaiXml
                     'pattern' => '^\d{2,2}-\d{2,2}-\d{4,4}$',
                     'description' => 'Zuzendutako edo ordezkatutako faktura egin den data (adib: 21-12-2020) - Fecha de expedición de la factura rectificada o sustituida (ej: 21-12-2020)'
                 ],
-                'serie' => [
+                'series' => [
                     'type' => 'string',
                     'maxLength' => 20,
                     'description' => 'Zuzendutako edo ordezkatutako faktura identifikatzen duen serie zenbakia - Número de serie que identifica a la factura rectificada o sustituida'

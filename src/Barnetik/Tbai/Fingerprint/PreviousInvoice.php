@@ -51,7 +51,19 @@ class PreviousInvoice implements TbaiXml
 
     public static function createFromJson(array $jsonData): self
     {
-        $previousInvoice = new PreviousInvoice($jsonData['invoiceNumber'], new Date($jsonData['sentDate']), $jsonData['signature'], $jsonData['serie'] ?? null);
+        $series = null;
+        if (array_key_exists('series', $jsonData)) {
+            $series = $jsonData['series'];
+        } else if (array_key_exists('serie', $jsonData)) {
+            trigger_error(
+                'Deprecated. Avoid "serie" tag on json, "series" should be used instead. Future versions will remove this tag',
+                E_USER_DEPRECATED
+            );
+
+            $series = $jsonData['serie'];
+        }
+
+        $previousInvoice = new PreviousInvoice($jsonData['invoiceNumber'], new Date($jsonData['sentDate']), $jsonData['signature'], $series);
         return $previousInvoice;
     }
 
@@ -76,7 +88,7 @@ class PreviousInvoice implements TbaiXml
                     'maxLength' => 100,
                     'description' => 'Aurreko fakturaren TBAI fitxategiko SignatureValue eremuko lehen ehun karaktereak - Primeros cien caracteres del campo SignatureValue del fichero TBAI de la factura anterior'
                 ],
-                'serie' => [
+                'series' => [
                     'type' => 'string',
                     'maxLength' => 20,
                     'description' => 'Aurreko fakturaren seriea - Serie factura anterior'
@@ -92,7 +104,7 @@ class PreviousInvoice implements TbaiXml
             'invoiceNumber' => $this->invoiceNumber,
             'sentDate' => (string)$this->sentDate,
             'signature' => $this->signature,
-            'serie' => $this->series ?? null,
+            'series' => $this->series ?? null,
         ];
     }
 }
