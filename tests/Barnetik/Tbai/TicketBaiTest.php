@@ -126,6 +126,7 @@ class TicketBaiTest extends TestCase
         $createdFromXmlSignedFile = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
         rename($createdFromXmlSignedFile, $createdFromXmlSignedFile . '.xml');
         $createdFromXmlSignedFile .= '.xml';
+
         $ticketbaiFromXml = TicketBai::createFromXml($signedDom->saveXML(), $ticketbai->territory(), false, $createdFromXmlSignedFile);
 
         $signedDom = new DOMDocument();

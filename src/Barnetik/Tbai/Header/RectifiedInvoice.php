@@ -38,7 +38,7 @@ class RectifiedInvoice implements TbaiXml
 
     public static function createFromXml(DOMXPath $xpath, DOMNode $contextNode): self
     {
-        $invoiceNumber = $xpath->evaluate('string(SerieFactura)', $contextNode);
+        $invoiceNumber = $xpath->evaluate('string(NumFactura)', $contextNode);
         $sentDate = new Date($xpath->evaluate('string(FechaExpedicionFactura)', $contextNode));
         $series = $xpath->evaluate('string(SerieFactura)', $contextNode) ?: null;
 
