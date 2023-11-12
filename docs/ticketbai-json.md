@@ -204,7 +204,7 @@
                                         "pattern": "^\\d{2,2}-\\d{2,2}-\\d{4,4}$",
                                         "description": "Zuzendutako edo ordezkatutako faktura egin den data (adib: 21-12-2020) - Fecha de expedici\u00f3n de la factura rectificada o sustituida (ej: 21-12-2020)"
                                     },
-                                    "serie": {
+                                    "series": {
                                         "type": "string",
                                         "maxLength": 20,
                                         "description": "Zuzendutako edo ordezkatutako faktura identifikatzen duen serie zenbakia - N\u00famero de serie que identifica a la factura rectificada o sustituida"
@@ -223,6 +223,13 @@
                 "data": {
                     "type": "object",
                     "properties": {
+                        "operationDate": {
+                            "type": "string",
+                            "minLength": 10,
+                            "maxLength": 10,
+                            "pattern": "^\\d{2,2}-\\d{2,2}-\\d{4,4}$",
+                            "description": "Faktura bidali den data (adib: 21-12-2020) - Fecha de operaci\u00f3n de factura (ej: 21-12-2020)"
+                        },
                         "description": {
                             "type": "string",
                             "maxLength": 250
@@ -403,7 +410,7 @@
                                             "S1",
                                             "S2"
                                         ],
-                                        "description": "\nSalbuetsi gabeko mota - Tipo de no exenta\n  * S1: sub. pas. inbertsiorik ez - sin ISP\n  * S2: sub. pas. inbertsioa - con ISP\n"
+                                        "description": "\nSalbuetsi gabeko mota - Tipo de no exenta\n  * S1: sub. pas. inbertsiorik ez - sin Inversi\u00f3n de Sujeto Pasivo (ISP)\n  * S2: sub. pas. inbertsioa - con Inversi\u00f3n de Sujeto Pasivo (ISP)\n"
                                     }
                                 },
                                 "required": [
@@ -520,7 +527,7 @@
                                             "S1",
                                             "S2"
                                         ],
-                                        "description": "\nSalbuetsi gabeko mota - Tipo de no exenta\n  * S1: sub. pas. inbertsiorik ez - sin ISP\n  * S2: sub. pas. inbertsioa - con ISP\n"
+                                        "description": "\nSalbuetsi gabeko mota - Tipo de no exenta\n  * S1: sub. pas. inbertsiorik ez - sin Inversi\u00f3n de Sujeto Pasivo (ISP)\n  * S2: sub. pas. inbertsioa - con Inversi\u00f3n de Sujeto Pasivo (ISP)\n"
                                     }
                                 },
                                 "required": [
@@ -637,7 +644,7 @@
                                             "S1",
                                             "S2"
                                         ],
-                                        "description": "\nSalbuetsi gabeko mota - Tipo de no exenta\n  * S1: sub. pas. inbertsiorik ez - sin ISP\n  * S2: sub. pas. inbertsioa - con ISP\n"
+                                        "description": "\nSalbuetsi gabeko mota - Tipo de no exenta\n  * S1: sub. pas. inbertsiorik ez - sin Inversi\u00f3n de Sujeto Pasivo (ISP)\n  * S2: sub. pas. inbertsioa - con Inversi\u00f3n de Sujeto Pasivo (ISP)\n"
                                     }
                                 },
                                 "required": [
@@ -703,7 +710,7 @@
                             "maxLength": 100,
                             "description": "Aurreko fakturaren TBAI fitxategiko SignatureValue eremuko lehen ehun karaktereak - Primeros cien caracteres del campo SignatureValue del fichero TBAI de la factura anterior"
                         },
-                        "serie": {
+                        "series": {
                             "type": "string",
                             "maxLength": 20,
                             "description": "Aurreko fakturaren seriea - Serie factura anterior"
