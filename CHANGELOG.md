@@ -1,7 +1,3 @@
-# [](https://github.com/Barnetik/tbai-php-lib/compare/v0.1.1...v) (2023-09-29)
-
-
-
 ## [0.1.1](https://github.com/Barnetik/tbai-php-lib/compare/v0.1.0...v0.1.1) (2023-09-29)
 
 
