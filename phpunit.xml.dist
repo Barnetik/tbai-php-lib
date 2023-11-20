@@ -58,8 +58,14 @@
     <env name="TBAI_GIPUZKOA_ISSUER_NAME" value="Issuer name" />
 
     <env name="TBAI_TEST_PEM_PASSWORD" value="IZDesa2021" />
-    <env name="TBAI_TEST_PEM_CRT" value="./tests/__files/EnpresaZigilua_SelloDeEmpresa.crt.pem" />
-    <env name="TBAI_TEST_PEM_KEY" value="./tests/__files/EnpresaZigilua_SelloDeEmpresa.key.pem" />
+    <env name="TBAI_TEST_PEM_CRT_PATH" value="./tests/__files/EnpresaZigilua_SelloDeEmpresa.crt.pem" />
+    <env name="TBAI_TEST_PEM_KEY_PATH" value="./tests/__files/EnpresaZigilua_SelloDeEmpresa.key.pem" />
 
+    <env name="TBAI_TEST_SINGLE_PEM_PASSWORD" value="IZDesa2021" />
+    <env name="TBAI_TEST_SINGLE_PEM_PATH"
+      value="./tests/__files/EnpresaZigilua_SelloDeEmpresa.single.pem" />
+
+    <env name="TBAI_TEST_P12_KEY" value="IZDesa2021" />
+    <env name="TBAI_TEST_P12_PATH" value="./tests/__files/EnpresaZigilua_SelloDeEmpresa.p12" />
   </php>
 </phpunit>

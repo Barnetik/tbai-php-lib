@@ -109,8 +109,8 @@ class TicketBaiTest extends TestCase
 
     public function test_ticketbai_can_be_generated_from_xml(): void
     {
-        $certFile = $_ENV['TBAI_ARABA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_ARABA_PRIVATE_KEY'];
+        $certFile = $_ENV['TBAI_TEST_P12_PATH'];
+        $certPassword = $_ENV['TBAI_TEST_P12_KEY'];
         $privateKey = PrivateKey::p12($certFile);
 
         $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
@@ -142,8 +142,8 @@ class TicketBaiTest extends TestCase
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
 
-        $privateKey = PrivateKey::p12($_ENV['TBAI_ARABA_P12_PATH']);
-        $ticketbai->sign($privateKey, $_ENV['TBAI_ARABA_PRIVATE_KEY'], $filename);
+        $privateKey = PrivateKey::p12($_ENV['TBAI_TEST_P12_PATH']);
+        $ticketbai->sign($privateKey, $_ENV['TBAI_TEST_P12_KEY'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
         $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
@@ -156,7 +156,21 @@ class TicketBaiTest extends TestCase
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
 
-        $privateKey = PrivateKey::pem($_ENV['TBAI_TEST_PEM_CRT'], $_ENV['TBAI_TEST_PEM_KEY']);
+        $privateKey = PrivateKey::pem($_ENV['TBAI_TEST_PEM_CRT_PATH'], $_ENV['TBAI_TEST_PEM_KEY_PATH']);
+        $ticketbai->sign($privateKey, $_ENV['TBAI_TEST_PEM_PASSWORD'], $filename);
+        $signedDom = new DOMDocument();
+        $signedDom->load($filename);
+        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
+    }
+
+    public function test_TicketBai_can_be_signed_with_singlefile_PEM(): void
+    {
+        $ticketbai = $this->getTicketBai();
+        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        rename($filename, $filename . '.xml');
+        $filename .= '.xml';
+
+        $privateKey = PrivateKey::pem($_ENV['TBAI_TEST_SINGLE_PEM_PATH'], $_ENV['TBAI_TEST_SINGLE_PEM_PATH']);
         $ticketbai->sign($privateKey, $_ENV['TBAI_TEST_PEM_PASSWORD'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
@@ -177,8 +191,8 @@ class TicketBaiTest extends TestCase
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
 
-        $privateKey = PrivateKey::p12($_ENV['TBAI_ARABA_P12_PATH']);
-        $ticketbai->sign($privateKey, $_ENV['TBAI_ARABA_PRIVATE_KEY'], $filename);
+        $privateKey = PrivateKey::p12($_ENV['TBAI_TEST_P12_PATH']);
+        $ticketbai->sign($privateKey, $_ENV['TBAI_TEST_P12_KEY'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
         $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
@@ -190,8 +204,8 @@ class TicketBaiTest extends TestCase
         $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
-        $privateKey = PrivateKey::p12($_ENV['TBAI_ARABA_P12_PATH']);
-        $ticketbai->sign($privateKey, $_ENV['TBAI_ARABA_PRIVATE_KEY'], $filename);
+        $privateKey = PrivateKey::p12($_ENV['TBAI_TEST_P12_PATH']);
+        $ticketbai->sign($privateKey, $_ENV['TBAI_TEST_P12_KEY'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
 
@@ -251,8 +265,8 @@ class TicketBaiTest extends TestCase
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
 
-        $privateKey = PrivateKey::p12($_ENV['TBAI_ARABA_P12_PATH']);
-        $ticketbai->sign($privateKey, $_ENV['TBAI_ARABA_PRIVATE_KEY'], $filename);
+        $privateKey = PrivateKey::p12($_ENV['TBAI_TEST_P12_PATH']);
+        $ticketbai->sign($privateKey, $_ENV['TBAI_TEST_P12_KEY'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
         $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
@@ -272,8 +286,8 @@ class TicketBaiTest extends TestCase
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
 
-        $privateKey = PrivateKey::p12($_ENV['TBAI_ARABA_P12_PATH']);
-        $ticketbai->sign($privateKey, $_ENV['TBAI_ARABA_PRIVATE_KEY'], $filename);
+        $privateKey = PrivateKey::p12($_ENV['TBAI_TEST_P12_PATH']);
+        $ticketbai->sign($privateKey, $_ENV['TBAI_TEST_P12_KEY'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
         $xpath = new DOMXPath($signedDom);

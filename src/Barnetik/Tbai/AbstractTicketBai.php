@@ -70,7 +70,10 @@ abstract class AbstractTicketBai implements TbaiXml, TbaiSignable, Stringable, J
                 );
             } else {
                 $certData['cert'] = file_get_contents($privateKey->certPath());
-                $certData['pkey'] = file_get_contents($privateKey->keyPath());
+                $certData['pkey'] = openssl_get_privatekey(
+                    file_get_contents($privateKey->keyPath()),
+                    $password
+                );
             }
 
             $xadesClass = $this->getXadesClassForTerritory();
