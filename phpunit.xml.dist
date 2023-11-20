@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="./tests/bootstrap.php" colors="true" testdox="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd">
-  <!-- <coverage>
-    <include>
-      <directory>./src</directory>
-    </include>
-    <exclude>
-      <directory>./tests</directory>
-      <directory>./vendor</directory>
-    </exclude>
-  </coverage> -->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.3/phpunit.xsd"
+  bootstrap="tests/bootstrap.php" beStrictAboutOutputDuringTests="true" failOnRisky="true"
+  failOnWarning="true" colors="true" testdox="false"
+  displayDetailsOnTestsThatTriggerDeprecations="true">
   <testsuites>
     <testsuite name="Tbai test suite">
       <directory suffix="Test.php">./tests</directory>
     </testsuite>
   </testsuites>
+  <source>
+    <include>
+      <directory suffix=".php">./src</directory>
+    </include>
+  </source>
+  <!-- <coverage>
+    <report>
+      <html outputDirectory="html-coverage" lowUpperBound="50" highLowerBound="90" />
+    </report>
+  </coverage> -->
   <php>
     <env name="TBAI_ARABA_APP_LICENSE" value="TBAIBI00000000PRUEBA" />
     <env name="TBAI_ARABA_APP_NAME" value="SOFTWARE GARANTE TICKETBAI PRUEBA" />
@@ -51,5 +56,10 @@
 
     <env name="TBAI_GIPUZKOA_ISSUER_NIF" value="00000000T" />
     <env name="TBAI_GIPUZKOA_ISSUER_NAME" value="Issuer name" />
+
+    <env name="TBAI_TEST_PEM_PASSWORD" value="IZDesa2021" />
+    <env name="TBAI_TEST_PEM_CRT" value="./tests/__files/EnpresaZigilua_SelloDeEmpresa.crt.pem" />
+    <env name="TBAI_TEST_PEM_KEY" value="./tests/__files/EnpresaZigilua_SelloDeEmpresa.key.pem" />
+
   </php>
 </phpunit>

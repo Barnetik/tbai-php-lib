@@ -149,6 +149,20 @@ class TicketBaiTest extends TestCase
         $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
     }
 
+    public function test_TicketBai_can_be_signed_with_PEM_key(): void
+    {
+        $ticketbai = $this->getTicketBai();
+        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        rename($filename, $filename . '.xml');
+        $filename .= '.xml';
+
+        $privateKey = PrivateKey::pem($_ENV['TBAI_TEST_PEM_CRT'], $_ENV['TBAI_TEST_PEM_KEY']);
+        $ticketbai->sign($privateKey, $_ENV['TBAI_TEST_PEM_PASSWORD'], $filename);
+        $signedDom = new DOMDocument();
+        $signedDom->load($filename);
+        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
+    }
+
     public function test_TicketBai_can_have_multiple_vats(): void
     {
         $nif = $_ENV['TBAI_ARABA_ISSUER_NIF'];
