@@ -1,4 +1,3 @@
-```json
 {
     "type": "object",
     "properties": {
@@ -765,4 +764,3 @@
         "fingerprint"
     ]
 }
-```
