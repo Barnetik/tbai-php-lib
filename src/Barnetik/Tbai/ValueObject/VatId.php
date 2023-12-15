@@ -9,6 +9,7 @@ class VatId implements Stringable
 {
     const VAT_ID_TYPE_IFZ = '02';
     const VAT_ID_TYPE_NIF = '02';
+    const VAT_ID_TYPE_EUVAT = '02';
     const VAT_ID_TYPE_PASSPORT = '03';
     /**
      * Egoitza dagoen herrialdeak edo lurraldeak emandako nortasun agiri ofiziala
@@ -23,22 +24,28 @@ class VatId implements Stringable
 
     public function __construct(string $vatId, string $type = self::VAT_ID_TYPE_IFZ)
     {
-        $this->check($vatId, $type);
+        $this->checkType($type);
         $this->type = $type;
         $this->value = $vatId;
     }
 
-    public function check(string $vatId, string $type): bool
+    private function checkType(string $type): bool
     {
         if (!in_array($type, self::validIdTypeValues())) {
             throw new InvalidVatIdException('Wrong VatId Type provided');
         }
 
-        if ($type === self::VAT_ID_TYPE_NIF && !preg_match('/^(([a-z|A-Z]{1}\d{7}[a-z|A-Z]{1})|(\d{8}[a-z|A-Z]{1})|([a-z|A-Z]{1}\d{8}))$/', $vatId, $matches)) {
-            throw new InvalidVatIdException('Wrong VatId provided');
-        }
-
         return true;
+    }
+
+    public function check(string $vatId, string $type): bool
+    {
+        trigger_error(
+            'Deprecated. This only checks if type is correct and will be removed on the future as NIF/IFZ type MUST be used for intracomunitary transactions',
+            E_USER_DEPRECATED
+        );
+
+        return $this->checkType($type);
     }
 
     public function __toString(): string
