@@ -1,0 +1,76 @@
+{
+  "territory": "01",
+  "subject": {
+    "issuer": {
+      "vatId": "00000015S",
+      "name": "Gaueko Akerbeltz"
+    },
+    "recipients": [
+      {
+        "vatId": "00000000T",
+        "vatIdType": "02",
+        "name": "Client Name",
+        "postalCode": "48270",
+        "address": "Markina-Xemein",
+        "countryCode": "ES"
+      }
+    ],
+    "issuedBy": "N"
+  },
+  "invoice": {
+    "header": {
+      "series": "TESTSERIE",
+      "invoiceNumber": "1646674248",
+      "expeditionDate": "07-03-2022",
+      "expeditionTime": "17:30:48",
+      "simplifiedInvoice": false
+    },
+    "data": {
+      "description": "factura ejemplo TBAI con ISP",
+      "details": [
+        {
+          "description": "Chatarra 1",
+          "unitPrice": "23.356",
+          "quantity": "1",
+          "discount": "2.00",
+          "totalAmount": "21.36"
+        },
+        {
+          "description": "Chatarra 2",
+          "unitPrice": "18.2",
+          "quantity": "1.50",
+          "discount": null,
+          "totalAmount": "27.3"
+        }
+      ],
+      "total": "48.66",
+      "vatRegimes": [
+        "01"
+      ],
+      "supportedRetention": null,
+      "taxBaseCost": null
+    },
+    "breakdown": {
+      "nationalSubjectExemptBreakdownItems": [],
+      "nationalSubjectNotExemptBreakdownItems": [
+        {
+          "type": "S2",
+          "vatDetails": [
+            {
+              "taxBase": "48.66",
+              "taxRate": "0",
+              "taxQuota": "0",
+              "equivalenceRate": "",
+              "equivalenceQuota": "",
+              "isEquivalenceOperation": null
+            }
+          ]
+        }
+      ],
+      "nationalNotSubjectBreakdownItems": []
+    }
+  },
+  "fingerprint": {
+    "previousInvoice": null
+  }
+}

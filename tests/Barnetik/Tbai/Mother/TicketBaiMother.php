@@ -499,6 +499,16 @@ class TicketBaiMother
         return $ticketBai;
     }
 
+    public function createGipuzkoaTicketBaiFromJson(string $jsonFile): TicketBai
+    {
+        $json = json_decode(file_get_contents($jsonFile), true);
+        $json['invoice']['header']['invoiceNumber'] = (string)time();
+        sleep(1);
+
+        $ticketBai = TicketBai::createFromJson($this->createGipuzkoaVendor(), $json);
+        return $ticketBai;
+    }
+
 
     public function createGipuzkoaTicketBai(): TicketBai
     {

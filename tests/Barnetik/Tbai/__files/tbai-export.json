@@ -1,0 +1,89 @@
+{
+    "territory": "02",
+    "subject": {
+        "issuer": {
+            "vatId": "00000015S",
+            "name": "Gaueko Akerbeltz"
+        },
+        "recipients": [
+            {
+                "vatId": "87947382",
+                "vatIdType": "04",
+                "countryCode": "CO",
+                "name": "Some kind of colombian company",
+                "postalCode": "31390",
+                "address": "dale"
+            }
+        ],
+        "issuedBy": "N"
+    },
+    "invoice": {
+        "header": {
+            "series": "TESTSERIE",
+            "invoiceNumber": "1646674248",
+            "expeditionDate": "07-03-2022",
+            "expeditionTime": "17:30:48",
+            "simplifiedInvoice": false
+        },
+        "data": {
+            "description": "Venta de servidores",
+            "details": [
+                {
+                    "description": "Servidor 1",
+                    "unitPrice": "485.00",
+                    "quantity": "1",
+                    "discount": null,
+                    "totalAmount": "485.00",
+                    "isService": false
+                },
+                {
+                    "description": "Comisi\u00f3n - Servidor 1",
+                    "unitPrice": "82.45",
+                    "quantity": "1",
+                    "discount": null,
+                    "totalAmount": "82.45",
+                    "isService": true
+                },
+                {
+                    "description": "Servidor 2",
+                    "unitPrice": "160.00",
+                    "quantity": "1",
+                    "discount": null,
+                    "totalAmount": "160.00",
+                    "isService": false
+                },
+                {
+                    "description": "Comisi\u00f3n - Servidor 2",
+                    "unitPrice": "27.20",
+                    "quantity": "1",
+                    "discount": null,
+                    "totalAmount": "27.20",
+                    "isService": true
+                }
+            ],
+            "total": "754.65",
+            "vatRegimes": [
+                "02"
+            ],
+            "supportedRetention": null,
+            "taxBaseCost": null
+        },
+        "breakdown": {
+            "foreignDeliverySubjectExemptBreakdownItems": [
+                {
+                    "reason": "E5",
+                    "taxBase": "645.00"
+                }
+            ],
+            "foreignServiceSubjectExemptBreakdownItems": [
+                {
+                    "reason": "E1",
+                    "taxBase": "109.65"
+                }
+            ]
+        }
+    },
+    "fingerprint": {
+        "previousInvoice": null
+    }
+}
