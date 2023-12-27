@@ -80,8 +80,14 @@ class Recipient implements TbaiXml
         return $this->vatIdType() === VatId::VAT_ID_TYPE_NIF;
     }
 
+    protected function isNational(): bool
+    {
+        return $this->countryCode() === 'ES';
+    }
+
     public static function createFromJson(array $jsonData): self
     {
+
         $countryCode = $jsonData['countryCode'] ?? 'ES';
         $name = $jsonData['name'];
         $postalCode = $jsonData['postalCode'];
@@ -120,7 +126,7 @@ class Recipient implements TbaiXml
     public function xml(DOMDocument $domDocument): DOMNode
     {
         $recipient = $domDocument->createElement('IDDestinatario');
-        if ($this->hasNifAsVatId()) {
+        if ($this->hasNifAsVatId() && $this->isNational()) {
             $recipient->appendChild(
                 $domDocument->createElement('NIF', $this->vatId())
             );
@@ -128,7 +134,12 @@ class Recipient implements TbaiXml
             $otherId = $domDocument->createElement('IDOtro');
             $otherId->appendChild($domDocument->createElement('CodigoPais', $this->countryCode()));
             $otherId->appendChild($domDocument->createElement('IDType', $this->vatIdType()));
-            $otherId->appendChild($domDocument->createElement('ID', $this->vatId()));
+
+            $vatId = (string)$this->vatId();
+            if ($this->hasNifAsVatId() && substr($vatId, 0, 2) !== $this->countryCode()) {
+                $vatId = $this->countryCode . $vatId;
+            }
+            $otherId->appendChild($domDocument->createElement('ID', $vatId));
 
             $recipient->appendChild(
                 $otherId

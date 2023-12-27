@@ -1,0 +1,85 @@
+{
+    "territory": "02",
+    "subject": {
+        "issuer": {
+            "vatId": "00000015S",
+            "name": "Gaueko Akerbeltz"
+        },
+        "recipients": [
+            {
+                "vatId": "35433115904",
+                "vatIdType": "02",
+                "countryCode": "FR",
+                "name": "Some kind of company",
+                "postalCode": "31390",
+                "address": "olala - lele"
+            }
+        ],
+        "issuedBy": "N"
+    },
+    "invoice": {
+        "header": {
+            "series": "TESTSERIE",
+            "invoiceNumber": "1646674248",
+            "expeditionDate": "07-03-2022",
+            "expeditionTime": "17:30:48",
+            "simplifiedInvoice": false
+        },
+        "data": {
+            "description": "Venta de servidores",
+            "details": [
+                {
+                    "description": "Servidor 1",
+                    "unitPrice": "485.00",
+                    "quantity": "1",
+                    "discount": null,
+                    "totalAmount": "485.00"
+                },
+                {
+                    "description": "Comisi\u00f3n - Servidor 1",
+                    "unitPrice": "82.45",
+                    "quantity": "1",
+                    "discount": null,
+                    "totalAmount": "82.45"
+                },
+                {
+                    "description": "Servidor 2",
+                    "unitPrice": "160.00",
+                    "quantity": "1",
+                    "discount": null,
+                    "totalAmount": "160.00"
+                },
+                {
+                    "description": "Comisi\u00f3n - Servidor 2",
+                    "unitPrice": "27.20",
+                    "quantity": "1",
+                    "discount": null,
+                    "totalAmount": "27.20"
+                }
+            ],
+            "total": "754.65",
+            "vatRegimes": [
+                "01"
+            ],
+            "supportedRetention": null,
+            "taxBaseCost": null
+        },
+        "breakdown": {
+            "foreignDeliverySubjectExemptBreakdownItems": [
+                {
+                    "reason": "E5",
+                    "taxBase": "645.00"
+                }
+            ],
+            "foreignServiceSubjectExemptBreakdownItems": [
+                {
+                    "reason": "E1",
+                    "taxBase": "109.65"
+                }
+            ]
+        }
+    },
+    "fingerprint": {
+        "previousInvoice": null
+    }
+}
