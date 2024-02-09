@@ -1,4 +1,5 @@
 <?php
+
 namespace Test\Barnetik\Tbai;
 
 use Barnetik\Tbai\Api;
@@ -6,18 +7,10 @@ use Barnetik\Tbai\Api\Araba\Endpoint as ArabaEndpoint;
 use Barnetik\Tbai\Api\Bizkaia\Endpoint as BizkaiaEndpoint;
 use Barnetik\Tbai\Api\Gipuzkoa\Endpoint as GipuzkoaEndpoint;
 use Barnetik\Tbai\TicketBai;
-use PHPUnit\Framework\TestCase;
-use Test\Barnetik\Tbai\Mother\TicketBaiMother;
+use Test\Barnetik\TestCase;
 
 class ApiTest extends TestCase
 {
-    private TicketBaiMother $ticketBaiMother;
-
-    protected function setUp(): void
-    {
-        $this->ticketBaiMother = new TicketBaiMother;
-    }
-
     public function test_create_by_ticketbai_uses_correct_endpoint(): void
     {
         $nif = $_ENV['TBAI_ARABA_ISSUER_NIF'];

@@ -3,26 +3,16 @@
 namespace Test\Barnetik\Tbai;
 
 use Barnetik\Tbai\Api;
-use Barnetik\Tbai\Api\Gipuzkoa\Endpoint;
 use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\Qr;
 use Barnetik\Tbai\TicketBai;
 use Barnetik\Tbai\ValueObject\Amount;
 use Barnetik\Tbai\ValueObject\Date;
 use Barnetik\Tbai\ValueObject\VatId;
-use DateTimeImmutable;
-use PHPUnit\Framework\TestCase;
-use Test\Barnetik\Tbai\Mother\TicketBaiMother;
+use Test\Barnetik\TestCase;
 
 class QrTest extends TestCase
 {
-    private TicketBaiMother $ticketBaiMother;
-
-    protected function setUp(): void
-    {
-        $this->ticketBaiMother = new TicketBaiMother;
-    }
-
     public function test_TicketBai_QR_can_be_generated_for_araba(): void
     {
         $ticketbai = $this->ticketBaiMother->createArabaTicketBai();

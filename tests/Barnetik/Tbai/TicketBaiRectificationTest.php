@@ -5,19 +5,11 @@ namespace Test\Barnetik\Tbai;
 use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
 use DOMDocument;
-use PHPUnit\Framework\TestCase;
-use Test\Barnetik\Tbai\Mother\TicketBaiMother;
+use Test\Barnetik\TestCase;
 
-class SimplifiedRectificationTicketBaiTest extends TestCase
+class TicketBaiRectificationTest extends TestCase
 {
-    private TicketBaiMother $ticketBaiMother;
-
-    protected function setUp(): void
-    {
-        $this->ticketBaiMother = new TicketBaiMother;
-    }
-
-    public function test_TicketBai_rectification_validates_schema(): void
+    public function test_TicketBai_simplified_rectification_validates_schema(): void
     {
         $certFile = $_ENV['TBAI_GIPUZKOA_P12_PATH'];
         $certPassword = $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'];
@@ -42,9 +34,23 @@ class SimplifiedRectificationTicketBaiTest extends TestCase
         $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
     }
 
-    public function test_ticketbai_simplified_can_be_generated_from_json(): void
+    public function test_ticketbai_rectification_can_be_generated_from_json(): void
     {
-        $json = file_get_contents(__DIR__ . '/__files/tbai-simplified-rectification-without-recipient-sample.json');
+        $json = $this->getFilesContents('tbai-simplified-rectification-without-recipient-sample.json');
+        $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createArabaVendor(), json_decode($json, true));
+        $this->assertEquals(
+            TicketBai::class,
+            get_class($ticketbai)
+        );
+
+        $dom = $ticketbai->dom();
+        $this->assertStringContainsString('<FacturaRectificativa><Codigo>R5</Codigo><Tipo>S</Tipo>', (string)$ticketbai);
+        $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2-no-signature.xsd'));
+    }
+
+    public function test_ticketbai_simplified_rectification_can_be_generated_from_json(): void
+    {
+        $json = $this->getFilesContents('tbai-simplified-rectification-without-recipient-sample.json');
         $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createArabaVendor(), json_decode($json, true));
         $this->assertEquals(
             TicketBai::class,

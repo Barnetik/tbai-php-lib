@@ -7,21 +7,13 @@ use Barnetik\Tbai\Api\AbstractTerritory;
 use Barnetik\Tbai\Api\Gipuzkoa\Endpoint;
 use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
-use PHPUnit\Framework\TestCase;
-use Test\Barnetik\Tbai\Mother\TicketBaiMother;
+use Test\Barnetik\TestCase;
 
 class EndpointTest extends TestCase
 {
     const SUBMIT_RETRIES = 3;
     const SUBMIT_RETRY_DELAY = 3;
     const DEFAULT_TERRITORY = TicketBai::TERRITORY_GIPUZKOA;
-
-    private TicketBaiMother $ticketBaiMother;
-
-    protected function setUp(): void
-    {
-        $this->ticketBaiMother = new TicketBaiMother;
-    }
 
     public function test_TicketBai_is_delivered(): void
     {
@@ -293,7 +285,7 @@ class EndpointTest extends TestCase
         $certPassword = $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'];
         $privateKey = PrivateKey::p12($certFile);
 
-        $json = file_get_contents(__DIR__ . '/../../__files/tbai-sample.json');
+        $json = $this->getFilesContents('tbai-sample.json');
         $jsonArray = json_decode($json, true);
         $jsonArray['invoice']['header']['invoiceNumber'] = time();
         sleep(1);
@@ -332,7 +324,7 @@ class EndpointTest extends TestCase
         $certPassword = $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'];
         $privateKey = PrivateKey::p12($certFile);
 
-        $json = file_get_contents(__DIR__ . '/../../__files/tbai-sample-with-multiple-same-vat.json');
+        $json = $this->getFilesContents('tbai-sample-with-multiple-same-vat.json');
         $jsonArray = json_decode($json, true);
         $jsonArray['invoice']['header']['invoiceNumber'] = time();
         sleep(1);
@@ -371,7 +363,7 @@ class EndpointTest extends TestCase
         $certPassword = $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'];
         $privateKey = PrivateKey::p12($certFile);
 
-        $json = file_get_contents(__DIR__ . '/../../__files/tbai-sample-regimen-51.json');
+        $json = $this->getFilesContents('tbai-sample-regimen-51.json');
         $jsonArray = json_decode($json, true);
         $jsonArray['invoice']['header']['invoiceNumber'] = time();
         sleep(1);
@@ -410,7 +402,7 @@ class EndpointTest extends TestCase
         $certPassword = $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'];
         $privateKey = PrivateKey::p12($certFile);
 
-        $json = file_get_contents(__DIR__ . '/../../__files/tbai-sample-regimen-51-with-equivalence.json');
+        $json = $this->getFilesContents('tbai-sample-regimen-51-with-equivalence.json');
         $jsonArray = json_decode($json, true);
         $jsonArray['invoice']['header']['invoiceNumber'] = time();
         sleep(1);

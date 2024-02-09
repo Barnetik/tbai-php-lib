@@ -9,7 +9,7 @@ use Barnetik\Tbai\Invoice\Breakdown\NationalSubjectNotExemptBreakdownItem;
 use Barnetik\Tbai\Invoice\Breakdown\VatDetail;
 use Barnetik\Tbai\ValueObject\Amount;
 use OutOfBoundsException;
-use PHPUnit\Framework\TestCase;
+use Test\Barnetik\TestCase;
 
 class InvoiceBreakdownsTest extends TestCase
 {

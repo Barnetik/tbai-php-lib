@@ -2,18 +2,10 @@
 
 namespace Barnetik\Tbai;
 
-use PHPUnit\Framework\TestCase;
-use Test\Barnetik\Tbai\Mother\TicketBaiMother;
+use Test\Barnetik\TestCase;
 
 class ZuzenduTest extends TestCase
 {
-    private TicketBaiMother $ticketBaiMother;
-
-    protected function setUp(): void
-    {
-        $this->ticketBaiMother = new TicketBaiMother;
-    }
-
     public function test_Zuzendu_data_can_be_serialized(): void
     {
         $zuzendu = $this->getZuzendu();
@@ -29,7 +21,7 @@ class ZuzenduTest extends TestCase
 
     public function test_Zuzendu_can_be_generated_from_json(): void
     {
-        $json = file_get_contents(__DIR__ . '/__files/zuzendu-sample.json');
+        $json = $this->getFilesContents('zuzendu-sample.json');
         $zuzendu = Zuzendu::createFromJson($this->ticketBaiMother->createArabaVendor(), json_decode($json, true));
         $this->assertEquals(
             Zuzendu::class,

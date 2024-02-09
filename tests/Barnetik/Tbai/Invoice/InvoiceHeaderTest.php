@@ -7,7 +7,7 @@ use Barnetik\Tbai\Exception\InvalidTimeException;
 use Barnetik\Tbai\Invoice\Header;
 use Barnetik\Tbai\ValueObject\Date;
 use Barnetik\Tbai\ValueObject\Time;
-use PHPUnit\Framework\TestCase;
+use Test\Barnetik\TestCase;
 
 class InvoiceHeaderTest extends TestCase
 {

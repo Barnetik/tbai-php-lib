@@ -2,18 +2,10 @@
 
 namespace Barnetik\Tbai;
 
-use PHPUnit\Framework\TestCase;
-use Test\Barnetik\Tbai\Mother\TicketBaiMother;
+use Test\Barnetik\TestCase;
 
 class ZuzenduCancelTest extends TestCase
 {
-    private TicketBaiMother $ticketBaiMother;
-
-    protected function setUp(): void
-    {
-        $this->ticketBaiMother = new TicketBaiMother;
-    }
-
     public function test_ZuzenduCancel_data_can_be_serialized(): void
     {
         $zuzenduCancel = $this->getZuzenduCancel();
@@ -29,7 +21,7 @@ class ZuzenduCancelTest extends TestCase
 
     public function test_ZuzenduCancel_can_be_generated_from_json(): void
     {
-        $json = file_get_contents(__DIR__ . '/__files/zuzendu-cancel-sample.json');
+        $json = $this->getFilesContents('zuzendu-cancel-sample.json');
         $zuzenduCancel = ZuzenduCancel::createFromJson($this->ticketBaiMother->createArabaVendor(), json_decode($json, true));
         $this->assertEquals(
             ZuzenduCancel::class,

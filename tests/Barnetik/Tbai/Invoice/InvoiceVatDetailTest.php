@@ -4,7 +4,7 @@ namespace Test\Barnetik\Tbai\Invoice;
 
 use Barnetik\Tbai\Invoice\Breakdown\VatDetail;
 use Barnetik\Tbai\ValueObject\Amount;
-use PHPUnit\Framework\TestCase;
+use Test\Barnetik\TestCase;
 
 class InvoiceVatDetailTest extends TestCase
 {

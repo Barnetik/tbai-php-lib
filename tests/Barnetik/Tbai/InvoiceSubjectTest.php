@@ -6,7 +6,7 @@ use Barnetik\Tbai\Subject;
 use Barnetik\Tbai\Subject\Issuer;
 use Barnetik\Tbai\Subject\Recipient;
 use Barnetik\Tbai\ValueObject\VatId;
-use PHPUnit\Framework\TestCase;
+use Test\Barnetik\TestCase;
 
 class InvoiceSubjectTest extends TestCase
 {

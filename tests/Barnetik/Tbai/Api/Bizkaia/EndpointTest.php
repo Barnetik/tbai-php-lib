@@ -5,25 +5,16 @@ namespace Test\Barnetik\Tbai\Api\Bizkaia;
 use Barnetik\Tbai\Api;
 use Barnetik\Tbai\Api\AbstractTerritory;
 use Barnetik\Tbai\Api\Bizkaia\Endpoint;
-use Barnetik\Tbai\Api\Bizkaia\LroeResultInterface;
 use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
 use DOMDocument;
-use PHPUnit\Framework\TestCase;
-use Test\Barnetik\Tbai\Mother\TicketBaiMother;
+use Test\Barnetik\TestCase;
 
 class EndpointTest extends TestCase
 {
     const SUBMIT_RETRIES = 3;
     const SUBMIT_RETRY_DELAY = 3;
     const DEFAULT_TERRITORY = TicketBai::TERRITORY_BIZKAIA;
-
-    private TicketBaiMother $ticketBaiMother;
-
-    protected function setUp(): void
-    {
-        $this->ticketBaiMother = new TicketBaiMother;
-    }
 
     public function test_sent_FacturasEmitidasConSGAltaPeticion_xml_is_valid(): void
     {
@@ -756,7 +747,7 @@ class EndpointTest extends TestCase
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
 
-        $json = json_decode(file_get_contents(__DIR__ . '/../../__files/tbai-sample-with-multiple-same-vat.json'), true);
+        $json = json_decode($this->getFilesContents('tbai-sample-with-multiple-same-vat.json'), true);
         $json['invoice']['header']['invoiceNumber'] = (string)time();
         sleep(1);
 

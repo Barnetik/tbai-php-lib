@@ -5,18 +5,10 @@ namespace Test\Barnetik\Tbai;
 use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBaiCancel;
 use DOMDocument;
-use PHPUnit\Framework\TestCase;
-use Test\Barnetik\Tbai\Mother\TicketBaiMother;
+use Test\Barnetik\TestCase;
 
 class TicketBaiCancelTest extends TestCase
 {
-    private TicketBaiMother $ticketBaiMother;
-
-    protected function setUp(): void
-    {
-        $this->ticketBaiMother = new TicketBaiMother;
-    }
-
     public function test_TicketBaiCancel_can_be_generated_from_xml(): void
     {
         $certFile = $_ENV['TBAI_ARABA_P12_PATH'];

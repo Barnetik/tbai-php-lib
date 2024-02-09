@@ -6,21 +6,13 @@ use Barnetik\Tbai\Api\AbstractTerritory;
 use Barnetik\Tbai\Api\Araba\Endpoint;
 use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
-use PHPUnit\Framework\TestCase;
-use Test\Barnetik\Tbai\Mother\TicketBaiMother;
+use Test\Barnetik\TestCase;
 
 class EndpointTest extends TestCase
 {
     const SUBMIT_RETRIES = 3;
     const SUBMIT_RETRY_DELAY = 3;
     const DEFAULT_TERRITORY = TicketBai::TERRITORY_ARABA;
-
-    private TicketBaiMother $ticketBaiMother;
-
-    protected function setUp(): void
-    {
-        $this->ticketBaiMother = new TicketBaiMother;
-    }
 
     public function test_TicketBai_is_delivered(): void
     {

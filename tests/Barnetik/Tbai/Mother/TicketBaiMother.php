@@ -35,6 +35,12 @@ use Barnetik\Tbai\ZuzenduCancel;
 
 class TicketBaiMother
 {
+
+    protected function getFilesContents(string $filename): string
+    {
+        return file_get_contents(__DIR__ . '/../__files/' . $filename);
+    }
+
     public function createTicketBai(string $nif, string $issuer, string $license, string $developer, string $appName, string $appVersion, string $territory, bool $selfEmployed = false): TicketBai
     {
         $subject = $this->getSubject($nif, $issuer);
@@ -471,7 +477,7 @@ class TicketBaiMother
 
     public function createBizkaiaTicketBaiForSelfEmployedFromJson(): TicketBai
     {
-        $json = json_decode(file_get_contents(__DIR__ . '/../__files/tbai-sample-self-employed.json'), true);
+        $json = json_decode($this->getFilesContents('tbai-sample-self-employed.json'), true);
 
         $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_140'];
         $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_140'];

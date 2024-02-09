@@ -4,7 +4,7 @@ namespace Test\Barnetik\Tbai\ValueObject;
 
 use Barnetik\Tbai\Exception\InvalidVatIdException;
 use Barnetik\Tbai\ValueObject\VatId;
-use PHPUnit\Framework\TestCase;
+use Test\Barnetik\TestCase;
 
 class VatIdTest extends TestCase
 {

@@ -4,19 +4,10 @@ namespace Test\Barnetik\RegressionTests;
 
 use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
-use DOMDocument;
-use PHPUnit\Framework\TestCase;
-use Test\Barnetik\Tbai\Mother\TicketBaiMother;
+use Test\Barnetik\TestCase;
 
 class RectificationTicketBaiTest extends TestCase
 {
-    private TicketBaiMother $ticketBaiMother;
-
-    protected function setUp(): void
-    {
-        $this->ticketBaiMother = new TicketBaiMother;
-    }
-
     /**
      * https://github.com/Barnetik/tbai-php-lib/issues/35
      */
@@ -32,11 +23,10 @@ class RectificationTicketBaiTest extends TestCase
         $signedRectificationFile = $this->getSignedDestinationFile();
         $ticketbaiRectification->sign($privateKey, $certPassword, $signedRectificationFile);
         $ticketbaiFromXml = TicketBai::createFromXml(file_get_contents($signedRectificationFile), $ticketbai->territory());
-        
+
         $rectificationArray = $ticketbaiRectification->toArray();
         $ticketbaiFromXmlArray = $ticketbaiFromXml->toArray();
         $this->assertEquals($rectificationArray['invoice']['header']['rectifiedInvoices'][0]['invoiceNumber'], $ticketbaiFromXmlArray['invoice']['header']['rectifiedInvoices'][0]['invoiceNumber']);
-
     }
 
     private function getSignedDestinationFile(): string
@@ -45,5 +35,4 @@ class RectificationTicketBaiTest extends TestCase
         rename($filename, $filename . '.xml');
         return $filename . '.xml';
     }
-
 }

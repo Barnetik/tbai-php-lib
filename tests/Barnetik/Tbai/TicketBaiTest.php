@@ -8,83 +8,14 @@ use DOMDocument;
 use DOMXPath;
 use Exception;
 use lyquidity\xmldsig\XAdES;
-use PHPUnit\Framework\TestCase;
-use Test\Barnetik\Tbai\Mother\TicketBaiMother;
+use Test\Barnetik\TestCase;
 
 class TicketBaiTest extends TestCase
 {
-    private TicketBaiMother $ticketBaiMother;
-
-    protected function setUp(): void
-    {
-        $this->ticketBaiMother = new TicketBaiMother;
-    }
-
     public function test_ticketbai_data_can_be_serialized(): void
     {
         $ticketbai = $this->getTicketBai();
         $this->assertIsString(json_encode($ticketbai->toArray()));
-    }
-
-    public function test_gh19_serialization_returns_correct_selfEmployed(): void
-    {
-        $json = json_decode(file_get_contents(__DIR__ . '/__files/tbai-sample.json'), true);
-        $json['self_employed'] = true;
-        $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createBizkaiaVendor(), $json);
-        $ticketbaiArray = $ticketbai->toArray();
-        $this->assertArrayHasKey('selfEmployed', $ticketbaiArray);
-        $this->assertEquals(true, $ticketbaiArray['selfEmployed']);
-
-        $json = json_decode(file_get_contents(__DIR__ . '/__files/tbai-sample.json'), true);
-        $json['self_employed'] = false;
-        $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createBizkaiaVendor(), $json);
-        $ticketbaiArray = $ticketbai->toArray();
-        $this->assertArrayHasKey('selfEmployed', $ticketbaiArray);
-        $this->assertEquals(false, $ticketbaiArray['selfEmployed']);
-
-        $json = json_decode(file_get_contents(__DIR__ . '/__files/tbai-sample.json'), true);
-        $json['selfEmployed'] = true;
-        $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createBizkaiaVendor(), $json);
-        $ticketbaiArray = $ticketbai->toArray();
-        $this->assertArrayHasKey('selfEmployed', $ticketbaiArray);
-        $this->assertEquals(true, $ticketbaiArray['selfEmployed']);
-
-        $json = json_decode(file_get_contents(__DIR__ . '/__files/tbai-sample.json'), true);
-        $json['selfEmployed'] = false; //This has priority over self_employed
-        $json['self_employed'] = true;
-        $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createBizkaiaVendor(), $json);
-        $ticketbaiArray = $ticketbai->toArray();
-        $this->assertArrayHasKey('selfEmployed', $ticketbaiArray);
-        $this->assertEquals(false, $ticketbaiArray['selfEmployed']);
-    }
-
-    public function test_gh19_serialization_batuzIncomeTaxes_is_correctly_handled(): void
-    {
-        $json = json_decode(file_get_contents(__DIR__ . '/__files/tbai-sample-self-employed.json'), true);
-        $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createBizkaiaVendor(), $json);
-        $ticketbaiArray = $ticketbai->toArray();
-        $this->assertArrayHasKey('selfEmployed', $ticketbaiArray);
-        $this->assertEquals(true, $ticketbaiArray['selfEmployed']);
-
-        $json = json_decode(file_get_contents(__DIR__ . '/__files/tbai-sample-self-employed.json'), true);
-        unset($json['batuzIncomeTaxes']);
-        $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createBizkaiaVendor(), $json);
-        $ticketbaiArray = $ticketbai->toArray();
-        $this->assertArrayHasKey('batuzIncomeTaxes', $ticketbaiArray);
-        $this->assertEmpty($ticketbaiArray['batuzIncomeTaxes']);
-
-        $json = json_decode(file_get_contents(__DIR__ . '/__files/tbai-sample.json'), true);
-        $json['batuzIncomeTaxes'] = [];
-        $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createBizkaiaVendor(), $json);
-        $ticketbaiArray = $ticketbai->toArray();
-        $this->assertArrayHasKey('batuzIncomeTaxes', $ticketbaiArray);
-        $this->assertEmpty($ticketbaiArray['batuzIncomeTaxes']);
-
-        $json = json_decode(file_get_contents(__DIR__ . '/__files/tbai-sample-self-employed.json'), true);
-        $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createBizkaiaVendor(), $json);
-        $ticketbaiArray = $ticketbai->toArray();
-        $this->assertArrayHasKey('batuzIncomeTaxes', $ticketbaiArray);
-        $this->assertEquals("197330", $ticketbaiArray['batuzIncomeTaxes']['incomeTaxDetails'][0]['epigraph']);
     }
 
     public function test_unsigned_TicketBai_validates_schema(): void
@@ -96,7 +27,7 @@ class TicketBaiTest extends TestCase
 
     public function test_ticketbai_can_be_generated_from_json(): void
     {
-        $json = file_get_contents(__DIR__ . '/__files/tbai-sample.json');
+        $json = $this->getFilesContents('tbai-sample.json');
         $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createArabaVendor(), json_decode($json, true));
         $this->assertEquals(
             TicketBai::class,

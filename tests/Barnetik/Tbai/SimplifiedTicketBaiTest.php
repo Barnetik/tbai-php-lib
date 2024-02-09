@@ -5,18 +5,10 @@ namespace Test\Barnetik\Tbai;
 use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
 use DOMDocument;
-use PHPUnit\Framework\TestCase;
-use Test\Barnetik\Tbai\Mother\TicketBaiMother;
+use Test\Barnetik\TestCase;
 
 class SimplifiedTicketBaiTest extends TestCase
 {
-    private TicketBaiMother $ticketBaiMother;
-
-    protected function setUp(): void
-    {
-        $this->ticketBaiMother = new TicketBaiMother;
-    }
-
     public function test_simplified_TicketBai_validates_schema(): void
     {
 
@@ -60,7 +52,7 @@ class SimplifiedTicketBaiTest extends TestCase
         $certPassword = $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'];
         $privateKey = PrivateKey::p12($certFile);
 
-        $ticketbai = $this->ticketBaiMother->createSimplifiedTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion,$territory, true, false);
+        $ticketbai = $this->ticketBaiMother->createSimplifiedTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, $territory, true, false);
 
         $signedFilename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
         rename($signedFilename, $signedFilename . '.xml');
@@ -75,7 +67,7 @@ class SimplifiedTicketBaiTest extends TestCase
 
     public function test_ticketbai_simplified_without_recipient_can_be_generated_from_json(): void
     {
-        $json = file_get_contents(__DIR__ . '/__files/tbai-simplified-without-recipient-sample.json');
+        $json = $this->getFilesContents('tbai-simplified-without-recipient-sample.json');
         $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createArabaVendor(), json_decode($json, true));
         $this->assertEquals(
             TicketBai::class,

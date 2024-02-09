@@ -4,7 +4,7 @@ namespace Test\Barnetik\Tbai\Subject;
 
 use Barnetik\Tbai\Subject\Recipient;
 use Barnetik\Tbai\ValueObject\VatId;
-use PHPUnit\Framework\TestCase;
+use Test\Barnetik\TestCase;
 
 class RecipientTest extends TestCase
 {
