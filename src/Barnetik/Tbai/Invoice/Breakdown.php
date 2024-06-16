@@ -417,7 +417,7 @@ class Breakdown implements TbaiXml
                 ],
                 'nationalNotSubjectBreakdownItems' => [
                     'type' => 'array',
-                    'maxItems' => 7,
+                    'maxItems' => 4,
                     'items' => NationalNotSubjectBreakdownItem::docJson(),
                     'description' => 'Kargapean ez daudenak - No sujetas a carga'
                 ],
@@ -435,7 +435,7 @@ class Breakdown implements TbaiXml
                 ],
                 'foreignServiceNotSubjectBreakdownItems' => [
                     'type' => 'array',
-                    'maxItems' => 7,
+                    'maxItems' => 4,
                     'items' => ForeignServiceNotSubjectBreakdownItem::docJson(),
                     'description' => 'Kargapean ez daudenak - No sujetas a carga'
                 ],
@@ -453,7 +453,7 @@ class Breakdown implements TbaiXml
                 ],
                 'foreignDeliveryNotSubjectBreakdownItems' => [
                     'type' => 'array',
-                    'maxItems' => 7,
+                    'maxItems' => 4,
                     'items' => ForeignDeliveryNotSubjectBreakdownItem::docJson(),
                     'description' => 'Kargapean ez daudenak - No sujetas a carga'
                 ]
