@@ -30,6 +30,8 @@ class Data implements TbaiXml
     const VAT_REGIME_13 = '13';
     const VAT_REGIME_14 = '14';
     const VAT_REGIME_15 = '15';
+    const VAT_REGIME_17 = '17';
+    const VAT_REGIME_19 = '19';
     const VAT_REGIME_51 = '51';
     const VAT_REGIME_52 = '52';
     const VAT_REGIME_53 = '53';
@@ -112,6 +114,8 @@ class Data implements TbaiXml
             self::VAT_REGIME_13,
             self::VAT_REGIME_14,
             self::VAT_REGIME_15,
+            self::VAT_REGIME_17,
+            self::VAT_REGIME_19,
             self::VAT_REGIME_51,
             self::VAT_REGIME_52,
             self::VAT_REGIME_53,
@@ -295,6 +299,8 @@ class Data implements TbaiXml
  * 13: Negozio lokala errentatzeko eragiketak, atxikipenari lotuak eta lotu gabeak - Operaciones de arrendamiento de local de negocio sujetas y no sujetas a retención
  * 14: Hartzailea administrazio publiko bat denean ordaintzeke dauden BEZdun fakturak, obra ziurtagirietakoak - Factura con IVA pendiente de devengo en certificaciones de obra cuyo destinatario sea una Administración Pública
  * 15: Segidako traktuko eragiketetan ordaintzeke dagoen BEZdun faktura - Factura con IVA pendiente de devengo en operaciones de tracto sucesivo
+ * 17: IX. tituluko XI. kapituluan aurreikusitako araubideren bati atxikitako eragiketa (OSS eta IOSS) - Operación acogida a alguno de los regímenes previstos en el Capítulo XI del Título IX (OSS e IOSS).
+ * 19: Nekazaritza, abeltzaintza eta arrantzaren araubide berezian dauden jardueren eragiketak (NAAAB) - Operaciones de actividades incluidas en el Régimen Especial de Agricultura, Ganadería y Pesca (REAGYP)
  * 51: Baliokidetasun errekarguko eragiketak - Operaciones en recargo de equivalencia
  * 52: Erregimen erraztuko eragiketak - Operaciones en régimen simplificado
  * 53: BEZaren ondorioetarako enpresari edo profesionaltzat jotzen ez diren pertsona edo erakundeek egindako eragiketak - Operaciones realizadas por personas o entidades que no tengan la consideración de empresarios, empresarias o profesionales a efectos del IVA
