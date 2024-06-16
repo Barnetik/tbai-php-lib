@@ -33,7 +33,7 @@ class Breakdown implements TbaiXml
 
     public function addNationalNotSubjectBreakdownItem(NationalNotSubjectBreakdownItem $notSubjectBreakdowItem): self
     {
-        if (sizeof($this->nationalNotSubjectBreakdownItems) < 2) {
+        if (sizeof($this->nationalNotSubjectBreakdownItems) < 4) {
             $this->nationalNotSubjectBreakdownItems[] = $notSubjectBreakdowItem;
             return $this;
         }
@@ -63,7 +63,7 @@ class Breakdown implements TbaiXml
 
     public function addForeignServiceNotSubjectBreakdownItem(ForeignServiceNotSubjectBreakdownItem $notSubjectBreakdowItem): self
     {
-        if (sizeof($this->foreignServiceNotSubjectBreakdownItems) < 2) {
+        if (sizeof($this->foreignServiceNotSubjectBreakdownItems) < 4) {
             $this->foreignServiceNotSubjectBreakdownItems[] = $notSubjectBreakdowItem;
             return $this;
         }
@@ -93,7 +93,7 @@ class Breakdown implements TbaiXml
 
     public function addForeignDeliveryNotSubjectBreakdownItem(ForeignDeliveryNotSubjectBreakdownItem $notSubjectBreakdowItem): self
     {
-        if (sizeof($this->foreignDeliveryNotSubjectBreakdownItems) < 2) {
+        if (sizeof($this->foreignDeliveryNotSubjectBreakdownItems) < 4) {
             $this->foreignDeliveryNotSubjectBreakdownItems[] = $notSubjectBreakdowItem;
             return $this;
         }
