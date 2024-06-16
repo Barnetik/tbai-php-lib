@@ -55,7 +55,7 @@ class AbstractSubjectNotExemptBreakdownItem implements TbaiXml
      */
     public function addVatDetail(VatDetail $vatDetail)
     {
-        if (sizeof($this->vatDetails) < 6) {
+        if (sizeof($this->vatDetails) < 12) {
             $this->vatDetails[] = $vatDetail;
             return $this;
         }
@@ -115,7 +115,7 @@ class AbstractSubjectNotExemptBreakdownItem implements TbaiXml
                     'type' => 'array',
                     'description' => 'Zenbatekoak - Importes',
                     'minItems' => 1,
-                    'maxItems' => 6,
+                    'maxItems' => 12,
                     'items' => VatDetail::docJson()
                 ],
                 'type' => [
