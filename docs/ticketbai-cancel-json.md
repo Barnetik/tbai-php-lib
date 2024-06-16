@@ -25,7 +25,7 @@
                         "vatId": {
                             "type": "string",
                             "pattern": "^(([a-z|A-Z]{1}\\d{7}[a-z|A-Z]{1})|(\\d{8}[a-z|A-Z]{1})|([a-z|A-Z]{1}\\d{8}))$",
-                            "description": "IFZ - NIF"
+                            "description": "IFZ: 9 zifrako edo letrako segida - NIF: Secuencia de 9 d\u00edgitos o letras"
                         },
                         "name": {
                             "type": "string",
@@ -48,6 +48,7 @@
                         },
                         "invoiceNumber": {
                             "type": "string",
+                            "minLength": 1,
                             "maxLength": 20,
                             "description": "Fakturaren zenbakia - N\u00famero factura"
                         },
