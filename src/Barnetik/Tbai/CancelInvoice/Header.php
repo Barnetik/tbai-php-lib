@@ -91,6 +91,7 @@ class Header implements TbaiXml
                 ],
                 'invoiceNumber' => [
                     'type' => 'string',
+                    'minLength' => 1,
                     'maxLength' => 20,
                     'description' => 'Fakturaren zenbakia - Número factura'
                 ],

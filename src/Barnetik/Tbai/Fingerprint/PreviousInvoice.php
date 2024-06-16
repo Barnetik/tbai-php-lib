@@ -75,6 +75,7 @@ class PreviousInvoice implements TbaiXml
             'properties' => [
                 'invoiceNumber' => [
                     'type' => 'string',
+                    'minLength' => 1,
                     'maxLength' => 20,
                     'description' => 'Aurreko fakturaren zenbakia - Número factura factura anterior'
                 ],
@@ -85,6 +86,7 @@ class PreviousInvoice implements TbaiXml
                 ],
                 'signature' => [
                     'type' => 'string',
+                    'minLength' => 1,
                     'maxLength' => 100,
                     'description' => 'Aurreko fakturaren TBAI fitxategiko SignatureValue eremuko lehen ehun karaktereak - Primeros cien caracteres del campo SignatureValue del fichero TBAI de la factura anterior'
                 ],

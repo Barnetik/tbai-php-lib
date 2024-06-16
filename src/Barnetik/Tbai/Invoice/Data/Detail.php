@@ -96,6 +96,7 @@ class Detail implements TbaiXml
             'properties' => [
                 'description' => [
                     'type' => 'string',
+                    'minLength' => 1,
                     'maxLength' => 250,
                 ],
                 'unitPrice' => [

@@ -265,6 +265,7 @@ class Data implements TbaiXml
                 ],
                 'description' => [
                     'type' => 'string',
+                    'minLength' => 1,
                     'maxLength' => 250,
                 ],
                 'details' => [

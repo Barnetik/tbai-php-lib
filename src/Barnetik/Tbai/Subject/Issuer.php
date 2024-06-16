@@ -62,7 +62,7 @@ class Issuer implements TbaiXml
                 'vatId' => [
                     'type' => 'string',
                     'pattern' => '^(([a-z|A-Z]{1}\d{7}[a-z|A-Z]{1})|(\d{8}[a-z|A-Z]{1})|([a-z|A-Z]{1}\d{8}))$',
-                    'description' => 'IFZ - NIF'
+                    'description' => 'IFZ: 9 zifrako edo letrako segida - NIF: Secuencia de 9 dígitos o letras'
                 ],
                 'name' => [
                     'type' => 'string',
