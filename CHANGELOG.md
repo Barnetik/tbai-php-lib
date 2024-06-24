@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.3.0](https://github.com/Barnetik/tbai-php-lib/compare/v0.2.2...v0.3.0) (2024-06-24)
+
+
+### Features
+
+* Add headers() function to retrieve all headers from response ([4213202](https://github.com/Barnetik/tbai-php-lib/commit/42132020d21f68f17218763dbafcf87d4884968e))
+
 ## [0.2.2](https://github.com/Barnetik/tbai-php-lib/compare/v0.2.1...v0.2.2) (2024-06-24)
 
 ## [0.2.1](https://github.com/Barnetik/tbai-php-lib/compare/v0.2.0...v0.2.1) (2024-06-24)
