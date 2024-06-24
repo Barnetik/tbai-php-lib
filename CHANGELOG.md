@@ -1,6 +1,8 @@
-# [](https://github.com/Barnetik/tbai-php-lib/compare/v0.1.3...v) (2023-12-26)
+# Changelog
 
+All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.2.1](https://github.com/Barnetik/tbai-php-lib/compare/v0.2.0...v0.2.1) (2024-06-24)
 
 ## [0.1.3](https://github.com/Barnetik/tbai-php-lib/compare/v0.1.2...v0.1.3) (2023-12-15)
 
@@ -30,6 +32,3 @@
 
 
 # 0.1.0 (2023-09-05)
-
-
-
