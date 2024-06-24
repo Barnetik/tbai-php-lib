@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/batuz_TiposBasicos.xsd">
 	<!-- Cadena de 1 caracteres -->
 	<simpleType name="TextMax1Type">
@@ -16,12 +16,6 @@
 	<simpleType name="TextMax5Type">
 		<restriction base="string">
 			<maxLength value="5"/>
-		</restriction>
-	</simpleType>
-	<!-- Cadena de 7 caracteres -->
-	<simpleType name="TextMax7Type">
-		<restriction base="string">
-			<maxLength value="7"/>
 		</restriction>
 	</simpleType>
 	<!-- Cadena de 8 caracteres -->
@@ -54,12 +48,6 @@
 			<maxLength value="15"/>
 		</restriction>
 	</simpleType>
-	<!-- Cadena de 16 caracteres -->
-	<simpleType name="TextMax16Type">
-		<restriction base="string">
-			<maxLength value="16"/>
-		</restriction>
-	</simpleType>
 	<!-- Cadena de 20 caracteres -->
 	<simpleType name="TextMax20Type">
 		<restriction base="string">
@@ -88,12 +76,6 @@
 	<simpleType name="TextMax35Type">
 		<restriction base="string">
 			<maxLength value="35"/>
-		</restriction>
-	</simpleType>
-	<!-- Cadena de 39 caracteres -->
-	<simpleType name="TextMax39Type">
-		<restriction base="string">
-			<maxLength value="39"/>
 		</restriction>
 	</simpleType>
 	<!-- Cadena de 40 caracteres -->
@@ -232,7 +214,7 @@
 	</simpleType>
 	<simpleType name="NIFType">
 		<annotation>
-			<documentation xml:lang="es">NIF: Secuencia de 9 dígitos o letras mayúsculas </documentation>
+			<documentation>IFZ: 9 zifrako edo letrako segida - NIF: Secuencia de 9 dígitos o letras</documentation>
 		</annotation>
 		<restriction base="string">
 			<length value="9"/>

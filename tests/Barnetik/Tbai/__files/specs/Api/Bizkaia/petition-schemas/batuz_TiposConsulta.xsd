@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/batuz_TiposConsulta.xsd"
 	xmlns:tiposconsulta="https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/batuz_TiposConsulta.xsd"
 	xmlns:enum="https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/batuz_Enumerados.xsd"
@@ -189,6 +189,7 @@
 			<element name="NumFactura" type="tiposbasicos:TextMax20Type" minOccurs="0"/>
 			<element name="FechaExpedicionFactura" type="tiposconsulta:FechaDesdeHastaType" minOccurs="0"/>
 			<element name="EmisorFacturaRecibida" type="tiposcomplejos:DocumentoType" minOccurs="0"/>
+			<element name="Concepto" type="enum:ConceptoEnum" minOccurs="0"/>
 		</sequence>
 	</complexType>	
 

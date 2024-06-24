@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/batuz_Enumerados.xsd">
 	<simpleType name="IDVersionEnum">
 		<restriction base="string">
@@ -131,6 +131,16 @@
 					<documentation>No sujeto por reglas de localización</documentation>
 				</annotation>
 			</enumeration>
+			<enumeration value="VT">
+				<annotation>
+					<documentation>No sujeto, ventas realizadas por cuenta de terceros (importe no computable a efectos de IVA ni de IRPF)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="IE">
+				<annotation>
+					<documentation>No sujeto en el TAI por reglas de localización, pero repercute impuesto extranjero, IPS/IGIC o IVA de otro estado miembro UE</documentation>
+				</annotation>
+			</enumeration>
 		</restriction>
 	</simpleType>
 	<simpleType name="SituacionInmuebleEnum">
@@ -232,7 +242,7 @@
 				<annotation>
 					<documentation>Otra información con trascendencia tributaria</documentation>
 				</annotation>
-			</enumeration>			
+			</enumeration>
 		</restriction>
 	</simpleType>
 	<simpleType name="SubcapituloModelo140Enum">
@@ -644,6 +654,15 @@
 			<enumeration value="XB"/>
 			<enumeration value="XU"/>
 			<enumeration value="XN"/>
+			<enumeration value="AX"/>
+			<enumeration value="BL"/>
+			<enumeration value="EH"/>
+			<enumeration value="GF"/>
+			<enumeration value="GP"/>
+			<enumeration value="MF"/>
+			<enumeration value="MQ"/>
+			<enumeration value="RE"/>
+			<enumeration value="SJ"/>
 		</restriction>
 	</simpleType>
 	<simpleType name="CountryMiembroType">
@@ -837,6 +856,16 @@
                     <documentation>Factura con IVA pendiente de devengo en operaciones de tracto sucesivo</documentation>
                 </annotation>
             </enumeration>			
+			<enumeration value="17">
+				<annotation>
+					<documentation>Operación acogida a alguno de los regímenes previstos en el Capítulo XI del Título IX (OSS e IOSS)</documentation>
+				</annotation>	
+			</enumeration>
+			<enumeration value="19">
+				<annotation>
+					<documentation>Operaciones de actividades incluidas en el Régimen Especial de Agricultura, Ganadería y Pesca (REAGYP)</documentation>
+				</annotation>
+			</enumeration>
 			 <enumeration value="51">
                 <annotation>
                     <documentation>Operaciones en recargo de equivalencia</documentation>
@@ -852,6 +881,11 @@
                     <documentation>Operaciones realizadas por personas o entidades que no tengan la consideración de empresarios, empresarias o profesionales a efectos del IVA</documentation>
                 </annotation>
             </enumeration>
+			<enumeration value="54">
+				<annotation>
+					<documentation>Operaciones realizadas desde Establecimientos Permanentes situados en Canarias, Ceuta y Melilla</documentation>
+				</annotation>
+			</enumeration>
 		</restriction>
 	</simpleType>
 	<simpleType name="OperacionTrascendenciaTributariaIngresoEnum">
@@ -926,6 +960,16 @@
 					<documentation>Factura con IVA pendiente de devengo en operaciones de tracto sucesivo</documentation>
 				</annotation>
 			</enumeration>
+			<enumeration value="17">
+				<annotation>
+					<documentation>Operación acogida a alguno de los regímenes previstos en el Capítulo XI del Título IX (OSS e IOSS)</documentation>
+				</annotation>	
+			</enumeration>
+			<enumeration value="19">
+				<annotation>
+					<documentation>Operaciones de actividades incluidas en el Régimen Especial de Agricultura, Ganadería y Pesca (REAGYP)</documentation>
+				</annotation>
+			</enumeration>
 			<enumeration value="51">
 				<annotation>
 					<documentation>Operaciones en recargo de equivalencia</documentation>
@@ -939,6 +983,11 @@
 			<enumeration value="53">
 				<annotation>
 					<documentation>Operaciones realizadas por personas o entidades que no tengan la consideración de empresarios, empresarias o profesionales a efectos del IVA </documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="54">
+				<annotation>
+					<documentation>Operaciones realizadas desde Establecimientos Permanentes situados en Canarias, Ceuta y Melilla</documentation>
 				</annotation>
 			</enumeration>
 		</restriction>
@@ -1074,9 +1123,24 @@
 					<documentation>Factura con IVA pendiente de devengo en operaciones de tracto sucesivo</documentation>
 				</annotation>
 			</enumeration>
+			<enumeration value="17">
+				<annotation>
+					<documentation>Operación acogida a alguno de los regímenes previstos en el Capítulo XI del Título IX (OSS e IOSS)</documentation>
+				</annotation>	
+			</enumeration>
+			<enumeration value="19">
+				<annotation>
+					<documentation>Operaciones de actividades incluidas en el Régimen Especial de Agricultura, Ganadería y Pesca (REAGYP)</documentation>
+				</annotation>
+			</enumeration>
 			<enumeration value="53">
 				<annotation>
 					<documentation>Operaciones realizadas por personas o entidades que no tengan la consideración de empresarios, empresarias o profesionales a efectos del IVA </documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="54">
+				<annotation>
+					<documentation>Operaciones realizadas desde Establecimientos Permanentes situados en Canarias, Ceuta y Melilla</documentation>
 				</annotation>
 			</enumeration>
 		</restriction>
