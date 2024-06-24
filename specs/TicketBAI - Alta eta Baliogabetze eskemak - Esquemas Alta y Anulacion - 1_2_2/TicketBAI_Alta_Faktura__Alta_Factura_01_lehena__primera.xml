@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><T:TicketBai xmlns:T="urn:ticketbai:emision" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:ticketbai:emision ticketBaiV1-2-1.xsd ">
+	<Cabecera>
+		<IDVersionTBAI>1.2</IDVersionTBAI>
+	</Cabecera>
+	<Sujetos>
+		<Emisor>
+			<NIF>99999974E</NIF>
+			<ApellidosNombreRazonSocial>GEZURREZKO JAULKITZAILEA - EMISOR FICTICIO</ApellidosNombreRazonSocial>
+		</Emisor>
+		<VariosDestinatarios>N</VariosDestinatarios>
+		<EmitidaPorTercerosODestinatario>N</EmitidaPorTercerosODestinatario>
+	</Sujetos>
+	<Factura>
+		<CabeceraFactura>
+			<SerieFactura>TB-2024-S</SerieFactura>
+			<NumFactura>1</NumFactura>
+			<FechaExpedicionFactura>29-02-2024</FechaExpedicionFactura>
+			<HoraExpedicionFactura>11:05:07</HoraExpedicionFactura>
+			<FacturaSimplificada>S</FacturaSimplificada>
+			<FacturaEmitidaSustitucionSimplificada>N</FacturaEmitidaSustitucionSimplificada>
+		</CabeceraFactura>
+		<DatosFactura>
+			<FechaOperacion>29-02-2024</FechaOperacion>
+			<DescripcionFactura>Lehen faktura - Primera factura</DescripcionFactura>
+			<DetallesFactura>
+				<IDDetalleFactura>
+					<DescripcionDetalle>Lehen produktua - Primer producto</DescripcionDetalle>
+					<Cantidad>1.00000000</Cantidad>
+					<ImporteUnitario>200.00000000</ImporteUnitario>
+					<Descuento>20.00000000</Descuento>
+					<ImporteTotal>217.80000000</ImporteTotal>
+				</IDDetalleFactura>
+				<IDDetalleFactura>
+					<DescripcionDetalle>Bigarren produktua - Segundo producto</DescripcionDetalle>
+					<Cantidad>2.00000000</Cantidad>
+					<ImporteUnitario>350.00000000</ImporteUnitario>
+					<ImporteTotal>847.00000000</ImporteTotal>
+				</IDDetalleFactura>
+			</DetallesFactura>
+			<ImporteTotalFactura>1064.8</ImporteTotalFactura>
+			<Claves>
+				<IDClave>
+					<ClaveRegimenIvaOpTrascendencia>01</ClaveRegimenIvaOpTrascendencia>
+				</IDClave>
+			</Claves>
+		</DatosFactura>
+		<TipoDesglose>
+			<DesgloseFactura>
+				<Sujeta>
+					<NoExenta>
+						<DetalleNoExenta>
+							<TipoNoExenta>S1</TipoNoExenta>
+							<DesgloseIVA>
+								<DetalleIVA>
+									<BaseImponible>880.0</BaseImponible>
+									<TipoImpositivo>21.0</TipoImpositivo>
+									<CuotaImpuesto>184.8</CuotaImpuesto>
+									<OperacionEnRecargoDeEquivalenciaORegimenSimplificado>N</OperacionEnRecargoDeEquivalenciaORegimenSimplificado>
+								</DetalleIVA>
+							</DesgloseIVA>
+						</DetalleNoExenta>
+					</NoExenta>
+				</Sujeta>
+			</DesgloseFactura>
+		</TipoDesglose>
+	</Factura>
+	<HuellaTBAI>
+		<Software>
+			<LicenciaTBAI>TBAIGIPRE00000000501</LicenciaTBAI>
+			<EntidadDesarrolladora>
+				<NIF>P2000000F</NIF>
+			</EntidadDesarrolladora>
+			<Nombre>FAKTURABAI</Nombre>
+			<Version>1.0</Version>
+		</Software>
+	</HuellaTBAI>
+<ds:Signature Id="Signature-02b3c092-6d38-4d0c-82ca-52e3621eaf29-Signature" xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/><ds:Reference Id="Reference-e682f051-34c2-4996-949e-5e766a43fae3" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><ds:Transform Algorithm="http://www.w3.org/TR/1999/REC-xpath-19991116"><ds:XPath xmlns:ds="http://www.w3.org/2000/09/xmldsig#">not(ancestor-or-self::ds:Signature)</ds:XPath></ds:Transform></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"/><ds:DigestValue>9yiBXr8CJmfMKNyViTr/6SKNviNdYvF2GOmeFpYYc1CfGAkWsPd22DNVcsN4pNjpG7izIoJ/iOa4eucD5x8f8A==</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature-02b3c092-6d38-4d0c-82ca-52e3621eaf29-SignedProperties"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"/><ds:DigestValue>u/Uc+1rtk/KBHLk+orCFFTB87yBdDYqU5/HpL9HtyrsTuTT28VAhQdxZJOJPncbaDo7g5v7aZo5G4XT6KhpI2Q==</ds:DigestValue></ds:Reference><ds:Reference URI="#Signature-02b3c092-6d38-4d0c-82ca-52e3621eaf29-KeyInfo"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"/><ds:DigestValue>mo3dmN9n5jlaghl7ygfG1a8xVas3lgdciyACMDDNVkafVaVQFMPE0LJTF8aElGdoCPP+ogLeLbWfAtC8s3x/Sg==</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="Signature-02b3c092-6d38-4d0c-82ca-52e3621eaf29-SignatureValue">Yl3mXsALUBz6HBJcJo0wg2vj+1FTSSLfPMg4OFICZvcyfXJs7+C+xdsLMXtPLKY7+mbuFHMF9IZwEbSbO2TBBzfBNILJ4/QuR7ttf/zC0l2OdiAinvdZ9AS7kNBx86PHX1d054bNHsMBHjSrF+eX5sOwqhT0065fDFqYc36NYIGlq2Vv8SDu/m4CYoFJ6hiTfjM6rfCmzV2dQV6I9YosTsaPHlUkUpwT0LVQVnipyivZ1I0ArBKISqF6XpR3u+uaA8wJcc3EV9h9+U64O+semhO7WOWCdROgG/mPBAffxUQWFPL94vpg2PIj3osvYt1u+zmjmg89fV2hzm1bKcn5zA==</ds:SignatureValue><ds:KeyInfo Id="Signature-02b3c092-6d38-4d0c-82ca-52e3621eaf29-KeyInfo"><ds:X509Data><ds:X509Certificate>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</ds:X509Certificate></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>t74LmH27RFviqc5sr8NDwPfLTHW8hEhG82gOv2YMAxyICYWPkDtSEUzBOz4uDbPq6aQ+LQPElus4/950cHQysNSsdIchcwkE0yyXBqvApfiRLsjFqsANWczRq/GUmWVWpAc9ccRtOUQKBsUFHEbnNf9xHZ7nKCiMJs6Ce0nodTZYj/3EiO0iwEIBJuknZMBDMwvelsYpvXjUG6RHBRsNuesWoK9hA0xW/fEFbcuYXF0ymhzyjI5dMB3UC/7GaA3bdfNa8m35Po8fIOhvtRmiWQoRejIQWzsZdQK1GU+LlIElQ3SXXLVWPCJyp2cfFbjiMlPNACTf6l9wzVyxlXgrPw==</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="Signature-02b3c092-6d38-4d0c-82ca-52e3621eaf29-QualifyingProperties" Target="#Signature-02b3c092-6d38-4d0c-82ca-52e3621eaf29-Signature" xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><xades:SignedProperties Id="Signature-02b3c092-6d38-4d0c-82ca-52e3621eaf29-SignedProperties"><xades:SignedSignatureProperties><xades:SigningTime>2024-02-29T11:05:17+01:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"/><ds:DigestValue>w2aRhX2DpLJL55LebXQQx3coJVdbWzWky3/Ud/dnFEIPKYEhO4evayFzaAW55oL9xPC3aPZGEUDMoPUVFo0HAQ==</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=CA de Ciudadanos y Entidades (4) - DESARROLLO,OU=NZZ Ziurtagiri publikoa - Certificado publico SCI,O=IZENPE S.A.,C=ES</ds:X509IssuerName><ds:X509SerialNumber>7018</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://www.gipuzkoa.eus/ticketbai/sinadura</xades:Identifier><xades:Description/></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>vSe1CH7eAFVkGN0X2Y7Nl9XGUoBnziDA5BGUSsyt8mg=</ds:DigestValue></xades:SigPolicyHash><xades:SigPolicyQualifiers><xades:SigPolicyQualifier><xades:SPURI>https://www.gipuzkoa.eus/ticketbai/sinadura</xades:SPURI></xades:SigPolicyQualifier></xades:SigPolicyQualifiers></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-e682f051-34c2-4996-949e-5e766a43fae3"><xades:Description/><xades:ObjectIdentifier><xades:Identifier Qualifier="OIDAsURN">urn:oid:1.2.840.10003.5.109.10</xades:Identifier><xades:Description/></xades:ObjectIdentifier><xades:MimeType>text/xml</xades:MimeType><xades:Encoding/></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></T:TicketBai>

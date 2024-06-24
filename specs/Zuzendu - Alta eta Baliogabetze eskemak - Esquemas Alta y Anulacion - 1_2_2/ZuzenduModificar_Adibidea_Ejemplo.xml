@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ns2:SubsanacionModificacionTicketBAI xmlns:ns2="urn:ticketbai:zuzendu-alta">
+	<Cabecera xmlns="">
+		<IDVersion>1.0</IDVersion>
+		<Accion>MODIFICAR</Accion>
+	</Cabecera>
+	<Sujetos xmlns="">
+		<Emisor>
+			<NIF>99999972C</NIF>
+			<ApellidosNombreRazonSocial>GEZURREZKO JAULKITZAILEA - EMISOR FICTICIO</ApellidosNombreRazonSocial>
+		</Emisor>
+		<Destinatarios>
+			<IDDestinatario>
+				<NIF>12345678Z</NIF>
+				<ApellidosNombreRazonSocial>GEZURREZKO EROSLEA - COMPRADOR FICTICIO</ApellidosNombreRazonSocial>
+				<CodigoPostal>48260</CodigoPostal>
+				<Direccion>ZUBIAURRE, Nº 38 --- 2 B</Direccion>
+			</IDDestinatario>
+		</Destinatarios>
+		<VariosDestinatarios>N</VariosDestinatarios>
+	</Sujetos>
+	<Factura xmlns="">
+		<CabeceraFactura>
+			<SerieFactura>ZUZENDU-TEST</SerieFactura>
+			<NumFactura>1</NumFactura>
+			<FechaExpedicionFactura>29-02-2024</FechaExpedicionFactura>
+			<HoraExpedicionFactura>11:16:24</HoraExpedicionFactura>
+			<FacturaSimplificada>N</FacturaSimplificada>
+			<FacturaEmitidaSustitucionSimplificada>N</FacturaEmitidaSustitucionSimplificada>
+		</CabeceraFactura>
+		<DatosFactura>
+			<FechaOperacion>29-02-2024</FechaOperacion>
+			<DescripcionFactura>Fakturaren deskribapena - Descripción factura</DescripcionFactura>
+			<DetallesFactura>
+				<IDDetalleFactura>
+					<DescripcionDetalle>Produktua - Producto</DescripcionDetalle>
+					<Cantidad>1.00000000</Cantidad>
+					<ImporteUnitario>20.00000000</ImporteUnitario>
+					<Descuento>0.00</Descuento>
+					<ImporteTotal>22.00000000</ImporteTotal>
+				</IDDetalleFactura>
+			</DetallesFactura>
+			<ImporteTotalFactura>22.00</ImporteTotalFactura>
+			<RetencionSoportada>0.00</RetencionSoportada>
+			<Claves>
+				<IDClave>
+					<ClaveRegimenIvaOpTrascendencia>01</ClaveRegimenIvaOpTrascendencia>
+				</IDClave>
+			</Claves>
+		</DatosFactura>
+		<TipoDesglose>
+			<DesgloseFactura>
+				<Sujeta>
+					<NoExenta>
+						<DetalleNoExenta>
+							<TipoNoExenta>S1</TipoNoExenta>
+							<DesgloseIVA>
+								<DetalleIVA>
+									<BaseImponible>20.00</BaseImponible>
+									<TipoImpositivo>10.00</TipoImpositivo>
+									<CuotaImpuesto>2.00</CuotaImpuesto>
+								</DetalleIVA>
+							</DesgloseIVA>
+						</DetalleNoExenta>
+					</NoExenta>
+				</Sujeta>
+			</DesgloseFactura>
+		</TipoDesglose>
+	</Factura>
+	<HuellaTBAI xmlns="">
+		<EncadenamientoFacturaAnterior>
+			<SerieFacturaAnterior>TB-2024-F</SerieFacturaAnterior>
+			<NumFacturaAnterior>1</NumFacturaAnterior>
+			<FechaExpedicionFacturaAnterior>29-02-2024</FechaExpedicionFacturaAnterior>
+			<SignatureValueFirmaFacturaAnterior>M/LMba8Ib1HgiUZlX4SSEoAnlMAeBVYM5l7nXczYz5gIcqxTPOrgZajjPiZ2JTtSdLOKdjR+D32a26w5gtWHpusDDcjvziLB0ne8</SignatureValueFirmaFacturaAnterior>
+		</EncadenamientoFacturaAnterior>
+		<Software>
+			<LicenciaTBAI>TBAIGI79FABB8C8D0C85</LicenciaTBAI>
+			<EntidadDesarrolladora>
+				<NIF>P2000000F</NIF>
+			</EntidadDesarrolladora>
+			<Nombre>FAKTURABAI</Nombre>
+			<Version>1.0</Version>
+		</Software>
+	</HuellaTBAI>
+	<SignatureValueFirmaFactura>BaJWauj62ngGIg2QSVjWBNk2SXyPF+uJDIaANsmhHqK4hIpgPhf+CTR3UjGO01gJgl3YtGSDOiP7ARUpIERSfSt4V/4nUiixeBe2</SignatureValueFirmaFactura>
+</ns2:SubsanacionModificacionTicketBAI>
+
+

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<T:SubsanacionAnulacionTicketBAI xmlns:T="urn:ticketbai:zuzendu-baja">
+   <Cabecera>
+      <IDVersion>1.0</IDVersion>
+   </Cabecera>
+   <IDFactura>
+      <Emisor>
+         <NIF>99999974E</NIF>
+         <ApellidosNombreRazonSocial>GEZURREZKO JAULKITZAILEA - EMISOR FICTICIO</ApellidosNombreRazonSocial>
+      </Emisor>
+      <CabeceraFactura>
+         <SerieFactura>TB-2024-F</SerieFactura>
+         <NumFactura>2</NumFactura>
+         <FechaExpedicionFactura>29-02-2024</FechaExpedicionFactura>
+      </CabeceraFactura>
+   </IDFactura>
+   <HuellaTBAI>
+      <Software>
+         <LicenciaTBAI>TBAIGI79FABB8C8D0C85</LicenciaTBAI>
+         <EntidadDesarrolladora>
+            <NIF>P2000000F</NIF>
+         </EntidadDesarrolladora>
+         <Nombre>FAKTURABAI</Nombre>
+         <Version>1.0</Version>
+      </Software>
+   </HuellaTBAI>
+   <SignatureValueFirmaAnulacion>Tsj6vfLJ+pJp5ZPHEHSeiVCMOY0O7zenosGfFKrbNeHxWuWDIBBqbyh3e8sfJalL0gPSj4HRP8NSqxkVPltrRssf2d6hhtycGJuh</SignatureValueFirmaAnulacion>
+</T:SubsanacionAnulacionTicketBAI>

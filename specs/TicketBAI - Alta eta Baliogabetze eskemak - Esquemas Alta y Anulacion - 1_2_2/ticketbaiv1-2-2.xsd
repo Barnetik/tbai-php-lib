@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:T="urn:ticketbai:emision" targetNamespace="urn:ticketbai:emision">
 
 	<import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd"/>
@@ -309,7 +309,7 @@
 			<minLength value="1"/>
 			<maxLength value="20"/>
 		</restriction>
-	</simpleType>
+	</simpleType>	
 	<!-- Cadena de 30 caracteres -->
 	<simpleType name="TextMax30Type">
 		<restriction base="string">
@@ -634,12 +634,12 @@
             </enumeration>
 			<enumeration value="VT">
                 <annotation>
-                  <documentation>Ez subjektua, hirugarrenen kontura egindako salmentak (BEZaren eta PFEZaren ondorioetarako konputagarria ez den zenbatekoa) - No sujeto, ventas realizadas por cuenta de terceros (importe no computable a efectos de IVA ni de IRPF)</documentation>
+                  <documentation>Lotu gabea, hirugarrenen kontura egindako salmentak (zenbatekoa ez da konputagarria BEZaren eta PFEZaren ondorioetarako) - No sujeto, ventas realizadas por cuenta de terceros (importe no computable a efectos de IVA ni de IRPF)</documentation>
                 </annotation>
             </enumeration>
 			<enumeration value="IE">
                 <annotation>
-                  <documentation>Lokalizazio-arauak direla-eta ZALen subjektua ez dena, baina atzerriko zerga, IPS/IGIC edo EBko beste estatu kide bateko BEZa eragiten duena - No sujeto en el TAI por reglas de localización, pero repercute impuesto extranjero, IPS/IGIC o IVA de otro estado miembro UE</documentation>
+                  <documentation>Zergaren aplikazio lurraldean lotu gabea, lokalizazio erregelengatik, baina EBko beste estatu batean atzerriko zerga, PZIZ/KZO edo BEZa jasanaraziz - No sujeto en el TAI por reglas de localización, pero repercute impuesto extranjero, IPS/IGIC o IVA de otro estado miembro UE</documentation>
                 </annotation>
             </enumeration>
 		</restriction>
