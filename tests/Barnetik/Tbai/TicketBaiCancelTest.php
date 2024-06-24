@@ -33,7 +33,7 @@ class TicketBaiCancelTest extends TestCase
         $signedDom = new DOMDocument();
         $signedDom->loadXML($ticketbaiFromXml->signed());
 
-        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/Anula_ticketBaiV1-2.xsd'));
+        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/anula_ticketbaiv1-2-2.xsd'));
     }
 
     public function test_TicketBaiCancel_data_can_be_serialized(): void
@@ -54,6 +54,6 @@ class TicketBaiCancelTest extends TestCase
         $ticketbai->sign($privateKey, $_ENV['TBAI_ARABA_PRIVATE_KEY'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
-        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/Anula_ticketBaiV1-2.xsd'));
+        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/anula_ticketbaiv1-2-2.xsd'));
     }
 }

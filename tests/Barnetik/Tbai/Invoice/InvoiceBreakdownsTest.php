@@ -28,6 +28,8 @@ class InvoiceBreakdownsTest extends TestCase
         $invoiceBreakdown->addNationalNotSubjectBreakdownItem($notSubjectItem);
         $invoiceBreakdown->addNationalNotSubjectBreakdownItem($notSubjectItem);
         $invoiceBreakdown->addNationalNotSubjectBreakdownItem($notSubjectItem);
+        $invoiceBreakdown->addNationalNotSubjectBreakdownItem($notSubjectItem);
+        $invoiceBreakdown->addNationalNotSubjectBreakdownItem($notSubjectItem);
     }
 
     public function test_SubjectExemptBreakdownItems_are_limited(): void

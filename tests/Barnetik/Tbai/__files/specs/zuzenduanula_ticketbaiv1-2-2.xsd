@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:TB="urn:ticketbai:emision" xmlns:TBA="urn:ticketbai:anulacion" xmlns:T="urn:ticketbai:zuzendu-baja" targetNamespace="urn:ticketbai:zuzendu-baja">
 
-	<import namespace="urn:ticketbai:emision" schemaLocation="ticketBaiV1-2.xsd"/>
-	<import namespace="urn:ticketbai:anulacion" schemaLocation="Anula_ticketBaiV1-2.xsd"/>
+	<import namespace="urn:ticketbai:emision" schemaLocation="ticketbaiv1-2-2.xsd"/>
+	<import namespace="urn:ticketbai:anulacion" schemaLocation="anula_ticketbaiv1-2-2.xsd"/>
 
 	<element name="SubsanacionAnulacionTicketBAI">
 		<complexType>
@@ -12,7 +12,7 @@
 				<!-- Jatorrizko fakturaren aztarna bera - Misma huella de factura original -->
 				<element name="HuellaTBAI" type="TB:HuellaTBAI"/>
 				<!-- Konpontzeko edo aldatzeko eskatzen den fakturaren sinaduratik lortua - Obtenido de la firma de la factura que se solicita subsanar o modificar -->
-				<element name="SignatureValueFirmaAnulacion" type="TB:TextMax100Type"/>
+				<element name="SignatureValueFirmaAnulacion" type="TB:TextMax100ObligatorioType"/>
 			</sequence>
 		</complexType>
 	</element>

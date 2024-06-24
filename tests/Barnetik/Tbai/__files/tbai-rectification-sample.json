@@ -1,0 +1,100 @@
+{
+    "territory": "01",
+    "selfEmployed": false,
+    "subject": {
+        "issuer": {
+            "vatId": "00000015S",
+            "name": "Gaueko Akerbeltz"
+        },
+        "recipients": [
+            {
+                "vatId": "00000000T",
+                "vatIdType": "02",
+                "name": "Client Name",
+                "postalCode": "48270",
+                "address": "Markina-Xemein",
+                "countryCode": "ES"
+            }
+        ],
+        "issuedBy": "N"
+    },
+    "invoice": {
+        "header": {
+            "series": "RTESTSERIE",
+            "invoiceNumber": "1707477548",
+            "expeditionDate": "09-02-2024",
+            "expeditionTime": "11:19:08",
+            "simplifiedInvoice": false,
+            "rectifyingInvoice": {
+                "code": "R1",
+                "type": "S", 
+                "rectifyingAmount": {
+                    "base": "73.86",
+                    "quota": "15.50"
+                }
+            },
+            "rectifiedInvoices": [
+                {
+                    "invoiceNumber": "1707477547",
+                    "sentDate": "09-02-2024",
+                    "serie": "TESTSERIE82"
+                }
+            ]
+        },
+        "data": {
+            "operationDate": null,
+            "description": "factura ejemplo TBAI",
+            "details": [
+                {
+                    "description": "Art\u00edculo 1 Ejemplo",
+                    "unitPrice": "23.356",
+                    "quantity": "1",
+                    "discount": "5",
+                    "totalAmount": "22.21"
+                },
+                {
+                    "description": "Art\u00edculo 2 xxx",
+                    "unitPrice": "18.2",
+                    "quantity": "1.50",
+                    "discount": null,
+                    "totalAmount": "33.03"
+                }
+            ],
+            "total": "55.24",
+            "vatRegimes": [
+                "01"
+            ],
+            "supportedRetention": null,
+            "taxBaseCost": null
+        },
+        "breakdown": {
+            "nationalSubjectExemptBreakdownItems": [],
+            "nationalSubjectNotExemptBreakdownItems": [
+                {
+                    "type": "S1",
+                    "vatDetails": [
+                        {
+                            "taxBase": "45.66",
+                            "taxRate": "21",
+                            "taxQuota": "9.59",
+                            "equivalenceRate": null,
+                            "equivalenceQuota": null,
+                            "isEquivalenceOperation": null
+                        }
+                    ]
+                }
+            ],
+            "nationalNotSubjectBreakdownItems": [],
+            "foreignDeliverySubjectExemptBreakdownItems": [],
+            "foreignDeliverySubjectNotExemptBreakdownItems": [],
+            "foreignDeliveryNotSubjectBreakdownItems": [],
+            "foreignServiceSubjectExemptBreakdownItems": [],
+            "foreignServiceSubjectNotExemptBreakdownItems": [],
+            "foreignServiceNotSubjectBreakdownItems": []
+        }
+    },
+    "fingerprint": {
+        "previousInvoice": null
+    },
+    "batuzIncomeTaxes": []
+}

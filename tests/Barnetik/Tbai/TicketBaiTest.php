@@ -22,7 +22,7 @@ class TicketBaiTest extends TestCase
     {
         $ticketbai = $this->getTicketBai();
         $dom = $ticketbai->dom();
-        $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2-no-signature.xsd'));
+        $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/ticketbaiv1-2-2-no-signature.xsd'));
     }
 
     public function test_ticketbai_can_be_generated_from_json(): void
@@ -35,7 +35,7 @@ class TicketBaiTest extends TestCase
         );
 
         $dom = $ticketbai->dom();
-        $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2-no-signature.xsd'));
+        $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/ticketbaiv1-2-2-no-signature.xsd'));
     }
 
     public function test_ticketbai_can_be_generated_from_xml(): void
@@ -63,7 +63,7 @@ class TicketBaiTest extends TestCase
         $signedDom = new DOMDocument();
         $signedDom->loadXML($ticketbaiFromXml->signed());
 
-        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
+        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketbaiv1-2-2.xsd'));
     }
 
     public function test_TicketBai_can_be_signed_with_PFX_key(): void
@@ -77,7 +77,7 @@ class TicketBaiTest extends TestCase
         $ticketbai->sign($privateKey, $_ENV['TBAI_TEST_P12_KEY'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
-        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
+        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketbaiv1-2-2.xsd'));
     }
 
     public function test_TicketBai_can_be_signed_with_PEM_key(): void
@@ -91,7 +91,7 @@ class TicketBaiTest extends TestCase
         $ticketbai->sign($privateKey, $_ENV['TBAI_TEST_PEM_PASSWORD'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
-        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
+        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketbaiv1-2-2.xsd'));
     }
 
     public function test_TicketBai_can_be_signed_with_singlefile_PEM(): void
@@ -105,7 +105,7 @@ class TicketBaiTest extends TestCase
         $ticketbai->sign($privateKey, $_ENV['TBAI_TEST_PEM_PASSWORD'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
-        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
+        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketbaiv1-2-2.xsd'));
     }
 
     public function test_TicketBai_can_have_multiple_vats(): void
@@ -126,7 +126,7 @@ class TicketBaiTest extends TestCase
         $ticketbai->sign($privateKey, $_ENV['TBAI_TEST_P12_KEY'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
-        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
+        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketbaiv1-2-2.xsd'));
     }
 
     public function test_TicketBai_signed_file_is_valid(): void
@@ -167,7 +167,7 @@ class TicketBaiTest extends TestCase
         $ticketbai = $this->ticketBaiMother->createEmptyTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
 
         $dom = $ticketbai->dom();
-        $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2-no-signature.xsd'));
+        $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/ticketbaiv1-2-2-no-signature.xsd'));
     }
 
     private function getTicketBai(): TicketBai
@@ -200,7 +200,7 @@ class TicketBaiTest extends TestCase
         $ticketbai->sign($privateKey, $_ENV['TBAI_TEST_P12_KEY'], $filename);
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
-        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketBaiV1-2.xsd'));
+        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketbaiv1-2-2.xsd'));
     }
 
     public function test_gh29_TicketBai_sends_operation_date_element(): void

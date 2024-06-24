@@ -16,7 +16,7 @@ class ZuzenduCancelTest extends TestCase
     {
         $zuzenduCancel = $this->getZuzenduCancel();
         $dom = $zuzenduCancel->dom();
-        $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/ZuzenduAnula_ticketBaiV1-0.xsd'));
+        $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/zuzenduanula_ticketbaiv1-2-2.xsd'));
     }
 
     public function test_ZuzenduCancel_can_be_generated_from_json(): void
@@ -29,7 +29,7 @@ class ZuzenduCancelTest extends TestCase
         );
 
         $dom = $zuzenduCancel->dom();
-        $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/ZuzenduAnula_ticketBaiV1-0.xsd'));
+        $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/zuzenduanula_ticketbaiv1-2-2.xsd'));
     }
 
     private function getZuzenduCancel(): ZuzenduCancel

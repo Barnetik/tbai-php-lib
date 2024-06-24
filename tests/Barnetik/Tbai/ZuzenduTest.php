@@ -16,7 +16,7 @@ class ZuzenduTest extends TestCase
     {
         $zuzendu = $this->getZuzendu();
         $dom = $zuzendu->dom();
-        $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/ZuzenduAlta_ticketBaiV1-0.xsd'));
+        $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/zuzendualta_ticketbaiv1-2-2.xsd'));
     }
 
     public function test_Zuzendu_can_be_generated_from_json(): void
@@ -29,7 +29,7 @@ class ZuzenduTest extends TestCase
         );
 
         $dom = $zuzendu->dom();
-        $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/ZuzenduAlta_ticketBaiV1-0.xsd'));
+        $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/zuzendualta_ticketbaiv1-2-2.xsd'));
     }
 
     private function getZuzendu(): Zuzendu
