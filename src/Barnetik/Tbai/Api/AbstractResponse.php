@@ -25,6 +25,11 @@ abstract class AbstractResponse implements ResponseInterface
         return $this->headers[$key];
     }
 
+    public function headers(): array
+    {
+        return $this->headers;
+    }
+
     public function saveResponseContent(string $path): void
     {
         file_put_contents($path, $this->content);
