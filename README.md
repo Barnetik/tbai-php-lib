@@ -1,9 +1,10 @@
 # Tbai PHP lib
 
 TicketBai sistema erabiltzeko PHP liburutegia
+Librería para integrarse con el sistema TicketBai
 
 
-Gaur egun egiteko gai dena:
+## Egungo Funtzionalitateak / Funcionalidades actuales
 
  * Fakturen, fakturen zuzenketen eta hauen baliogabetzeen TicketBai formatudun XML-a sortu
  * Fakturak, fakturen zuzenketak eta hauen baliogabetzeak XaDES motako sinadurarekin sinatu
@@ -13,10 +14,6 @@ Gaur egun egiteko gai dena:
 
 ----
 
-Librería para integrarse con el sistema TicketBai
-
-Funcionalidades actuales:
-
  * Generar XML en formato TicketBai de facturas, facturas rectificativas y cancelaciones de factura
  * Firmar estos documentos con firma XaDES
  * Enviar estos documentos a los servicios de las tres haciendas forales de la CAV.
@@ -24,3 +21,93 @@ Funcionalidades actuales:
  * Integración con el servicio __Zuzendu__ de Araba y Gipuzkoa que permite la subsanación y modificación de facturas emitidas. Gracias a las aportaciones de [@areinaNubeApp](https://github.com/areinaNubapp)
 
 
+## Instalazioa / Instalación
+```shell
+composer require barnetik/ticketbai
+```
+
+## Erabilera adibideak / Ejemplos de uso
+
+
+### Fakturaren sinaketa / Firma de una factura
+[Adibide moduan erabiltzen dugun JSON fitxategia / JSON usado como ejemplo](./tests/Barnetik/Tbai/__files/tbai-sample.json)
+
+```php
+use Barnetik\Tbai\Fingerprint\Vendor;
+use Barnetik\Tbai\PrivateKey;
+use Barnetik\Tbai\TicketBai;
+
+$license = 'LICENCIA_DESARROLLO';
+$developerCif = 'CIF';
+$appName = 'TBAI PHP APP';
+$version = '1.0';
+
+$certificatePath = '/path/to/certificate.p12';
+$certificatePassword = 'myCertificatePassword';
+
+## Where we want the signed document to be stored
+$signedXmlPath = './signed.xml';
+
+$ticketbai = TicketBai::createFromJson(
+    new Vendor($license, $developerCif, $appName, $version),
+    json_decode(file_get_contents('tbai-sample.json'), true)
+);
+
+$ticketbai->sign(
+    PrivateKey::p12($certificatePath),
+    $certificatePassword,
+    $signedXmlPath
+);
+
+
+```
+
+### Faktura bidaltzea / Envío de la factura
+```php
+## We have an endpoint for each province Araba, Bizkaia or Gipuzkoa
+use Barnetik\Tbai\Api\Bizkaia\Endpoint as BizkaiaEndpoint;
+
+/**
+ * BizkaiaEndpoint(bool $dev = false, bool $debug = false)
+ * For production usage $dev param must be false
+ * $bizkaiaEndpoint = new BizkaiaEndpoint();
+ */
+$bizkaiaEndpoint = new BizkaiaEndpoint(true, true);
+$result = $bizkaiaEndpoint->submitInvoice(
+    $ticketbai,
+    PrivateKey::p12($certificatePath),
+    $certificatePassword,
+);
+
+
+if ($result->isDelivered()) {
+    var_dump('SUCCESS!');
+} else {
+    var_dump($result->errorDataRegistry());
+    var_dump($result->headers());
+}
+```
+
+### Hurrengo faktura kateatzeko behar den sinadura zatia lortu  / Obtener el trozo de firma necesaria para encadenar la próxima factura
+```php
+$shortSignatureValue = $ticketbai->chainSignatureValue();
+```
+
+### QR kodea sortzea  / Creación del QR
+```php
+use Barnetik\Tbai\Qr;
+
+/**
+ * Qr(TicketBai $ticketBai, bool $dev = false)
+ * For production usage $dev param must be false
+ * $qr = new Qr($ticketbai);
+ */
+$qr = new Qr($ticketbai, true);
+
+
+$qr->savePng('/path/to/qr.png')
+
+// Code that must be shown over QR on any invoice
+$tbaiIdentifier = $qr->ticketbaiIdentifier();
+
+```
