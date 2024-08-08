@@ -71,9 +71,9 @@
                     "taxBase": "645.00"
                 }
             ],
-            "foreignServiceSubjectExemptBreakdownItems": [
+            "foreignServiceNotSubjecBreakdownItems": [
                 {
-                    "reason": "E1",
+                    "reason": "RL",
                     "taxBase": "109.65"
                 }
             ]
