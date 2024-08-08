@@ -45,7 +45,7 @@ $version = '1.0';
 $certificatePath = '/path/to/certificate.p12';
 $certificatePassword = 'myCertificatePassword';
 
-## Where we want the signed document to be stored
+// Where we want the signed document to be stored
 $signedXmlPath = './signed.xml';
 
 $ticketbai = TicketBai::createFromJson(
@@ -64,7 +64,7 @@ $ticketbai->sign(
 
 ### Faktura bidaltzea / Envío de la factura
 ```php
-## We have an endpoint for each province Araba, Bizkaia or Gipuzkoa
+// We have an endpoint for each province Araba, Bizkaia or Gipuzkoa
 use Barnetik\Tbai\Api\Bizkaia\Endpoint as BizkaiaEndpoint;
 
 /**
@@ -105,9 +105,9 @@ use Barnetik\Tbai\Qr;
 $qr = new Qr($ticketbai, true);
 
 
-$qr->savePng('/path/to/qr.png')
+$qr->savePng('/path/to/qr.png');
 
-// Code that must be shown over QR on any invoice
+// Get the code that must be shown over QR on any invoice
 $tbaiIdentifier = $qr->ticketbaiIdentifier();
 
 ```
