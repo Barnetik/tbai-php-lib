@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.4.0](https://github.com/Barnetik/tbai-php-lib/compare/v0.3.0...v0.4.0) (2024-08-08)
+
+
+### Features
+
+* Added chainSignatureValue method to Ticketbai for easier chain data retrieving ([0c7ca63](https://github.com/Barnetik/tbai-php-lib/commit/0c7ca635e35489c77b45298442f5f44eaaec9666))
+
 ## [0.3.0](https://github.com/Barnetik/tbai-php-lib/compare/v0.2.2...v0.3.0) (2024-06-24)
 
 
