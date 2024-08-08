@@ -154,6 +154,11 @@ abstract class AbstractTicketBai implements TbaiXml, TbaiSignable, Stringable, J
         return (string)$ds->Signature->SignatureValue;
     }
 
+    public function chainSignatureValue(): string
+    {
+        return substr($this->signatureValue(), 0, 100);
+    }
+
     public function shortSignatureValue(): string
     {
         return substr($this->signatureValue(), 0, 13);

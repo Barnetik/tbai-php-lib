@@ -154,6 +154,21 @@ class TicketBaiTest extends TestCase
         }
     }
 
+
+    public function test_TicketBai_generates_signature_values(): void
+    {
+        $ticketbai = $this->getTicketBai();
+        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        rename($filename, $filename . '.xml');
+        $filename .= '.xml';
+        $privateKey = PrivateKey::p12($_ENV['TBAI_TEST_P12_PATH']);
+        $ticketbai->sign($privateKey, $_ENV['TBAI_TEST_P12_KEY'], $filename);
+        
+        $this->assertGreaterThan(100, mb_strlen($ticketbai->signatureValue()));
+        $this->assertEquals(100, mb_strlen($ticketbai->chainSignatureValue()));
+        $this->assertEquals(13, mb_strlen($ticketbai->shortSignatureValue()));
+    }
+
     public function test_TicketBai_without_lines_validates_schema(): void
     {
 
