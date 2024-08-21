@@ -1,0 +1,74 @@
+{
+  "selfEmployed": false,
+  "recipient": {
+    "vatId": "00000015S",
+    "name": "Gaueko Akerbeltz"
+  },
+  "issuer": {
+    "vatId": "00000000T",
+    "name": "Provider Name",
+    "vatIdType": "02",
+    "countryCode": "ES"
+  },
+  "header": {
+    "series": "TESTSERIE",
+    "invoiceNumber": "1707477557",
+    "expeditionDate": "07-03-2024",
+    "operationDate": "06-03-2024",
+    "receptionDate": "08-03-2024",
+    "invoiceType": "F1",
+    "rectifyingInvoice": {
+      "code": "R1",
+      "type": "S", 
+      "rectifyingAmount": {
+          "base": "73.86",
+          "quota": "15.50"
+      }
+    },
+    "rectifiedInvoices": [
+        {
+          "series": "TESTSERIE82",
+          "invoiceNumber": "1707477547",
+          "sentDate": "09-02-2024"
+        }
+    ]
+  },
+  "data": {
+    "description": "factura ejemplo TBAI",
+    "vatRegimes": [
+      "01"
+    ],
+    "total": "89.36"
+  },
+  "taxesInfo": [
+    {
+      "purchaseType": "C",
+      "taxBase": "72.86"
+    },
+    {
+      "purchaseType": "C",
+      "taxBase": "1.00",
+      "irpfOrVatAffectedGoodType": "N",
+      "conceptType": 600,
+      "taxablePersonReversal": false,
+      "simplifiedOrEquivalenceSurchargeOperation": "E",
+      "reference": 1,
+      "taxRate": "21.00",
+      "supportedTaxQuota": "3.2",
+      "deductibleTaxQuota": "1.2",
+      "equivalenceRate": 5,
+      "equivalenceQuota": 6,
+      "irpfExpensesAmount": 9,
+      "withCollectionAndPaymentCriteria": false
+    }
+  ],
+  "otherTaxSignificantInfo": {
+    "accountingRecordDate": "09-03-2024",
+    "billingAgreementRecordNumber": "666",
+    "externalReference": "999",
+    "succededEntity": {
+      "vatId": "00000010X",
+      "name": "Borboitar Juankar"
+    }
+  }
+}

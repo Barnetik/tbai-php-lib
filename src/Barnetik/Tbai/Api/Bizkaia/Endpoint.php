@@ -4,7 +4,10 @@ namespace Barnetik\Tbai\Api\Bizkaia;
 
 use Barnetik\Tbai\Api\ApiRequestInterface;
 use Barnetik\Tbai\Api\AbstractTerritory;
+use Barnetik\Tbai\Api\ResponseInterface;
 use Barnetik\Tbai\Exception\InvalidTerritoryException;
+use Barnetik\Tbai\LROE\ExpensesInvoice;
+use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
 use Barnetik\Tbai\TicketBaiCancel;
 use Barnetik\Tbai\Zuzendu;
@@ -52,5 +55,16 @@ class Endpoint extends AbstractTerritory
     protected function response(string $status, array $headers, string $content): Response
     {
         return new Response($status, $headers, $content);
+    }
+
+    public function createSubmitExpensesRequest(ExpensesInvoice $expenses): ApiRequestInterface
+    {
+        return new SubmitExpensesRequest($expenses, $this->getSubmitEndpoint());
+    }
+
+    public function submitExpenses(ExpensesInvoice $expenses, PrivateKey $privateKey, string $password, int $maxRetries = 1, int $retryDelay = 1): ResponseInterface
+    {
+        $submitExpensesRequest = $this->createSubmitExpensesRequest($expenses);
+        return $this->doRequest($submitExpensesRequest, $privateKey, $password, $maxRetries, $retryDelay);
     }
 }

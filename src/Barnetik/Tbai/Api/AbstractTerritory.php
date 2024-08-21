@@ -70,7 +70,7 @@ abstract class AbstractTerritory implements EndpointInterface
         return $this->doRequest($cancelZuzenduRequest, $privateKey, $password, $maxRetries, $retryDelay);
     }
 
-    private function doRequest(ApiRequestInterface $request, PrivateKey $privateKey, string $password, int $maxRetries, int $retryDelay): ?ResponseInterface
+    protected function doRequest(ApiRequestInterface $request, PrivateKey $privateKey, string $password, int $maxRetries, int $retryDelay): ?ResponseInterface
     {
         $tries = 0;
         do {
@@ -90,6 +90,7 @@ abstract class AbstractTerritory implements EndpointInterface
             }
             sleep($retryDelay);
         } while ($tries <= $maxRetries);
+
         return null;
     }
 
@@ -154,6 +155,7 @@ abstract class AbstractTerritory implements EndpointInterface
         } else {
             unlink($dataFile);
         }
+
         return $data;
     }
 
