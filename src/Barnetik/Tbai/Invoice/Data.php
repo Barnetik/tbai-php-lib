@@ -82,8 +82,8 @@ class Data implements TbaiXml
             throw new InvalidVatRegimeException();
         }
 
-        if (!sizeof($this->vatRegimes) < 2) {
-            throw new OutOfBoundsException('Too many subject and not exempt breakdown items');
+        if (sizeof($this->vatRegimes) >= 2) {
+            throw new OutOfBoundsException('Too many VAT Regimes provided');
         }
 
         $this->vatRegimes[] = $vatRegime;
@@ -329,7 +329,7 @@ class Data implements TbaiXml
     public function toArray(): array
     {
         return [
-            'operationDate' => $this->operationDate ?? null,
+            'operationDate' => $this->operationDate ? (string)$this->operationDate : null,
             'description' => $this->description,
             'details' => array_map(function ($detail) {
                 return $detail->toArray();

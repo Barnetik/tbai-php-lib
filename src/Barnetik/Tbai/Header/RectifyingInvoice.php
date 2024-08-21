@@ -5,7 +5,6 @@ namespace Barnetik\Tbai\Header;
 use Barnetik\Tbai\Exception\InvalidRectifyingInvoiceCode;
 use Barnetik\Tbai\Exception\InvalidRectifyingInvoiceType;
 use Barnetik\Tbai\Interfaces\TbaiXml;
-use Barnetik\Tbai\ValueObject\Amount;
 use DOMDocument;
 use DOMNode;
 use DOMXPath;
@@ -126,32 +125,32 @@ class RectifyingInvoice implements TbaiXml
     public static function docJson(): array
     {
         return [
-        'type' => 'object',
-        'properties' => [
-        'code' => [
-          'type' => 'string',
-          'enum' => self::validCodes(),
-          'description' => '
+            'type' => 'object',
+            'properties' => [
+                'code' => [
+                    'type' => 'string',
+                    'enum' => self::validCodes(),
+                    'description' => '
   Faktura zuzentzailearen mota identifikatzen duen kodea - Código que identifica el tipo de factura rectificativa
-   * R1: Faktura zuzentzailea: zuzenbidean eta BEZaren Legearen 80.Bat, Bi eta Sei artikuluan oinarritutako akatsa - Factura rectificativa: error fundado en derecho y Art. 80 Uno, Dos y Seis de la Ley del IVA
-   * R2: Faktura zuzentzailea: BEZaren Legearen 80.Hiru artikulua - Factura rectificativa: artículo 80 Tres de la Ley del IVA
-   * R3: Faktura zuzentzailea: BEZaren Legearen 80.Lau artikulua - Factura rectificativa: artículo 80 Cuatro de la Ley del IVA
-   * R4: Faktura zuzentzailea: gainerakoak - Factura rectificativa: Resto
-   * R5: Faktura sinplifikatuak zuzentzeko faktura - Factura rectificativa en facturas simplificadas
-          '
-        ],
-        'type' => [
-          'type' => 'string',
-          'enum' => self::validTypes(),
-          'description' => '
-Faktura zuzentzaile mota - Tipo de factura rectificativa
- * S: Ordezkapenagatiko faktura zuzentzailea - Factura rectificativa por sustitución
- * I: Diferentziengatiko faktura zuzentzailea - Factura rectificativa por diferencias
-          ',
-        ],
-        'rectifyingAmount' => RectifyingAmount::docJson(),
-        ],
-        'required' => ['code', 'type']
+    * R1: Faktura zuzentzailea: zuzenbidean eta BEZaren Legearen 80.Bat, Bi eta Sei artikuluan oinarritutako akatsa - Factura rectificativa: error fundado en derecho y Art. 80 Uno, Dos y Seis de la Ley del IVA
+    * R2: Faktura zuzentzailea: BEZaren Legearen 80.Hiru artikulua - Factura rectificativa: artículo 80 Tres de la Ley del IVA
+    * R3: Faktura zuzentzailea: BEZaren Legearen 80.Lau artikulua - Factura rectificativa: artículo 80 Cuatro de la Ley del IVA
+    * R4: Faktura zuzentzailea: gainerakoak - Factura rectificativa: Resto
+    * R5: Faktura sinplifikatuak zuzentzeko faktura - Factura rectificativa en facturas simplificadas
+                '
+                ],
+                'type' => [
+                    'type' => 'string',
+                    'enum' => self::validTypes(),
+                    'description' => '
+  Faktura zuzentzaile mota - Tipo de factura rectificativa
+    * S: Ordezkapenagatiko faktura zuzentzailea - Factura rectificativa por sustitución
+    * I: Diferentziengatiko faktura zuzentzailea - Factura rectificativa por diferencias
+                ',
+                ],
+                'rectifyingAmount' => RectifyingAmount::docJson(),
+            ],
+            'required' => ['code', 'type']
         ];
     }
 
