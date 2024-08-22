@@ -9,8 +9,6 @@ use DOMNode;
 
 class Data extends AbstractData
 {
-    const VAT_REGIME_06 = '06';
-
     private ?Amount $taxableBaseAtCost = null;
 
     protected static function validVatRegimes(): array
@@ -66,6 +64,7 @@ class Data extends AbstractData
             'pattern' => '^(\+|-)?\d{1,12}(\.\d{0,2})?$',
             'description' => 'Zenbatekoa guztira (2 dezimalekin) - Base imponible a coste (2 decimales)'
         ];
+
         return $docJson;
     }
 

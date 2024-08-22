@@ -384,7 +384,6 @@ Operación en recargo de equivalencia o regimen simplificado:
                     'type' => 'boolean',
                     'description' => 'Criterio de Cobros y Pagos'
                 ],
-
             ],
             'required' => ['epigraph', 'taxBase']
         ];
@@ -395,7 +394,20 @@ Operación en recargo de equivalencia o regimen simplificado:
         return [
             'epigraph' => $this->epigraph,
             'taxBase' => (string)$this->taxBase,
-            'taxablePersonReversal' => $this->taxablePersonReversal
+            'irpfOrVatAffectedGoodType' => $this->irpfOrVatAffectedGoodType,
+            'conceptType' => $this->conceptType,
+            'reference' => $this->reference,
+            'taxablePersonReversal' => $this->taxablePersonReversal,
+            'simplifiedOrEquivalenceSurchargeOperation' => $this->simplifiedOrEquivalenceSurchargeOperation,
+            'taxRate' => $this->taxRate ? (string) $this->taxRate : null,
+            'supportedTaxQuota' => $this->supportedTaxQuota ? (string) $this->supportedTaxQuota : null,
+            'deductibleTaxQuota' => $this->deductibleTaxQuota ? (string) $this->deductibleTaxQuota : null,
+            'equivalenceRate' => $this->equivalenceRate ? (string) $this->equivalenceRate : null,
+            'equivalenceQuota' => $this->equivalenceQuota ? (string) $this->equivalenceQuota : null,
+            'reagypCompensationPercent' => $this->reagypCompensationPercent ? (string) $this->reagypCompensationPercent : null,
+            'reagypCompensationAmount' => $this->reagypCompensationAmount ? (string) $this->reagypCompensationAmount : null,
+            'irpfExpensesAmount' => $this->irpfExpensesAmount ? (string) $this->irpfExpensesAmount : null,
+            'withCollectionAndPaymentCriteria' => $this->withCollectionAndPaymentCriteria,
         ];
     }
 }

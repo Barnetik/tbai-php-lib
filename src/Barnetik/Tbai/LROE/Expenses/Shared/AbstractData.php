@@ -17,15 +17,16 @@ abstract class AbstractData implements TbaiXml
     const VAT_REGIME_03 = '03';
     const VAT_REGIME_04 = '04';
     const VAT_REGIME_05 = '05';
+    const VAT_REGIME_06 = '06';
     const VAT_REGIME_07 = '07';
     const VAT_REGIME_08 = '08';
     const VAT_REGIME_09 = '09';
     const VAT_REGIME_12 = '12';
     const VAT_REGIME_13 = '13';
 
-    private string $description;
-    private Amount $total;
-    private array $vatRegimes = [];
+    protected string $description;
+    protected Amount $total;
+    protected array $vatRegimes = [];
 
     protected function __construct(string $description, Amount $total, array $vatRegimes)
     {
@@ -144,6 +145,7 @@ abstract class AbstractData implements TbaiXml
  * 03: Erabilitako ondasunen, arte objektuen, zaharkinen eta bilduma objektuen araudi berezia aplikatzen zaien eragiketak - Operaciones a las que se aplique el régimen especial de bienes usados, objetos de arte, antigüedades y objetos de colección
  * 04: Inbertsio urrearen araubide berezia - Régimen especial del oro de inversión
  * 05: Bidaia-agentzien araubide berezia - Régimen especial de las agencias de viajes
+ * 06: BEZeko erakundeen multzoaren araudi berezia (maila aurreratua) - Régimen especial grupo de entidades en IVA (Nivel Avanzado)
  * 07: Kutxa-irizpidearen araubide berezia - Régimen especial del criterio de caja
  * 08: Ekoizpen, Zerbitzu eta Inportazioaren gaineko Zergari / Kanarietako Zeharkako Zerga Orokorrari lotutako eragiketak - Operaciones sujetas al IPSI/IGIC (Impuesto sobre la Producción, los Servicios y la Importación / Impuesto General Indirecto Canario)
  * 09: Besteren izenean eta kontura ari diren bidai agentziek egindako zerbitzuen fakturazioa(Fakturazio Araudiko 3. xedapen gehigarria) - Facturación de las prestaciones de servicios de agencias de viaje que actúan como mediadoras en nombre y por cuenta ajena (disposición adicional 3ª del Reglamento de Facturación)

@@ -98,6 +98,51 @@ class TaxInfo extends AbstractTaxInfo
         return [
             'type' => 'object',
             'properties' => [
+                'purchaseType' => [
+                    'type' => 'string',
+                    'enum' => self::validPurchaseTypeValues(),
+                    'description' => '
+Tipo de gasto:
+ * C: Compra de bienes corrientes
+ * G: Gastos
+ * I: Adquisición de bienes de inversión
+                ',
+                ],
+                'taxablePersonReversal' => [
+                    'type' => 'boolean',
+                    'default' => false,
+                    'description' => 'Inversión del sujeto pasivo'
+                ],
+                'taxBase' => [
+                    'type' => 'string',
+                    'pattern' => '^(\+|-)?\d{1,12}(\.\d{0,2})?$',
+                    'description' => 'Base imponible (2 decimales)'
+                ],
+                'taxRate' => [
+                    'type' => 'string',
+                    'pattern' => '^(\+|-)?\d{1,3}(\.\d{0,2})?$',
+                    'description' => 'Tipo impositivo (2 decimales)'
+                ],
+                'supportedTaxQuota' => [
+                    'type' => 'string',
+                    'pattern' => '^(\+|-)?\d{1,12}(\.\d{0,2})?$',
+                    'description' => 'Cuota IVA Soportada (2 decimales)'
+                ],
+                'deductibleTaxQuota' => [
+                    'type' => 'string',
+                    'pattern' => '^(\+|-)?\d{1,12}(\.\d{0,2})?$',
+                    'description' => 'Cuota IVA Deducible (2 decimales)'
+                ],
+                'reagypCompensationPercent' => [
+                    'type' => 'string',
+                    'pattern' => '^(\+|-)?\d{1,3}(\.\d{0,2})?$',
+                    'description' => 'Porcentaje compensación REAGYP (2 decimales)'
+                ],
+                'reagypCompensationAmount' => [
+                    'type' => 'string',
+                    'pattern' => '^(\+|-)?\d{1,12}(\.\d{0,2})?$',
+                    'description' => 'Importe de compensación REAGYP (2 decimales)'
+                ],
             ],
             'required' => ['purchaseType', 'taxBase']
         ];
@@ -106,6 +151,14 @@ class TaxInfo extends AbstractTaxInfo
     public function toArray(): array
     {
         return [
+            'purchaseType' => $this->purchaseType,
+            'taxablePersonReversal' => $this->taxablePersonReversal,
+            'taxBase' => (string) $this->taxBase,
+            'taxRate' => $this->taxRate ? (string)$this->taxRate : null,
+            'supportedTaxQuota' => $this->supportedTaxQuota ? (string)$this->supportedTaxQuota : null,
+            'deductibleTaxQuota' => $this->deductibleTaxQuota ? (string)$this->deductibleTaxQuota : null,
+            'reagypCompensationPercent' => $this->reagypCompensationPercent ? (string)$this->reagypCompensationPercent : null,
+            'reagypCompensationAmount' => $this->reagypCompensationAmount ? (string)$this->reagypCompensationAmount : null,
         ];
     }
 }
