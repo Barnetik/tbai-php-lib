@@ -150,11 +150,8 @@ class Header implements TbaiXml
     {
         $header = self::createHeaderFromJson($jsonData);
 
-        if (isset($jsonData['rectifiedInvoices']) && $jsonData['rectifiedInvoices']) {
-            foreach ($jsonData['rectifiedInvoices'] as $jsonRectifiedInvoice) {
-                $jsonRectifiedInvoice = RectifiedInvoice::createFromJson($jsonRectifiedInvoice);
-                $header->addRectifiedInvoice($jsonRectifiedInvoice);
-            }
+        if (isset($jsonData['operationDate']) && $jsonData['operationDate']) {
+            $header->operationDate = new Date($jsonData['operationDate']);
         }
 
         return $header;
@@ -162,27 +159,26 @@ class Header implements TbaiXml
 
     private static function createHeaderFromJson(array $jsonData): self
     {
-        $header = self::auxCreateHeaderFromJson($jsonData);
-        if (isset($jsonData['operationDate']) && $jsonData['operationDate']) {
-            $header->operationDate = new Date($jsonData['operationDate']);
-        }
-        return $header;
-    }
-
-    private static function auxCreateHeaderFromJson(array $jsonData): self
-    {
+        $series = $jsonData['series'] ?? null;
         $invoiceNumber = $jsonData['invoiceNumber'];
         $expeditionDate = new Date($jsonData['expeditionDate']);
         $receptionDate = new Date($jsonData['receptionDate']);
-        $series = $jsonData['series'] ?? null;
         $invoiceType = $jsonData['invoiceType'];
 
-        if (isset($jsonData['rectifyingInvoice']) && $jsonData['rectifyingInvoice']) {
-            $rectifyingInvoice = RectifyingInvoice::createFromJson($jsonData['rectifyingInvoice']);
-            return self::createRectifyingInvoice($invoiceNumber, $expeditionDate, $receptionDate, $invoiceType, $rectifyingInvoice, $series);
+        if (!isset($jsonData['rectifyingInvoice']) || is_null($jsonData['rectifyingInvoice'])) {
+            return self::create($invoiceNumber, $expeditionDate, $receptionDate, $invoiceType, $series);
         }
 
-        return self::create($invoiceNumber, $expeditionDate, $receptionDate, $invoiceType, $series);
+        $rectifyingInvoiceData = RectifyingInvoice::createFromJson($jsonData['rectifyingInvoice']);
+        $rectifyingInvoiceHeader = self::createRectifyingInvoice($invoiceNumber, $expeditionDate, $receptionDate, $invoiceType, $rectifyingInvoiceData, $series);
+        if (isset($jsonData['rectifiedInvoices']) && $jsonData['rectifiedInvoices']) {
+            foreach ($jsonData['rectifiedInvoices'] as $jsonRectifiedInvoice) {
+                $jsonRectifiedInvoice = RectifiedInvoice::createFromJson($jsonRectifiedInvoice);
+                $rectifyingInvoiceHeader->addRectifiedInvoice($jsonRectifiedInvoice);
+            }
+        }
+
+        return $rectifyingInvoiceHeader;
     }
 
     public static function docJson(): array
