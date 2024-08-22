@@ -26,6 +26,13 @@ Librería para integrarse con el sistema TicketBai
 composer require barnetik/ticketbai
 ```
 
+## Erabilgarri dauden JSON dokumentuen definizioak / Definición de los documentos JSON disponibles
+Hurrengo helbidean, dokumentuak sortzeko erabili daitezkeen JSON dokumentuen definizioak topatu ahal ditzazkezue:
+
+Podéis encontrar las definiciones de los JSON disponibles para la generación de documentos en el siguiente enlace:
+
+https://barnetik.github.io/tbai-php-lib/
+
 ## Erabilera adibideak / Ejemplos de uso
 
 
