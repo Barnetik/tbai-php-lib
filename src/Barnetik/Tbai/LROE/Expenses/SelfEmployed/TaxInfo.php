@@ -1,14 +1,14 @@
 <?php
 
-namespace Barnetik\Tbai\LROE\Expenses;
+namespace Barnetik\Tbai\LROE\Expenses\SelfEmployed;
 
+use Barnetik\Tbai\LROE\Expenses\Shared\AbstractTaxInfo;
 use DOMNode;
-use DOMElement;
 use DOMDocument;
 use Barnetik\Tbai\ValueObject\Amount;
 use InvalidArgumentException;
 
-class SelfEmployedTaxInfo extends AbstractTaxInfo
+class TaxInfo extends AbstractTaxInfo
 {
     const IRPF_VAT_GOOD_TYPE_IRPF_AND_VAT = 'I';
     const IRPF_VAT_GOOD_TYPE_IRPF_ONLY = 'R';

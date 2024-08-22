@@ -1,15 +1,16 @@
 <?php
 
-namespace Barnetik\Tbai\LROE\Expenses;
+namespace Barnetik\Tbai\LROE\Expenses\SelfEmployed;
 
+use Barnetik\Tbai\LROE\Expenses\Shared\AbstractTaxesInfo;
 use DOMDocument;
 use DOMNode;
 
-class JuridicPersonTaxesInfo extends AbstractTaxesInfo
+class TaxesInfo extends AbstractTaxesInfo
 {
     public function xml(DOMDocument $domDocument): DOMNode
     {
-        $taxesInfo = $domDocument->createElement('IVA');
+        $taxesInfo = $domDocument->createElement('RentaIVA');
         foreach ($this->taxesInfo as $taxInfo) {
             $taxesInfo->appendChild($taxInfo->xml($domDocument));
         }
@@ -21,7 +22,7 @@ class JuridicPersonTaxesInfo extends AbstractTaxesInfo
     {
         $taxesInfo = new self();
         foreach ($jsonData as $taxInfo) {
-            $taxesInfo->addTaxInfo(JuridicPersonTaxInfo::createFromJson($taxInfo));
+            $taxesInfo->addTaxInfo(TaxInfo::createFromJson($taxInfo));
         }
         return $taxesInfo;
     }
@@ -30,9 +31,9 @@ class JuridicPersonTaxesInfo extends AbstractTaxesInfo
     {
         return [
             'type' => 'array',
-            'items' => JuridicPersonTaxInfo::docJson(),
+            'items' => TaxInfo::docJson(),
             'minItems' => 1,
-            'maxItems' => 1000,
+            'maxItems' => 100,
         ];
     }
 }

@@ -4,7 +4,7 @@ namespace Test\Barnetik\Tbai\LROE;
 
 use Barnetik\Tbai\Api;
 use Barnetik\Tbai\Api\Bizkaia\Endpoint;
-use Barnetik\Tbai\LROE\ExpensesInvoice;
+use Barnetik\Tbai\LROE\Expenses\ExpensesInvoiceFactory;
 use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
 use DOMDocument;
@@ -45,7 +45,7 @@ class ExpensesTest extends TestCase
         $expensesData['recipient']['name'] = $recipient;
         $expensesData['header']['invoiceNumber'] = time();
         sleep(1);
-        $expenses = ExpensesInvoice::createFromJson($expensesData);
+        $expenses = ExpensesInvoiceFactory::createFromJson($expensesData);
         
         $endpoint = new Endpoint(true, true);
         $response = $endpoint->submitExpenses($expenses, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
@@ -90,7 +90,7 @@ class ExpensesTest extends TestCase
         $expensesData['recipient']['name'] = $recipient;
         $expensesData['header']['invoiceNumber'] = time();
         sleep(1);
-        $expenses = ExpensesInvoice::createFromJson($expensesData);
+        $expenses = ExpensesInvoiceFactory::createFromJson($expensesData);
         
         $endpoint = new Endpoint(true, true);
         $response = $endpoint->submitExpenses($expenses, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);

@@ -6,7 +6,7 @@ use Barnetik\Tbai\Api\ApiRequestInterface;
 use Barnetik\Tbai\Api\AbstractTerritory;
 use Barnetik\Tbai\Api\ResponseInterface;
 use Barnetik\Tbai\Exception\InvalidTerritoryException;
-use Barnetik\Tbai\LROE\ExpensesInvoice;
+use Barnetik\Tbai\LROE\Expenses\Interfaces\ExpensesInvoice as InterfacesExpensesInvoice;
 use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
 use Barnetik\Tbai\TicketBaiCancel;
@@ -57,12 +57,12 @@ class Endpoint extends AbstractTerritory
         return new Response($status, $headers, $content);
     }
 
-    public function createSubmitExpensesRequest(ExpensesInvoice $expenses): ApiRequestInterface
+    public function createSubmitExpensesRequest(InterfacesExpensesInvoice $expenses): ApiRequestInterface
     {
         return new SubmitExpensesRequest($expenses, $this->getSubmitEndpoint());
     }
 
-    public function submitExpenses(ExpensesInvoice $expenses, PrivateKey $privateKey, string $password, int $maxRetries = 1, int $retryDelay = 1): ResponseInterface
+    public function submitExpenses(InterfacesExpensesInvoice $expenses, PrivateKey $privateKey, string $password, int $maxRetries = 1, int $retryDelay = 1): ResponseInterface
     {
         $submitExpensesRequest = $this->createSubmitExpensesRequest($expenses);
         return $this->doRequest($submitExpensesRequest, $privateKey, $password, $maxRetries, $retryDelay);

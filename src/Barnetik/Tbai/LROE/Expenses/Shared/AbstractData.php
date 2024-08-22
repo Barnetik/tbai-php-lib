@@ -1,6 +1,6 @@
 <?php
 
-namespace Barnetik\Tbai\LROE\Expenses;
+namespace Barnetik\Tbai\LROE\Expenses\Shared;
 
 use Barnetik\Tbai\Exception\InvalidVatRegimeException;
 use Barnetik\Tbai\Interfaces\TbaiXml;

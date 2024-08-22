@@ -3,7 +3,7 @@
 namespace Barnetik\Tbai\Api\Bizkaia;
 
 use Barnetik\Tbai\Api\ApiRequestInterface;
-use Barnetik\Tbai\LROE\ExpensesInvoice;
+use Barnetik\Tbai\LROE\Expenses\Interfaces\ExpensesInvoice as InterfacesExpensesInvoice;
 use DOMDocument;
 use DOMElement;
 use DOMNode;
@@ -13,12 +13,12 @@ class SubmitExpensesRequest implements ApiRequestInterface
     const URL = '/N3B4000M/aurkezpena';
 
     private string $endpoint;
-    private ExpensesInvoice $expenses;
+    private InterfacesExpensesInvoice $expenses;
 
     private DOMDocument $document;
 
 
-    public function __construct(ExpensesInvoice $expenses, string $endpoint)
+    public function __construct(InterfacesExpensesInvoice $expenses, string $endpoint)
     {
         $this->endpoint = $endpoint;
         $this->expenses = $expenses;

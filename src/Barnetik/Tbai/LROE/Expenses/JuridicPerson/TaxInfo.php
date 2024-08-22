@@ -1,13 +1,14 @@
 <?php
 
-namespace Barnetik\Tbai\LROE\Expenses;
+namespace Barnetik\Tbai\LROE\Expenses\JuridicPerson;
 
+use Barnetik\Tbai\LROE\Expenses\Shared\AbstractTaxInfo;
 use DOMNode;
 use DOMDocument;
 use Barnetik\Tbai\ValueObject\Amount;
 use InvalidArgumentException;
 
-class JuridicPersonTaxInfo extends AbstractTaxInfo
+class TaxInfo extends AbstractTaxInfo
 {
     const PURCHASE_TYPE_COMMON_GOODS = 'C';
     const PURCHASE_TYPE_EXPENSES = 'G';

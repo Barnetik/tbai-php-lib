@@ -1,12 +1,13 @@
 <?php
 
-namespace Barnetik\Tbai\LROE\Expenses;
+namespace Barnetik\Tbai\LROE\Expenses\JuridicPerson;
 
+use Barnetik\Tbai\LROE\Expenses\Shared\AbstractData;
 use Barnetik\Tbai\ValueObject\Amount;
 use DOMDocument;
 use DOMNode;
 
-class JuridicPersonData extends AbstractData
+class Data extends AbstractData
 {
     const VAT_REGIME_06 = '06';
 
