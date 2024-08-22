@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.5.0](https://github.com/Barnetik/tbai-php-lib/compare/v0.4.0...v0.5.0) (2024-08-22)
+
+
+### Features
+
+* Added better curl error control. Now exception is thrown with curl error number and message. ([597305b](https://github.com/Barnetik/tbai-php-lib/commit/597305b955f39a06a0dd7863a09ca67f9c1bc2ab))
+
+
+### Bug Fixes
+
+* VatRegimes count control was not working. ([d557b04](https://github.com/Barnetik/tbai-php-lib/commit/d557b048e067e21ad797811550e97368e22cf6bb))
+
 ## [0.4.0](https://github.com/Barnetik/tbai-php-lib/compare/v0.3.0...v0.4.0) (2024-08-08)
 
 
