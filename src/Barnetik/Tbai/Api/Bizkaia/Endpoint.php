@@ -7,6 +7,7 @@ use Barnetik\Tbai\Api\AbstractTerritory;
 use Barnetik\Tbai\Api\ResponseInterface;
 use Barnetik\Tbai\Exception\InvalidTerritoryException;
 use Barnetik\Tbai\LROE\Expenses\Interfaces\ExpensesInvoice as InterfacesExpensesInvoice;
+use Barnetik\Tbai\LROE\Expenses\SelfEmployed\ExpensesWithoutInvoice;
 use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
 use Barnetik\Tbai\TicketBaiCancel;
@@ -57,14 +58,25 @@ class Endpoint extends AbstractTerritory
         return new Response($status, $headers, $content);
     }
 
-    public function createSubmitExpensesRequest(InterfacesExpensesInvoice $expenses): ApiRequestInterface
+    public function createSubmitExpensesInvoiceRequest(InterfacesExpensesInvoice $expenses): ApiRequestInterface
     {
-        return new SubmitExpensesRequest($expenses, $this->getSubmitEndpoint());
+        return new SubmitExpensesInvoiceRequest($expenses, $this->getSubmitEndpoint());
     }
 
-    public function submitExpenses(InterfacesExpensesInvoice $expenses, PrivateKey $privateKey, string $password, int $maxRetries = 1, int $retryDelay = 1): ResponseInterface
+    public function submitExpensesInvoice(InterfacesExpensesInvoice $expenses, PrivateKey $privateKey, string $password, int $maxRetries = 1, int $retryDelay = 1): ResponseInterface
     {
-        $submitExpensesRequest = $this->createSubmitExpensesRequest($expenses);
+        $submitExpensesRequest = $this->createSubmitExpensesInvoiceRequest($expenses);
+        return $this->doRequest($submitExpensesRequest, $privateKey, $password, $maxRetries, $retryDelay);
+    }
+
+    public function createSubmitExpensesWithoutInvoiceRequest(ExpensesWithoutInvoice $expenses): ApiRequestInterface
+    {
+        return new SubmitExpensesWithoutInvoiceRequest($expenses, $this->getSubmitEndpoint());
+    }
+
+    public function submitExpensesWithoutInvoice(ExpensesWithoutInvoice $expenses, PrivateKey $privateKey, string $password, int $maxRetries = 1, int $retryDelay = 1): ResponseInterface
+    {
+        $submitExpensesRequest = $this->createSubmitExpensesWithoutInvoiceRequest($expenses);
         return $this->doRequest($submitExpensesRequest, $privateKey, $password, $maxRetries, $retryDelay);
     }
 }

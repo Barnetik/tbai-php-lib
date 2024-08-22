@@ -17,9 +17,10 @@ class Issuer implements TbaiXml
     {
     }
 
-    public static function createNationalIssuer(VatId $vatId, string $name): self
+    public static function createNationalIssuer(VatId $vatId, string $name): static
     {
-        $issuer = new self();
+        /** @phpstan-ignore-next-line */
+        $issuer = new static();
         $issuer->vatId = $vatId;
 
         $issuer->countryCode = 'ES';
@@ -27,9 +28,10 @@ class Issuer implements TbaiXml
         return $issuer;
     }
 
-    public static function createGenericIssuer(VatId $vatId, string $name, string $countryCode = 'ES'): self
+    public static function createGenericIssuer(VatId $vatId, string $name, string $countryCode = 'ES'): static
     {
-        $issuer = new self();
+        /** @phpstan-ignore-next-line */
+        $issuer = new static();
         $issuer->vatId = $vatId;
 
         $issuer->countryCode = $countryCode;
@@ -37,22 +39,22 @@ class Issuer implements TbaiXml
         return $issuer;
     }
 
-    private function vatIdType(): string
+    protected function vatIdType(): string
     {
         return $this->vatId->type();
     }
 
-    private function vatId(): VatId
+    protected function vatId(): VatId
     {
         return $this->vatId;
     }
 
-    private function name(): string
+    protected function name(): string
     {
         return $this->name;
     }
 
-    private function countryCode(): string
+    protected function countryCode(): string
     {
         return $this->countryCode;
     }
@@ -67,7 +69,7 @@ class Issuer implements TbaiXml
         return $this->countryCode() === 'ES';
     }
 
-    public static function createFromJson(array $jsonData): self
+    public static function createFromJson(array $jsonData): static
     {
         $countryCode = $jsonData['countryCode'] ?? 'ES';
         $name = $jsonData['name'];

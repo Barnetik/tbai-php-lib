@@ -56,7 +56,7 @@ class TaxInfo extends AbstractTaxInfo
     private string $epigraph;
     private ?string $irpfOrVatAffectedGoodType = null;
     private ?string $conceptType = null;
-    private ?string $reference = null;
+    private ?string $goodReference = null;
     private bool $taxablePersonReversal;
     private ?string $simplifiedOrEquivalenceSurchargeOperation = null;
     private Amount $taxBase;
@@ -144,7 +144,7 @@ class TaxInfo extends AbstractTaxInfo
 
         $this->appendOptionalXml($taxInfo, $domDocument->createElement('BienAfectoIRPFYOIVA'), $this->irpfOrVatAffectedGoodType);
         $this->appendOptionalXml($taxInfo, $domDocument->createElement('Concepto'), $this->conceptType);
-        $this->appendOptionalXml($taxInfo, $domDocument->createElement('ReferenciaBien'), $this->reference);
+        $this->appendOptionalXml($taxInfo, $domDocument->createElement('ReferenciaBien'), $this->goodReference);
 
         $taxInfo->appendChild($domDocument->createElement('InversionSujetoPasivo', $this->taxablePersonReversal ? 'S' : 'N'));
 
@@ -207,8 +207,8 @@ class TaxInfo extends AbstractTaxInfo
             $taxInfo->setConceptType($jsonData['conceptType']);
         }
 
-        if (isset($jsonData['reference'])) {
-            $taxInfo->reference = (string)$jsonData['reference'];
+        if (isset($jsonData['goodReference'])) {
+            $taxInfo->goodReference = (string)$jsonData['goodReference'];
         }
 
         if (isset($jsonData['simplifiedOrEquivalenceSurchargeOperation'])) {
@@ -315,7 +315,7 @@ Concepto de los bienes adquiridos
   * 69: Pérdidas por deterioro y otras dotaciones
                 '
                 ],
-                'reference' => [
+                'goodReference' => [
                     'type' => 'string',
                     'maxLength' => 10,
                     'description' => 'Referencia del bien'
@@ -396,7 +396,7 @@ Operación en recargo de equivalencia o regimen simplificado:
             'taxBase' => (string)$this->taxBase,
             'irpfOrVatAffectedGoodType' => $this->irpfOrVatAffectedGoodType,
             'conceptType' => $this->conceptType,
-            'reference' => $this->reference,
+            'goodReference' => $this->goodReference,
             'taxablePersonReversal' => $this->taxablePersonReversal,
             'simplifiedOrEquivalenceSurchargeOperation' => $this->simplifiedOrEquivalenceSurchargeOperation,
             'taxRate' => $this->taxRate ? (string) $this->taxRate : null,

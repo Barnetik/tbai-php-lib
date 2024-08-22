@@ -52,7 +52,6 @@
       "conceptType": 600,
       "taxablePersonReversal": false,
       "simplifiedOrEquivalenceSurchargeOperation": "E",
-      "reference": 1,
       "taxRate": "21.00",
       "supportedTaxQuota": "3.2",
       "deductibleTaxQuota": "1.2",

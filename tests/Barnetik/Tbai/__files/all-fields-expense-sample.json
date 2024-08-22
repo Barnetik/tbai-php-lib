@@ -55,7 +55,7 @@
       "conceptType": 600,
       "taxablePersonReversal": false,
       "simplifiedOrEquivalenceSurchargeOperation": "E",
-      "reference": 1,
+      "goodReference": 1,
       "taxRate": 2,
       "supportedTaxQuota": "3.2",
       "equivalenceRate": 5,

@@ -1,0 +1,21 @@
+{
+  "recipient": {
+    "vatId": "00000015S",
+    "name": "Gaueko Akerbeltz"
+  },
+  "declaredSupplierCounterpart": {
+    "vatId": "00000000T",
+    "name": "Provider Name",
+    "vatIdType": "02",
+    "countryCode": "ES"
+  },
+  "operationDate": "06-03-2024",
+  "receptionDate": "07-03-2024",
+  "income": {
+    "epigraph": "197500",
+    "conceptType": 600,
+    "line": 1,
+    "irpfExpenseAmount": "213.12",
+    "withCollectionAndPaymentCriteria": false
+  }
+}

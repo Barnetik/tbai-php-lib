@@ -2,6 +2,7 @@
 
 use Barnetik\Tbai\LROE\Expenses\JuridicPerson\ExpensesInvoice as JuridicPersonExpensesInvoice;
 use Barnetik\Tbai\LROE\Expenses\SelfEmployed\ExpensesInvoice as SelfEmployedExpensesInvoice;
+use Barnetik\Tbai\LROE\Expenses\SelfEmployed\ExpensesWithoutInvoice;
 use Barnetik\Tbai\TicketBai;
 use Barnetik\Tbai\TicketBaiCancel;
 use Barnetik\Tbai\Zuzendu;
@@ -26,6 +27,7 @@ $docs['definitions']['Ticketbai'] = TicketBai::docJson();
 $docs['definitions']['TicketbaiCancel'] = TicketBaiCancel::docJson();
 $docs['definitions']['ExpensesInvoice (Juridic Person)'] = JuridicPersonExpensesInvoice::docJson();
 $docs['definitions']['ExpensesInvoice (Self Employed)'] = SelfEmployedExpensesInvoice::docJson();
+$docs['definitions']['ExpensesWithoutInvoice (Self Employed)'] = ExpensesWithoutInvoice::docJson();
 $docs['definitions']['Zuzendu'] = Zuzendu::docJson();
 $docs['definitions']['ZuzenduCancel'] = ZuzenduCancel::docJson();
 

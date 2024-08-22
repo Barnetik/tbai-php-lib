@@ -1515,7 +1515,7 @@
                                 ],
                                 "description": "\nConcepto de los bienes adquiridos\n  * 600: Compras de mercader\u00edas\n  * 601: Compras de materias primas\n  * 602: Compras de otros aprovisionamientos\n  * 606: Descuentos sobre compras por pronto pago\n  * 607: Trabajos realizados por otras empresas\n  * 608: Devoluciones de compras y operaciones similares\n  * 609: Rappels por compras\n  * 620: Gastos en investigaci\u00f3n y desarrollo del ejercicio\n  * 621: Arrendamientos y c\u00e1nones\n  * 622: Reparaciones y conservaci\u00f3n\n  * 623: Servicios de profesionales independientes\n  * 624: Transportes\n  * 625: Primas de seguros\n  * 626: Servicios bancarios y similares\n  * 627: Publicidad, propaganda y relaciones p\u00fablicas\n  * 628: Suministros\n  * 629: Otros servicios\n  * 631: Otros servicios\n  * 634: Ajustes negativos en la imposici\u00f3n indirecta\n  * 639: Ajustes positivos en la imposici\u00f3n indirecta\n  * 640: Sueldos y salarios\n  * 641: Indemnizaciones\n  * 64201: Seguridad social a cargo de la empresa: aut\u00f3nomos\n  * 64202: Seguridad social a cargo de la empresa: empleados\n  * 643: Retribuciones a largo plazo mediante sistemas de aportaci\u00f3n definida\n  * 644: Retribuciones a largo plazo mediante sistemas de prestaci\u00f3n definida\n  * 649: Otros gastos sociales\n  * 65: Otros gastos de gesti\u00f3n\n  * 66: Gastos financieros\n  * 67: Gastos excepcionales\n  * 680: Amortizaci\u00f3n del inmovilizado intangible\n  * 681: Amortizaci\u00f3n del inmovilizado material\n  * 682: Amortizaci\u00f3n de las inversiones inmobiliarias\n  * 69: P\u00e9rdidas por deterioro y otras dotaciones\n                "
                             },
-                            "reference": {
+                            "goodReference": {
                                 "type": "string",
                                 "maxLength": 10,
                                 "description": "Referencia del bien"
@@ -1599,6 +1599,157 @@
                 "header",
                 "data",
                 "taxesInfo"
+            ]
+        },
+        "ExpensesWithoutInvoice (Self Employed)": {
+            "type": "object",
+            "properties": {
+                "recipient": {
+                    "type": "object",
+                    "properties": {
+                        "vatId": {
+                            "type": "string"
+                        },
+                        "name": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "vatId",
+                        "name"
+                    ]
+                },
+                "declaredSupplierCounterpart": {
+                    "type": "object",
+                    "properties": {
+                        "vatId": {
+                            "type": "string",
+                            "description": "IFZ edo Identifikatzailea - NIF o Identificador"
+                        },
+                        "vatIdType": {
+                            "type": "string",
+                            "enum": [
+                                "02",
+                                "03",
+                                "04",
+                                "05",
+                                "06"
+                            ],
+                            "default": "02",
+                            "description": "\nDokumentu mota - Tipo de documento:\n * 02: IFZ - NIF\n * 03: Pasaportea - Pasaporte\n * 04: Egoitza dagoen herrialdeak edo lurraldeak emandako nortasun agiri ofiziala - Documento oficial de identificaci\u00f3n expedido por el pa\u00eds o territorio de residencia\n * 05: Egoitza ziurtagiria - Certificado de residencia\n * 06: Beste frogagiri bat - Otro documento probatorio\n                    "
+                        },
+                        "name": {
+                            "type": "string",
+                            "maxLength": 120,
+                            "description": "Abizenak eta izena edo Sozietatearen izena - Apellidos y nombre o Raz\u00f3n social"
+                        },
+                        "countryCode": {
+                            "type": "string",
+                            "description": "Herrialdearen kodea (ISO3166 alpha2) - C\u00f3digo de pa\u00eds (ISO3166 alpha2)",
+                            "default": "ES"
+                        }
+                    },
+                    "required": [
+                        "vatId",
+                        "name"
+                    ]
+                },
+                "operationDate": {
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 10,
+                    "pattern": "^\\d{2,2}-\\d{2,2}-\\d{4,4}$",
+                    "description": "Fakturaren eragiketa data (adib: 21-12-2020) - Fecha de operaci\u00f3n de factura (ej: 21-12-2020)"
+                },
+                "receptionDate": {
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 10,
+                    "pattern": "^\\d{2,2}-\\d{2,2}-\\d{4,4}$",
+                    "description": "Faktura jasotako data (adib: 21-12-2020) - Fecha de recepci\u00f3n de factura (ej: 21-12-2020)"
+                },
+                "income": {
+                    "type": "object",
+                    "properties": {
+                        "epigraph": {
+                            "type": "string",
+                            "maxLength": 7,
+                            "description": "Ep\u00edgrafe"
+                        },
+                        "conceptType": {
+                            "type": "string",
+                            "enum": [
+                                "600",
+                                "601",
+                                "602",
+                                "606",
+                                "607",
+                                "608",
+                                "609",
+                                "620",
+                                "621",
+                                "622",
+                                "623",
+                                "624",
+                                "625",
+                                "626",
+                                "627",
+                                "628",
+                                "629",
+                                "631",
+                                "634",
+                                "639",
+                                "640",
+                                "641",
+                                "64201",
+                                "64202",
+                                "643",
+                                "644",
+                                "649",
+                                "65",
+                                "66",
+                                "67",
+                                "680",
+                                "681",
+                                "682",
+                                "69"
+                            ],
+                            "description": "\nConcepto de los bienes adquiridos\n  * 600: Compras de mercader\u00edas\n  * 601: Compras de materias primas\n  * 602: Compras de otros aprovisionamientos\n  * 606: Descuentos sobre compras por pronto pago\n  * 607: Trabajos realizados por otras empresas\n  * 608: Devoluciones de compras y operaciones similares\n  * 609: Rappels por compras\n  * 620: Gastos en investigaci\u00f3n y desarrollo del ejercicio\n  * 621: Arrendamientos y c\u00e1nones\n  * 622: Reparaciones y conservaci\u00f3n\n  * 623: Servicios de profesionales independientes\n  * 624: Transportes\n  * 625: Primas de seguros\n  * 626: Servicios bancarios y similares\n  * 627: Publicidad, propaganda y relaciones p\u00fablicas\n  * 628: Suministros\n  * 629: Otros servicios\n  * 631: Otros servicios\n  * 634: Ajustes negativos en la imposici\u00f3n indirecta\n  * 639: Ajustes positivos en la imposici\u00f3n indirecta\n  * 640: Sueldos y salarios\n  * 641: Indemnizaciones\n  * 64201: Seguridad social a cargo de la empresa: aut\u00f3nomos\n  * 64202: Seguridad social a cargo de la empresa: empleados\n  * 643: Retribuciones a largo plazo mediante sistemas de aportaci\u00f3n definida\n  * 644: Retribuciones a largo plazo mediante sistemas de prestaci\u00f3n definida\n  * 649: Otros gastos sociales\n  * 65: Otros gastos de gesti\u00f3n\n  * 66: Gastos financieros\n  * 67: Gastos excepcionales\n  * 680: Amortizaci\u00f3n del inmovilizado intangible\n  * 681: Amortizaci\u00f3n del inmovilizado material\n  * 682: Amortizaci\u00f3n de las inversiones inmobiliarias\n  * 69: P\u00e9rdidas por deterioro y otras dotaciones\n                "
+                        },
+                        "line": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 99,
+                            "description": "N\u00famero de l\u00ednea"
+                        },
+                        "goodReference": {
+                            "type": "string",
+                            "maxLength": 10,
+                            "description": "Referencia del bien"
+                        },
+                        "irpfExpenseAmount": {
+                            "type": "string",
+                            "pattern": "^(\\+|-)?\\d{1,12}(\\.\\d{0,2})?$",
+                            "description": "Importe de gasto de IRPF (2 decimales)"
+                        },
+                        "withCollectionAndPaymentCriteria": {
+                            "type": "boolean",
+                            "description": "Criterio de Cobros y Pagos"
+                        }
+                    },
+                    "required": [
+                        "epigraph",
+                        "conceptType",
+                        "line",
+                        "irpfExpenseAmount"
+                    ]
+                }
+            },
+            "required": [
+                "recipient",
+                "operationDate",
+                "receptionDate",
+                "income"
             ]
         },
         "Zuzendu": {

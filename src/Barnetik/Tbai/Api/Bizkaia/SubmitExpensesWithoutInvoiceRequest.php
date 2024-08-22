@@ -3,22 +3,22 @@
 namespace Barnetik\Tbai\Api\Bizkaia;
 
 use Barnetik\Tbai\Api\ApiRequestInterface;
-use Barnetik\Tbai\LROE\Expenses\Interfaces\ExpensesInvoice as InterfacesExpensesInvoice;
+use Barnetik\Tbai\LROE\Expenses\SelfEmployed\ExpensesWithoutInvoice;
 use DOMDocument;
 use DOMElement;
 use DOMNode;
 
-class SubmitExpensesRequest implements ApiRequestInterface
+class SubmitExpensesWithoutInvoiceRequest implements ApiRequestInterface
 {
     const URL = '/N3B4000M/aurkezpena';
 
     private string $endpoint;
-    private InterfacesExpensesInvoice $expenses;
+    private ExpensesWithoutInvoice $expenses;
 
     private DOMDocument $document;
 
 
-    public function __construct(InterfacesExpensesInvoice $expenses, string $endpoint)
+    public function __construct(ExpensesWithoutInvoice $expenses, string $endpoint)
     {
         $this->endpoint = $endpoint;
         $this->expenses = $expenses;
@@ -33,26 +33,15 @@ class SubmitExpensesRequest implements ApiRequestInterface
 
     private function getRootElement(): DOMElement
     {
-        if ($this->expenses->selfEmployed()) {
-            return $this->document->createElementNS(
-                'https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/LROE_PF_140_2_1_Gastos_Confactura_AltaModifPeticion_V1_0_2.xsd',
-                'lrpfgcfamp:LROEPF140GastosConFacturaAltaModifPeticion'
-            );
-        }
-
         return $this->document->createElementNS(
-            'https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/LROE_PJ_240_2_FacturasRecibidas_AltaModifPeticion_V1_0_1.xsd',
-            'lrpjfecsgap:LROEPJ240FacturasRecibidasAltaModifPeticion'
+            'https://www.batuz.eus/fitxategiak/batuz/LROE/esquemas/LROE_PF_140_2_2_Gastos_Sinfactura_AltaModifPeticion_V1_0_2.xsd',
+            'lrpfgsfamp:LROEPF140GastosSinFacturaAltaModifPeticion'
         );
     }
 
     private function getModel(): string
     {
-        if ($this->expenses->selfEmployed()) {
-            return '140';
-        }
-
-        return '240';
+        return '140';
     }
 
     private function getHeader(): DOMNode
@@ -62,7 +51,7 @@ class SubmitExpensesRequest implements ApiRequestInterface
         $header->appendChild($this->document->createElement('Modelo', $this->getModel()));
         $header->appendChild($this->document->createElement('Capitulo', '2'));
         if ($this->expenses->selfEmployed()) {
-            $header->appendChild($this->document->createElement('Subcapitulo', '2.1'));
+            $header->appendChild($this->document->createElement('Subcapitulo', '2.2'));
         }
         $header->appendChild($this->document->createElement('Operacion', 'A00'));
         $header->appendChild($this->document->createElement('Version', '1.0'));
@@ -85,24 +74,9 @@ class SubmitExpensesRequest implements ApiRequestInterface
 
     private function getExpenses(): DOMElement
     {
-        if ($this->expenses->selfEmployed()) {
-            return $this->getSelfEmployedExpenses();
-        }
-        return $this->getLegalPersonExpenses();
-    }
-
-    private function getSelfEmployedExpenses(): DOMElement
-    {
-        $incomes = $this->document->createElement('Gastos');
-        $incomes->appendChild($this->expenses->xml($this->document));
-        return $incomes;
-    }
-
-    private function getLegalPersonExpenses(): DOMElement
-    {
-        $invoices = $this->document->createElement('FacturasRecibidas');
-        $invoices->appendChild($this->expenses->xml($this->document));
-        return $invoices;
+        $expenses = $this->document->createElement('Gastos');
+        $expenses->appendChild($this->expenses->xml($this->document));
+        return $expenses;
     }
 
     public function url(): string
@@ -120,7 +94,7 @@ class SubmitExpensesRequest implements ApiRequestInterface
 
         return json_encode([
             'con' => 'LROE',
-            'apa' => $this->expenses->selfEmployed() ? '2.1' : '2',
+            'apa' => '2.2',
             'inte' => [
                 'nif' => (string)$this->expenses->recipientVatId(),
                 'nrs' => $this->expenses->recipientName()
