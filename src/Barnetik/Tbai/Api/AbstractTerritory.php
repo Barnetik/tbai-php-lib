@@ -80,6 +80,10 @@ abstract class AbstractTerritory implements EndpointInterface
                 curl_setopt_array($curl, $this->getOptArray($request, $privateKey, $password));
 
                 $response = curl_exec($curl);
+                if (curl_errno($curl)) {
+                    throw new Exception(sprintf('Curl error(%s): %s', curl_errno($curl), curl_error($curl)));
+                }
+
                 list($status, $headers, $content) = $this->parseCurlResponse($response, $curl);
                 curl_close($curl);
                 return $this->response($status, $headers, $content);
