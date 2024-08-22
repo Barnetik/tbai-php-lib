@@ -6,15 +6,12 @@ use Barnetik\Tbai\Interfaces\TbaiXml;
 use Barnetik\Tbai\ValueObject\VatId;
 use DOMDocument;
 use DOMNode;
-use DOMXPath;
 
 class Issuer implements TbaiXml
 {
     protected VatId $vatId;
     protected string $name;
     protected string $countryCode;
-    protected string $postalCode;
-    protected string $address;
 
     private function __construct()
     {
@@ -40,22 +37,22 @@ class Issuer implements TbaiXml
         return $issuer;
     }
 
-    public function vatIdType(): string
+    private function vatIdType(): string
     {
         return $this->vatId->type();
     }
 
-    public function vatId(): VatId
+    private function vatId(): VatId
     {
         return $this->vatId;
     }
 
-    public function name(): string
+    private function name(): string
     {
         return $this->name;
     }
 
-    public function countryCode(): string
+    private function countryCode(): string
     {
         return $this->countryCode;
     }
@@ -81,25 +78,6 @@ class Issuer implements TbaiXml
             $vatId = new VatId($jsonData['vatId'], $jsonData['vatIdType']);
             $issuer = self::createGenericIssuer($vatId, $name, $countryCode);
         }
-        return $issuer;
-    }
-
-    public static function createFromXml(DOMXPath $xpath, DOMNode $contextNode): self
-    {
-        $name = $xpath->evaluate('string(ApellidosNombreRazonSocial)', $contextNode);
-
-        if ($xpath->evaluate('count(NIF)', $contextNode) === 0) {
-            $vatIdValue = $xpath->evaluate('string(IDOtro/ID)', $contextNode);
-            $vatType = $xpath->evaluate('string(IDOtro/IDType)', $contextNode);
-            $countryCode = $xpath->evaluate('string(IDOtro/CodigoPais)', $contextNode);
-
-            $vatId = new VatId($vatIdValue, $vatType);
-            $issuer = self::createGenericIssuer($vatId, $name, $countryCode);
-        } else {
-            $vatId = new VatId($xpath->evaluate('string(NIF)', $contextNode));
-            $issuer = self::createNationalIssuer($vatId, $name);
-        }
-
         return $issuer;
     }
 

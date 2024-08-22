@@ -78,17 +78,17 @@ class Header implements TbaiXml
         return $this;
     }
 
-    public function series(): ?string
+    private function series(): ?string
     {
         return $this->series;
     }
 
-    public function invoiceNumber(): string
+    private function invoiceNumber(): string
     {
         return $this->invoiceNumber;
     }
 
-    public function expeditionDate(): Date
+    private function expeditionDate(): Date
     {
         return $this->expeditionDate;
     }
@@ -98,12 +98,12 @@ class Header implements TbaiXml
         return $this->receptionDate;
     }
 
-    public function operationDate(): ?Date
+    private function operationDate(): ?Date
     {
         return $this->operationDate;
     }
 
-    public function invoiceType(): string
+    private function invoiceType(): string
     {
         return $this->invoiceType;
     }
@@ -140,7 +140,7 @@ class Header implements TbaiXml
         return $header;
     }
 
-    public function addRectifiedInvoice(RectifiedInvoice $rectifiedInvoice): self
+    private function addRectifiedInvoice(RectifiedInvoice $rectifiedInvoice): self
     {
         array_push($this->rectifiedInvoices, $rectifiedInvoice);
         return $this;

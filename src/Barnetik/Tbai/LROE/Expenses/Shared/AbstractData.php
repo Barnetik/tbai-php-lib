@@ -47,7 +47,7 @@ abstract class AbstractData implements TbaiXml
         return $this;
     }
 
-    public function addVatRegime(string $vatRegime): static
+    private function addVatRegime(string $vatRegime): static
     {
         if (!in_array($vatRegime, static::validVatRegimes())) {
             throw new InvalidVatRegimeException();
@@ -104,11 +104,6 @@ abstract class AbstractData implements TbaiXml
         );
 
         return $data;
-    }
-
-    public function total(): Amount
-    {
-        return $this->total;
     }
 
     public static function createFromJson(array $jsonData): static
