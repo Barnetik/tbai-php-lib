@@ -4,6 +4,8 @@ use Barnetik\Tbai\LROE\Expenses\JuridicPerson\ExpensesInvoice as JuridicPersonEx
 use Barnetik\Tbai\LROE\Expenses\SelfEmployed\ExpensesInvoice as SelfEmployedExpensesInvoice;
 use Barnetik\Tbai\TicketBai;
 use Barnetik\Tbai\TicketBaiCancel;
+use Barnetik\Tbai\Zuzendu;
+use Barnetik\Tbai\ZuzenduCancel;
 
 include_once(__DIR__ . '/../vendor/autoload.php');
 
@@ -24,5 +26,7 @@ $docs['definitions']['Ticketbai'] = TicketBai::docJson();
 $docs['definitions']['TicketbaiCancel'] = TicketBaiCancel::docJson();
 $docs['definitions']['ExpensesInvoice (Juridic Person)'] = JuridicPersonExpensesInvoice::docJson();
 $docs['definitions']['ExpensesInvoice (Self Employed)'] = SelfEmployedExpensesInvoice::docJson();
+$docs['definitions']['Zuzendu'] = Zuzendu::docJson();
+$docs['definitions']['ZuzenduCancel'] = ZuzenduCancel::docJson();
 
 file_put_contents(__DIR__ . '/../docs/swagger/swagger.json', json_encode($docs, JSON_PRETTY_PRINT));
