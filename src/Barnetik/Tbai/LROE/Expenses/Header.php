@@ -22,6 +22,7 @@ class Header implements TbaiXml
 
     private ?string $series;
     private string $invoiceNumber;
+    private ?string $lastInvoiceNumber = null;
     private Date $expeditionDate;
     private Date $receptionDate;
     private ?Date $operationDate = null;
@@ -78,52 +79,32 @@ class Header implements TbaiXml
         return $this;
     }
 
-    private function series(): ?string
-    {
-        return $this->series;
-    }
-
-    private function invoiceNumber(): string
-    {
-        return $this->invoiceNumber;
-    }
-
-    private function expeditionDate(): Date
-    {
-        return $this->expeditionDate;
-    }
-
     public function receptionDate(): Date
     {
         return $this->receptionDate;
     }
 
-    private function operationDate(): ?Date
-    {
-        return $this->operationDate;
-    }
-
-    private function invoiceType(): string
-    {
-        return $this->invoiceType;
-    }
-
     public function xml(DOMDocument $domDocument): DOMNode
     {
         $header = $domDocument->createElement('CabeceraFactura');
-        if ($this->series()) {
-            $header->appendChild($domDocument->createElement('SerieFactura', htmlspecialchars($this->series(), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8')));
+        if ($this->series) {
+            $header->appendChild($domDocument->createElement('SerieFactura', htmlspecialchars($this->series, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8')));
         }
 
-        $header->appendChild($domDocument->createElement('NumFactura', $this->invoiceNumber()));
-        $header->appendChild($domDocument->createElement('FechaExpedicionFactura', $this->expeditionDate()));
+        $header->appendChild($domDocument->createElement('NumFactura', $this->invoiceNumber));
 
-        if ($this->operationDate()) {
-            $header->appendChild($domDocument->createElement('FechaOperacion', $this->operationDate()));
+        if ($this->lastInvoiceNumber) {
+            $header->appendChild($domDocument->createElement('NumFacturaFin', $this->lastInvoiceNumber));
+        }
+
+        $header->appendChild($domDocument->createElement('FechaExpedicionFactura', $this->expeditionDate));
+
+        if ($this->operationDate) {
+            $header->appendChild($domDocument->createElement('FechaOperacion', $this->operationDate));
         }
 
         $header->appendChild($domDocument->createElement('FechaRecepcion', $this->receptionDate()));
-        $header->appendChild($domDocument->createElement('TipoFactura', $this->invoiceType()));
+        $header->appendChild($domDocument->createElement('TipoFactura', $this->invoiceType));
 
         if (isset($this->rectifyingInvoice)) {
             $header->appendChild($this->rectifyingInvoice->xml($domDocument));
@@ -150,6 +131,7 @@ class Header implements TbaiXml
     {
         $header = self::createHeaderFromJson($jsonData);
 
+        $header->lastInvoiceNumber = $jsonData['lastInvoiceNumber'] ?? null;
         if (isset($jsonData['operationDate']) && $jsonData['operationDate']) {
             $header->operationDate = new Date($jsonData['operationDate']);
         }
@@ -189,13 +171,19 @@ class Header implements TbaiXml
                 'series' => [
                     'type' => 'string',
                     'maxLength' => 20,
-                    'description' => 'Fakturaren seriea - Serie factura'
+                    'description' => 'Serie factura. Obligatorio cuando esté incluido en la factura recibida'
                 ],
                 'invoiceNumber' => [
                     'type' => 'string',
                     'minLength' => 1,
                     'maxLength' => 20,
-                    'description' => 'Fakturaren zenbakia - Número factura'
+                    'description' => 'Número de la factura que identifica la primera factura del asiento resumen'
+                ],
+                'lastInvoiceNumber' => [
+                    'type' => 'string',
+                    'minLength' => 1,
+                    'maxLength' => 20,
+                    'description' => 'Número de factura que identifica a la última factura del asiento resumen'
                 ],
                 'expeditionDate' => [
                     'type' => 'string',
@@ -250,6 +238,7 @@ Faktura mota - Tipo de factura:
         return [
             'series' => $this->series ?? null,
             'invoiceNumber' => $this->invoiceNumber,
+            'lastInvoiceNumber' => $this->lastInvoiceNumber ?? null,
             'expeditionDate' => (string)$this->expeditionDate,
             'receptionDate' => (string)$this->receptionDate,
             'operationDate' => isset($this->operationDate) ? (string) $this->operationDate : null,
