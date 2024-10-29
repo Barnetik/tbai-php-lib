@@ -147,7 +147,7 @@ class Header implements TbaiXml
         $receptionDate = new Date($jsonData['receptionDate']);
         $invoiceType = $jsonData['invoiceType'];
 
-        if (!isset($jsonData['rectifyingInvoice']) || is_null($jsonData['rectifyingInvoice'])) {
+        if (!isset($jsonData['rectifyingInvoice'])) {
             return self::create($invoiceNumber, $expeditionDate, $receptionDate, $invoiceType, $series);
         }
 

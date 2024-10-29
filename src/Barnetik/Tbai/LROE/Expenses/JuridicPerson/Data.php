@@ -33,7 +33,7 @@ class Data extends AbstractData
     {
         $data = parent::xml($domDocument);
 
-        if (isset($this->taxableBaseAtCost) && !is_null($this->taxableBaseAtCost)) {
+        if (isset($this->taxableBaseAtCost)) {
             $data->appendChild(
                 $domDocument->createElement(
                     'BaseImponibleACoste',

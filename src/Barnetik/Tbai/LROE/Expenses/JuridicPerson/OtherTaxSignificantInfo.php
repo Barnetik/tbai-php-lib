@@ -45,19 +45,19 @@ class OtherTaxSignificantInfo implements TbaiXml
     {
         $otherTaxInfo = new self();
 
-        if (isset($jsonData['accountingRecordDate']) && !is_null($jsonData['accountingRecordDate'])) {
+        if (isset($jsonData['accountingRecordDate'])) {
             $otherTaxInfo->accountingRecordDate = new Date($jsonData['accountingRecordDate']);
         }
 
-        if (isset($jsonData['billingAgreementRecordNumber']) && !is_null($jsonData['billingAgreementRecordNumber'])) {
+        if (isset($jsonData['billingAgreementRecordNumber'])) {
             $otherTaxInfo->billingAgreementRecordNumber = $jsonData['billingAgreementRecordNumber'];
         }
 
-        if (isset($jsonData['externalReference']) && !is_null($jsonData['externalReference'])) {
+        if (isset($jsonData['externalReference'])) {
             $otherTaxInfo->externalReference = $jsonData['externalReference'];
         }
 
-        if (isset($jsonData['succededEntity']) && !is_null($jsonData['succededEntity'])) {
+        if (isset($jsonData['succededEntity'])) {
             $otherTaxInfo->succededEntity = SuccededEntity::createFromJson($jsonData['succededEntity']);
         }
 
