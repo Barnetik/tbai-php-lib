@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.6.0](https://github.com/Barnetik/tbai-php-lib/compare/v0.5.0...v0.6.0) (2024-10-29)
+
+
+### Features
+
+* Added Expenses without invoice submission ([06f0314](https://github.com/Barnetik/tbai-php-lib/commit/06f0314e6c0443bfdcec03dbaa08105db730ff54))
+* Added lastInvoiceNumber attribute to expense invoices Header ([ff3b7d3](https://github.com/Barnetik/tbai-php-lib/commit/ff3b7d3c5542d6af451b7b454aeb94a9d60a4243))
+* Juridic and physical person expenses with invoices registration working ([2b15960](https://github.com/Barnetik/tbai-php-lib/commit/2b15960e10b0143775b32f601bbc85e545dcf392))
+
+
+### Bug Fixes
+
+* Greek VIES code uses ISO 639-1 language code (EL) instead of ISO 3166 country code. ([185ad57](https://github.com/Barnetik/tbai-php-lib/commit/185ad572d9b0f3a3f6bc808d6bb0ff4a84c4ea8e)), closes [#48](https://github.com/Barnetik/tbai-php-lib/issues/48)
+* Loading international invoices from XML was not loading proper recipient identifier data ([7b45e6e](https://github.com/Barnetik/tbai-php-lib/commit/7b45e6ecb9ae861063c1f0796b4738199ef15c2e)), closes [#47](https://github.com/Barnetik/tbai-php-lib/issues/47)
+
 ## [0.5.0](https://github.com/Barnetik/tbai-php-lib/compare/v0.4.0...v0.5.0) (2024-08-22)
 
 
