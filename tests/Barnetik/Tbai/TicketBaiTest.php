@@ -4,6 +4,7 @@ namespace Test\Barnetik\Tbai;
 
 use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
+use Barnetik\Tbai\ValueObject\VatId;
 use DOMDocument;
 use DOMXPath;
 use Exception;
@@ -239,5 +240,42 @@ class TicketBaiTest extends TestCase
         $xpath = new DOMXPath($signedDom);
         $operationDateValue = $xpath->evaluate('string(/T:TicketBai/Factura/DatosFactura/FechaOperacion)');
         $this->assertFalse(empty($operationDateValue));
+    }
+
+    public function test_gh48_Greek_Vatid_prefix_EL_instead_of_GR(): void
+    {
+        $nif = $_ENV['TBAI_ARABA_ISSUER_NIF'];
+        $issuer = 'Test with & on issuer name';
+        $license = $_ENV['TBAI_ARABA_APP_LICENSE'];
+        $developer = $_ENV['TBAI_ARABA_APP_DEVELOPER_NIF'];
+        $appName = $_ENV['TBAI_ARABA_APP_NAME'];
+        $appVersion =  $_ENV['TBAI_ARABA_APP_VERSION'];
+
+        $expectedVatId = 'EL00000000T';
+
+        $ticketbai = $this->ticketBaiMother->createTicketBaiWithForeignServices($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA, false, VatId::VAT_ID_TYPE_NIF, '00000000T', 'GR');
+        $xml = new DOMDocument('1.0', 'utf-8');
+        $ticketbai->xml($xml);
+        $xpath = new DOMXPath($xml);
+
+        $finalVatId = $xpath->evaluate('string(/T:TicketBai/Sujetos/Destinatarios/IDDestinatario/IDOtro/ID)');
+        $this->assertEquals($expectedVatId, $finalVatId);
+
+        $ticketbai = $this->ticketBaiMother->createTicketBaiWithForeignServices($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA, false, VatId::VAT_ID_TYPE_NIF, 'EL00000000T', 'GR');
+        $xml = new DOMDocument('1.0', 'utf-8');
+        $ticketbai->xml($xml);
+        $xpath = new DOMXPath($xml);
+
+        $finalVatId = $xpath->evaluate('string(/T:TicketBai/Sujetos/Destinatarios/IDDestinatario/IDOtro/ID)');
+        $this->assertEquals($expectedVatId, $finalVatId);
+
+        // Check other countries still work correctly
+        $ticketbai = $this->ticketBaiMother->createTicketBaiWithForeignServices($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA, false, VatId::VAT_ID_TYPE_NIF, '00000000T', 'IE');
+        $xml = new DOMDocument('1.0', 'utf-8');
+        $ticketbai->xml($xml);
+        $xpath = new DOMXPath($xml);
+
+        $finalVatId = $xpath->evaluate('string(/T:TicketBai/Sujetos/Destinatarios/IDDestinatario/IDOtro/ID)');
+        $this->assertEquals('IE00000000T', $finalVatId);
     }
 }

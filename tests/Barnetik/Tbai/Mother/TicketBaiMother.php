@@ -268,9 +268,9 @@ class TicketBaiMother
         );
     }
 
-    public function createTicketBaiWithForeignServices(string $nif, string $issuer, string $license, string $developer, string $appName, string $appVersion, string $territory, bool $selfEmployed = false): TicketBai
+    public function createTicketBaiWithForeignServices(string $nif, string $issuer, string $license, string $developer, string $appName, string $appVersion, string $territory, bool $selfEmployed = false, string $clientIdType = VatId::VAT_ID_TYPE_PASSPORT, string $clientNif = '00000000T', string $countryCode = 'IE'): TicketBai
     {
-        $subject = $this->getForeignSubject($nif, $issuer);
+        $subject = $this->getForeignSubject($nif, $issuer, $clientIdType, $clientNif, $countryCode);
         $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
 
         $header = Header::create((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), $this->testSerie());
@@ -632,10 +632,10 @@ class TicketBaiMother
         return new Subject($issuer, $recipient, Subject::ISSUED_BY_THIRD_PARTY);
     }
 
-    public function getForeignSubject(string $nif, string $name): Subject
+    public function getForeignSubject(string $nif, string $name, string $clientIdType = VatId::VAT_ID_TYPE_PASSPORT, string $clientNif = '00000000T', string $countryCode = 'IE'): Subject
     {
         $issuer = new Issuer(new VatId($nif, VatId::VAT_ID_TYPE_PASSPORT), $name);
-        $recipient = Recipient::createGenericRecipient(new VatId('00000000T', VatId::VAT_ID_TYPE_PASSPORT), 'Client Name', '48270', 'Markina-Xemein', 'IE');
+        $recipient = Recipient::createGenericRecipient(new VatId($clientNif, $clientIdType), 'Client Name', '48270', 'Markina-Xemein', $countryCode);
         return new Subject($issuer, $recipient, Subject::ISSUED_BY_THIRD_PARTY);
     }
 

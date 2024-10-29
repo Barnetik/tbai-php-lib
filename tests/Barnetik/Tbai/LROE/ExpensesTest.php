@@ -131,6 +131,8 @@ class ExpensesTest extends TestCase
         $expensesData['recipient']['vatId'] = $nif;
         $expensesData['recipient']['name'] = $recipient;
         $expensesData['header']['invoiceNumber'] = time();
+        $expensesData['operationDate'] = date('d-m-Y'); // Only works onces a day, it will say that allready exists on other cases
+        $expensesData['income']['irpfExpenseAmount'] = rand(1, 10000000);
         sleep(1);
         $expenses = ExpensesWithoutInvoice::createFromJson($expensesData);
         
@@ -140,6 +142,9 @@ class ExpensesTest extends TestCase
         $responseFile = tempnam(__DIR__ . '/../__files/responses', 'response-');
         file_put_contents($responseFile, $response->content());
         if (!$response->isCorrect()) {
+            if ($response->errorDataRegistry()[0]['errorMessage']['eu'] === 'Erregistro bikoiztua.') {
+                $this->markTestSkipped('Duplicated registry. Already tested today.');
+            }
             echo "\n";
             echo "VatId / IFZ / NIF: " . $expenses->recipientVatId() . "\n";
             echo "Date:" . date('Y-m-d H:i:s') . "\n";

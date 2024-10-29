@@ -126,18 +126,19 @@ class Recipient implements TbaiXml
     public function xml(DOMDocument $domDocument): DOMNode
     {
         $recipient = $domDocument->createElement('IDDestinatario');
+
+        $vatId = (string)$this->vatId();
         if ($this->hasNifAsVatId() && $this->isNational()) {
             $recipient->appendChild(
-                $domDocument->createElement('NIF', $this->vatId())
+                $domDocument->createElement('NIF', $vatId)
             );
         } else {
             $otherId = $domDocument->createElement('IDOtro');
             $otherId->appendChild($domDocument->createElement('CodigoPais', $this->countryCode()));
             $otherId->appendChild($domDocument->createElement('IDType', $this->vatIdType()));
 
-            $vatId = (string)$this->vatId();
-            if ($this->hasNifAsVatId() && substr($vatId, 0, 2) !== $this->countryCode()) {
-                $vatId = $this->countryCode . $vatId;
+            if ($this->hasNifAsVatId() && substr($vatId, 0, 2) !== $this->viesCountryCode()) {
+                $vatId = $this->viesCountryCode() . $vatId;
             }
             $otherId->appendChild($domDocument->createElement('ID', $vatId));
 
@@ -162,6 +163,15 @@ class Recipient implements TbaiXml
             );
         }
         return $recipient;
+    }
+
+    public function viesCountryCode(): string
+    {
+        if ($this->countryCode === 'GR') {
+            return 'EL';
+        }
+
+        return $this->countryCode;
     }
 
     public static function docJson(): array
