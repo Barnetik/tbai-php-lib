@@ -108,16 +108,16 @@ class Recipient implements TbaiXml
         $postalCode = $xpath->evaluate('string(CodigoPostal)', $contextNode);
         $address = $xpath->evaluate('string(Direccion)', $contextNode);
 
-        if ($xpath->evaluate('count(NIF)', $contextNode) === 0) {
+        if ($xpath->evaluate('count(NIF)', $contextNode)) {
+            $vatId = new VatId($xpath->evaluate('string(NIF)', $contextNode));
+            $recipient = self::createNationalRecipient($vatId, $name, $postalCode, $address);
+        } else {
             $vatIdValue = $xpath->evaluate('string(IDOtro/ID)', $contextNode);
             $vatType = $xpath->evaluate('string(IDOtro/IDType)', $contextNode);
             $countryCode = $xpath->evaluate('string(IDOtro/CodigoPais)', $contextNode);
 
             $vatId = new VatId($vatIdValue, $vatType);
             $recipient = self::createGenericRecipient($vatId, $name, $postalCode, $address, $countryCode);
-        } else {
-            $vatId = new VatId($xpath->evaluate('string(NIF)', $contextNode));
-            $recipient = self::createNationalRecipient($vatId, $name, $postalCode, $address);
         }
 
         return $recipient;

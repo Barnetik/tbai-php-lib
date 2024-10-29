@@ -242,6 +242,64 @@ class TicketBaiTest extends TestCase
         $this->assertFalse(empty($operationDateValue));
     }
 
+    public function test_gh47_foreign_recipient_ticketbai_can_be_generated_from_xml(): void
+    {
+        $nif = $_ENV['TBAI_ARABA_ISSUER_NIF'];
+        $issuer = 'Test with & on issuer name';
+        $license = $_ENV['TBAI_ARABA_APP_LICENSE'];
+        $developer = $_ENV['TBAI_ARABA_APP_DEVELOPER_NIF'];
+        $appName = $_ENV['TBAI_ARABA_APP_NAME'];
+        $appVersion =  $_ENV['TBAI_ARABA_APP_VERSION'];
+
+        $certFile = $_ENV['TBAI_TEST_P12_PATH'];
+        $certPassword = $_ENV['TBAI_TEST_P12_KEY'];
+        $privateKey = PrivateKey::p12($certFile);
+
+        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        rename($filename, $filename . '.xml');
+        $filename .= '.xml';
+
+        $ticketbai = $this->ticketBaiMother->createTicketBaiWithForeignServices($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA, false, VatId::VAT_ID_TYPE_NIF, '00000000T', 'IE');
+        $ticketbai->sign($privateKey, $certPassword, $filename);
+
+        $signedDom = new DOMDocument();
+        $signedDom->load($filename);
+
+        $createdFromXmlSignedFile = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        rename($createdFromXmlSignedFile, $createdFromXmlSignedFile . '.xml');
+        $createdFromXmlSignedFile .= '.xml';
+
+        $ticketbaiFromXml = TicketBai::createFromXml($signedDom->saveXML(), $ticketbai->territory(), false, $createdFromXmlSignedFile);
+        $this->assertEquals('IE', $ticketbaiFromXml->toArray()['subject']['recipients'][0]['countryCode']);
+        $xml = new DOMDocument('1.0', 'utf-8');
+        $ticketbaiFromXml->xml($xml);
+        $xpath = new DOMXPath($xml);
+
+        $finalVatId = $xpath->evaluate('string(/T:TicketBai/Sujetos/Destinatarios/IDDestinatario/IDOtro/CodigoPais)');
+        $this->assertEquals('IE', $finalVatId);
+
+
+        $ticketbai = $this->getTicketBai();
+        $ticketbai->sign($privateKey, $certPassword, $filename);
+
+        $signedDom = new DOMDocument();
+        $signedDom->load($filename);
+
+        $createdFromXmlSignedFile = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        rename($createdFromXmlSignedFile, $createdFromXmlSignedFile . '.xml');
+        $createdFromXmlSignedFile .= '.xml';
+
+        $ticketbaiFromXml = TicketBai::createFromXml($signedDom->saveXML(), $ticketbai->territory(), false, $createdFromXmlSignedFile);
+
+        $xml = new DOMDocument('1.0', 'utf-8');
+        $ticketbaiFromXml->xml($xml);
+        $xpath = new DOMXPath($xml);
+
+        $finalVatId = $xpath->evaluate('string(/T:TicketBai/Sujetos/Destinatarios/IDDestinatario/NIF)');
+        $this->assertEquals('00000000T', $finalVatId);
+    }
+
+
     public function test_gh48_Greek_Vatid_prefix_EL_instead_of_GR(): void
     {
         $nif = $_ENV['TBAI_ARABA_ISSUER_NIF'];
