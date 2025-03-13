@@ -37,6 +37,25 @@ class SimplifiedTicketBaiTest extends TestCase
         $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketbaiv1-2-2.xsd'));
     }
 
+    public function test_simplified_TicketBai_with_recipient_from_json_validates_schema(): void
+    {
+        $certFile = $_ENV['TBAI_GIPUZKOA_P12_PATH'];
+        $certPassword = $_ENV['TBAI_GIPUZKOA_PRIVATE_KEY'];
+        $privateKey = PrivateKey::p12($certFile);
+
+        $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBaiForCompanyFromJson(__DIR__ . '/__files/tbai-simplified-with-recipient-sample.json');
+
+        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        rename($signedFilename, $signedFilename . '.xml');
+        $signedFilename = $signedFilename . '.xml';
+
+        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+
+        $signedDom = new DOMDocument();
+        $signedDom->load($signedFilename);
+        $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketbaiv1-2-2.xsd'));
+    }
+
     public function test_simplified_TicketBai_without_recipient_validates_schema(): void
     {
 
