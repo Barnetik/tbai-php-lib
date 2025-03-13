@@ -339,7 +339,7 @@ class TicketBaiTest extends TestCase
 
     public function test_gh55_TicketBai_should_allow_return_of_null_batuzIncomeTaxCollection(): void
     {
-        $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBaiSelfEmployed();
+        $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBai();
         $this->assertNull($ticketbai->batuzIncomeTaxes());
     }
 
