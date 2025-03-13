@@ -23,22 +23,36 @@
       "invoiceNumber": "1646674248",
       "expeditionDate": "07-03-2025",
       "expeditionTime": "17:30:48",
-      "simplifiedInvoice": false
+      "simplifiedInvoice": true
     },
     "data": {
       "description": "factura ejemplo TBAI",
       "details": [
         {
           "description": "Art\u00edculo 1 Ejemplo",
-          "unitPrice": "10.00",
+          "unitPrice": "23.356",
           "quantity": "1",
+          "discount": "2.00",
+          "totalAmount": "25.84"
+        },
+        {
+          "description": "Art\u00edculo 2 xxx",
+          "unitPrice": "18.2",
+          "quantity": "1.50",
           "discount": null,
-          "totalAmount": "12.1"
+          "totalAmount": "33.03"
+        },
+        {
+          "description": "Art\u00edculo 3 aaaaaaa",
+          "unitPrice": "1.40",
+          "quantity": "18",
+          "discount": null,
+          "totalAmount": "30.49"
         }
       ],
-      "total": "12.1",
+      "total": "89.36",
       "vatRegimes": [
-        "51"
+        "01"
       ],
       "supportedRetention": null,
       "taxBaseCost": null
@@ -50,12 +64,12 @@
           "type": "S1",
           "vatDetails": [
             {
-              "taxBase": "10",
+              "taxBase": "73.86",
               "taxRate": "21",
-              "taxQuota": "2.1",
+              "taxQuota": "21",
               "equivalenceRate": "",
               "equivalenceQuota": "",
-              "isEquivalenceOperation": true
+              "isEquivalenceOperation": null
             }
           ]
         }
