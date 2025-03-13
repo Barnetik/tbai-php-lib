@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.6.1](https://github.com/Barnetik/tbai-php-lib/compare/v0.6.0...v0.6.1) (2025-03-13)
+
+
+### Bug Fixes
+
+* Ticketbai::batuzIncomeTaxes should be able to return null values ([4eda700](https://github.com/Barnetik/tbai-php-lib/commit/4eda7004b4c8d3700e5c92943da660f6078bc9ad))
+
 ## [0.6.0](https://github.com/Barnetik/tbai-php-lib/compare/v0.5.0...v0.6.0) (2024-10-29)
 
 
