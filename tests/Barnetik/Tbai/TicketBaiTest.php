@@ -222,7 +222,7 @@ class TicketBaiTest extends TestCase
     public function test_gh29_TicketBai_sends_operation_date_element(): void
     {
         $nif = $_ENV['TBAI_ARABA_ISSUER_NIF'];
-        $issuer = 'Test with & on issuer name';
+        $issuer = $_ENV['TBAI_ARABA_ISSUER_NAME'];
         $license = $_ENV['TBAI_ARABA_APP_LICENSE'];
         $developer = $_ENV['TBAI_ARABA_APP_DEVELOPER_NIF'];
         $appName = $_ENV['TBAI_ARABA_APP_NAME'];
@@ -245,7 +245,7 @@ class TicketBaiTest extends TestCase
     public function test_gh47_foreign_recipient_ticketbai_can_be_generated_from_xml(): void
     {
         $nif = $_ENV['TBAI_ARABA_ISSUER_NIF'];
-        $issuer = 'Test with & on issuer name';
+        $issuer = $_ENV['TBAI_ARABA_ISSUER_NAME'];
         $license = $_ENV['TBAI_ARABA_APP_LICENSE'];
         $developer = $_ENV['TBAI_ARABA_APP_DEVELOPER_NIF'];
         $appName = $_ENV['TBAI_ARABA_APP_NAME'];
@@ -303,7 +303,7 @@ class TicketBaiTest extends TestCase
     public function test_gh48_Greek_Vatid_prefix_EL_instead_of_GR(): void
     {
         $nif = $_ENV['TBAI_ARABA_ISSUER_NIF'];
-        $issuer = 'Test with & on issuer name';
+        $issuer = $_ENV['TBAI_ARABA_ISSUER_NAME'];
         $license = $_ENV['TBAI_ARABA_APP_LICENSE'];
         $developer = $_ENV['TBAI_ARABA_APP_DEVELOPER_NIF'];
         $appName = $_ENV['TBAI_ARABA_APP_NAME'];
@@ -336,4 +336,12 @@ class TicketBaiTest extends TestCase
         $finalVatId = $xpath->evaluate('string(/T:TicketBai/Sujetos/Destinatarios/IDDestinatario/IDOtro/ID)');
         $this->assertEquals('IE00000000T', $finalVatId);
     }
+
+    public function test_gh55_TicketBai_should_allow_return_of_null_batuzIncomeTaxCollection(): void
+    {
+        $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBaiSelfEmployed();
+        $this->assertNull($ticketbai->batuzIncomeTaxes());
+    }
+
+
 }

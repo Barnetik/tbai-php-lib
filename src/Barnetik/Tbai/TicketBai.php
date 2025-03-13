@@ -204,7 +204,7 @@ Faktura aurkeztuko den lurraldea - Territorio en el que se presentará la factur
         return $this;
     }
 
-    public function batuzIncomeTaxes(): Collection
+    public function batuzIncomeTaxes(): ?Collection
     {
         return $this->batuzIncomeTaxCollection;
     }
