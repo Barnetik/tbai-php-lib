@@ -13,6 +13,8 @@ interface ResponseInterface
     public function isCorrect(): bool;
     public function mainErrorMessage(): string;
     public function saveResponseContent(string $path): void;
+    public function saveFullResponse(string $path): void;
     public function errorDataRegistry(): array;
     public function hasErrorData(): bool;
+    public function toArray(): array;
 }

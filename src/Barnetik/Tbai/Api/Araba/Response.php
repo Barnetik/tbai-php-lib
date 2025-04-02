@@ -92,9 +92,4 @@ class Response extends ApiResponse
     {
         return sizeof($this->errorDataRegistry()) > 0;
     }
-
-    public function content(): string
-    {
-        return $this->content;
-    }
 }
