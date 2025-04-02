@@ -492,8 +492,13 @@ class TicketBaiMother
 
     public function createBizkaiaTicketBaiForCompanyFromJson(string $jsonFile): TicketBai
     {
-        $json = json_decode(file_get_contents($jsonFile), true);
+        return $this->createBizkaiaTicketBaiForCompanyFromArray(
+            json_decode(file_get_contents($jsonFile), true)
+        );
+    }
 
+    public function createBizkaiaTicketBaiForCompanyFromArray(array $json): TicketBai
+    {
         $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_240'];
         $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_240'];
         $json['subject']['issuer']['vatId'] = $nif;

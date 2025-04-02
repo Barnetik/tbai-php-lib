@@ -28,14 +28,14 @@ class TicketBaiRectificationTest extends TestCase
         $privateKey = PrivateKey::p12($certFile);
 
         $ticketbai = $this->ticketBaiMother->createGipuzkoaTicketBai();
-        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
 
         $ticketbai->sign($privateKey, $certPassword, $signedFilename);
 
         $ticketbaiRectification = $this->ticketBaiMother->createGipuzkoaTicketBaiRectification($ticketbai);
-        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
 
@@ -53,14 +53,14 @@ class TicketBaiRectificationTest extends TestCase
         $privateKey = PrivateKey::p12($certFile);
 
         $ticketbai = $this->ticketBaiMother->createGipuzkoaTicketBai();
-        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
 
         $ticketbai->sign($privateKey, $certPassword, $signedFilename);
 
         $ticketbaiRectification = $this->ticketBaiMother->createGipuzkoaTicketBaiFromJson(__DIR__ . '/__files/tbai-rectification-sample.json');
-        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
 
@@ -123,7 +123,7 @@ class TicketBaiRectificationTest extends TestCase
             $territory
         );
 
-        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
 

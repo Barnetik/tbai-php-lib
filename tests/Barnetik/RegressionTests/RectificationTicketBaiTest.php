@@ -31,7 +31,7 @@ class RectificationTicketBaiTest extends TestCase
 
     private function getSignedDestinationFile(): string
     {
-        $filename = tempnam(__DIR__ . '/../Tbai/__files/signedXmls', 'signed-');
+        $filename = tempnam(__DIR__ . '/../Tbai/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($filename, $filename . '.xml');
         return $filename . '.xml';
     }

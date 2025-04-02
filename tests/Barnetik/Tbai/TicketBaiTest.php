@@ -45,7 +45,7 @@ class TicketBaiTest extends TestCase
         $certPassword = $_ENV['TBAI_TEST_P12_KEY'];
         $privateKey = PrivateKey::p12($certFile);
 
-        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $filename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
 
@@ -55,7 +55,7 @@ class TicketBaiTest extends TestCase
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
 
-        $createdFromXmlSignedFile = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $createdFromXmlSignedFile = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($createdFromXmlSignedFile, $createdFromXmlSignedFile . '.xml');
         $createdFromXmlSignedFile .= '.xml';
 
@@ -70,7 +70,7 @@ class TicketBaiTest extends TestCase
     public function test_TicketBai_can_be_signed_with_PFX_key(): void
     {
         $ticketbai = $this->getTicketBai();
-        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $filename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
 
@@ -84,7 +84,7 @@ class TicketBaiTest extends TestCase
     public function test_TicketBai_can_be_signed_with_PEM_key(): void
     {
         $ticketbai = $this->getTicketBai();
-        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $filename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
 
@@ -98,7 +98,7 @@ class TicketBaiTest extends TestCase
     public function test_TicketBai_can_be_signed_with_singlefile_PEM(): void
     {
         $ticketbai = $this->getTicketBai();
-        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $filename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
 
@@ -119,7 +119,7 @@ class TicketBaiTest extends TestCase
         $appVersion =  $_ENV['TBAI_ARABA_APP_VERSION'];
 
         $ticketbai = $this->ticketBaiMother->createTicketBaiMultiVat($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
-        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $filename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
 
@@ -133,7 +133,7 @@ class TicketBaiTest extends TestCase
     public function test_TicketBai_signed_file_is_valid(): void
     {
         $ticketbai = $this->getTicketBai();
-        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $filename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
         $privateKey = PrivateKey::p12($_ENV['TBAI_TEST_P12_PATH']);
@@ -159,7 +159,7 @@ class TicketBaiTest extends TestCase
     public function test_TicketBai_generates_signature_values(): void
     {
         $ticketbai = $this->getTicketBai();
-        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $filename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
         $privateKey = PrivateKey::p12($_ENV['TBAI_TEST_P12_PATH']);
@@ -208,7 +208,7 @@ class TicketBaiTest extends TestCase
         $appVersion =  $_ENV['TBAI_ARABA_APP_VERSION'];
 
         $ticketbai = $this->ticketBaiMother->createTicketBaiMultiVat($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
-        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $filename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
 
@@ -229,7 +229,7 @@ class TicketBaiTest extends TestCase
         $appVersion =  $_ENV['TBAI_ARABA_APP_VERSION'];
 
         $ticketbai = $this->ticketBaiMother->createTicketBaiWithOperationDate($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
-        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $filename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
 
@@ -255,7 +255,7 @@ class TicketBaiTest extends TestCase
         $certPassword = $_ENV['TBAI_TEST_P12_KEY'];
         $privateKey = PrivateKey::p12($certFile);
 
-        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $filename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
 
@@ -265,7 +265,7 @@ class TicketBaiTest extends TestCase
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
 
-        $createdFromXmlSignedFile = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $createdFromXmlSignedFile = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($createdFromXmlSignedFile, $createdFromXmlSignedFile . '.xml');
         $createdFromXmlSignedFile .= '.xml';
 
@@ -285,7 +285,7 @@ class TicketBaiTest extends TestCase
         $signedDom = new DOMDocument();
         $signedDom->load($filename);
 
-        $createdFromXmlSignedFile = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $createdFromXmlSignedFile = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($createdFromXmlSignedFile, $createdFromXmlSignedFile . '.xml');
         $createdFromXmlSignedFile .= '.xml';
 

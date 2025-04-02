@@ -26,7 +26,7 @@ class SimplifiedTicketBaiTest extends TestCase
 
         $ticketbai = $this->ticketBaiMother->createSimplifiedTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, $territory, true, true);
 
-        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
 
@@ -45,7 +45,7 @@ class SimplifiedTicketBaiTest extends TestCase
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBaiForCompanyFromJson(__DIR__ . '/__files/tbai-simplified-with-recipient-sample.json');
 
-        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
 
@@ -73,7 +73,7 @@ class SimplifiedTicketBaiTest extends TestCase
 
         $ticketbai = $this->ticketBaiMother->createSimplifiedTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, $territory, true, false);
 
-        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
 

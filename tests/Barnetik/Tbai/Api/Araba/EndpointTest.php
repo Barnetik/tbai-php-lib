@@ -24,7 +24,7 @@ class EndpointTest extends TestCase
         $appVersion =  $_ENV['TBAI_ARABA_APP_VERSION'];
 
         $ticketbai = $this->ticketBaiMother->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
 
@@ -38,8 +38,8 @@ class EndpointTest extends TestCase
 
         $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
-        file_put_contents($responseFile, $response->content());
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
+        $response->saveResponseContent($responseFile);
 
         if (!$response->isCorrect()) {
             echo "\n";
@@ -71,7 +71,7 @@ class EndpointTest extends TestCase
         $ticketbai = $this->ticketBaiMother->createTicketBaiMultiVat($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
 
         $ticketbai = $this->ticketBaiMother->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
 
@@ -81,8 +81,8 @@ class EndpointTest extends TestCase
 
         $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
-        file_put_contents($responseFile, $response->content());
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
+        $response->saveResponseContent($responseFile);
 
         if (!$response->isCorrect()) {
             echo "\n";
@@ -104,7 +104,7 @@ class EndpointTest extends TestCase
         $certPassword = $_ENV['TBAI_ARABA_PRIVATE_KEY'];
         $privateKey = PrivateKey::p12($certFile);
 
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
 
@@ -118,8 +118,8 @@ class EndpointTest extends TestCase
         $ticketbaiCancel->sign($privateKey, $certPassword, $signedFilename);
         $response = $endpoint->cancelInvoice($ticketbaiCancel, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
-        file_put_contents($responseFile, $response->content());
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
+        $response->saveResponseContent($responseFile);
 
         if (!$response->isCorrect()) {
             echo "\n";
@@ -142,7 +142,7 @@ class EndpointTest extends TestCase
         $privateKey = PrivateKey::p12($certFile);
 
         $ticketbai = $this->ticketBaiMother->createArabaTicketBai();
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
 
@@ -152,7 +152,7 @@ class EndpointTest extends TestCase
         $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
         $ticketbaiRectification = $this->ticketBaiMother->createArabaTicketBaiRectification($ticketbai);
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
 
@@ -161,8 +161,8 @@ class EndpointTest extends TestCase
         $endpoint = new Endpoint(true, true);
         $response = $endpoint->submitInvoice($ticketbaiRectification, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
-        file_put_contents($responseFile, $response->content());
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
+        $response->saveResponseContent($responseFile);
 
         if (!$response->isCorrect()) {
             echo "\n";
@@ -184,7 +184,7 @@ class EndpointTest extends TestCase
         $privateKey = PrivateKey::p12($certFile);
 
         $ticketbai = $this->ticketBaiMother->createArabaTicketBai();
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
 
@@ -199,8 +199,8 @@ class EndpointTest extends TestCase
         $endpoint = new Endpoint(true, true);
         $response = $endpoint->submitInvoice($restoredTbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
-        file_put_contents($responseFile, $response->content());
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
+        $response->saveResponseContent($responseFile);
 
         if (!$response->isCorrect()) {
             echo "\n";
@@ -223,7 +223,7 @@ class EndpointTest extends TestCase
 
         $ticketbai = $this->ticketBaiMother->createArabaWrongTicketBai();
 
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
 
@@ -236,8 +236,8 @@ class EndpointTest extends TestCase
 
         $response = $endpoint->submitZuzendu($zuzendu, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
-        file_put_contents($responseFile, $response->content());
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
+        $response->saveResponseContent($responseFile);
 
         if (!$response->isCorrect()) {
             echo "\n";
@@ -259,7 +259,7 @@ class EndpointTest extends TestCase
         $certPassword = $_ENV['TBAI_ARABA_PRIVATE_KEY'];
         $privateKey = PrivateKey::p12($certFile);
 
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
 
@@ -278,8 +278,8 @@ class EndpointTest extends TestCase
         $zuzenduCancel = $this->ticketBaiMother->createZuzenduCancelForTicketBai($wrongTicketBaiCancel, $ticketbai);
         $response = $endpoint->cancelZuzendu($zuzenduCancel, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
-        file_put_contents($responseFile, $response->content());
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
+        $response->saveResponseContent($responseFile);
 
         if (!$response->isCorrect()) {
             echo "\n";
@@ -305,7 +305,7 @@ class EndpointTest extends TestCase
         $appVersion =  $_ENV['TBAI_ARABA_APP_VERSION'];
 
         $ticketbai = $this->ticketBaiMother->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls', 'signed-');
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
 
@@ -319,8 +319,8 @@ class EndpointTest extends TestCase
 
         $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', 'response-');
-        file_put_contents($responseFile, $response->content());
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
+        $response->saveResponseContent($responseFile);
 
         if (!$response->isCorrect()) {
             echo "\n";

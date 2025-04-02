@@ -38,7 +38,7 @@ class ZuzenduTest extends TestCase
         $certPassword = $_ENV['TBAI_ARABA_PRIVATE_KEY'];
         $privateKey = PrivateKey::p12($certFile);
 
-        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $filename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
 

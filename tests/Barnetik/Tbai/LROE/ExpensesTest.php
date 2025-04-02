@@ -51,7 +51,7 @@ class ExpensesTest extends TestCase
         $endpoint = new Endpoint(true, true);
         $response = $endpoint->submitExpensesInvoice($expenses, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
-        $responseFile = tempnam(__DIR__ . '/../__files/responses', 'response-');
+        $responseFile = tempnam(__DIR__ . '/../__files/responses',  date('YmdHis') . '-response-');
         file_put_contents($responseFile, $response->content());
         if (!$response->isCorrect()) {
             echo "\n";
@@ -96,7 +96,7 @@ class ExpensesTest extends TestCase
         $endpoint = new Endpoint(true, true);
         $response = $endpoint->submitExpensesInvoice($expenses, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
-        $responseFile = tempnam(__DIR__ . '/../__files/responses', 'response-');
+        $responseFile = tempnam(__DIR__ . '/../__files/responses',  date('YmdHis') . '-response-');
         file_put_contents($responseFile, $response->content());
         if (!$response->isCorrect()) {
             echo "\n";
@@ -139,7 +139,7 @@ class ExpensesTest extends TestCase
         $endpoint = new Endpoint(true, true);
         $response = $endpoint->submitExpensesWithoutInvoice($expenses, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
-        $responseFile = tempnam(__DIR__ . '/../__files/responses', 'response-');
+        $responseFile = tempnam(__DIR__ . '/../__files/responses',  date('YmdHis') . '-response-');
         file_put_contents($responseFile, $response->content());
         if (!$response->isCorrect()) {
             if ($response->errorDataRegistry()[0]['errorMessage']['eu'] === 'Erregistro bikoiztua.') {

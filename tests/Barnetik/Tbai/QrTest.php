@@ -16,7 +16,7 @@ class QrTest extends TestCase
     public function test_TicketBai_QR_can_be_generated_for_araba(): void
     {
         $ticketbai = $this->ticketBaiMother->createArabaTicketBai();
-        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $filename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
         $privateKey = PrivateKey::p12($_ENV['TBAI_ARABA_P12_PATH']);
@@ -33,7 +33,7 @@ class QrTest extends TestCase
     public function test_TicketBai_QR_can_be_generated_for_bizkaia(): void
     {
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBai();
-        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $filename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
         $privateKey = PrivateKey::p12($_ENV['TBAI_BIZKAIA_P12_PATH']);
@@ -50,7 +50,7 @@ class QrTest extends TestCase
     public function test_TicketBai_QR_can_be_generated_for_gipuzkoa(): void
     {
         $ticketbai = $this->ticketBaiMother->createGipuzkoaTicketBai();
-        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $filename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
         $privateKey = PrivateKey::p12($_ENV['TBAI_GIPUZKOA_P12_PATH']);
@@ -109,7 +109,7 @@ class QrTest extends TestCase
     public function test_TicketBai_Araba_QR_saves_png_to_path(): void
     {
         $ticketbai = $this->ticketBaiMother->createArabaTicketBai();
-        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $filename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
         $privateKey = PrivateKey::p12($_ENV['TBAI_ARABA_P12_PATH']);
@@ -120,7 +120,7 @@ class QrTest extends TestCase
         $api->submitInvoice($ticketbai, $privateKey, $certPassword);
 
         $qr = new Qr($ticketbai, true);
-        $filename = tempnam(__DIR__ . '/__files/qr', 'qr-araba-');
+        $filename = tempnam(__DIR__ . '/__files/qr', date('YmdHis') . '-qr-araba-');
         rename($filename, $filename . '.png');
         $filename .= '.png';
         $qr->savePng($filename);
@@ -130,7 +130,7 @@ class QrTest extends TestCase
     public function test_TicketBai_Bizkaia_QR_saves_png_to_path(): void
     {
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBai();
-        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $filename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
         $privateKey = PrivateKey::p12($_ENV['TBAI_BIZKAIA_P12_PATH']);
@@ -141,7 +141,7 @@ class QrTest extends TestCase
         $api->submitInvoice($ticketbai, $privateKey, $certPassword);
 
         $qr = new Qr($ticketbai, true);
-        $filename = tempnam(__DIR__ . '/__files/qr', 'qr-bizkaia-');
+        $filename = tempnam(__DIR__ . '/__files/qr', date('YmdHis') . '-qr-bizkaia-');
         rename($filename, $filename . '.png');
         $filename .= '.png';
         $qr->savePng($filename);
@@ -151,7 +151,7 @@ class QrTest extends TestCase
     public function test_TicketBai_Gipuzkoa_QR_saves_png_to_path(): void
     {
         $ticketbai = $this->ticketBaiMother->createGipuzkoaTicketBai();
-        $filename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $filename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($filename, $filename . '.xml');
         $filename .= '.xml';
         $privateKey = PrivateKey::p12($_ENV['TBAI_GIPUZKOA_P12_PATH']);
@@ -162,7 +162,7 @@ class QrTest extends TestCase
         $api->submitInvoice($ticketbai, $privateKey, $certPassword);
 
         $qr = new Qr($ticketbai, true);
-        $filename = tempnam(__DIR__ . '/__files/qr', 'qr-gipuzkoa-');
+        $filename = tempnam(__DIR__ . '/__files/qr', date('YmdHis') . '-qr-gipuzkoa-');
         rename($filename, $filename . '.png');
         $filename .= '.png';
         $qr->savePng($filename);

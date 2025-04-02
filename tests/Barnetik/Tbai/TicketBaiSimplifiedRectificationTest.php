@@ -16,14 +16,14 @@ class TicketBaiSimplifiedRectificationTest extends TestCase
         $privateKey = PrivateKey::p12($certFile);
 
         $ticketbai = $this->ticketBaiMother->createGipuzkoaTicketBai();
-        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
 
         $ticketbai->sign($privateKey, $certPassword, $signedFilename);
 
         $ticketbaiRectification = $this->ticketBaiMother->createGipuzkoaTicketBaiSimplifiedRectification($ticketbai);
-        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls', 'signed-');
+        $signedFilename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
         $ticketbaiRectification->sign($privateKey, $certPassword, $signedFilename);

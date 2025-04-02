@@ -1,0 +1,83 @@
+{
+    "territory": "01",
+    "subject": {
+      "issuer": {
+        "vatId": "00000015S",
+        "name": "Gaueko Akerbeltz"
+      },
+      "recipients": [
+        {
+          "vatId": "00000000T",
+          "vatIdType": "02",
+          "name": "Client Name",
+          "postalCode": "48270",
+          "address": "Markina-Xemein",
+          "countryCode": "ES"
+        }
+      ],
+      "issuedBy": "N"
+    },
+    "invoice": {
+      "header": {
+        "series": "TESTSERIE",
+        "invoiceNumber": "1646674248",
+        "expeditionDate": "07-03-2025",
+        "expeditionTime": "17:30:48",
+        "simplifiedInvoice": false
+      },
+      "data": {
+        "description": "factura ejemplo TBAI",
+        "details": [
+          {
+            "description": "Art\u00edculo 1 Ejemplo",
+            "unitPrice": "23.356",
+            "quantity": "1",
+            "discount": "2.00",
+            "totalAmount": "21.36"
+          },
+          {
+            "description": "Art\u00edculo 2 xxx",
+            "unitPrice": "18.2",
+            "quantity": "1.50",
+            "discount": null,
+            "totalAmount": "27.3"
+          },
+          {
+            "description": "Art\u00edculo 3 aaaaaaa",
+            "unitPrice": "1.40",
+            "quantity": "18",
+            "discount": null,
+            "totalAmount": "25.2"
+          }
+        ],
+        "total": "73.86",
+        "vatRegimes": [
+          "03"
+        ],
+        "supportedRetention": null,
+        "taxBaseCost": null
+      },
+      "breakdown": {
+        "nationalSubjectExemptBreakdownItems": [],
+        "nationalSubjectNotExemptBreakdownItems": [
+          {
+            "type": "S1",
+            "vatDetails": [
+              {
+                "taxBase": "73.86",
+                "taxRate": "0",
+                "taxQuota": "0",
+                "equivalenceRate": "",
+                "equivalenceQuota": "",
+                "isEquivalenceOperation": null
+              }
+            ]
+          }
+        ],
+        "nationalNotSubjectBreakdownItems": []
+      }
+    },
+    "fingerprint": {
+      "previousInvoice": null
+    }
+  }
