@@ -82,7 +82,7 @@ class Data implements TbaiXml
             throw new InvalidVatRegimeException();
         }
 
-        if (sizeof($this->vatRegimes) >= 2) {
+        if (sizeof($this->vatRegimes) > 3) {
             throw new OutOfBoundsException('Too many VAT Regimes provided');
         }
 
