@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.6.2](https://github.com/Barnetik/tbai-php-lib/compare/v0.6.1...v0.6.2) (2025-04-03)
+
+
+### Features
+
+* Added saveFullResponse to response object to save full headers info too.\nAdded toArray method to Responses.\nSaveResponseContent now saves ungzipped content on bizkaia responses too. ([403eee4](https://github.com/Barnetik/tbai-php-lib/commit/403eee433e32993f5ed46f8c1408288fc542a275))
+
+
+### Bug Fixes
+
+* Allow between 1 an 3 vat regimes as stated on ticketbai spec ([34ada59](https://github.com/Barnetik/tbai-php-lib/commit/34ada59dcdd287cfff77c198774eb3868e163e7e))
+
 ## [0.6.1](https://github.com/Barnetik/tbai-php-lib/compare/v0.6.0...v0.6.1) (2025-03-13)
 
 
