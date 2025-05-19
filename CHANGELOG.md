@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file. See [commit
 
 ## [0.6.3](https://github.com/Barnetik/tbai-php-lib/compare/v0.6.2...v0.6.3) (2025-05-19)
 
+### Bug Fixes
+
+* Bizkaia and Araba Policy Identifier and Digest where outdated. ([102dc76](https://github.com/Barnetik/tbai-php-lib/commit/102dc76ba9ab5f168b66b1bfa9c4ffca772dcbf1))
+
+
 ## [0.6.2](https://github.com/Barnetik/tbai-php-lib/compare/v0.6.1...v0.6.2) (2025-04-03)
 
 
