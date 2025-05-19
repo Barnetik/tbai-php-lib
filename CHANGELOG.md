@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.6.3](https://github.com/Barnetik/tbai-php-lib/compare/v0.6.2...v0.6.3) (2025-05-19)
+
 ## [0.6.2](https://github.com/Barnetik/tbai-php-lib/compare/v0.6.1...v0.6.2) (2025-04-03)
 
 
