@@ -137,7 +137,7 @@ class Income extends AbstractTaxInfo
 
         $taxInfo->appendChild($domDocument->createElement('ImporteGastoIRPF', $this->irpfExpenseAmount));
 
-        if (!is_null($this->withCollectionAndPaymentCriteria)) {
+        if ($this->withCollectionAndPaymentCriteria !== null) {
             $taxInfo->appendChild($domDocument->createElement('CriterioCobrosYPagos', $this->withCollectionAndPaymentCriteria ? 'S' : 'N'));
         }
 

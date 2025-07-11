@@ -58,7 +58,7 @@ class ExpensesWithoutInvoice implements TbaiXml
         $income = Income::createFromJson($jsonData['income']);
 
         $declaredSupplierCounterpart = null;
-        if (array_key_exists('declaredSupplierCounterpart', $jsonData) && !is_null($jsonData['declaredSupplierCounterpart'])) {
+        if (array_key_exists('declaredSupplierCounterpart', $jsonData) && $jsonData['declaredSupplierCounterpart'] !== null) {
             $declaredSupplierCounterpart = DeclaredSupplierCounterpart::createFromJson($jsonData['declaredSupplierCounterpart']);
         }
 

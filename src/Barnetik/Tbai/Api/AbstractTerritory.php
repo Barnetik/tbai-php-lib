@@ -98,7 +98,6 @@ abstract class AbstractTerritory implements EndpointInterface
         return null;
     }
 
-    /** @phpstan-ignore-next-line */
     protected function parseCurlResponse(string $response, $curlHandle): array
     {
         if (!$response) {
