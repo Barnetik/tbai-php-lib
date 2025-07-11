@@ -384,7 +384,7 @@ class Breakdown implements TbaiXml
 
         if ($this->hasNationalBreakdown()) {
             $breakdown->appendChild($this->nationalBreakdownXml($domDocument));
-        } else if ($this->hasForeignBreakdown()) {
+        } elseif ($this->hasForeignBreakdown()) {
             $foreignBreakdown = $domDocument->createElement('DesgloseTipoOperacion');
             if ($this->hasForeignServiceBreakdown()) {
                 $foreignBreakdown->appendChild($this->foreignServiceBreakdownXml($domDocument));

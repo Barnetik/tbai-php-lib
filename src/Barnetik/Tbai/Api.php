@@ -12,7 +12,7 @@ use Barnetik\Tbai\Api\ResponseInterface;
 
 class Api
 {
-    const DEBUG_SENT_FILE = 'sentFile';
+    public const DEBUG_SENT_FILE = 'sentFile';
 
     private EndpointInterface $endpoint;
 

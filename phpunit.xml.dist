@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.3/phpunit.xsd"
+  xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/8.5/phpunit.xsd"
   bootstrap="tests/bootstrap.php" beStrictAboutOutputDuringTests="true" failOnRisky="true"
-  failOnWarning="true" colors="true" testdox="false"
-  displayDetailsOnTestsThatTriggerDeprecations="true">
+  failOnWarning="true" colors="true" testdox="false">
   <testsuites>
     <testsuite name="Tbai test suite">
       <directory suffix="Test.php">./tests</directory>
     </testsuite>
   </testsuites>
-  <source>
-    <include>
+  <filter>
+    <whitelist>
       <directory suffix=".php">./src</directory>
-    </include>
-  </source>
+    </whitelist>
+  </filter>
   <!-- <coverage>
     <report>
       <html outputDirectory="html-coverage" lowUpperBound="50" highLowerBound="90" />

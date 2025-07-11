@@ -7,17 +7,17 @@ use Barnetik\Tbai\Interfaces\Stringable;
 
 class VatId implements Stringable
 {
-    const VAT_ID_TYPE_IFZ = '02';
-    const VAT_ID_TYPE_NIF = '02';
-    const VAT_ID_TYPE_EUVAT = '02';
-    const VAT_ID_TYPE_PASSPORT = '03';
+    public const VAT_ID_TYPE_IFZ = '02';
+    public const VAT_ID_TYPE_NIF = '02';
+    public const VAT_ID_TYPE_EUVAT = '02';
+    public const VAT_ID_TYPE_PASSPORT = '03';
     /**
      * Egoitza dagoen herrialdeak edo lurraldeak emandako nortasun agiri ofiziala
      * Documento oficial de identificación expedido por el país o territorio de residencia
      */
-    const VAT_ID_TYPE_NATIONAL_ID = '04';
-    const VAT_ID_TYPE_RESIDENCE_CERTIFICATE = '05';
-    const VAT_ID_TYPE_OTHER = '06';
+    public const VAT_ID_TYPE_NATIONAL_ID = '04';
+    public const VAT_ID_TYPE_RESIDENCE_CERTIFICATE = '05';
+    public const VAT_ID_TYPE_OTHER = '06';
 
     private string $value;
     private string $type;

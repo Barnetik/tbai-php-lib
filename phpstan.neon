@@ -1,15 +1,7 @@
 parameters:
   level: 6
-  checkMissingIterableValueType: false
   paths:
     - src
     - tests
   excludePaths:
     - src/Barnetik/Tbai/Xades/xmldsig/xml/SigningCertificateV2.php
-  ignoreErrors:
-    -
-      message: '#Access to an undefined property .*::\$saveFilename#'
-      path: src/Barnetik/Tbai/Xades/TicketBai.php
-    -
-      message: '#Parameter \#3 \$mimeType of class .*#'
-      path: src/Barnetik/Tbai/Xades/TicketBai.php

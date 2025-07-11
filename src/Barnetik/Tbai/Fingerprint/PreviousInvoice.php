@@ -54,7 +54,7 @@ class PreviousInvoice implements TbaiXml
         $series = null;
         if (array_key_exists('series', $jsonData)) {
             $series = $jsonData['series'];
-        } else if (array_key_exists('serie', $jsonData)) {
+        } elseif (array_key_exists('serie', $jsonData)) {
             trigger_error(
                 'Deprecated. Avoid "serie" tag on json, "series" should be used instead. Future versions will remove this tag',
                 E_USER_DEPRECATED

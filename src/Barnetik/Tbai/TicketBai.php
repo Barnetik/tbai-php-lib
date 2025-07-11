@@ -137,7 +137,7 @@ class TicketBai extends AbstractTicketBai
         $selfEmployed = false;
         if (array_key_exists('selfEmployed', $jsonData)) {
             $selfEmployed = (bool)$jsonData['selfEmployed'];
-        } else if (array_key_exists('self_employed', $jsonData)) {
+        } elseif (array_key_exists('self_employed', $jsonData)) {
             trigger_error(
                 'Deprecated. Avoid "self_employed" tag on json, "selfEmployed" should be used instead. Future versions will remove this tag',
                 E_USER_DEPRECATED

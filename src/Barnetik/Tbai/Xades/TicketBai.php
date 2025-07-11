@@ -107,7 +107,7 @@ class TicketBai extends XAdES
                 new SignedSignatureProperties(
                     new SigningTime(),
                     null, // signingCertificate
-                    $signingCertificate, /**  @phpstan-ignore-line */
+                    $signingCertificate,
                     $this->getSignaturePolicyIdentifier(),
                     $signatureProductionPlace instanceof SignatureProductionPlace ? $signatureProductionPlace : null,
                     $signatureProductionPlace instanceof SignatureProductionPlaceV2 ? $signatureProductionPlace : null,

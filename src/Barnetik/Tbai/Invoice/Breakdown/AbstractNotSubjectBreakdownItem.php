@@ -11,12 +11,12 @@ use InvalidArgumentException;
 
 class AbstractNotSubjectBreakdownItem implements TbaiXml
 {
-    const NOT_SUBJECT_REASON_RL = 'RL';
-    const NOT_SUBJECT_REASON_LOCATION_RULES = 'RL';
-    const NOT_SUBJECT_REASON_OTHER = 'OT';
-    const NOT_SUBJECT_REASON_OT = 'OT';
-    const NOT_SUBJECT_REASON_VT = 'VT';
-    const NOT_SUBJECT_REASON_IE = 'IE';
+    public const NOT_SUBJECT_REASON_RL = 'RL';
+    public const NOT_SUBJECT_REASON_LOCATION_RULES = 'RL';
+    public const NOT_SUBJECT_REASON_OTHER = 'OT';
+    public const NOT_SUBJECT_REASON_OT = 'OT';
+    public const NOT_SUBJECT_REASON_VT = 'VT';
+    public const NOT_SUBJECT_REASON_IE = 'IE';
 
     private string $notSubjectReason;
     private Amount $amount;

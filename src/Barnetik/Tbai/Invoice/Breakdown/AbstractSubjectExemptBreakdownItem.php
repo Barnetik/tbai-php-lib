@@ -23,7 +23,7 @@ class AbstractSubjectExemptBreakdownItem implements TbaiXml
     const EXEMPT_REASON_ART_23 = 'E4';
     const EXEMPT_REASON_ART_24 = 'E4';
     const EXEMPT_REASON_ART_25 = 'E5';
-    const EXEMPT_REASON_OTHER = 'E6';
+    public const EXEMPT_REASON_OTHER = 'E6';
 
     private string $exemptionReason;
     private Amount $taxBase;

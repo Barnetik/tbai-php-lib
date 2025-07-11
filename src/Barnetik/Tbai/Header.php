@@ -8,7 +8,7 @@ use DOMNode;
 
 class Header implements TbaiXml
 {
-    const TBAI_VERSION = '1.2';
+    public const TBAI_VERSION = '1.2';
 
     public function xml(DOMDocument $document): DOMNode
     {

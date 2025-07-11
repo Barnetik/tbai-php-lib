@@ -85,7 +85,6 @@ abstract class AbstractTicketBai implements TbaiXml, TbaiSignable, Stringable, J
             call_user_func(
                 $xadesClass . '::signDocument',
                 new InputResourceInfo(
-                    /** @phpstan-ignore-next-line */
                     $this->dom(),
                     ResourceInfo::xmlDocument, // The source is a DOMDocument
                     dirname($signedFileStoragePath), // The location to save the signed document

@@ -15,26 +15,26 @@ use OutOfBoundsException;
 
 class Data implements TbaiXml
 {
-    const VAT_REGIME_01 = '01';
-    const VAT_REGIME_02 = '02';
-    const VAT_REGIME_03 = '03';
-    const VAT_REGIME_04 = '04';
-    const VAT_REGIME_05 = '05';
-    const VAT_REGIME_06 = '06';
-    const VAT_REGIME_07 = '07';
-    const VAT_REGIME_08 = '08';
-    const VAT_REGIME_09 = '09';
-    const VAT_REGIME_10 = '10';
-    const VAT_REGIME_11 = '11';
-    const VAT_REGIME_12 = '12';
-    const VAT_REGIME_13 = '13';
-    const VAT_REGIME_14 = '14';
-    const VAT_REGIME_15 = '15';
-    const VAT_REGIME_17 = '17';
-    const VAT_REGIME_19 = '19';
-    const VAT_REGIME_51 = '51';
-    const VAT_REGIME_52 = '52';
-    const VAT_REGIME_53 = '53';
+    public const VAT_REGIME_01 = '01';
+    public const VAT_REGIME_02 = '02';
+    public const VAT_REGIME_03 = '03';
+    public const VAT_REGIME_04 = '04';
+    public const VAT_REGIME_05 = '05';
+    public const VAT_REGIME_06 = '06';
+    public const VAT_REGIME_07 = '07';
+    public const VAT_REGIME_08 = '08';
+    public const VAT_REGIME_09 = '09';
+    public const VAT_REGIME_10 = '10';
+    public const VAT_REGIME_11 = '11';
+    public const VAT_REGIME_12 = '12';
+    public const VAT_REGIME_13 = '13';
+    public const VAT_REGIME_14 = '14';
+    public const VAT_REGIME_15 = '15';
+    public const VAT_REGIME_17 = '17';
+    public const VAT_REGIME_19 = '19';
+    public const VAT_REGIME_51 = '51';
+    public const VAT_REGIME_52 = '52';
+    public const VAT_REGIME_53 = '53';
 
     private string $description;
     private Amount $total;
