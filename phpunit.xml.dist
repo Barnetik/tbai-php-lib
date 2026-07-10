@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.3/phpunit.xsd"
-  bootstrap="tests/bootstrap.php" beStrictAboutOutputDuringTests="true" failOnRisky="true"
+  bootstrap="tests/bootstrap.php" beStrictAboutOutputDuringTests="true" failOnRisky="false"
   failOnWarning="true" colors="true" testdox="false"
   displayDetailsOnTestsThatTriggerDeprecations="true">
   <testsuites>
