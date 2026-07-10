@@ -131,7 +131,8 @@ class ExpensesTest extends TestCase
         $expensesData['recipient']['vatId'] = $nif;
         $expensesData['recipient']['name'] = $recipient;
         $expensesData['header']['invoiceNumber'] = time();
-        $expensesData['operationDate'] = date('d-m-Y'); // Only works onces a day, it will say that allready exists on other cases
+        $expensesData['operationDate'] = date('d-m-Y'); // Only works once a day, it will say that allready exists on other cases
+        $expensesData['receptionDate'] = date('d-m-Y'); // Only works once a day, it will say that allready exists on other cases
         $expensesData['income']['irpfExpenseAmount'] = rand(1, 10000000);
         sleep(1);
         $expenses = ExpensesWithoutInvoice::createFromJson($expensesData);
