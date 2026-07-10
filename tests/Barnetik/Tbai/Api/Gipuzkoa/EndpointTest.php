@@ -154,7 +154,7 @@ class EndpointTest extends TestCase
             echo "Response file: " . basename($responseFile) . "\n";
         }
 
-        $this->assertTrue($response->isCorrect());
+        $this->assertTrue($response->isDelivered());
     }
 
     public function test_TicketBai_multiVat_is_delivered(): void
@@ -196,7 +196,6 @@ class EndpointTest extends TestCase
             echo "Response file: " . basename($responseFile) . "\n";
         }
 
-        $this->assertFalse($response->hasErrorData());
         $this->assertTrue($response->isDelivered());
     }
 

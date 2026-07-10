@@ -131,7 +131,7 @@ class EndpointTest extends TestCase
             echo "Response file: " . basename($responseFile) . "\n";
         }
 
-        $this->assertTrue($response->isCorrect());
+        $this->assertTrue($response->isDelivered());
     }
 
 

@@ -12,7 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         php-version: ['8.0', '8.1', '8.2', '8.3']
-        test-type: ['phpstan', 'phpunit']
+        test-type: ['phpstan', 'phpunit-zuzendu', 'phpunit-ticketbai']
     
     steps:
     - uses: actions/checkout@v4
@@ -40,7 +40,7 @@ jobs:
       run: phpstan analyse --configuration phpstan.neon --memory-limit 1G
     
     - name: Run phpunit
-      if: matrix.test-type == 'phpunit'
+      if: matrix.test-type == 'phpunit-zuzendu'
       env:
         TBAI_ARABA_APP_LICENSE: ${{ secrets.TBAI_ARABA_APP_LICENSE }}
         TBAI_ARABA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_ARABA_APP_DEVELOPER_NIF }}
@@ -51,4 +51,18 @@ jobs:
         TBAI_BIZKAIA_ISSUER_NIF_240: ${{ secrets.TBAI_BIZKAIA_ISSUER_NIF_240 }}
         TBAI_GIPUZKOA_APP_LICENSE: ${{ secrets.TBAI_GIPUZKOA_APP_LICENSE }}
         TBAI_GIPUZKOA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_GIPUZKOA_APP_DEVELOPER_NIF }}
-      run: phpunit -c phpunit.xml.dist --filter "^(?!.*(araba)).*$"
+      run: phpunit -c phpunit.xml.dist --filter ".*zuzendu.*"
+    
+    - name: Run phpunit (without Zuzendu)
+      if: matrix.test-type == 'phpunit-ticketbai'
+      env:
+        TBAI_ARABA_APP_LICENSE: ${{ secrets.TBAI_ARABA_APP_LICENSE }}
+        TBAI_ARABA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_ARABA_APP_DEVELOPER_NIF }}
+        TBAI_BIZKAIA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_BIZKAIA_APP_DEVELOPER_NIF }}
+        TBAI_BIZKAIA_ISSUER_NAME_140: ${{ secrets.TBAI_BIZKAIA_ISSUER_NAME_140 }}
+        TBAI_BIZKAIA_ISSUER_NIF_140: ${{ secrets.TBAI_BIZKAIA_ISSUER_NIF_140 }}
+        TBAI_BIZKAIA_ISSUER_NAME_240: ${{ secrets.TBAI_BIZKAIA_ISSUER_NAME_240 }}
+        TBAI_BIZKAIA_ISSUER_NIF_240: ${{ secrets.TBAI_BIZKAIA_ISSUER_NIF_240 }}
+        TBAI_GIPUZKOA_APP_LICENSE: ${{ secrets.TBAI_GIPUZKOA_APP_LICENSE }}
+        TBAI_GIPUZKOA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_GIPUZKOA_APP_DEVELOPER_NIF }}
+      run: phpunit -c phpunit.xml.dist --filter "^(?!.*(zuzendu)).*$"
