@@ -44,4 +44,4 @@ jobs:
         TBAI_BIZKAIA_ISSUER_NIF_240: ${{ secrets.TBAI_BIZKAIA_ISSUER_NIF_240 }}
         TBAI_GIPUZKOA_APP_LICENSE: ${{ secrets.TBAI_GIPUZKOA_APP_LICENSE }}
         TBAI_GIPUZKOA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_GIPUZKOA_APP_DEVELOPER_NIF }}
-      run: phpunit -c phpunit.xml.dist --filter "^(?!.*(araba)).*$" --timeout-for-large-tests=60
+      run: phpunit -c phpunit.xml.dist --filter "^(?!.*(araba)).*$"
