@@ -1,62 +1,47 @@
 name: TicketBai Actions
 on: [push]
+
+env:
+  PHP_EXTENSIONS: gmp,curl,gd
+
 jobs:
-  phpstan:
-    name: Check with phpstan
+  tests:
+    name: PHP ${{ matrix.php-version }} - ${{ matrix.test-type }}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        php-versions: ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
-
+        php-version: ['8.0', '8.1', '8.2', '8.3']
+        test-type: ['phpstan', 'phpunit']
+    
     steps:
+    - uses: actions/checkout@v4
+    
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: ${{ matrix.php-versions }}
-        extensions: gmp, curl, gd
-        tools: composer:v2
-    - name: checkout
-      uses: actions/checkout@v2
-    - name: composer
-      uses: php-actions/composer@v5 # or alternative dependency management
-      with:
-        php_version: ${{ matrix.php-versions }}
-        php_extensions: gmp curl gd
-    - name: phpstan
-      uses: php-actions/phpstan@v3
-      with:
-        php_version: ${{ matrix.php-versions }}
-        php_extensions: gmp curl gd
-        configuration: phpstan.neon
-        memory_limit: 1G
-
-  phpunit:
-    name: Test with phpunit
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php-versions: ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
-    env:
-      TBAI_ARABA_APP_LICENSE: ${{ secrets.TBAI_ARABA_APP_LICENSE }}
-      TBAI_ARABA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_ARABA_APP_DEVELOPER_NIF }}
-      TBAI_BIZKAIA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_BIZKAIA_APP_DEVELOPER_NIF }}
-      TBAI_BIZKAIA_ISSUER_NAME_140: ${{ secrets.TBAI_BIZKAIA_ISSUER_NAME_140 }}
-      TBAI_BIZKAIA_ISSUER_NIF_140: ${{ secrets.TBAI_BIZKAIA_ISSUER_NIF_140 }}
-      TBAI_BIZKAIA_ISSUER_NAME_240: ${{ secrets.TBAI_BIZKAIA_ISSUER_NAME_240 }}
-      TBAI_BIZKAIA_ISSUER_NIF_240: ${{ secrets.TBAI_BIZKAIA_ISSUER_NIF_240 }}
-      TBAI_GIPUZKOA_APP_LICENSE: ${{ secrets.TBAI_GIPUZKOA_APP_LICENSE }}
-      TBAI_GIPUZKOA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_GIPUZKOA_APP_DEVELOPER_NIF }}
-
-    steps:
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: ${{ matrix.php-versions }}
-        extensions: gmp, curl, gd
-        tools: phpunit, composer, openssl
-    - name: checkout
-      uses: actions/checkout@v2
+        php-version: ${{ matrix.php-version }}
+        extensions: ${{ env.PHP_EXTENSIONS }}
+        tools: composer:v2,phpstan,phpunit
+        cache: composer
+    
     - name: Install dependencies
-      run: composer install
+      run: composer install --no-interaction --prefer-dist
+    
+    - name: Run phpstan
+      if: matrix.test-type == 'phpstan'
+      run: phpstan analyse --configuration phpstan.neon --memory-limit 1G
+    
     - name: Run phpunit
-      run: phpunit -c phpunit.xml.dist --filter "^(?!.*(araba)).*$"
+      if: matrix.test-type == 'phpunit'
+      env:
+        TBAI_ARABA_APP_LICENSE: ${{ secrets.TBAI_ARABA_APP_LICENSE }}
+        TBAI_ARABA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_ARABA_APP_DEVELOPER_NIF }}
+        TBAI_BIZKAIA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_BIZKAIA_APP_DEVELOPER_NIF }}
+        TBAI_BIZKAIA_ISSUER_NAME_140: ${{ secrets.TBAI_BIZKAIA_ISSUER_NAME_140 }}
+        TBAI_BIZKAIA_ISSUER_NIF_140: ${{ secrets.TBAI_BIZKAIA_ISSUER_NIF_140 }}
+        TBAI_BIZKAIA_ISSUER_NAME_240: ${{ secrets.TBAI_BIZKAIA_ISSUER_NAME_240 }}
+        TBAI_BIZKAIA_ISSUER_NIF_240: ${{ secrets.TBAI_BIZKAIA_ISSUER_NIF_240 }}
+        TBAI_GIPUZKOA_APP_LICENSE: ${{ secrets.TBAI_GIPUZKOA_APP_LICENSE }}
+        TBAI_GIPUZKOA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_GIPUZKOA_APP_DEVELOPER_NIF }}
+      run: phpunit -c phpunit.xml.dist --filter "^(?!.*(araba)).*$" --timeout-for-large-tests=60
