@@ -23,7 +23,14 @@ jobs:
         php-version: ${{ matrix.php-version }}
         extensions: ${{ env.PHP_EXTENSIONS }}
         tools: composer:v2,phpstan,phpunit
-        cache: composer
+    
+    - name: Cache Composer dependencies
+      uses: actions/cache@v4
+      with:
+        path: vendor
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-composer-
     
     - name: Install dependencies
       run: composer install --no-interaction --prefer-dist
