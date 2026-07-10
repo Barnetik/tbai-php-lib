@@ -422,7 +422,10 @@ class EndpointTest extends TestCase
         return $filename;
     }
 
-    private function debugResponseWithFile($endpoint, TicketBai | TicketBaiCancel $ticketbai, $response, string $signedFile, string $responseFile): void
+    /**
+     * @param TicketBai|TicketBaiCancel $ticketbai
+    */
+    private function debugResponseWithFile($endpoint, $ticketbai, $response, string $signedFile, string $responseFile): void
     {
         if (!$response->isCorrect()) {
             echo "\n";
@@ -436,10 +439,14 @@ class EndpointTest extends TestCase
             echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
             echo "Signed file: " . basename($signedFile) . "\n";
             echo "Response file: " . basename($responseFile) . "\n";
-        }
-    }
-
-    private function assertSubmissionSuccessful(Api|Endpoint $endpoint, TicketBai|TicketBaiCancel $ticketbai, PrivateKey $key, string $password, string $signedFile): void
+            }
+            }
+            
+    /**
+     * @param Api|Endpoint $endpoint
+     * @param TicketBai|TicketBaiCancel $ticketbai
+     */
+    private function assertSubmissionSuccessful($endpoint, $ticketbai, PrivateKey $key, string $password, string $signedFile): void
     {
         $response = $endpoint->submitInvoice($ticketbai, $key, $password, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
         $responseFile = $this->saveResponseToFile($response);

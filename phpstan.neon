@@ -1,5 +1,6 @@
 parameters:
   level: 5
+  phpVersion: 70400
   paths:
     - src
     - tests
@@ -10,10 +11,6 @@ parameters:
     -
       message: '#Parameter \#3 \$mimeType of class .*#'
       path: src/Barnetik/Tbai/Xades/TicketBai.php
-    - 
-      message: '#Deprecated in PHP 8.*#'
-      paths:
-        - src/
     -
       message: '#.* will always evaluate to true.*#'
     -
