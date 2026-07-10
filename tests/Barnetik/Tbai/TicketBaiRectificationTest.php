@@ -34,7 +34,7 @@ class TicketBaiRectificationTest extends TestCase
 
         $ticketbai->sign($privateKey, $certPassword, $signedFilename);
 
-        $ticketbaiRectification = $this->ticketBaiMother->createGipuzkoaTicketBaiRectification($ticketbai);
+        $ticketbaiRectification = $this->ticketBaiMother->createGipuzkoaTicketBaiRectificationBySubstitution($ticketbai);
         $signedFilename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
@@ -94,7 +94,7 @@ class TicketBaiRectificationTest extends TestCase
 
         $rectifyingInvoice = new RectifyingInvoice(
             RectifyingInvoice::CODE_R1,
-            RectifyingInvoice::TYPE_SUSTITUTION,
+            RectifyingInvoice::TYPE_SUBSTITUTION,
         );
 
         $header = Header::createRectifyingInvoice((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), $rectifyingInvoice, 'R' . $this->ticketBaiMother->testSerie());

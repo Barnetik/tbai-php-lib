@@ -14,7 +14,6 @@ class InvoiceHeaderTest extends TestCase
     public function test_invoice_header_can_be_created(): void
     {
         $invoiceHeader = Header::create('00001', new Date('02-09-2021'), new Time('21:21:21'), 'SERIE');
-        $this->assertIsObject($invoiceHeader);
         $this->assertEquals('SERIE', $invoiceHeader->series());
         $this->assertEquals('00001', $invoiceHeader->invoiceNumber());
         $this->assertNotEquals('1', $invoiceHeader->invoiceNumber());

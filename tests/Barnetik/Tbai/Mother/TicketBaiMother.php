@@ -182,14 +182,14 @@ class TicketBaiMother
         );
     }
 
-    public function createTicketBaiRectification(TicketBai $previousInvoice, string $nif, string $issuer, string $license, string $developer, string $appName, string $appVersion, string $territory, bool $selfEmployed = false): TicketBai
+    public function createTicketBaiRectificationBySubstitution(TicketBai $previousInvoice, string $nif, string $issuer, string $license, string $developer, string $appName, string $appVersion, string $territory, bool $selfEmployed = false): TicketBai
     {
         $subject = $this->getSubject($nif, $issuer);
         $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
 
         $rectifyingInvoice = new RectifyingInvoice(
             RectifyingInvoice::CODE_R1,
-            RectifyingInvoice::TYPE_SUSTITUTION,
+            RectifyingInvoice::TYPE_SUBSTITUTION,
             new RectifyingAmount(
                 new Amount('73.86'), //$previousInvoice->base()
                 new Amount('15.50')  //$previousInvoice->quote()
@@ -225,14 +225,52 @@ class TicketBaiMother
         );
     }
 
-    public function createTicketBaiSimplifiedRectification(TicketBai $previousInvoice, string $nif, string $issuer, string $license, string $developer, string $appName, string $appVersion, string $territory, bool $selfEmployed = false): TicketBai
+    public function createTicketBaiRectificationByDifference(TicketBai $previousInvoice, string $nif, string $issuer, string $license, string $developer, string $appName, string $appVersion, string $territory, bool $selfEmployed = false): TicketBai
     {
         $subject = $this->getSubject($nif, $issuer);
         $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
 
         $rectifyingInvoice = new RectifyingInvoice(
             RectifyingInvoice::CODE_R1,
-            RectifyingInvoice::TYPE_SUSTITUTION,
+            RectifyingInvoice::TYPE_DIFFERENCE,
+        );
+
+        $header = Header::createRectifyingInvoice((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), $rectifyingInvoice, 'R' . $this->testSerie());
+        $header->addRectifiedInvoice(new RectifiedInvoice(
+            $previousInvoice->invoiceNumber(),
+            $previousInvoice->expeditionDate(),
+            $previousInvoice->series()
+        ));
+
+        sleep(1); // Avoid same invoice number as time is used for generation
+        $data = new Data('factura rectificativa ejemplo TBAI', new Amount('-33.03'), [Data::VAT_REGIME_01]);
+        $data->addDetail(new Detail('Artículo 2 xxx', new Amount('-18.2', 12, 8), new Amount('1.50'), new Amount('-33.03')));
+
+
+        $vatDetail = new VatDetail(new Amount('-27.3'), new Amount('21'), new Amount('-5.73'));
+        $notExemptBreakdown = new NationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1, [$vatDetail]);
+
+        $breakdown = new Breakdown();
+        $breakdown->addNationalSubjectNotExemptBreakdownItem($notExemptBreakdown);
+
+        $invoice = new Invoice($header, $data, $breakdown);
+        return new TicketBai(
+            $subject,
+            $invoice,
+            $fingerprint,
+            $territory,
+            $selfEmployed
+        );
+    }
+
+    public function createTicketBaiSimplifiedRectificationBySubstitution(TicketBai $previousInvoice, string $nif, string $issuer, string $license, string $developer, string $appName, string $appVersion, string $territory, bool $selfEmployed = false): TicketBai
+    {
+        $subject = $this->getSubject($nif, $issuer);
+        $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
+
+        $rectifyingInvoice = new RectifyingInvoice(
+            RectifyingInvoice::CODE_R5,
+            RectifyingInvoice::TYPE_SUBSTITUTION,
             new RectifyingAmount(
                 new Amount('73.86'), //$previousInvoice->base()
                 new Amount('15.50')  //$previousInvoice->quote()
@@ -253,6 +291,44 @@ class TicketBaiMother
 
 
         $vatDetail = new VatDetail(new Amount('45.66'), new Amount('21'), new Amount('9.59'));
+        $notExemptBreakdown = new NationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1, [$vatDetail]);
+
+        $breakdown = new Breakdown();
+        $breakdown->addNationalSubjectNotExemptBreakdownItem($notExemptBreakdown);
+
+        $invoice = new Invoice($header, $data, $breakdown);
+        return new TicketBai(
+            $subject,
+            $invoice,
+            $fingerprint,
+            $territory,
+            $selfEmployed
+        );
+    }
+
+    public function createTicketBaiSimplifiedRectificationByDifference(TicketBai $previousInvoice, string $nif, string $issuer, string $license, string $developer, string $appName, string $appVersion, string $territory, bool $selfEmployed = false): TicketBai
+    {
+        $subject = $this->getSubject($nif, $issuer);
+        $fingerprint = $this->getFingerprint($license, $developer, $appName, $appVersion);
+
+        $rectifyingInvoice = new RectifyingInvoice(
+            RectifyingInvoice::CODE_R5,
+            RectifyingInvoice::TYPE_DIFFERENCE,
+        );
+
+        $header = Header::createSimplifiedRectifyingInvoice((string)time(), new Date(date('d-m-Y')), new Time(date('H:i:s')), $rectifyingInvoice, 'R' . $this->testSerie());
+        $header->addRectifiedInvoice(new RectifiedInvoice(
+            $previousInvoice->invoiceNumber(),
+            $previousInvoice->expeditionDate(),
+            $previousInvoice->series()
+        ));
+
+        sleep(1); // Avoid same invoice number as time is used for generation
+        $data = new Data('factura rectificativa ejemplo TBAI', new Amount('-33.03'), [Data::VAT_REGIME_01]);
+        $data->addDetail(new Detail('Artículo 2 xxx', new Amount('-18.2', 12, 8), new Amount('1.50'), new Amount('-33.03')));
+
+
+        $vatDetail = new VatDetail(new Amount('-27.3'), new Amount('21'), new Amount('-5.73'));
         $notExemptBreakdown = new NationalSubjectNotExemptBreakdownItem(NationalSubjectNotExemptBreakdownItem::NOT_EXEMPT_TYPE_S1, [$vatDetail]);
 
         $breakdown = new Breakdown();
@@ -484,6 +560,8 @@ class TicketBaiMother
         $json['subject']['issuer']['vatId'] = $nif;
         $json['subject']['issuer']['name'] = $issuer;
         $json['invoice']['header']['invoiceNumber'] = (string)time();
+        $json['invoice']['header']['expeditionDate'] = date('d-m-Y');
+
         sleep(1);
 
         $ticketBai = TicketBai::createFromJson($this->createBizkaiaVendor(), $json);
@@ -504,6 +582,8 @@ class TicketBaiMother
         $json['subject']['issuer']['vatId'] = $nif;
         $json['subject']['issuer']['name'] = $issuer;
         $json['invoice']['header']['invoiceNumber'] = (string)time();
+        $json['invoice']['header']['expeditionDate'] = date('d-m-Y');
+
         sleep(1);
 
         $ticketBai = TicketBai::createFromJson($this->createBizkaiaVendor(), $json);
@@ -514,6 +594,7 @@ class TicketBaiMother
     {
         $json = json_decode(file_get_contents($jsonFile), true);
         $json['invoice']['header']['invoiceNumber'] = (string)time();
+        $json['invoice']['header']['expeditionDate'] = date('d-m-Y');
         sleep(1);
 
         $ticketBai = TicketBai::createFromJson($this->createGipuzkoaVendor(), $json);
@@ -557,7 +638,7 @@ class TicketBaiMother
         return $this->createTicketBaiCancel($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_GIPUZKOA);
     }
 
-    public function createGipuzkoaTicketBaiRectification(TicketBai $previousInvoice): TicketBai
+    public function createGipuzkoaTicketBaiRectificationBySubstitution(TicketBai $previousInvoice): TicketBai
     {
         $nif = $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'];
         $issuer = $_ENV['TBAI_GIPUZKOA_ISSUER_NAME'];
@@ -566,10 +647,10 @@ class TicketBaiMother
         $appName = $_ENV['TBAI_GIPUZKOA_APP_NAME'];
         $appVersion =  $_ENV['TBAI_GIPUZKOA_APP_VERSION'];
 
-        return $this->createTicketBaiRectification($previousInvoice, $nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_GIPUZKOA);
+        return $this->createTicketBaiRectificationBySubstitution($previousInvoice, $nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_GIPUZKOA);
     }
 
-    public function createGipuzkoaTicketBaiSimplifiedRectification(TicketBai $previousInvoice): TicketBai
+    public function createGipuzkoaTicketBaiRectificationByDifference(TicketBai $previousInvoice): TicketBai
     {
         $nif = $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'];
         $issuer = $_ENV['TBAI_GIPUZKOA_ISSUER_NAME'];
@@ -578,10 +659,34 @@ class TicketBaiMother
         $appName = $_ENV['TBAI_GIPUZKOA_APP_NAME'];
         $appVersion =  $_ENV['TBAI_GIPUZKOA_APP_VERSION'];
 
-        return $this->createTicketBaiSimplifiedRectification($previousInvoice, $nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_GIPUZKOA);
+        return $this->createTicketBaiRectificationByDifference($previousInvoice, $nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_GIPUZKOA);
     }
 
-    public function createArabaTicketBaiRectification(TicketBai $previousInvoice): TicketBai
+    public function createGipuzkoaTicketBaiSimplifiedRectificationBySubstitution(TicketBai $previousInvoice): TicketBai
+    {
+        $nif = $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'];
+        $issuer = $_ENV['TBAI_GIPUZKOA_ISSUER_NAME'];
+        $license = $_ENV['TBAI_GIPUZKOA_APP_LICENSE'];
+        $developer = $_ENV['TBAI_GIPUZKOA_APP_DEVELOPER_NIF'];
+        $appName = $_ENV['TBAI_GIPUZKOA_APP_NAME'];
+        $appVersion =  $_ENV['TBAI_GIPUZKOA_APP_VERSION'];
+
+        return $this->createTicketBaiSimplifiedRectificationBySubstitution($previousInvoice, $nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_GIPUZKOA);
+    }
+
+    public function createGipuzkoaTicketBaiSimplifiedRectificationByDifference(TicketBai $previousInvoice): TicketBai
+    {
+        $nif = $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'];
+        $issuer = $_ENV['TBAI_GIPUZKOA_ISSUER_NAME'];
+        $license = $_ENV['TBAI_GIPUZKOA_APP_LICENSE'];
+        $developer = $_ENV['TBAI_GIPUZKOA_APP_DEVELOPER_NIF'];
+        $appName = $_ENV['TBAI_GIPUZKOA_APP_NAME'];
+        $appVersion =  $_ENV['TBAI_GIPUZKOA_APP_VERSION'];
+
+        return $this->createTicketBaiSimplifiedRectificationByDifference($previousInvoice, $nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_GIPUZKOA);
+    }
+
+    public function createArabaTicketBaiRectificationBySubstitution(TicketBai $previousInvoice): TicketBai
     {
         $nif = $_ENV['TBAI_ARABA_ISSUER_NIF'];
         $issuer = $_ENV['TBAI_ARABA_ISSUER_NAME'];
@@ -590,10 +695,35 @@ class TicketBaiMother
         $appName = $_ENV['TBAI_ARABA_APP_NAME'];
         $appVersion =  $_ENV['TBAI_ARABA_APP_VERSION'];
 
-        return $this->createTicketBaiRectification($previousInvoice, $nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
+        return $this->createTicketBaiRectificationBySubstitution($previousInvoice, $nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
     }
 
-    public function createBizkaiaTicketBaiRectification(TicketBai $previousInvoice): TicketBai
+    public function createArabaTicketBaiRectificationByDifference(TicketBai $previousInvoice): TicketBai
+    {
+        $nif = $_ENV['TBAI_ARABA_ISSUER_NIF'];
+        $issuer = $_ENV['TBAI_ARABA_ISSUER_NAME'];
+        $license = $_ENV['TBAI_ARABA_APP_LICENSE'];
+        $developer = $_ENV['TBAI_ARABA_APP_DEVELOPER_NIF'];
+        $appName = $_ENV['TBAI_ARABA_APP_NAME'];
+        $appVersion =  $_ENV['TBAI_ARABA_APP_VERSION'];
+
+        return $this->createTicketBaiRectificationByDifference($previousInvoice, $nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_ARABA);
+    }
+
+    public function createArabaTicketBaiFromJson(string $jsonFile): TicketBai
+    {
+        $json = json_decode(file_get_contents($jsonFile), true);
+        $json['invoice']['header']['invoiceNumber'] = (string)time();
+        $json['invoice']['header']['expeditionDate'] = date('d-m-Y');
+        sleep(1);
+
+        $ticketBai = TicketBai::createFromJson($this->createArabaVendor(), $json);
+        return $ticketBai;
+    }
+
+
+
+    public function createBizkaiaTicketBaiRectificationBySubstitution(TicketBai $previousInvoice): TicketBai
     {
         $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_240'];
         $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_240'];
@@ -602,10 +732,22 @@ class TicketBaiMother
         $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
         $appVersion =  $_ENV['TBAI_BIZKAIA_APP_VERSION'];
 
-        return $this->createTicketBaiRectification($previousInvoice, $nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_BIZKAIA);
+        return $this->createTicketBaiRectificationBySubstitution($previousInvoice, $nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_BIZKAIA);
     }
 
-    public function createBizkaiaTicketBaiRectificationForSelfEmployed(TicketBai $previousInvoice): TicketBai
+    public function createBizkaiaTicketBaiRectificationByDifference(TicketBai $previousInvoice): TicketBai
+    {
+        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_240'];
+        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_240'];
+        $license = $_ENV['TBAI_BIZKAIA_APP_LICENSE'];
+        $developer = $_ENV['TBAI_BIZKAIA_APP_DEVELOPER_NIF'];
+        $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
+        $appVersion =  $_ENV['TBAI_BIZKAIA_APP_VERSION'];
+
+        return $this->createTicketBaiRectificationByDifference($previousInvoice, $nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_BIZKAIA);
+    }
+
+    public function createBizkaiaTicketBaiRectificationBySubstitutionForSelfEmployed(TicketBai $previousInvoice): TicketBai
     {
         $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_140'];
         $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_140'];
@@ -614,7 +756,25 @@ class TicketBaiMother
         $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
         $appVersion =  $_ENV['TBAI_BIZKAIA_APP_VERSION'];
 
-        $ticketbai = $this->createTicketBaiRectification($previousInvoice, $nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_BIZKAIA, true);
+        $ticketbai = $this->createTicketBaiRectificationBySubstitution($previousInvoice, $nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_BIZKAIA, true);
+        $incomingTaxCollection = new Collection();
+        $incomingTaxCollection->addDetail(IncomeTaxDetail::create("197330", new Amount("11.02")));
+        $incomingTaxCollection->addDetail(IncomeTaxDetail::create("184990", new Amount("111")));
+
+        $ticketbai->addBatuzIncomeTaxes($incomingTaxCollection);
+        return $ticketbai;
+    }
+
+    public function createBizkaiaTicketBaiRectificationByDifferenceForSelfEmployed(TicketBai $previousInvoice): TicketBai
+    {
+        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_140'];
+        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_140'];
+        $license = $_ENV['TBAI_BIZKAIA_APP_LICENSE'];
+        $developer = $_ENV['TBAI_BIZKAIA_APP_DEVELOPER_NIF'];
+        $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
+        $appVersion =  $_ENV['TBAI_BIZKAIA_APP_VERSION'];
+
+        $ticketbai = $this->createTicketBaiRectificationByDifference($previousInvoice, $nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_BIZKAIA, true);
         $incomingTaxCollection = new Collection();
         $incomingTaxCollection->addDetail(IncomeTaxDetail::create("197330", new Amount("11.02")));
         $incomingTaxCollection->addDetail(IncomeTaxDetail::create("184990", new Amount("111")));

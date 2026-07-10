@@ -22,7 +22,7 @@ class TicketBaiSimplifiedRectificationTest extends TestCase
 
         $ticketbai->sign($privateKey, $certPassword, $signedFilename);
 
-        $ticketbaiRectification = $this->ticketBaiMother->createGipuzkoaTicketBaiSimplifiedRectification($ticketbai);
+        $ticketbaiRectification = $this->ticketBaiMother->createGipuzkoaTicketBaiSimplifiedRectificationBySubstitution($ticketbai);
         $signedFilename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
@@ -34,9 +34,9 @@ class TicketBaiSimplifiedRectificationTest extends TestCase
         $this->assertTrue($signedDom->schemaValidate(__DIR__ . '/__files/specs/ticketbaiv1-2-2.xsd'));
     }
 
-    public function test_ticketbai_simplified_rectification_can_be_generated_from_json(): void
+    public function test_ticketbai_simplified_rectification_by_substitution_can_be_generated_from_json(): void
     {
-        $json = $this->getFilesContents('tbai-simplified-rectification-without-recipient-sample.json');
+        $json = $this->getFilesContents('tbai-simplified-rectification-by-substitution-without-recipient-sample.json');
         $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createArabaVendor(), json_decode($json, true));
         $this->assertEquals(
             TicketBai::class,
@@ -45,6 +45,20 @@ class TicketBaiSimplifiedRectificationTest extends TestCase
 
         $dom = $ticketbai->dom();
         $this->assertStringContainsString('<FacturaRectificativa><Codigo>R5</Codigo><Tipo>S</Tipo>', (string)$ticketbai);
+        $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/ticketbaiv1-2-2-no-signature.xsd'));
+    }
+
+    public function test_ticketbai_simplified_rectification_by_difference_can_be_generated_from_json(): void
+    {
+        $json = $this->getFilesContents('tbai-simplified-rectification-by-difference-without-recipient-sample.json');
+        $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createArabaVendor(), json_decode($json, true));
+        $this->assertEquals(
+            TicketBai::class,
+            get_class($ticketbai)
+        );
+
+        $dom = $ticketbai->dom();
+        $this->assertStringContainsString('<FacturaRectificativa><Codigo>R5</Codigo><Tipo>I</Tipo>', (string)$ticketbai);
         $this->assertTrue($dom->schemaValidate(__DIR__ . '/__files/specs/ticketbaiv1-2-2-no-signature.xsd'));
     }
 }

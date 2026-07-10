@@ -253,7 +253,7 @@ class EndpointTest extends TestCase
         $endpoint = new Endpoint(true, true);
         $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
-        $ticketbaiRectification = $this->ticketBaiMother->createGipuzkoaTicketBaiRectification($ticketbai);
+        $ticketbaiRectification = $this->ticketBaiMother->createGipuzkoaTicketBaiRectificationBySubstitution($ticketbai);
         $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';

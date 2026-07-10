@@ -132,6 +132,8 @@ class TicketBaiTest extends TestCase
 
     public function test_TicketBai_signed_file_is_valid(): void
     {
+        $this->expectNotToPerformAssertions();
+
         $ticketbai = $this->getTicketBai();
         $filename = tempnam(__DIR__ . '/__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($filename, $filename . '.xml');
@@ -147,7 +149,6 @@ class TicketBaiTest extends TestCase
                 $filename
             );
             ob_end_clean();
-            $this->assertTrue(true);
         } catch (Exception $e) {
             var_dump($e->getFile());
             var_dump($e->getLine());

@@ -98,6 +98,43 @@ class EndpointTest extends TestCase
         $this->assertTrue($response->isDelivered());
     }
 
+    public function test_TicketBai_is_delivered_for_ISP(): void
+    {
+        $certFile = $_ENV['TBAI_ARABA_P12_PATH'];
+        $certPassword = $_ENV['TBAI_ARABA_PRIVATE_KEY'];
+        $privateKey = PrivateKey::p12($certFile);
+
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
+        rename($signedFilename, $signedFilename . '.xml');
+        $signedFilename = $signedFilename . '.xml';
+
+        $ticketbai = $this->ticketBaiMother->createArabaTicketBaiFromJson(
+            __DIR__ . '/../../__files/tbai-sample-isp.json'
+        );
+        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+
+        $endpoint = new Endpoint(true, true);
+
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
+        $response->saveResponseContent($responseFile);
+
+        if (!$response->isCorrect()) {
+            echo "\n";
+            echo "VatId / IFZ / NIF: " . $_ENV['TBAI_ARABA_ISSUER_NIF'] . "\n";
+            echo "Date:" . date('Y-m-d H:i:s') . "\n";
+            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
+            echo "Sent file: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
+            echo "Signed file: " . basename($signedFilename) . "\n";
+            echo "Main error message: " . $response->mainErrorMessage() . "\n";
+            echo "Response file: " . basename($responseFile) . "\n";
+        }
+
+        $this->assertTrue($response->isCorrect());
+    }
+
+
     public function test_TicketBai_is_canceled(): void
     {
         $certFile = $_ENV['TBAI_ARABA_P12_PATH'];
@@ -135,7 +172,7 @@ class EndpointTest extends TestCase
         $this->assertTrue($response->isDelivered());
     }
 
-    public function test_TicketBai_is_rectified(): void
+    public function test_TicketBai_is_rectified_by_substitution(): void
     {
         $certFile = $_ENV['TBAI_ARABA_P12_PATH'];
         $certPassword = $_ENV['TBAI_ARABA_PRIVATE_KEY'];
@@ -151,7 +188,49 @@ class EndpointTest extends TestCase
         $endpoint = new Endpoint(true, true);
         $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
-        $ticketbaiRectification = $this->ticketBaiMother->createArabaTicketBaiRectification($ticketbai);
+        $ticketbaiRectification = $this->ticketBaiMother->createArabaTicketBaiRectificationBySubstitution($ticketbai);
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
+        rename($signedFilename, $signedFilename . '.xml');
+        $signedFilename = $signedFilename . '.xml';
+
+        $ticketbaiRectification->sign($privateKey, $certPassword, $signedFilename);
+
+        $endpoint = new Endpoint(true, true);
+        $response = $endpoint->submitInvoice($ticketbaiRectification, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+
+        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
+        $response->saveResponseContent($responseFile);
+
+        if (!$response->isCorrect()) {
+            echo "\n";
+            echo "VatId / IFZ / NIF: " . $_ENV['TBAI_ARABA_ISSUER_NIF'] . "\n";
+            echo "Date:" . date('Y-m-d H:i:s') . "\n";
+            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
+            echo "Sent file: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
+            echo "Signed file: " . basename($signedFilename) . "\n";
+            echo "Main error message: " . $response->mainErrorMessage() . "\n";
+            echo "Response file: " . basename($responseFile) . "\n";
+        }
+        $this->assertTrue($response->isDelivered());
+    }
+
+    public function test_TicketBai_is_rectified_by_difference(): void
+    {
+        $certFile = $_ENV['TBAI_ARABA_P12_PATH'];
+        $certPassword = $_ENV['TBAI_ARABA_PRIVATE_KEY'];
+        $privateKey = PrivateKey::p12($certFile);
+
+        $ticketbai = $this->ticketBaiMother->createArabaTicketBai();
+        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
+        rename($signedFilename, $signedFilename . '.xml');
+        $signedFilename = $signedFilename . '.xml';
+
+        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+
+        $endpoint = new Endpoint(true, true);
+        $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+
+        $ticketbaiRectification = $this->ticketBaiMother->createArabaTicketBaiRectificationByDifference($ticketbai);
         $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
@@ -215,6 +294,7 @@ class EndpointTest extends TestCase
         $this->assertTrue($response->isDelivered());
     }
 
+    
     public function test_Zuzendu_modify_is_delivered(): void
     {
         $certFile = $_ENV['TBAI_ARABA_P12_PATH'];

@@ -10,25 +10,13 @@ class AmountTest extends TestCase
 {
     public function test_throws_exception_if_amount_is_not_valid(): void
     {
-        try {
-            $amount = new Amount("12,04", 2);
-            $this->fail();
-        } catch (InvalidAmountException $e) {
-            $this->assertTrue(true);
-        }
+        $this->expectException(InvalidAmountException::class);
+        new Amount("12,04", 2);
+    }
 
-        // try {
-        //     $amount = new Amount("12.4");
-        //     $this->fail();
-        // } catch (InvalidAmountException $e) {
-        //     $this->assertTrue(true);
-        // }
-
-        try {
-            $amount = new Amount("123456.02", 2);
-            $this->fail();
-        } catch (InvalidAmountException $e) {
-            $this->assertTrue(true);
-        }
+    public function test_throws_exception_if_amount_exceeds_maximum(): void
+    {
+        $this->expectException(InvalidAmountException::class);
+        new Amount("123456.02", 2);
     }
 }

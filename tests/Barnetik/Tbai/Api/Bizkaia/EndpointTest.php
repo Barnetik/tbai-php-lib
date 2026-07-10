@@ -2,11 +2,14 @@
 
 namespace Test\Barnetik\Tbai\Api\Bizkaia;
 
+use Barnetik\Tbai\AbstractTicketBai;
 use Barnetik\Tbai\Api;
 use Barnetik\Tbai\Api\AbstractTerritory;
 use Barnetik\Tbai\Api\Bizkaia\Endpoint;
+use Barnetik\Tbai\Interfaces\TbaiSignable;
 use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
+use Barnetik\Tbai\TicketBaiCancel;
 use DOMDocument;
 use Test\Barnetik\TestCase;
 
@@ -18,27 +21,14 @@ class EndpointTest extends TestCase
 
     public function test_sent_FacturasEmitidasConSGAltaPeticion_xml_is_valid(): void
     {
-        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_240'];
-        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_240'];
-        $license = $_ENV['TBAI_BIZKAIA_APP_LICENSE'];
-        $developer = $_ENV['TBAI_BIZKAIA_APP_DEVELOPER_NIF'];
-        $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
-        $appVersion =  $_ENV['TBAI_BIZKAIA_APP_VERSION'];
-        $ticketbai = $this->ticketBaiMother->createTicketBai($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_BIZKAIA);
-
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
-
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
-
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
+        
+        $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBai();
+        $this->signFile($ticketbai, $privateKey, $password);
 
         $endpoint = new Endpoint(true, true);
-
         $response = $endpoint->createSubmitInvoiceRequest($ticketbai)->data();
+        
         $dom = new DOMDocument();
         $dom->loadXML(gzdecode($response));
         $this->assertTrue($dom->schemaValidate(__DIR__ . '/../../__files/specs/Api/Bizkaia/petition-schemas/LROE_PJ_240_1_1_FacturasEmitidas_ConSG_AltaPeticion_V1_0_2.xsd'));
@@ -46,599 +36,237 @@ class EndpointTest extends TestCase
 
     public function test_TicketBai_is_delivered(): void
     {
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
-
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBai();
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
-
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
-
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
-        $response->saveResponseContent($responseFile);
-
-        if (!$response->isCorrect()) {
-            echo "\n";
-            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
-            echo "Date:" . date('Y-m-d H:i:s') . "\n";
-            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
-            echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
-            echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
-            echo "Main error message: " . $response->mainErrorMessage() . "\n";
-            echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
-            echo "Signed file: " . basename($signedFilename) . "\n";
-            echo "Response file: " . basename($responseFile) . "\n";
-        }
-
-        $this->assertTrue($response->isCorrect());
+        $this->assertSubmissionSuccessful($endpoint, $ticketbai, $privateKey, $password, $signedFilename);
     }
 
     public function test_TicketBai_is_delivered_for_intracomunitary_with_vat(): void
     {
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
-
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBaiForCompanyFromJson(
             __DIR__ . '/../../__files/tbai-intracomunitary-eu-vat-id-recipient.json'
         );
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
-
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
-
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
-        $response->saveResponseContent($responseFile);
-
-        if (!$response->isCorrect()) {
-            echo "\n";
-            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
-            echo "Date:" . date('Y-m-d H:i:s') . "\n";
-            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
-            echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
-            echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
-            echo "Main error message: " . $response->mainErrorMessage() . "\n";
-            echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
-            echo "Signed file: " . basename($signedFilename) . "\n";
-            echo "Response file: " . basename($responseFile) . "\n";
-        }
-
-        $this->assertTrue($response->isCorrect());
+        $this->assertSubmissionSuccessful($endpoint, $ticketbai, $privateKey, $password, $signedFilename);
     }
 
     public function test_TicketBai_is_delivered_for_exports(): void
     {
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
-
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBaiForCompanyFromJson(
             __DIR__ . '/../../__files/tbai-export.json'
         );
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
-
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
-
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
-        $response->saveResponseContent($responseFile);
-
-        if (!$response->isCorrect()) {
-            echo "\n";
-            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
-            echo "Date:" . date('Y-m-d H:i:s') . "\n";
-            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
-            echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
-            echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
-            echo "Main error message: " . $response->mainErrorMessage() . "\n";
-            echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
-            echo "Signed file: " . basename($signedFilename) . "\n";
-            echo "Response file: " . basename($responseFile) . "\n";
-        }
-
-        $this->assertTrue($response->isCorrect());
+        $this->assertSubmissionSuccessful($endpoint, $ticketbai, $privateKey, $password, $signedFilename);
     }
 
     public function test_TicketBai_is_delivered_for_rebu(): void
     {
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
-
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBaiForCompanyFromJson(
             __DIR__ . '/../../__files/tbai-rebu.json'
         );
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
-
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
-
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
-        $response->saveResponseContent($responseFile);
-
-        if (!$response->isCorrect()) {
-            echo "\n";
-            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
-            echo "Date:" . date('Y-m-d H:i:s') . "\n";
-            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
-            echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
-            echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
-            echo "Main error message: " . $response->mainErrorMessage() . "\n";
-            echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
-            echo "Signed file: " . basename($signedFilename) . "\n";
-            echo "Response file: " . basename($responseFile) . "\n";
-        }
-
-        $this->assertTrue($response->isCorrect());
+        $this->assertSubmissionSuccessful($endpoint, $ticketbai, $privateKey, $password, $signedFilename);
     }
 
     public function test_TicketBai_is_delivered_for_ISP(): void
     {
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
-
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBaiForCompanyFromJson(
             __DIR__ . '/../../__files/tbai-sample-isp.json'
         );
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
-
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
-
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
-        $response->saveResponseContent($responseFile);
-
-        if (!$response->isCorrect()) {
-            echo "\n";
-            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
-            echo "Date:" . date('Y-m-d H:i:s') . "\n";
-            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
-            echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
-            echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
-            echo "Main error message: " . $response->mainErrorMessage() . "\n";
-            echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
-            echo "Signed file: " . basename($signedFilename) . "\n";
-            echo "Response file: " . basename($responseFile) . "\n";
-        }
-
-        $this->assertTrue($response->isCorrect());
+        $this->assertSubmissionSuccessful($endpoint, $ticketbai, $privateKey, $password, $signedFilename);
     }
 
     public function test_TicketBai_is_delivered_using_PEM(): void
     {
-        $certFile = $_ENV['TBAI_TEST_SINGLE_PEM_PATH'];
-        $certPassword = $_ENV['TBAI_TEST_SINGLE_PEM_PASSWORD'];
-        $privateKey = PrivateKey::pem($certFile, $certFile);
-
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
+        [$privateKey, $password] = $this->getBizkaiaPemCredentials();
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBai();
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
-
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
-
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
-        $response->saveResponseContent($responseFile);
-
-        if (!$response->isCorrect()) {
-            echo "\n";
-            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
-            echo "Date:" . date('Y-m-d H:i:s') . "\n";
-            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
-            echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
-            echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
-            echo "Main error message: " . $response->mainErrorMessage() . "\n";
-            echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
-            echo "Signed file: " . basename($signedFilename) . "\n";
-            echo "Response file: " . basename($responseFile) . "\n";
-        }
-
-        $this->assertTrue($response->isCorrect());
+        $this->assertSubmissionSuccessful($endpoint, $ticketbai, $privateKey, $password, $signedFilename);
     }
 
     public function test_TicketBai_with_operation_date_is_delivered(): void
     {
-
         $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_240'];
         $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_240'];
         $license = $_ENV['TBAI_BIZKAIA_APP_LICENSE'];
         $developer = $_ENV['TBAI_BIZKAIA_APP_DEVELOPER_NIF'];
         $appName = $_ENV['TBAI_BIZKAIA_APP_NAME'];
-        $appVersion =  $_ENV['TBAI_BIZKAIA_APP_VERSION'];
+        $appVersion = $_ENV['TBAI_BIZKAIA_APP_VERSION'];
 
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
-
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
 
         $ticketbai = $this->ticketBaiMother->createTicketBaiWithOperationDate($nif, $issuer, $license, $developer, $appName, $appVersion, TicketBai::TERRITORY_BIZKAIA);
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
-
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
-
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
-        $response->saveResponseContent($responseFile);
-
-        if (!$response->isCorrect()) {
-            echo "\n";
-            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
-            echo "Date:" . date('Y-m-d H:i:s') . "\n";
-            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
-            echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
-            echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
-            echo "Main error message: " . $response->mainErrorMessage() . "\n";
-            echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
-            echo "Signed file: " . basename($signedFilename) . "\n";
-            echo "Response file: " . basename($responseFile) . "\n";
-        }
-        $this->assertTrue($response->isCorrect());
+        $this->assertSubmissionSuccessful($endpoint, $ticketbai, $privateKey, $password, $signedFilename);
     }
 
     public function test_TicketBai_is_delivered_for_selfEmployed(): void
     {
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
-
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBaiSelfEmployed();
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
-
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
-
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
-        $response->saveResponseContent($responseFile);
-
-        if (!$response->isCorrect()) {
-            echo "\n";
-            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
-            echo "Date:" . date('Y-m-d H:i:s') . "\n";
-            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
-            echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
-            echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
-            echo "Main error message: " . $response->mainErrorMessage() . "\n";
-            echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
-            echo "Signed file: " . basename($signedFilename) . "\n";
-            echo "Response file: " . basename($responseFile) . "\n";
-        }
-
-        $this->assertTrue($response->isCorrect());
+        $this->assertSubmissionSuccessful($endpoint, $ticketbai, $privateKey, $password, $signedFilename);
     }
 
     public function test_TicketBai_is_delivered_for_selfEmployed_created_from_json(): void
     {
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
-
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBaiForSelfEmployedFromJson();
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
-
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
-
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
-        $response->saveResponseContent($responseFile);
-
-        if (!$response->isCorrect()) {
-            echo "\n";
-            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
-            echo "Date:" . date('Y-m-d H:i:s') . "\n";
-            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
-            echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
-            echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
-            echo "Main error message: " . $response->mainErrorMessage() . "\n";
-            echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
-            echo "Signed file: " . basename($signedFilename) . "\n";
-            echo "Response file: " . basename($responseFile) . "\n";
-        }
-
-        $this->assertTrue($response->isCorrect());
+        $this->assertSubmissionSuccessful($endpoint, $ticketbai, $privateKey, $password, $signedFilename);
     }
 
     public function test_TicketBai_is_delivered_for_selfEmployed_with_multiple_incomeTaxEpigraphs(): void
     {
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
-
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBaiSelfEmployed(true);
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
-
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
-
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
-        $response->saveResponseContent($responseFile);
-
-        if (!$response->isCorrect()) {
-            echo "\n";
-            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
-            echo "Date:" . date('Y-m-d H:i:s') . "\n";
-            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
-            echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
-            echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
-            echo "eus-bizkaia-n3-mensaje-respuesta: " . $response->header('eus-bizkaia-n3-mensaje-respuesta') . "\n";
-            echo "Main error message: " . $response->mainErrorMessage() . "\n";
-            echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
-            echo "Signed file: " . basename($signedFilename) . "\n";
-            echo "Response file: " . basename($responseFile) . "\n";
-        }
-
-        $this->assertTrue($response->isCorrect());
+        $this->assertSubmissionSuccessful($endpoint, $ticketbai, $privateKey, $password, $signedFilename);
     }
 
     public function test_TicketBai_multiVat_is_delivered(): void
     {
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
-
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBai();
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
-
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
-
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
-        $response->saveResponseContent($responseFile);
-
-        if (!$response->isCorrect()) {
-            echo "\n";
-            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
-            echo "Date:" . date('Y-m-d H:i:s') . "\n";
-            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
-            echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
-            echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
-            echo "Main error message: " . $response->mainErrorMessage() . "\n";
-            echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
-            echo "Signed file: " . basename($signedFilename) . "\n";
-            echo "Response file: " . basename($responseFile) . "\n";
-        }
-
-        $this->assertTrue($response->isCorrect());
+        $this->assertSubmissionSuccessful($endpoint, $ticketbai, $privateKey, $password, $signedFilename);
     }
 
     public function test_TicketBai_is_canceled(): void
     {
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
-
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBai();
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+        $endpoint->submitInvoice($ticketbai, $privateKey, $password, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
         $ticketbaiCancel = $this->ticketBaiMother->createTicketBaiCancelForInvoice($ticketbai);
-        $signedFilename = $signedFilename . '-cancel.xml';
-        $ticketbaiCancel->sign($privateKey, $certPassword, $signedFilename);
-        $response = $endpoint->cancelInvoice($ticketbaiCancel, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+        $cancelFilename = $this->signFile($ticketbaiCancel, $privateKey, $password, '-cancel.xml');
 
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
-        $response->saveResponseContent($responseFile);
+        $response = $endpoint->cancelInvoice($ticketbaiCancel, $privateKey, $password, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+        $responseFile = $this->saveResponseToFile($response);
 
-        if (!$response->isCorrect()) {
-            echo "\n";
-            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
-            echo "Date:" . date('Y-m-d H:i:s') . "\n";
-            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "Sent file: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
-            echo "Signed file: " . basename($signedFilename) . "\n";
-            echo "Main error message: " . $response->mainErrorMessage() . "\n";
-            echo "Response file: " . basename($responseFile) . "\n";
-        }
+        $this->debugResponseWithFile($endpoint, $ticketbaiCancel, $response, $cancelFilename, $responseFile);
 
         $this->assertTrue($response->isDelivered());
     }
 
     public function test_TicketBai_is_canceled_for_selfEmployed(): void
     {
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
-
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBaiSelfEmployed();
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+        $endpoint->submitInvoice($ticketbai, $privateKey, $password, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
         $ticketbaiCancel = $this->ticketBaiMother->createTicketBaiCancelForInvoice($ticketbai);
-        $signedFilename = $signedFilename . '-cancel.xml';
-        $ticketbaiCancel->sign($privateKey, $certPassword, $signedFilename);
-        $response = $endpoint->cancelInvoice($ticketbaiCancel, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+        $cancelFilename = $this->signFile($ticketbaiCancel, $privateKey, $password, '-cancel.xml');
 
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
-        $response->saveResponseContent($responseFile);
+        $response = $endpoint->cancelInvoice($ticketbaiCancel, $privateKey, $password, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+        $responseFile = $this->saveResponseToFile($response);
 
-        if (!$response->isCorrect()) {
-            echo "\n";
-            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
-            echo "Date:" . date('Y-m-d H:i:s') . "\n";
-            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "Sent file: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
-            echo "Signed file: " . basename($signedFilename) . "\n";
-            echo "Main error message: " . $response->mainErrorMessage() . "\n";
-            echo "Response file: " . basename($responseFile) . "\n";
-        }
+        $this->debugResponseWithFile($endpoint, $ticketbaiCancel, $response, $cancelFilename, $responseFile);
 
         $this->assertTrue($response->isDelivered());
     }
 
     public function test_TicketBai_is_rectified(): void
     {
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBai();
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
-
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
 
         $endpoint = new Endpoint(true, true);
-        $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+        $endpoint->submitInvoice($ticketbai, $privateKey, $password, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
-        $ticketbaiRectification = $this->ticketBaiMother->createBizkaiaTicketBaiRectification($ticketbai);
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
+        $ticketbaiRectification = $this->ticketBaiMother->createBizkaiaTicketBaiRectificationBySubstitution($ticketbai);
+        $rectFilename = $this->signFile($ticketbaiRectification, $privateKey, $password);
 
-        $ticketbaiRectification->sign($privateKey, $certPassword, $signedFilename);
-
-        $endpoint = new Endpoint(true, true);
-        $response = $endpoint->submitInvoice($ticketbaiRectification, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
-
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
-        $response->saveResponseContent($responseFile);
-
-        if (!$response->isCorrect()) {
-            echo "\n";
-            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
-            echo "Date:" . date('Y-m-d H:i:s') . "\n";
-            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "Sent file: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
-            echo "Signed file: " . basename($signedFilename) . "\n";
-            echo "Main error message: " . $response->mainErrorMessage() . "\n";
-            echo "Response file: " . basename($responseFile) . "\n";
-        }
-        $this->assertTrue($response->isDelivered());
+        $this->assertSubmissionSuccessful($endpoint, $ticketbaiRectification, $privateKey, $password, $rectFilename);
     }
 
-    public function test_TicketBai_is_rectified_for_selfEmployed(): void
+    public function test_TicketBai_is_rectified_by_substitution_for_selfEmployed(): void
     {
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBaiSelfEmployed();
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
-
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
 
         $endpoint = new Endpoint(true, true);
-        $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+        $endpoint->submitInvoice($ticketbai, $privateKey, $password, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
-        $ticketbaiRectification = $this->ticketBaiMother->createBizkaiaTicketBaiRectificationForSelfEmployed($ticketbai);
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
+        $ticketbaiRectification = $this->ticketBaiMother->createBizkaiaTicketBaiRectificationBySubstitutionForSelfEmployed($ticketbai);
+        $rectFilename = $this->signFile($ticketbaiRectification, $privateKey, $password);
 
-        $ticketbaiRectification->sign($privateKey, $certPassword, $signedFilename);
+        $this->assertSubmissionSuccessful($endpoint, $ticketbaiRectification, $privateKey, $password, $rectFilename);
+    }
+
+    public function test_TicketBai_is_rectified_by_difference_for_selfEmployed(): void
+    {
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
+
+        $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBaiSelfEmployed();
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
 
         $endpoint = new Endpoint(true, true);
-        $response = $endpoint->submitInvoice($ticketbaiRectification, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+        $endpoint->submitInvoice($ticketbai, $privateKey, $password, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
-        $response->saveResponseContent($responseFile);
+        $ticketbaiRectification = $this->ticketBaiMother->createBizkaiaTicketBaiRectificationByDifferenceForSelfEmployed($ticketbai);
+        $rectFilename = $this->signFile($ticketbaiRectification, $privateKey, $password);
 
-        if (!$response->isCorrect()) {
-            echo "\n";
-            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
-            echo "Date:" . date('Y-m-d H:i:s') . "\n";
-            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "Sent file: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
-            echo "Signed file: " . basename($signedFilename) . "\n";
-            echo "Main error message: " . $response->mainErrorMessage() . "\n";
-            echo "Response file: " . basename($responseFile) . "\n";
-        }
-        $this->assertTrue($response->isDelivered());
+        $endpoint = new Endpoint(true, true);
+        $this->assertSubmissionSuccessful($endpoint, $ticketbaiRectification, $privateKey, $password, $rectFilename);
     }
 
     public function test_TicketBai_can_be_signed_and_restored_for_async_send(): void
     {
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBaiSelfEmployed();
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
-
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
 
         $jsonString = json_encode($ticketbai->toArray());
         $json = json_decode($jsonString, true);
@@ -647,120 +275,50 @@ class EndpointTest extends TestCase
         $restoredTbai->setSignedXmlPath($signedFilename);
 
         $endpoint = new Endpoint(true, true);
-        $response = $endpoint->submitInvoice($restoredTbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
-        $response->saveResponseContent($responseFile);
-
-        if (!$response->isCorrect()) {
-            echo "\n";
-            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
-            echo "Date:" . date('Y-m-d H:i:s') . "\n";
-            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "Sent file: " . $endpoint->debugData(AbstractTerritory::DEBUG_SENT_FILE) . "\n";
-            echo "Signed file: " . basename($signedFilename) . "\n";
-            echo "Main error message: " . $response->mainErrorMessage() . "\n";
-            echo "Response file: " . basename($responseFile) . "\n";
-        }
-        $this->assertTrue($response->isDelivered());
+        $this->assertSubmissionSuccessful($endpoint, $restoredTbai, $privateKey, $password, $signedFilename);
     }
 
 
     public function test_json_data_is_correct_on_sample_with_multiple_same_vat(): void
     {
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
-
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBaiForCompanyFromJson(__DIR__ . '/../../__files/tbai-sample-with-multiple-same-vat.json');
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
-
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
-
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
-        $response->saveResponseContent($responseFile);
-
-        if (!$response->isCorrect()) {
-            echo "\n";
-            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
-            echo "Date:" . date('Y-m-d H:i:s') . "\n";
-            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
-            echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
-            echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
-            echo "Main error message: " . $response->mainErrorMessage() . "\n";
-            echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
-            echo "Signed file: " . basename($signedFilename) . "\n";
-            echo "Response file: " . basename($responseFile) . "\n";
-        }
-
-        $this->assertTrue($response->isCorrect());
+        $this->assertSubmissionSuccessful($endpoint, $ticketbai, $privateKey, $password, $signedFilename);
     }
 
     public function test_json_data_is_correct_on_json_file_sample(): void
     {
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
-
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBaiForCompanyFromJson(__DIR__ . '/../../__files/tbai-sample.json');
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
-
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
-
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
-        $response->saveResponseContent($responseFile);
-
-        if (!$response->isCorrect()) {
-            echo "\n";
-            echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
-            echo "Date:" . date('Y-m-d H:i:s') . "\n";
-            echo "IP: " . file_get_contents('https://ipecho.net/plain') . "\n";
-            echo "eus-bizkaia-n3-tipo-respuesta: " . $response->header('eus-bizkaia-n3-tipo-respuesta') . "\n";
-            echo "eus-bizkaia-n3-identificativo: " . $response->header('eus-bizkaia-n3-identificativo') . "\n";
-            echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
-            echo "Main error message: " . $response->mainErrorMessage() . "\n";
-            echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
-            echo "Signed file: " . basename($signedFilename) . "\n";
-            echo "Response file: " . basename($responseFile) . "\n";
-        }
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $password, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+        $responseFile = $this->saveResponseToFile($response);
+        $this->debugResponseWithFile($endpoint, $ticketbai, $response, $signedFilename, $responseFile);
 
         $this->assertFalse($response->hasErrorData());
-        $this->assertTrue($response->isCorrect());
     }
 
     public function test_sending_duplicated_invoice_number_returns_duplicated_error(): void
     {
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
-
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBai();
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
 
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
-        $response->saveResponseContent($responseFile);
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $password, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+        $responseFile = $this->saveResponseToFile($response);
 
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $password, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
         $responseFile = $responseFile . '-duplicated';
         file_put_contents($responseFile, $response->content());
 
@@ -778,23 +336,17 @@ class EndpointTest extends TestCase
 
     public function test_wrong_issuer_is_marked_as_incorrect_response(): void
     {
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
-
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
 
         $json = json_decode($this->getFilesContents('tbai-sample-with-multiple-same-vat.json'), true);
         $json['invoice']['header']['invoiceNumber'] = (string)time();
         sleep(1);
 
         $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createBizkaiaVendor(), $json);
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $password, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
         $this->assertFalse($response->isCorrect());
         $this->assertFalse($response->isDelivered());
@@ -802,24 +354,76 @@ class EndpointTest extends TestCase
 
     public function test_TicketBai_response_headers_can_be_retrieved(): void
     {
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
-
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
 
         $ticketbai = $this->ticketBaiMother->createBizkaiaTicketBai();
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
 
         $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $password, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
 
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+        $this->assertIsArray($response->headers());
+        $this->assertArrayHasKey('eus-bizkaia-n3-tipo-respuesta', $response->headers());
+    }
 
-        $responseFile = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
-        $response->saveResponseContent($responseFile);
+    public function test_headers_can_be_retrieved_on_incorrect_response(): void
+    {
+        [$privateKey, $password] = $this->getBizkaiaP12Credentials();
 
+        $json = json_decode($this->getFilesContents('tbai-sample-with-multiple-same-vat.json'), true);
+        $json['invoice']['header']['invoiceNumber'] = (string)time();
+        sleep(1);
+
+        $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createBizkaiaVendor(), $json);
+        $signedFilename = $this->signFile($ticketbai, $privateKey, $password);
+
+        $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
+        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $password, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+
+        $this->assertFalse($response->isCorrect());
+        $this->assertFalse($response->isDelivered());
+
+        $this->assertIsArray($response->headers());
+        $this->assertArrayHasKey('eus-bizkaia-n3-tipo-respuesta', $response->headers());
+    }
+
+    private function getBizkaiaP12Credentials(): array
+    {
+        return [
+            PrivateKey::p12($_ENV['TBAI_BIZKAIA_P12_PATH']), 
+            $_ENV['TBAI_BIZKAIA_PRIVATE_KEY']
+        ];
+    }
+
+    private function getBizkaiaPemCredentials(): array
+    {
+        return [
+            PrivateKey::pem($_ENV['TBAI_TEST_SINGLE_PEM_PATH'], $_ENV['TBAI_TEST_SINGLE_PEM_PATH']),
+            $_ENV['TBAI_TEST_SINGLE_PEM_PASSWORD']
+        ];
+    }
+
+    private function signFile(TbaiSignable $ticketbai, PrivateKey $privateKey, string $password, string $suffix = ''): string
+    {
+        $filename = tempnam(__DIR__ . '/../../__files/signedXmls', date('YmdHis') . '-signed-');
+        rename($filename, $filename . '.xml');
+        $filename = $filename . '.xml';
+        if ($suffix) {
+            $filename = $filename . $suffix;
+        }
+        $ticketbai->sign($privateKey, $password, $filename);
+        return $filename;
+    }
+
+    private function saveResponseToFile($response): string
+    {
+        $filename = tempnam(__DIR__ . '/../../__files/responses', date('YmdHis') . '-response-');
+        $response->saveResponseContent($filename);
+        return $filename;
+    }
+
+    private function debugResponseWithFile($endpoint, TicketBai | TicketBaiCancel $ticketbai, $response, string $signedFile, string $responseFile): void
+    {
         if (!$response->isCorrect()) {
             echo "\n";
             echo "VatId / IFZ / NIF: " . $ticketbai->issuerVatId() . "\n";
@@ -830,39 +434,17 @@ class EndpointTest extends TestCase
             echo "eus-bizkaia-n3-codigo-respuesta: " . $response->header('eus-bizkaia-n3-codigo-respuesta') . "\n";
             echo "Main error message: " . $response->mainErrorMessage() . "\n";
             echo "Sent file: " . $endpoint->debugData(Api::DEBUG_SENT_FILE) . "\n";
-            echo "Signed file: " . basename($signedFilename) . "\n";
+            echo "Signed file: " . basename($signedFile) . "\n";
             echo "Response file: " . basename($responseFile) . "\n";
         }
-
-        $this->assertIsArray($response->headers());
-        $this->assertArrayHasKey('eus-bizkaia-n3-tipo-respuesta', $response->headers());
     }
 
-    public function test_headers_can_be_retrieved_on_incorrect_response(): void
+    private function assertSubmissionSuccessful(Api|Endpoint $endpoint, TicketBai|TicketBaiCancel $ticketbai, PrivateKey $key, string $password, string $signedFile): void
     {
-        $certFile = $_ENV['TBAI_BIZKAIA_P12_PATH'];
-        $certPassword = $_ENV['TBAI_BIZKAIA_PRIVATE_KEY'];
-        $privateKey = PrivateKey::p12($certFile);
-
-        $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
-        rename($signedFilename, $signedFilename . '.xml');
-        $signedFilename = $signedFilename . '.xml';
-
-        $json = json_decode($this->getFilesContents('tbai-sample-with-multiple-same-vat.json'), true);
-        $json['invoice']['header']['invoiceNumber'] = (string)time();
-        sleep(1);
-
-        $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createBizkaiaVendor(), $json);
-        $ticketbai->sign($privateKey, $certPassword, $signedFilename);
-
-        $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
-        $response = $endpoint->submitInvoice($ticketbai, $privateKey, $certPassword, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
-
-        $this->assertFalse($response->isCorrect());
-        $this->assertFalse($response->isDelivered());
-
-        $this->assertIsArray($response->headers());
-        $this->assertArrayHasKey('eus-bizkaia-n3-tipo-respuesta', $response->headers());
+        $response = $endpoint->submitInvoice($ticketbai, $key, $password, self::SUBMIT_RETRIES, self::SUBMIT_RETRY_DELAY);
+        $responseFile = $this->saveResponseToFile($response);
+        $this->debugResponseWithFile($endpoint, $ticketbai, $response, $signedFile, $responseFile);
+        $this->assertTrue($response->isCorrect());
     }
 
 }

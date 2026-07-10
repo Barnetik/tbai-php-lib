@@ -19,7 +19,7 @@ class RectificationTicketBaiTest extends TestCase
 
         $ticketbai = $this->ticketBaiMother->createGipuzkoaTicketBai();
 
-        $ticketbaiRectification = $this->ticketBaiMother->createGipuzkoaTicketBaiRectification($ticketbai);
+        $ticketbaiRectification = $this->ticketBaiMother->createGipuzkoaTicketBaiRectificationBySubstitution($ticketbai);
         $signedRectificationFile = $this->getSignedDestinationFile();
         $ticketbaiRectification->sign($privateKey, $certPassword, $signedRectificationFile);
         $ticketbaiFromXml = TicketBai::createFromXml(file_get_contents($signedRectificationFile), $ticketbai->territory());

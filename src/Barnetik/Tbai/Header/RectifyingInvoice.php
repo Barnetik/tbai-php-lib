@@ -17,7 +17,8 @@ class RectifyingInvoice implements TbaiXml
     const CODE_R4 = 'R4';
     const CODE_R5 = 'R5';
 
-    const TYPE_SUSTITUTION = 'S';
+    const TYPE_SUSTITUTION = 'S'; // @deprecated use TYPE_SUBSTITUTION instead
+    const TYPE_SUBSTITUTION = 'S';
     const TYPE_DIFFERENCE = 'I';
 
 
