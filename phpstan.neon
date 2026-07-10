@@ -13,7 +13,6 @@ parameters:
     - 
       message: '#Deprecated in PHP 8.*#'
       paths:
-        - tests/
         - src/
     -
       message: '#.* will always evaluate to true.*#'

@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: ['7.4', '8.0', '8.1', '8.2']
+        php-versions: ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
 
     steps:
     - name: Setup PHP
@@ -14,6 +14,7 @@ jobs:
       with:
         php-version: ${{ matrix.php-versions }}
         extensions: gmp, curl, gd
+        tools: composer:v2
     - name: checkout
       uses: actions/checkout@v2
     - name: composer
@@ -34,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: ['7.4', '8.0', '8.1', '8.2']
+        php-versions: ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
     env:
       TBAI_ARABA_APP_LICENSE: ${{ secrets.TBAI_ARABA_APP_LICENSE }}
       TBAI_ARABA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_ARABA_APP_DEVELOPER_NIF }}
