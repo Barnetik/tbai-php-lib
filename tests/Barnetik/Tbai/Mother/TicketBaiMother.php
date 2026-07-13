@@ -716,6 +716,8 @@ class TicketBaiMother
     public function createArabaTicketBaiFromJson(string $jsonFile): TicketBai
     {
         $json = json_decode(file_get_contents($jsonFile), true);
+        $json['subject']['issuer']['vatId'] = $_ENV['TBAI_ARABA_ISSUER_NIF'];
+        $json['subject']['issuer']['name'] = $_ENV['TBAI_ARABA_ISSUER_NAME'];
         $json['invoice']['header']['invoiceNumber'] = (string)time();
         $json['invoice']['header']['expeditionDate'] = date('d-m-Y');
         sleep(1);
