@@ -7,6 +7,7 @@ use Barnetik\Tbai\Api\AbstractTerritory;
 use Barnetik\Tbai\Api\Gipuzkoa\Endpoint;
 use Barnetik\Tbai\PrivateKey;
 use Barnetik\Tbai\TicketBai;
+use Barnetik\Tbai\ValueObject\VatId;
 use Test\Barnetik\TestCase;
 
 class EndpointTest extends TestCase
@@ -287,9 +288,9 @@ class EndpointTest extends TestCase
         $json = $this->getFilesContents('tbai-sample.json');
         $jsonArray = json_decode($json, true);
         $jsonArray['invoice']['header']['invoiceNumber'] = time();
+        $jsonArray['subject']['recipients'][0]['vatId'] = $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'];
         sleep(1);
         $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createGipuzkoaVendor(), $jsonArray);
-
         $signedFilename = tempnam(__DIR__ . '/../../__files/signedXmls',  date('YmdHis') . '-signed-');
         rename($signedFilename, $signedFilename . '.xml');
         $signedFilename = $signedFilename . '.xml';
@@ -326,6 +327,7 @@ class EndpointTest extends TestCase
         $json = $this->getFilesContents('tbai-sample-with-multiple-same-vat.json');
         $jsonArray = json_decode($json, true);
         $jsonArray['invoice']['header']['invoiceNumber'] = time();
+        $jsonArray['subject']['recipients'][0]['vatId'] = $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'];
         sleep(1);
         $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createGipuzkoaVendor(), $jsonArray);
 
@@ -365,6 +367,7 @@ class EndpointTest extends TestCase
         $json = $this->getFilesContents('tbai-sample-regimen-51.json');
         $jsonArray = json_decode($json, true);
         $jsonArray['invoice']['header']['invoiceNumber'] = time();
+        $jsonArray['subject']['recipients'][0]['vatId'] = $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'];
         sleep(1);
         $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createGipuzkoaVendor(), $jsonArray);
 
@@ -404,6 +407,7 @@ class EndpointTest extends TestCase
         $json = $this->getFilesContents('tbai-sample-regimen-51-with-equivalence.json');
         $jsonArray = json_decode($json, true);
         $jsonArray['invoice']['header']['invoiceNumber'] = time();
+        $jsonArray['subject']['recipients'][0]['vatId'] = $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'];
         sleep(1);
         $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createGipuzkoaVendor(), $jsonArray);
 

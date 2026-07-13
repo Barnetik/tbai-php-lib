@@ -595,6 +595,9 @@ class TicketBaiMother
         $json = json_decode(file_get_contents($jsonFile), true);
         $json['invoice']['header']['invoiceNumber'] = (string)time();
         $json['invoice']['header']['expeditionDate'] = date('d-m-Y');
+        if ($json['subject']['recipients'][0]['countryCode'] === 'ES') {
+            $json['subject']['recipients'][0]['vatId'] = $_ENV['TBAI_GIPUZKOA_ISSUER_NIF'];
+        }
         sleep(1);
 
         $ticketBai = TicketBai::createFromJson($this->createGipuzkoaVendor(), $json);
@@ -786,8 +789,8 @@ class TicketBaiMother
     public function getSubject(string $nif, string $name, bool $withRecipient = true): Subject
     {
         $issuer = new Issuer(new VatId($nif), $name);
-        $recipient = Recipient::createNationalRecipient(new VatId('00000000T'), 'Client Name', '48270', 'Markina-Xemein');
-        return new Subject($issuer, $recipient, Subject::ISSUED_BY_THIRD_PARTY);
+        $recipient = Recipient::createNationalRecipient(new VatId($nif), 'Client Name', '48270', 'Markina-Xemein');
+        return new Subject($issuer, $recipient, Subject::ISSUED_BY_ISSUER);
     }
 
     public function getSubjectWithoutRecipient(string $nif, string $name, bool $withRecipient = true): Subject
