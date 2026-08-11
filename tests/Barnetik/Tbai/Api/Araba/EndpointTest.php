@@ -12,13 +12,12 @@ use Test\Barnetik\TestCase;
 class EndpointTest extends TestCase
 {
     const SUBMIT_RETRIES = 3;
-    const SUBMIT_RETRY_DELAY = 3;
+    const SUBMIT_RETRY_DELAY = 2;
     const DEFAULT_TERRITORY = TicketBai::TERRITORY_ARABA;
 
     protected function setUp(): void
     {
         parent::setUp();
-        sleep(2);
     }
 
     public function test_TicketBai_is_delivered(): void
