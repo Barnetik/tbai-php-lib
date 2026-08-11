@@ -22,7 +22,7 @@ class EndpointTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        sleep(5);
+        sleep(2);
     }
 
     public function test_sent_FacturasEmitidasConSGAltaPeticion_xml_is_valid(): void
