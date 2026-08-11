@@ -13,7 +13,16 @@ jobs:
       max-parallel: 1
       matrix:
         php-version: ['8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
-        test-type: ['phpstan', 'phpunit-zuzendu', 'phpunit-ticketbai']
+        test-type: ['phpstan', 'phpunit-unit', 'phpunit-api']
+        exclude:
+          - php-version: '8.1'
+            test-type: 'phpunit-api'
+          - php-version: '8.2'
+            test-type: 'phpunit-api'
+          - php-version: '8.3'
+            test-type: 'phpunit-api'
+          - php-version: '8.4'
+            test-type: 'phpunit-api'
     
     steps:
     - uses: actions/checkout@v4
@@ -40,8 +49,8 @@ jobs:
       if: matrix.test-type == 'phpstan'
       run: phpstan analyse --configuration phpstan.neon --memory-limit 1G
     
-    - name: Run phpunit (Ticketbai service)
-      if: matrix.test-type == 'phpunit-ticketbai'
+    - name: Run phpunit (unit tests)
+      if: matrix.test-type == 'phpunit-unit'
       env:
         TBAI_ARABA_APP_LICENSE: ${{ secrets.TBAI_ARABA_APP_LICENSE }}
         TBAI_ARABA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_ARABA_APP_DEVELOPER_NIF }}
@@ -53,10 +62,10 @@ jobs:
         TBAI_GIPUZKOA_APP_LICENSE: ${{ secrets.TBAI_GIPUZKOA_APP_LICENSE }}
         TBAI_GIPUZKOA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_GIPUZKOA_APP_DEVELOPER_NIF }}
         TBAI_GIPUZKOA_ISSUER_NIF: ${{ secrets.TBAI_GIPUZKOA_ISSUER_NIF }}
-      run: phpunit -c phpunit.xml.dist --filter "^(?!.*(zuzendu)).*$"
+      run: phpunit -c phpunit.xml.dist --testsuite unit
 
-    - name: Run phpunit (Zuzendu service)
-      if: matrix.test-type == 'phpunit-zuzendu'
+    - name: Run phpunit (API endpoint tests)
+      if: matrix.test-type == 'phpunit-api'
       env:
         TBAI_ARABA_APP_LICENSE: ${{ secrets.TBAI_ARABA_APP_LICENSE }}
         TBAI_ARABA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_ARABA_APP_DEVELOPER_NIF }}
@@ -68,5 +77,5 @@ jobs:
         TBAI_GIPUZKOA_APP_LICENSE: ${{ secrets.TBAI_GIPUZKOA_APP_LICENSE }}
         TBAI_GIPUZKOA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_GIPUZKOA_APP_DEVELOPER_NIF }}
         TBAI_GIPUZKOA_ISSUER_NIF: ${{ secrets.TBAI_GIPUZKOA_ISSUER_NIF }}
-      run: phpunit -c phpunit.xml.dist --filter ".*zuzendu.*"
+      run: phpunit -c phpunit.xml.dist --testsuite api
     

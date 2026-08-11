@@ -15,6 +15,12 @@ class EndpointTest extends TestCase
     const SUBMIT_RETRY_DELAY = 3;
     const DEFAULT_TERRITORY = TicketBai::TERRITORY_ARABA;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        sleep(5);
+    }
+
     public function test_TicketBai_is_delivered(): void
     {
         $nif = $_ENV['TBAI_ARABA_ISSUER_NIF'];

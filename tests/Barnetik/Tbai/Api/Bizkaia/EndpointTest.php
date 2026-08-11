@@ -19,6 +19,12 @@ class EndpointTest extends TestCase
     const SUBMIT_RETRY_DELAY = 3;
     const DEFAULT_TERRITORY = TicketBai::TERRITORY_BIZKAIA;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        sleep(5);
+    }
+
     public function test_sent_FacturasEmitidasConSGAltaPeticion_xml_is_valid(): void
     {
         [$privateKey, $password] = $this->getBizkaiaP12Credentials();

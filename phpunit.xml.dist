@@ -5,8 +5,15 @@
   failOnWarning="true" colors="true" testdox="false"
   displayDetailsOnTestsThatTriggerDeprecations="true">
   <testsuites>
-    <testsuite name="Tbai test suite">
+    <testsuite name="all">
       <directory suffix="Test.php">./tests</directory>
+    </testsuite>
+    <testsuite name="api">
+      <directory suffix="Test.php">./tests/Barnetik/Tbai/Api</directory>
+    </testsuite>
+    <testsuite name="unit">
+      <directory suffix="Test.php">./tests</directory>
+      <exclude>./tests/Barnetik/Tbai/Api</exclude>
     </testsuite>
   </testsuites>
   <source>
