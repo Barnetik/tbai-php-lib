@@ -12,16 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         php-version: ['8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
-        test-type: ['phpstan', 'phpunit-unit', 'phpunit-api']
-        exclude:
-          - php-version: '8.1'
-            test-type: 'phpunit-api'
-          - php-version: '8.2'
-            test-type: 'phpunit-api'
-          - php-version: '8.3'
-            test-type: 'phpunit-api'
-          - php-version: '8.4'
-            test-type: 'phpunit-api'
+        test-type: ['phpstan', 'phpunit-unit']
     
     steps:
     - uses: actions/checkout@v4
@@ -63,8 +54,37 @@ jobs:
         TBAI_GIPUZKOA_ISSUER_NIF: ${{ secrets.TBAI_GIPUZKOA_ISSUER_NIF }}
       run: phpunit -c phpunit.xml.dist --testsuite unit
 
+  api-tests:
+    name: PHP ${{ matrix.php-version }} - phpunit-api
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        php-version: ['8.0', '8.5']
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-version }}
+        extensions: ${{ env.PHP_EXTENSIONS }}
+        tools: composer:v2,phpunit
+    
+    - name: Cache Composer dependencies
+      uses: actions/cache@v4
+      with:
+        path: vendor
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-composer-
+    
+    - name: Install dependencies
+      run: composer install --no-interaction --prefer-dist
+    
     - name: Run phpunit (API endpoint tests)
-      if: matrix.test-type == 'phpunit-api'
       env:
         TBAI_ARABA_APP_LICENSE: ${{ secrets.TBAI_ARABA_APP_LICENSE }}
         TBAI_ARABA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_ARABA_APP_DEVELOPER_NIF }}
@@ -77,4 +97,4 @@ jobs:
         TBAI_GIPUZKOA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_GIPUZKOA_APP_DEVELOPER_NIF }}
         TBAI_GIPUZKOA_ISSUER_NIF: ${{ secrets.TBAI_GIPUZKOA_ISSUER_NIF }}
       run: phpunit -c phpunit.xml.dist --testsuite api
-    
+
