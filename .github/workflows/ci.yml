@@ -10,10 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      max-parallel: 1
       matrix:
         php-version: ['8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
-        test-type: ['phpstan', 'phpunit-zuzendu', 'phpunit-ticketbai']
+        test-type: ['phpstan', 'phpunit-unit']
     
     steps:
     - uses: actions/checkout@v4
@@ -40,8 +39,8 @@ jobs:
       if: matrix.test-type == 'phpstan'
       run: phpstan analyse --configuration phpstan.neon --memory-limit 1G
     
-    - name: Run phpunit (Ticketbai service)
-      if: matrix.test-type == 'phpunit-ticketbai'
+    - name: Run phpunit (unit tests)
+      if: matrix.test-type == 'phpunit-unit'
       env:
         TBAI_ARABA_APP_LICENSE: ${{ secrets.TBAI_ARABA_APP_LICENSE }}
         TBAI_ARABA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_ARABA_APP_DEVELOPER_NIF }}
@@ -53,10 +52,39 @@ jobs:
         TBAI_GIPUZKOA_APP_LICENSE: ${{ secrets.TBAI_GIPUZKOA_APP_LICENSE }}
         TBAI_GIPUZKOA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_GIPUZKOA_APP_DEVELOPER_NIF }}
         TBAI_GIPUZKOA_ISSUER_NIF: ${{ secrets.TBAI_GIPUZKOA_ISSUER_NIF }}
-      run: phpunit -c phpunit.xml.dist --filter "^(?!.*(zuzendu)).*$"
+      run: phpunit -c phpunit.xml.dist --testsuite unit
 
-    - name: Run phpunit (Zuzendu service)
-      if: matrix.test-type == 'phpunit-zuzendu'
+  api-tests:
+    name: PHP ${{ matrix.php-version }} - phpunit-api
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        php-version: ['8.0', '8.5']
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-version }}
+        extensions: ${{ env.PHP_EXTENSIONS }}
+        tools: composer:v2,phpunit
+    
+    - name: Cache Composer dependencies
+      uses: actions/cache@v4
+      with:
+        path: vendor
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-composer-
+    
+    - name: Install dependencies
+      run: composer install --no-interaction --prefer-dist
+    
+    - name: Run phpunit (API endpoint tests)
       env:
         TBAI_ARABA_APP_LICENSE: ${{ secrets.TBAI_ARABA_APP_LICENSE }}
         TBAI_ARABA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_ARABA_APP_DEVELOPER_NIF }}
@@ -68,5 +96,5 @@ jobs:
         TBAI_GIPUZKOA_APP_LICENSE: ${{ secrets.TBAI_GIPUZKOA_APP_LICENSE }}
         TBAI_GIPUZKOA_APP_DEVELOPER_NIF: ${{ secrets.TBAI_GIPUZKOA_APP_DEVELOPER_NIF }}
         TBAI_GIPUZKOA_ISSUER_NIF: ${{ secrets.TBAI_GIPUZKOA_ISSUER_NIF }}
-      run: phpunit -c phpunit.xml.dist --filter ".*zuzendu.*"
-    
+      run: phpunit -c phpunit.xml.dist --testsuite api
+
