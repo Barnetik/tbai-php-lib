@@ -10,10 +10,12 @@
     </testsuite>
     <testsuite name="api">
       <directory suffix="Test.php">./tests/Barnetik/Tbai/Api</directory>
+      <directory suffix="Test.php">./tests/Barnetik/Tbai/LROE</directory>
     </testsuite>
     <testsuite name="unit">
       <directory suffix="Test.php">./tests</directory>
       <exclude>./tests/Barnetik/Tbai/Api</exclude>
+      <exclude>./tests/Barnetik/Tbai/LROE</exclude>
     </testsuite>
   </testsuites>
   <source>
