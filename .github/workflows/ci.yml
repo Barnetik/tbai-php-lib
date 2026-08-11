@@ -59,6 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix:
         php-version: ['8.0', '8.5']
     
