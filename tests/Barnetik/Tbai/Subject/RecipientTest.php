@@ -29,4 +29,22 @@ class RecipientTest extends TestCase
         $this->assertEquals(48260, $receptor->postalCode());
         $this->assertEquals('abcdefghijkl', $receptor->vatId());
     }
+
+    public function test_spanish_recipient_can_use_a_passport(): void
+    {
+        $receptor = Recipient::createFromJson([
+            'vatId' => 'abcdefghijkl',
+            'vatIdType' => VatId::VAT_ID_TYPE_PASSPORT,
+            'name' => 'Test recipient',
+            'postalCode' => '48260',
+            'address' => 'Markina-Xemein',
+            'countryCode' => 'ES',
+        ]);
+
+        $this->assertEquals(VatId::VAT_ID_TYPE_PASSPORT, $receptor->vatIdType());
+        $this->assertEquals('Test recipient', $receptor->name());
+        $this->assertEquals('ES', $receptor->countryCode());
+        $this->assertEquals('48260', $receptor->postalCode());
+        $this->assertEquals('abcdefghijkl', $receptor->vatId());
+    }
 }
