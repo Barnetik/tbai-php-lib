@@ -2,13 +2,6 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
-## [0.6.4](https://github.com/Barnetik/tbai-php-lib/compare/v0.6.3...v0.6.4) (2026-10-07)
-
-### Bug Fixes
-
-* Better curl connection error handle for retries ([b51d7e4](https://github.com/Barnetik/tbai-php-lib/commit/b51d7e46473d467168643e4feb90fb58d4e84b24))
-* Set PHP 8.0 as minimum version as expenses module uses static as return value ([5320fd3](https://github.com/Barnetik/tbai-php-lib/commit/5320fd3bc9afdcb7800045693a09bfc0848de2f1))
-* support Spanish passport identification when creating from json ([45556e1](https://github.com/Barnetik/tbai-php-lib/commit/45556e1252d81f5acc1be0e128894ab297fe64d6))
 ## [0.6.3](https://github.com/Barnetik/tbai-php-lib/compare/v0.6.2...v0.6.3) (2025-05-19)
 
 ### Bug Fixes
