@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.6.4](https://github.com/Barnetik/tbai-php-lib/compare/v0.6.3...v0.6.4) (2026-10-07)
+
+### Bug Fixes
+
+* Gipuzkoa Policy Digest was outdated ([#72](https://github.com/Barnetik/tbai-php-lib/issues/72)) ([17fc376](https://github.com/Barnetik/tbai-php-lib/commit/17fc376be2835cfefffe1a9211c21c11bfd3459f)), references [#63](https://github.com/Barnetik/tbai-php-lib/issues/63) [#71](https://github.com/Barnetik/tbai-php-lib/issues/71)
+* Retries handle now checks for multiple CURL connection errors ([#73](https://github.com/Barnetik/tbai-php-lib/issues/73)) ([d91ad03](https://github.com/Barnetik/tbai-php-lib/commit/d91ad03456e296037bbdd8c176b23f6bdf48914f))
+* Set PHP 8.0 as minimum version as expenses module uses static as return value ([5320fd3](https://github.com/Barnetik/tbai-php-lib/commit/5320fd3bc9afdcb7800045693a09bfc0848de2f1))
+* support Spanish passport identification when creating from json ([86d090d](https://github.com/Barnetik/tbai-php-lib/commit/86d090d039b0a4347b4989403ed4d7f999899136))
 ## [0.6.3](https://github.com/Barnetik/tbai-php-lib/compare/v0.6.2...v0.6.3) (2025-05-19)
 
 ### Bug Fixes
