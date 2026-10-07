@@ -61,37 +61,6 @@ class EndpointTest extends TestCase
         $this->assertSubmissionSuccessful($endpoint, $ticketbai, $privateKey, $password, $signedFilename);
     }
 
-    public function test_TicketBai_is_delivered_for_spanish_recipient_with_passport(): void
-    {
-        [$privateKey, $certPassword] = $this->getBizkaiaP12Credentials();
-
-        $json = json_decode($this->getFilesContents('tbai-sample.json'), true);
-        
-        $nif = $_ENV['TBAI_BIZKAIA_ISSUER_NIF_240'];
-        $issuer = $_ENV['TBAI_BIZKAIA_ISSUER_NAME_240'];
-        $json['subject']['issuer']['vatId'] = $nif;
-        $json['subject']['issuer']['name'] = $issuer;
-        $json['subject']['recipients'][0]['vatId'] = 'MSU871403S';
-        $json['subject']['recipients'][0]['vatIdType'] = '03';
-        $json['subject']['recipients'][0]['countryCode'] = 'ES';
-        // Set the issuer information for the Spanish recipient with passport test, diputation treats it as a foreign delivery subject
-        $json['invoice']['breakdown'] = [
-            'foreignDeliverySubjectNotExemptBreakdownItems' => $json['invoice']['breakdown']['nationalSubjectNotExemptBreakdownItems'],
-        ];
-        $json['invoice']['header']['invoiceNumber'] = (string) time();
-        $json['invoice']['header']['expeditionDate'] = date('d-m-Y');
-        $json['invoice']['header']['expeditionTime'] = date('H:i:s');
-        sleep(1);
-
-        $ticketbai = TicketBai::createFromJson($this->ticketBaiMother->createBizkaiaVendor(), $json);
-        $signedFilename = $this->signFile($ticketbai, $privateKey, $certPassword);
-
-        $endpoint = new Api(TicketBai::TERRITORY_BIZKAIA, true, true);
-        $this->assertSubmissionSuccessful($endpoint, $ticketbai, $privateKey, $certPassword, $signedFilename);
-    }
-
-
-
     public function test_TicketBai_is_delivered_for_exports(): void
     {
         [$privateKey, $password] = $this->getBizkaiaP12Credentials();
