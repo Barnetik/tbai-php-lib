@@ -2,9 +2,7 @@
 
 namespace Test\Barnetik\Tbai\Api\Bizkaia;
 
-use Barnetik\Tbai\AbstractTicketBai;
 use Barnetik\Tbai\Api;
-use Barnetik\Tbai\Api\AbstractTerritory;
 use Barnetik\Tbai\Api\Bizkaia\Endpoint;
 use Barnetik\Tbai\Interfaces\TbaiSignable;
 use Barnetik\Tbai\PrivateKey;
@@ -16,8 +14,13 @@ use Test\Barnetik\TestCase;
 class EndpointTest extends TestCase
 {
     const SUBMIT_RETRIES = 3;
-    const SUBMIT_RETRY_DELAY = 3;
+    const SUBMIT_RETRY_DELAY = 2;
     const DEFAULT_TERRITORY = TicketBai::TERRITORY_BIZKAIA;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+    }
 
     public function test_sent_FacturasEmitidasConSGAltaPeticion_xml_is_valid(): void
     {

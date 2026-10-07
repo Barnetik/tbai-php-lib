@@ -7,6 +7,6 @@ use lyquidity\xmldsig\XMLSecurityDSig;
 class Gipuzkoa extends TicketBai
 {
     const POLICY_IDENTIFIER = 'https://www.gipuzkoa.eus/ticketbai/sinadura';
-    const POLICY_DIGEST = 'vSe1CH7eAFVkGN0X2Y7Nl9XGUoBnziDA5BGUSsyt8mg=';
+    const POLICY_DIGEST = '4LDJbY5hqHHHX858s9QV1P8yVGzo6H23P/iNRRv+PnQ=';
     const ALGORITHM = XMLSecurityDSig::SHA256;
 }

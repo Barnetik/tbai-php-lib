@@ -81,14 +81,23 @@ abstract class AbstractTerritory implements EndpointInterface
 
                 $response = curl_exec($curl);
                 if (curl_errno($curl)) {
-                    throw new Exception(sprintf('Curl error(%s): %s', curl_errno($curl), curl_error($curl)));
+                    throw new Exception(sprintf('Curl error(%s): %s', curl_errno($curl), curl_error($curl)), curl_errno($curl));
                 }
 
                 list($status, $headers, $content) = $this->parseCurlResponse($response, $curl);
-                curl_close($curl);
                 return $this->response($status, $headers, $content);
             } catch (Exception $e) {
-                if ($tries > $maxRetries || $e->getMessage() !== 'No response from server') {
+                $isCurlConnectionError = in_array($e->getCode(), [
+                    CURLE_COULDNT_RESOLVE_PROXY,
+                    CURLE_COULDNT_RESOLVE_HOST,
+                    CURLE_COULDNT_CONNECT,
+                    CURLE_OPERATION_TIMEDOUT,
+                    CURLE_SSL_CONNECT_ERROR,
+                    CURLE_RECV_ERROR
+                ]);
+                $isConnectionError = $isCurlConnectionError || $e->getMessage() === 'No response from server';
+
+                if ($tries > $maxRetries || !$isConnectionError) {
                     throw $e;
                 }
             }
