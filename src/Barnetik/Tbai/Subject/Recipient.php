@@ -89,14 +89,14 @@ class Recipient implements TbaiXml
     {
 
         $countryCode = $jsonData['countryCode'] ?? 'ES';
+        $vatIdType = $jsonData['vatIdType'] ?? VatId::VAT_ID_TYPE_NIF;
         $name = $jsonData['name'];
         $postalCode = $jsonData['postalCode'];
         $address = $jsonData['address'];
-        if ($countryCode === 'ES') {
-            $vatId = new VatId($jsonData['vatId']);
+        $vatId = new VatId($jsonData['vatId'], $vatIdType);
+        if ($countryCode === 'ES' && $vatIdType === VatId::VAT_ID_TYPE_NIF) {
             $recipient = self::createNationalRecipient($vatId, $name, $postalCode, $address);
         } else {
-            $vatId = new VatId($jsonData['vatId'], $jsonData['vatIdType']);
             $recipient = self::createGenericRecipient($vatId, $name, $postalCode, $address, $countryCode);
         }
         return $recipient;
